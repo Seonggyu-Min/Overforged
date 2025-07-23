@@ -1,12 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace SHG
 {
-  public class TestMaterialItem : MonoBehaviour
-  {
 
+  public class TestItemData: ScriptableObject
+  {
+    public string Name;
+    public GameObject prefab;
+    public Sprite Image;
   }
 
+  [CreateAssetMenu(menuName = "GameData/Test/MaterialItem")]
+  public class TestMaterialItemData: TestItemData
+  {
+    public TestMaterialType Type;
+  }
+
+  public class TestMaterialItem
+  {
+    public TestMaterialItemData Data;
+    public TestMaterialType MaterialType => this.Data.Type;
+
+    public TestMaterialItem(TestMaterialItemData data)
+    {
+      this.Data = data;
+    }
+  }
 }

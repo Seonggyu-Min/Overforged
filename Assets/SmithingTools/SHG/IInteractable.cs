@@ -7,6 +7,6 @@ namespace SHG
   public interface IInteractable
   {
     public bool IsInteractable(Player player);
-    IEnumerator Interact(Player player);
+    public IEnumerator Interact(Player player);
   }
 }
