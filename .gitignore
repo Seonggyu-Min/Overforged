@@ -79,9 +79,6 @@ Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset
 /Assets/Imports
 /Assets/Firebase/Plugins
 
-# c-tag
-**/tags
-
 ### Linux ###
 *~
 
@@ -104,7 +101,13 @@ Sessionx.vim
 
 # Temporary
 .netrwhist
+
 # Auto-generated tag files
-tags
+**/tags
+**/tags.meta
+
 # Persistent undo
 [._]*.un~
+
+# Parrel sync setting
+[Aa]ssets/[Pp]lugins/ParrelSync/ScriptableOjects/
