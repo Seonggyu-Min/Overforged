@@ -78,3 +78,6 @@ Assets/StreamingAssets/google-services-desktop.json
 Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset
 /Assets/Imports
 /Assets/Firebase/Plugins
+.vscode/extensions.json
+.vscode/launch.json
+.vscode/settings.json
