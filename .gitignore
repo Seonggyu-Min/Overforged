@@ -111,3 +111,6 @@ Sessionx.vim
 
 # Parrel sync setting
 [Aa]ssets/[Pp]lugins/ParrelSync/ScriptableOjects/
+.vscode/extensions.json
+.vscode/launch.json
+.vscode/settings.json

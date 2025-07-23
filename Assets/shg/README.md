@@ -62,15 +62,29 @@ classDiagram
 
 ```mermaid
 classDiagram
+
+    class SmithingToolData {
+        +Name: string
+        +Prefab: GameObject
+        +AllowedItemTypes: List~ItemType~
+    }
+
 	class SmithingTool {
     	<<abstract>>
-        +bool IsFinished
-        +AllowedItemTypes: List~ItemType~
+        +Data: SmithingToolData
+        +IsFinished: bool 
         +HoldingItem: Nullable~MaterialItem~  
+        +CanInteract(Player): bool
         +RemainingTime: float 
-        +ShowTimerUI
-        +ShowItemIconUI
+        -ShowTimerUI()
+        -ShowItemIconUI()
 	}
+
+    class IInteractable {
+        <<interface>>
+        +CanInteract(Player): bool
+        +Interact(Player): IEnumerator
+    }
 
     class WoodWorkTable {
         +HasCraftableItem(Player): bool
@@ -86,6 +100,9 @@ classDiagram
         
     }
     
+    ScriptableObject <|-- SmithingToolData: inherit
+    SmithingToolData "1" o-- SmithingTool: has
+    IInteractable <|.. SmithingTool: implement
     MaterialItem "1" o-- SmithingTool: has
     ItemType "1" o-- SmithingTool: has
     SmithingTool <|-- WoodWorkTable: inherit
