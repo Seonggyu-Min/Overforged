@@ -1,0 +1,19 @@
+name: 버그 리포트
+description: 문제가 발생했을 때 작성해주세요.
+title: "[Bug] 문제 요약"
+labels: ["bug"]
+body:
+  - type: input
+    id: summary
+    attributes:
+      label: 문제 요약
+      placeholder: ex) 캐릭터가 점프하지 않음
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 재현 방법
+      placeholder: 어떤 상황에서 버그가 발생했는지 간단히 써주세요
+    validations:
