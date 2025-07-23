@@ -1,31 +1,6 @@
-using UnityEngine;
 
 namespace SHG
 {
-
-  public class TestItemData: ScriptableObject
-  {
-    public string Name;
-    public GameObject prefab;
-    public Sprite Image;
-  }
-
-  public class TestItem
-  {
-    public TestItemData Data;
-    public TestItem(TestItemData data)
-    {
-      this.Data = data;
-    }
-  }
-
-  [CreateAssetMenu(menuName = "GameData/Test/MaterialItem")]
-  public class TestMaterialItemData: TestItemData
-  {
-    public TestMaterialType Type;
-    public TestMaterialItemData RefinedResult;
-  }
-
   public class TestMaterialItem: TestItem
   {
     public TestMaterialType MaterialType;
@@ -39,6 +14,11 @@ namespace SHG
     {
       this.MaterialType = data.Type;
       this.refindResult = data.RefinedResult;
+    }
+
+    public override string ToString()
+    {
+      return ($"[{nameof(TestMaterialItem)}; [Name: {this.Data.Name}]]");
     }
   }
 }

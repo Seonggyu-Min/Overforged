@@ -9,6 +9,7 @@ namespace SHG
     Wood,
     Leather,
     IronOre,
-    IronInGot
+    IronInGot,
+    Blade
   }
 }

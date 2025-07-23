@@ -29,10 +29,11 @@ namespace SHG
   {
     public Item ReceivedItem;
     public float DurationToPlayerStay;
+    public bool IsMaterialItemTaken;
 
     public override string ToString()
     {
-      return ($"[{nameof(ToolInteractArgs)}; {nameof(ReceivedItem)}: ${this.ReceivedItem}; {nameof(DurationToPlayerStay)}: {DurationToPlayerStay}]");
+      return ($"[{nameof(ToolInteractArgs)}; {nameof(ReceivedItem)}: {this.ReceivedItem}; {nameof(DurationToPlayerStay)}: {DurationToPlayerStay}; {nameof(IsMaterialItemTaken)}: {this.IsMaterialItemTaken}]");
     }
   }
 }

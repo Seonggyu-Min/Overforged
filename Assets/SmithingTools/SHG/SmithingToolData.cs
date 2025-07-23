@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using EditorAttributes;
+using Void = EditorAttributes.Void;
 
 namespace SHG
 {
@@ -19,7 +19,7 @@ namespace SHG
     [HideInInspector]
     public GameObject Prefab => this.prefab;
     [HideInInspector]
-    public MaterialType[] AllowdMaterials;
+    public MaterialType[] AllowedMaterials => this.allowdMaterialTypes;
     [HideInInspector]
     public float TimeRequiredInSeconds => this.timeRequiredInSeconds;
     [HideInInspector]
@@ -29,24 +29,26 @@ namespace SHG
     string toolName;
     [SerializeField] [AssetPreview(64f, 64f), Validate("No prefab", nameof(IsPrefabNone), MessageMode.Error, buildKiller: true)]
     GameObject prefab;
-    [SerializeField] [Validate("No material", nameof(EmptyMaterialType), MessageMode.Error, buildKiller:true)]
+    [SerializeField] [ReadOnly, Validate("No material", nameof(NoMaterialType), MessageMode.Error, buildKiller: true)]
+    Void noMaterialCheck;
+    [SerializeField]
     MaterialType[] allowdMaterialTypes;
-    [SerializeField] [Validate("Invalid required time", nameof(HasValidTimeRequired), MessageMode.Error, buildKiller: true)]
+    [SerializeField] [Validate("Invalid required time", nameof(HasInValidTimeRequired), MessageMode.Error, buildKiller: true)]
     float timeRequiredInSeconds;
-    [SerializeField] [Validate("Invalid required count", nameof(HasValidCountRequired), MessageMode.Error, buildKiller: true)]
+    [SerializeField] [Validate("Invalid required count", nameof(HasInValidCountRequired), MessageMode.Error, buildKiller: true)]
     int requiredInteractCount;
 
     protected bool IsNameEmpty() => (
       this.Name == null || this.Name .Replace(" ", "").Length == 0);
     protected bool IsPrefabNone() => (this.Prefab == null);
-    protected bool EmptyMaterialType() => (
-      this.AllowdMaterials == null || this.AllowdMaterials.Length == 0);
-    protected bool HasValidTimeRequired => (
-      this.TimeRequiredInSeconds > 0 && 
-      this.TimeRequiredInSeconds < MAX_REQUIRED_TIME_IN_SECONDS
+    protected bool NoMaterialType() => (
+      this.AllowedMaterials == null || this.AllowedMaterials.Length == 0);
+    protected bool HasInValidTimeRequired => (
+      this.TimeRequiredInSeconds <= 0 ||
+      this.TimeRequiredInSeconds > MAX_REQUIRED_TIME_IN_SECONDS
       );
-    protected bool HasValidCountRequired => (
-      this.RequiredInteractCount > 0 &&
-      this.RequiredInteractCount < MAX_REQUIRED_INTERACT_COUNT);
+    protected bool HasInValidCountRequired => (
+      this.RequiredInteractCount <= 0 ||
+      this.RequiredInteractCount > MAX_REQUIRED_INTERACT_COUNT);
   }
 }

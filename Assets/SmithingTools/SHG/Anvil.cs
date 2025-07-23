@@ -1,13 +1,15 @@
 using System;
+using UnityEngine;
+using EditorAttributes;
 
 namespace SHG
 {
   using MaterialItem = TestMaterialItem;
 
+    [Serializable]
     public class Anvil : SmithingTool, IInteractable
     {
-      public override bool IsFinished => (
-        this.RemainingTime <= 0 && this.RemainingInteractionCount < 1);
+      public override bool IsFinished => (this.RemainingInteractionCount < 1);
 
       protected override bool isPlayerMovable => true;
       protected override bool isRemamingTimeElapse => false;
@@ -23,7 +25,7 @@ namespace SHG
         }
         if (args.CurrentHoldingItem == null ||
           !(args.CurrentHoldingItem is MaterialItem materialItem) ||
-          Array.IndexOf(this.AllowedMaterials, materialItem) == -1) {
+          Array.IndexOf(this.AllowedMaterials, materialItem.MaterialType) == -1) {
           return (false);
         }
         return (true);
@@ -63,7 +65,8 @@ namespace SHG
         this.RemainingInteractionCount -= 1;
         return (new ToolInteractArgs {
           ReceivedItem = null,
-          DurationToPlayerStay = this.RemainingTime
+          DurationToPlayerStay = this.RemainingTime,
+          IsMaterialItemTaken = false
         });
       }
 
@@ -73,7 +76,8 @@ namespace SHG
         this.isInteracting = true;
         ToolInteractArgs result = new ToolInteractArgs {
           ReceivedItem = null,
-          DurationToPlayerStay = 0
+          DurationToPlayerStay = 0,
+          IsMaterialItemTaken = true
         };
         return (result);
       }
@@ -84,7 +88,8 @@ namespace SHG
         this.ResetInteraction();
         return (new ToolInteractArgs {
           ReceivedItem = item,
-          DurationToPlayerStay = 0
+          DurationToPlayerStay = 0,
+          IsMaterialItemTaken = false
         });
       }
 

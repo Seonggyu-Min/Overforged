@@ -15,7 +15,7 @@ namespace SHG
     TestMaterialItemData HoldingItemData;
     public Action OnCancelInteraction;
 
-    public TestMaterialItem HoldingItem => new TestMaterialItem(this.HoldingItemData);
+    public TestMaterialItem HoldingItem => this.HoldingItemData != null ?  new TestMaterialItem(this.HoldingItemData): null;
 
     bool IsTryingInteract()
     {
@@ -64,8 +64,9 @@ namespace SHG
       if (this.IsTryingInteract() &&
         this.TryFindInteratable(out IInteractable interactable)) {
         PlayerInteractArgs args = this.GetInteractArgs();
-        interactable.IsInteractable(args);
-        this.Interact(interactable, args);
+        if (interactable.IsInteractable(args)) {
+          this.Interact(interactable, args);
+        }
       }
     }
 

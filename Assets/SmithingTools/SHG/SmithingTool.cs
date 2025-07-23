@@ -1,4 +1,6 @@
 using System;
+using UnityEngine;
+using EditorAttributes;
 
 namespace SHG
 {
@@ -6,21 +8,27 @@ namespace SHG
   using MaterialItem = TestMaterialItem;
   using MaterialType = TestMaterialType;
 
+  [Serializable]
   public abstract class SmithingTool: IInteractable 
   {
     public virtual bool IsFinished { get; }
+    [ShowInInspector]
     public MaterialItem HoldingItem { get; protected set; }
-    public MaterialType[] AllowedMaterials => this.Data.AllowdMaterials;
+    public MaterialType[] AllowedMaterials => this.Data.AllowedMaterials;
     public Action<SmithingTool, PlayerInteractArgs> BeforeInteract;
     public Action<SmithingTool, ToolInteractArgs> AfterInteract;
+    [ShowInInspector]
+    public float RemainingTime { get; protected set; }
+    [ShowInInspector]
+    public int RemainingInteractionCount { get; protected set; }
 
+    [SerializeField]
     protected SmithingToolData Data;
     protected abstract bool isPlayerMovable { get; }
     protected abstract bool isRemamingTimeElapse { get; }
     protected virtual Item ItemToReturn => this.HoldingItem;
+    [SerializeField]
     protected bool isInteracting;
-    protected float RemainingTime { get; set; }
-    protected int RemainingInteractionCount { get; set; }
     protected float DefaultRequiredTime => this.Data.TimeRequiredInSeconds;
     protected int DefaultRequiredInteractCount => this.Data.RequiredInteractCount;
 
@@ -28,14 +36,19 @@ namespace SHG
     {
       this.Data = data;
       this.isInteracting = false;
+      this.RemainingInteractionCount = data.RequiredInteractCount;
+      this.RemainingTime = data.TimeRequiredInSeconds;
     }
 
-    protected virtual void OnUpdate(float deltaTime)
+    public virtual void OnUpdate(float deltaTime)
     {
-      if (this.isRemamingTimeElapse && !this.isInteracting) {
+      if (!this.isRemamingTimeElapse || !this.isInteracting) {
         return ;
       }  
       this.RemainingTime -= deltaTime;
+      if (this.RemainingTime < 0) {
+        this.RemainingInteractionCount -= 1;
+      }
     }
 
     public abstract bool IsInteractable(PlayerInteractArgs args);

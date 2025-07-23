@@ -73,6 +73,7 @@ classDiagram
     class ToolInteractArgs {
         +ReceivedItem: Nullable~Item~
         +DurationToPlayerStay: float
+        +IsMaterialItemTaken bool
     }
 
     class SmithingToolData {
@@ -90,8 +91,9 @@ classDiagram
         #Data: SmithingToolData
         +CanInteract(PlayerInteractArgs) bool
         +Interact(PlayerInteractArgs) ToolInteractArgs
-        #RemainingTime: float 
-        #RemainingCount: int
+        +OnUpdate(float)
+        +RemainingTime: float 
+        +RemainingCount: int
         -ShowTimerUI()
         -ShowItemIconUI()
 	}
