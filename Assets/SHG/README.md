@@ -66,7 +66,7 @@ classDiagram
     class SmithingToolData {
         +Name: string
         +Prefab: GameObject
-        +AllowedItemTypes: List~ItemType~
+        +AllowedMaterialTypes: List~MaterialType~
     }
 
 	class SmithingTool {
@@ -104,7 +104,7 @@ classDiagram
     SmithingToolData "1" o-- SmithingTool: has
     IInteractable <|.. SmithingTool: implement
     MaterialItem "1" o-- SmithingTool: has
-    ItemType "1" o-- SmithingTool: has
+    MaterialType "1" o-- SmithingTool: has
     SmithingTool <|-- WoodWorkTable: inherit
     SmithingTool <|-- Anvil: inherit 
     SmithingTool <|-- CraftTable: inherit
