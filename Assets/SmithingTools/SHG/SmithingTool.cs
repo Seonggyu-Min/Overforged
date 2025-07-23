@@ -26,7 +26,7 @@ namespace SHG
     protected SmithingToolData Data;
     protected abstract bool isPlayerMovable { get; }
     protected abstract bool isRemamingTimeElapse { get; }
-    protected virtual Item ItemToReturn => this.HoldingItem;
+    protected abstract Item ItemToReturn { get; }
     [SerializeField]
     protected bool isInteracting;
     protected float DefaultRequiredTime => this.Data.TimeRequiredInSeconds;

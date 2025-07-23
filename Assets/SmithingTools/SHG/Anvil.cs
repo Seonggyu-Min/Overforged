@@ -4,6 +4,7 @@ using EditorAttributes;
 
 namespace SHG
 {
+  using Item = TestItem;
   using MaterialItem = TestMaterialItem;
 
     [Serializable]
@@ -13,6 +14,8 @@ namespace SHG
 
       protected override bool isPlayerMovable => true;
       protected override bool isRemamingTimeElapse => false;
+      protected override Item ItemToReturn => (
+        this.HoldingItem != null ? this.HoldingItem.GetRefinedResult() : null);
 
       public Anvil(SmithingToolData data): base(data)
       {
