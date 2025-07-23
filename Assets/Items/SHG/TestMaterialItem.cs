@@ -10,20 +10,35 @@ namespace SHG
     public Sprite Image;
   }
 
+  public class TestItem
+  {
+    public TestItemData Data;
+    public TestItem(TestItemData data)
+    {
+      this.Data = data;
+    }
+  }
+
   [CreateAssetMenu(menuName = "GameData/Test/MaterialItem")]
   public class TestMaterialItemData: TestItemData
   {
     public TestMaterialType Type;
+    public TestMaterialItemData RefinedResult;
   }
 
-  public class TestMaterialItem
+  public class TestMaterialItem: TestItem
   {
-    public TestMaterialItemData Data;
-    public TestMaterialType MaterialType => this.Data.Type;
+    public TestMaterialType MaterialType;
+    TestMaterialItemData refindResult;
 
-    public TestMaterialItem(TestMaterialItemData data)
+    public TestMaterialItem GetRefinedResult()
     {
-      this.Data = data;
+      return (new TestMaterialItem(this.refindResult));
+    }
+    public TestMaterialItem(TestMaterialItemData data): base(data)
+    {
+      this.MaterialType = data.Type;
+      this.refindResult = data.RefinedResult;
     }
   }
 }

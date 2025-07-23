@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace SHG
@@ -10,9 +11,9 @@ namespace SHG
     float interactRadius;
     [SerializeField] [Range(1f, 10f)]
     float interactRange; 
-    Coroutine interactRoutine;
     [SerializeField]
     TestMaterialItemData HoldingItemData;
+    public Action OnCancelInteraction;
 
     public TestMaterialItem HoldingItem => new TestMaterialItem(this.HoldingItemData);
 
@@ -61,19 +62,27 @@ namespace SHG
       }
 
       if (this.IsTryingInteract() &&
-        this.TryFindInteratable(out IInteractable interactable) &&
-        interactable.IsInteractable(this)) {
-        this.Interact(interactable);
+        this.TryFindInteratable(out IInteractable interactable)) {
+        PlayerInteractArgs args = this.GetInteractArgs();
+        interactable.IsInteractable(args);
+        this.Interact(interactable, args);
       }
     }
 
-    void Interact(IInteractable interactable)
+    PlayerInteractArgs GetInteractArgs()
     {
-      if (this.interactRoutine != null) {
-        this.StopCoroutine(this.interactRoutine);
-      }
-      this.interactRoutine = this.StartCoroutine(
-        interactable.Interact(this));
+      return (new PlayerInteractArgs {
+          CurrentHoldingItem = this.HoldingItem,
+          PlayerNetworkId = 1,
+          OnCancel = this.OnCancelInteraction
+        });
+    }
+
+    void Interact(in IInteractable interactable, in PlayerInteractArgs args)
+    {
+      ToolInteractArgs result = interactable.Interact(
+          this.GetInteractArgs());
+      Debug.Log($"interaction result: {result}");
     }
 
     #region Test code

@@ -4,8 +4,7 @@
 classDiagram
 	class Item {
     	<<abstract>>
-		+Data: ItemData
-		-data: ItemData
+        #Data: ItemData
 		+Item(ItemData data) Item
 	}
 
@@ -21,11 +20,13 @@ classDiagram
     
     class MaterialItem {
         +ToolNeeded: SmithingTool 
-        +TimeOrCountToRefine: float 
+        +GetRefinedResult() MaterialItem 
+        #Data: MaterialItemData
     }
 
     class MaterialItemData {
-        +MaterialType: MaterialType
+        +Type: MaterialType
+        +RefinedResult: MaterialItemData
     }
 
     class MaterialType {
@@ -50,10 +51,10 @@ classDiagram
     Item <|-- MaterialItem: inherit
     ItemData <|-- MaterialItemData: inherit
     MaterialItemData "1" o-- "1" MaterialItem: has
-    MaterialType "1" o-- "1" MaterialItemData: has
+    MaterialType "1" o-- "0..*" MaterialItemData: has
     Item <|-- CompletedMaterialItem: inherit
     Item <|-- ProductItem : inherit
-    CraftData "*" o-- CompletedMaterialItem: has
+    CraftData "1" o-- "*" CompletedMaterialItem: has
     ICarryable <|.. Item: implement
 ```
 
@@ -63,6 +64,17 @@ classDiagram
 ```mermaid
 classDiagram
 
+    class PlayerInteractArgs {
+        +CurrentHoldingItem: Nullable~MaterialItem~
+        +PlayerNetworkId: int
+        +OnCancel: Action
+    }
+
+    class ToolInteractArgs {
+        +ReceivedItem: Nullable~Item~
+        +DurationToPlayerStay: float
+    }
+
     class SmithingToolData {
         +Name: string
         +Prefab: GameObject
@@ -71,23 +83,27 @@ classDiagram
 
 	class SmithingTool {
     	<<abstract>>
-        +Data: SmithingToolData
         +IsFinished: bool 
         +HoldingItem: Nullable~MaterialItem~  
-        +CanInteract(Player): bool
-        +RemainingTime: float 
+        +BeforeInteract: Action~SmithingTool~
+        +AfterInteract: Action~SmithingTool~
+        #Data: SmithingToolData
+        +CanInteract(PlayerInteractArgs) bool
+        +Interact(PlayerInteractArgs) ToolInteractArgs
+        #RemainingTime: float 
+        #RemainingCount: int
         -ShowTimerUI()
         -ShowItemIconUI()
 	}
 
     class IInteractable {
         <<interface>>
-        +CanInteract(Player): bool
-        +Interact(Player): IEnumerator
+        +CanInteract(PlayerInteractArgs) bool
+        +Interact(PlayerInteractArgs) ToolInteractArgs
     }
 
     class WoodWorkTable {
-        +HasCraftableItem(Player): bool
+        +HasCraftableItem(Player) bool
         +ShowPrductIconUI()
         -CraftList: List~CraftData~
     }
@@ -101,12 +117,14 @@ classDiagram
     }
     
     ScriptableObject <|-- SmithingToolData: inherit
-    SmithingToolData "1" o-- SmithingTool: has
+    SmithingToolData "1" o-- "1" SmithingTool: has
     IInteractable <|.. SmithingTool: implement
-    MaterialItem "1" o-- SmithingTool: has
-    MaterialType "1" o-- SmithingTool: has
+    PlayerInteractArgs <-- IInteractable: use
+    ToolInteractArgs <-- IInteractable: use
+    MaterialItem "0..1" o-- "1" SmithingTool: has
+    MaterialType "1..*" o-- "1..*" SmithingTool: use
     SmithingTool <|-- WoodWorkTable: inherit
     SmithingTool <|-- Anvil: inherit 
     SmithingTool <|-- CraftTable: inherit
-    CraftData "*" o-- WoodWorkTable: has
+    CraftData "*" o-- "1" WoodWorkTable: has
 ```
