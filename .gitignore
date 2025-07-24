@@ -80,3 +80,5 @@ Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset
 /Assets/Firebase/Plugins
 /.vscode
 /Assets/Plugins/Demigiant
+**/tags
+**/tags.meta
