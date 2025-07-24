@@ -9,7 +9,7 @@ namespace SHG
   using MaterialType = TestMaterialType;
 
   [Serializable]
-  public abstract class SmithingTool: IInteractable 
+  public abstract class SmithingTool : IInteractable
   {
     public virtual bool IsFinished { get; }
     [ShowInInspector]
@@ -21,6 +21,7 @@ namespace SHG
     public float RemainingTime { get; protected set; }
     [ShowInInspector]
     public int RemainingInteractionCount { get; protected set; }
+    public float Progress => this.CalcProgress();
 
     [SerializeField]
     protected SmithingToolData Data;
@@ -28,23 +29,22 @@ namespace SHG
     protected abstract bool isRemamingTimeElapse { get; }
     protected abstract Item ItemToReturn { get; }
     [SerializeField]
-    protected bool isInteracting;
     protected float DefaultRequiredTime => this.Data.TimeRequiredInSeconds;
     protected int DefaultRequiredInteractCount => this.Data.RequiredInteractCount;
 
     protected SmithingTool(SmithingToolData data)
     {
       this.Data = data;
-      this.isInteracting = false;
       this.RemainingInteractionCount = data.RequiredInteractCount;
       this.RemainingTime = data.TimeRequiredInSeconds;
     }
 
     public virtual void OnUpdate(float deltaTime)
     {
-      if (!this.isRemamingTimeElapse || !this.isInteracting) {
-        return ;
-      }  
+      if (!this.isRemamingTimeElapse ||
+      this.HoldingItem == null || this.IsFinished) {
+        return;
+      }
       this.RemainingTime -= deltaTime;
       if (this.RemainingTime < 0) {
         this.RemainingInteractionCount -= 1;
@@ -53,6 +53,65 @@ namespace SHG
 
     public abstract bool IsInteractable(PlayerInteractArgs args);
     public abstract ToolInteractArgs Interact(PlayerInteractArgs args);
+
+    protected float CalcProgress()
+    {
+      var countProgress = ((float)this.DefaultRequiredInteractCount -
+        (float)this.RemainingInteractionCount) /
+        (float)this.DefaultRequiredInteractCount;
+      var timeProgress = (this.DefaultRequiredTime - this.RemainingTime) /
+        this.DefaultRequiredTime;
+      return (countProgress + (timeProgress / (float)this.DefaultRequiredInteractCount));
+    }
+
+    protected ToolInteractArgs DecreseInteractionCount(float durationToStay)
+    {
+      this.RemainingInteractionCount -= 1;
+      return (new ToolInteractArgs {
+        ReceivedItem = null,
+        DurationToPlayerStay = durationToStay,
+        IsMaterialItemTaken = false,
+        OnTrigger = this.OnTriggered
+      });
+    }
+
+    protected ToolInteractArgs ReceiveMaterialItem(MaterialItem materialItem, float durationToStay = 0)
+    {
+      this.HoldingItem = materialItem;
+      ToolInteractArgs result = new ToolInteractArgs {
+        ReceivedItem = null,
+        DurationToPlayerStay = durationToStay,
+        IsMaterialItemTaken = true,
+        OnTrigger = this.OnTriggered
+      };
+      return (result);
+    }
+
+    protected ToolInteractArgs ReturnItem(float durationToStay = 0)
+    {
+      var item = this.ItemToReturn;
+      this.ResetInteraction();
+      return (new ToolInteractArgs {
+        ReceivedItem = item,
+        DurationToPlayerStay = durationToStay,
+        IsMaterialItemTaken = false,
+        OnTrigger = this.OnTriggered
+      });
+    }
+
+    protected ToolInteractArgs ReturnWithEvent(in ToolInteractArgs result)
+    {
+      this.AfterInteract?.Invoke(this, result);
+      return (result);
+    }
+
+    protected virtual void ResetInteraction()
+    {
+      this.RemainingTime = this.DefaultRequiredTime;
+      this.RemainingInteractionCount = this.DefaultRequiredInteractCount;
+      this.HoldingItem = null;
+    }
+    protected abstract void OnTriggered(IInteractable interactable);
   }
 }
 
