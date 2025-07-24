@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using SHG;
 using UnityEngine;
+using MIN;
 using UnityEngine.ResourceManagement.ResourceProviders.Simulation;
 
 
@@ -12,9 +12,14 @@ namespace KMS
     public class Item : MonoBehaviour, ICarryable
     {
 
-        protected TestItemData data;
+        [SerializeField] protected MaterialData matCatalog;
+        [SerializeField] protected GameObject model;
 
-        public TestItemData Data
+        protected ItemData data;
+
+
+        //아이템이 참조할 아이템 스크립터블 오브젝트
+        public ItemData Data
         {
             get
             {
@@ -26,7 +31,7 @@ namespace KMS
                 InitItemData(data);
             }
         }
-        protected virtual void InitItemData(TestItemData itemdata)
+        protected virtual void InitItemData(ItemData itemdata)
         {
         }
 

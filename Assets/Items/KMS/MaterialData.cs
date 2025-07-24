@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[CreateAssetMenu(menuName = "MaterialData")]
 public class MaterialData : ScriptableObject
 {
 
@@ -12,6 +12,10 @@ public class MaterialData : ScriptableObject
 
     public Material Stone;
     public Material None;
+
+    public Material Birch;
+
+    public Material HotMetal;
 
 
 }
