@@ -17,7 +17,7 @@ namespace SHG
   {
     public MaterialItem CurrentHoldingItem;
     public int PlayerNetworkId;
-    public Action OnCancel;
+    public Action<IInteractable> OnTrigger;
 
     public override string ToString()
     {
