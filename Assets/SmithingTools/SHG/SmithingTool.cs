@@ -21,6 +21,7 @@ namespace SHG
     public float RemainingTime { get; protected set; }
     [ShowInInspector]
     public int RemainingInteractionCount { get; protected set; }
+    public float Progress => this.CalcProgress();
 
     [SerializeField]
     protected SmithingToolData Data;
@@ -53,6 +54,16 @@ namespace SHG
 
     public abstract bool IsInteractable(PlayerInteractArgs args);
     public abstract ToolInteractArgs Interact(PlayerInteractArgs args);
+
+    protected float CalcProgress()
+    {
+      var countProgress = ((float)this.DefaultRequiredInteractCount - 
+        (float)this.RemainingInteractionCount) / 
+        (float)this.DefaultRequiredInteractCount;
+      var timeProgress = (this.DefaultRequiredTime - this.RemainingTime) /
+        this.DefaultRequiredTime;
+      return (countProgress + (timeProgress / (float)this.DefaultRequiredInteractCount));
+    }
   }
 }
 
