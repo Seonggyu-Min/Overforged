@@ -12,6 +12,7 @@ namespace SHG
     {
       public override bool IsFinished => (this.RemainingInteractionCount < 1);
 
+      public Action<IInteractable> OnInteractionTriggered;
       protected override bool isPlayerMovable => true;
       protected override bool isRemamingTimeElapse => false;
       protected override Item ItemToReturn => (
@@ -54,7 +55,6 @@ namespace SHG
         //TODO
         //1.재료 아이템을 도구로 이동하거나 숨기고 아이콘 표시
         //2. 재료 아이템 또는 플레이어의 상태에 따라 남은 시간을 차등 적용
-        //3.UI에 변화를 알려주는 기능
         if (this.HoldingItem == null) {
           return (this.ReturnWithEvent(
               this.ReceiveMaterialItem(args.CurrentHoldingItem)));
@@ -69,7 +69,8 @@ namespace SHG
         return (new ToolInteractArgs {
           ReceivedItem = null,
           DurationToPlayerStay = this.RemainingTime,
-          IsMaterialItemTaken = false
+          IsMaterialItemTaken = false,
+          OnTrigger = this.OnTriggered
         });
       }
 
@@ -80,7 +81,8 @@ namespace SHG
         ToolInteractArgs result = new ToolInteractArgs {
           ReceivedItem = null,
           DurationToPlayerStay = 0,
-          IsMaterialItemTaken = true
+          IsMaterialItemTaken = true,
+          OnTrigger = this.OnTriggered
         };
         return (result);
       }
@@ -92,7 +94,8 @@ namespace SHG
         return (new ToolInteractArgs {
           ReceivedItem = item,
           DurationToPlayerStay = 0,
-          IsMaterialItemTaken = false
+          IsMaterialItemTaken = false,
+          OnTrigger = this.OnTriggered
         });
       }
 
@@ -108,6 +111,11 @@ namespace SHG
         this.RemainingInteractionCount = this.DefaultRequiredInteractCount;
         this.HoldingItem = null;
         this.isInteracting = false;
+      }
+
+      void OnTriggered(IInteractable interactable)
+      {
+        this.OnInteractionTriggered?.Invoke(interactable);
       }
     }
 }
