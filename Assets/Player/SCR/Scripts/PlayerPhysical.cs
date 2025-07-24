@@ -22,12 +22,12 @@ namespace SCR
             player = GetComponent<Player>();
             rayLength = 1f;
             HoldingObjLayer = LayerMask.NameToLayer("item");
-            centralPos = transform.position;
-            centralPos.y = 0.3f;
         }
 
         void Update()
         {
+            centralPos = transform.position;
+            centralPos.y = 0.3f;
             Debug.DrawRay(centralPos, transform.forward * rayLength, Color.yellow);
         }
 
