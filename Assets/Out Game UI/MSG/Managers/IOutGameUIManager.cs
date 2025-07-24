@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace MIN
 {
@@ -10,7 +11,7 @@ namespace MIN
 
         public void Show(string key);
 
-        public void Hide(string key);
+        public void Hide(string key, Action onComplete = null);
 
         public void ShowAsFirst(string key);
 
