@@ -506,7 +506,7 @@ MonoBehaviour:
   anvil:
     Data: {fileID: 0}
     isInteracting: 0
-  data: {fileID: 0}
+  data: {fileID: 11400000, guid: c1316c9342abf7f62b47dce54e56a9dc, type: 2}
 --- !u!1 &1380290122
 GameObject:
   m_ObjectHideFlags: 0
