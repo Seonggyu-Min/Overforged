@@ -981,10 +981,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.2
-  m_Height: 0.7
+  m_Radius: 0.4
+  m_Height: 1.5
   m_Direction: 1
-  m_Center: {x: 0, y: 0.35, z: 0}
+  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!95 &-4925067354748421328
 Animator:
   serializedVersion: 5
@@ -1071,6 +1071,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 321810940947258551}
+  - {fileID: 4307499343150644350}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1104,5 +1105,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
-  m_SynchronizeParameters: []
-  m_SynchronizeLayers: []
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 1
+    Name: Walk
+  - Type: 4
+    SynchronizeType: 1
+    Name: Hold
+  - Type: 4
+    SynchronizeType: 1
+    Name: UseTongs
+  - Type: 9
+    SynchronizeType: 2
+    Name: Tempering
+  - Type: 9
+    SynchronizeType: 2
+    Name: Throw
+  - Type: 9
+    SynchronizeType: 2
+    Name: Hit
+  - Type: 9
+    SynchronizeType: 2
+    Name: ShowOff
+  - Type: 9
+    SynchronizeType: 2
+    Name: Dash
+  - Type: 9
+    SynchronizeType: 2
+    Name: Hammering
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0

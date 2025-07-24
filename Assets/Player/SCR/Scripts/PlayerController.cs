@@ -10,16 +10,19 @@ namespace SCR
     {
         private Player player;
         private Vector2 inputdirection;
+        private bool canMove;
 
         private void Awake()
         {
             player = GetComponent<Player>();
             inputdirection = new();
+            canMove = true;
         }
 
         private void Update()
         {
-            SetMove();
+            if (canMove)
+                SetMove();
         }
 
         private void SetMove()
@@ -32,6 +35,7 @@ namespace SCR
 
         private void OnMove(InputValue value)
         {
+            if (!canMove) return;
             inputdirection = value.Get<Vector2>().normalized;
 
             if (inputdirection == Vector2.zero) Walk(false);
@@ -45,6 +49,7 @@ namespace SCR
 
         private void OnDash()
         {
+            if (!canMove) return;
             if (!player.PlayerPhysical.IsDash)
             {
                 StartCoroutine(Dash());
@@ -53,6 +58,7 @@ namespace SCR
 
         private void OnAction()
         {
+            if (!canMove) return;
             GameObject ActionObj = player.PlayerPhysical.GetActionObj();
 
             // 집게를 들고 있을 때
@@ -119,11 +125,11 @@ namespace SCR
                         Holding(true);
                         // 상호 작용 오브젝트와 상호작용을 할 수 있는 상태하면 상호작용하기
                         // 용광로일때
-                        Tempering();
+                        StartCoroutine(Tempering());
                         // 모루일때
-                        Hammering();
+                        StartCoroutine(Hammering());
                         // 담금질할때
-                        Tempering();
+                        StartCoroutine(Tempering());
                     }
                     else if (ActionObj.CompareTag("아이템"))
                     {
@@ -141,7 +147,8 @@ namespace SCR
 
         private void OnThrow()
         {
-            Throw();
+            if (!canMove) return;
+            StartCoroutine(Throw());
             if (player.PlayerPhysical.IsHold)
             {
                 // 들고 있는 아이템에 AddForce 해주기
@@ -150,7 +157,8 @@ namespace SCR
 
         private void OnShowOff()
         {
-            ShowOff();
+            if (!canMove) return;
+            StartCoroutine(ShowOff());
         }
 
         private IEnumerator Dash()
@@ -158,25 +166,20 @@ namespace SCR
             player.PlayerPhysical.IsDash = true;
             player.Rigidbody.AddForce(transform.forward
                 * player.PlayerPhysical.DashForce, ForceMode.Impulse);
-            UseDash();
-            float time = 0.5f;
+            player.Animator.SetBool("Dash", true);
+            float time = 0.8333f;
             while (time > 0.0f)
             {
                 time -= Time.deltaTime;
                 yield return new WaitForFixedUpdate();
             }
+            player.Animator.SetBool("Dash", false);
             player.Rigidbody.velocity = Vector3.zero;
             player.PlayerPhysical.IsDash = false;
         }
-
         private void Walk(bool move)
         {
             player.Animator.SetBool("Walk", move);
-        }
-
-        private void UseDash()
-        {
-            player.Animator.SetTrigger("Dash");
         }
 
         private void Holding(bool hold)
@@ -185,24 +188,62 @@ namespace SCR
             player.Animator.SetBool("Hold", hold);
         }
 
-        private void Throw()
+
+        private IEnumerator Throw()
         {
-            player.Animator.SetTrigger("Throw");
+            player.Animator.SetBool("Throw", true);
+            float time = 0.417f;
+            while (time > 0.0f)
+            {
+                time -= Time.deltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+            player.Animator.SetBool("Throw", false);
         }
 
-        private void Hammering()
+
+        private IEnumerator Hammering()
         {
-            player.Animator.SetTrigger("Hammering");
+            canMove = false;
+            player.Animator.SetBool("Hammering", true);
+            float time = 0.5f;
+            while (time > 0.0f)
+            {
+                time -= Time.deltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+            player.Animator.SetBool("Hammering", false);
+            canMove = true;
         }
 
-        private void Tempering()
+
+        private IEnumerator Tempering()
         {
-            player.Animator.SetTrigger("Tempering");
+            canMove = false;
+            player.Animator.SetBool("Tempering", true);
+            float time = 0.667f;
+            while (time > 0.0f)
+            {
+                time -= Time.deltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+            player.Animator.SetBool("Tempering", false);
+            canMove = true;
         }
 
-        private void ShowOff()
+
+        private IEnumerator ShowOff()
         {
-            player.Animator.SetTrigger("ShowOff");
+            canMove = false;
+            player.Animator.SetBool("ShowOff", true);
+            float time = 1f;
+            while (time > 0.0f)
+            {
+                time -= Time.deltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+            player.Animator.SetBool("ShowOff", false);
+            canMove = true;
         }
 
         private void UseTongs(bool useTong)

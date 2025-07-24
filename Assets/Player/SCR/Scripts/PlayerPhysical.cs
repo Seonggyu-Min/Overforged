@@ -15,17 +15,20 @@ namespace SCR
         public bool IsDash;
         public bool IsHold;
         public bool UseTongs;
+        private Vector3 centralPos;
 
         void Awake()
         {
             player = GetComponent<Player>();
-            rayLength = 5f;
+            rayLength = 1f;
             HoldingObjLayer = LayerMask.NameToLayer("item");
+            centralPos = transform.position;
+            centralPos.y = 0.3f;
         }
 
         void Update()
         {
-            Debug.DrawRay(transform.position, transform.forward * rayLength, Color.yellow);
+            Debug.DrawRay(centralPos, transform.forward * rayLength, Color.yellow);
         }
 
         public void SetPhysical(float speed, float dashForce, float workSpeed)
@@ -38,12 +41,12 @@ namespace SCR
         public GameObject GetActionObj()
         {
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.forward, out hit, rayLength, HoldingObjLayer))
+
+            if (Physics.Raycast(centralPos, transform.forward, out hit, rayLength, HoldingObjLayer))
             {
                 Debug.Log(hit.collider.gameObject.name);
                 return hit.collider.gameObject;
             }
-            Debug.Log(hit.collider.gameObject.name);
             return null;
         }
     }
