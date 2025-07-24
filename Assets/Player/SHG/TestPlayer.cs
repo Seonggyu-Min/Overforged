@@ -13,8 +13,7 @@ namespace SHG
     float interactRange; 
     [SerializeField]
     TestMaterialItemData HoldingItemData;
-    public Action<IInteractable> OnTriggerInteraction;
-    IInteractable lastInteractable;
+    public Action OnTriggerInteraction;
 
     public TestMaterialItem HoldingItem => this.HoldingItemData != null ?  new TestMaterialItem(this.HoldingItemData): null;
 
@@ -76,7 +75,6 @@ namespace SHG
       return (new PlayerInteractArgs {
           CurrentHoldingItem = this.HoldingItem,
           PlayerNetworkId = 1,
-          OnCancel = this.OnTriggerInteraction,
           OnTrigger = this.OnTriggerInteraction
         });
     }
@@ -85,8 +83,6 @@ namespace SHG
     {
       ToolInteractArgs result = interactable.Interact(
           this.GetInteractArgs());
-      this.lastInteractable = interactable;
-      this.OnTriggerInteraction?.Invoke(this.lastInteractable);
       Debug.Log($"interaction result: {result}");
     }
 
