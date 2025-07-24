@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fd9578c79781667eb4767d61fa7689e, type: 3}
+  m_Name: HotIngotMaterial
+  m_EditorClassIdentifier: 
+  Name: Iron Ingot
+  prefab: {fileID: 6821755785160948244, guid: 988b2c8e901c7232c9ac55d1377d172a, type: 3}
+  Image: {fileID: 21300000, guid: ccebdea707e01ff95a7791cef54aa78b, type: 3}
+  Type: 3
+  RefinedResult: {fileID: 11400000, guid: 764f3a789a73907e6958e237ac607ca1, type: 2}
