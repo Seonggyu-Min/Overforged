@@ -1,4 +1,5 @@
-﻿using Firebase.Extensions;
+﻿using Firebase.Auth;
+using Firebase.Extensions;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -34,19 +35,11 @@ namespace MIN
         #endregion
 
 
-
-
         #region Public Methods
 
-        public void OnClickConfirmButton()
-        {
-            SignUp();
-        }
+        public void OnClickConfirmButton() => SignUp();
 
-        public void OnClickCancelButton()
-        {
-            _outGameUIManager.CloseTopPanel();
-        }
+        public void OnClickCancelButton() => _outGameUIManager.CloseTopPanel();
 
         #endregion
 
@@ -78,11 +71,31 @@ namespace MIN
                         return;
                     }
 
-                    _infoText.text = "회원가입이 완료되었습니다.";
-                    StartInfoTextCoroutine();
+                    FirebaseUser user = task.Result.User;
+                    string userId = user.UserId;
+                    string now = System.DateTime.UtcNow.ToString("s"); // ISO8601 형식
 
-                    _outGameUIManager.Hide("Sign Up Panel");
-                    _outGameUIManager.Show("Log In Panel");
+                    Dictionary<string, object> userData = new()
+                    {
+                        { "email", _idInputField.text },
+                        { "createdAt", now }
+                    };
+
+                    _firebaseManager.Database
+                        .GetReference("users")
+                        .Child(userId)
+                        .SetValueAsync(userData)
+                        .ContinueWithOnMainThread(dbTask =>
+                        {
+                            if (dbTask.IsCanceled || dbTask.IsFaulted)
+                            {
+                                _infoText.text = "회원 정보 저장 중 오류가 발생했습니다.";
+                                StartInfoTextCoroutine();
+                                return;
+                            }
+
+                            _outGameUIManager.CloseTopPanel();
+                        });
                 });
         }
 
@@ -93,6 +106,7 @@ namespace MIN
             _infoText.gameObject.SetActive(false);
         }
 
+        // TODO: 안내 메시지가 계속 사용된다면 static 클래스에서 구현하기
         private void StartInfoTextCoroutine()
         {
             if (_infoTextCo != null)
