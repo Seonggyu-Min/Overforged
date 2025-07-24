@@ -43,10 +43,6 @@ namespace SHG
             new ApplicationException(
               "player try to interact but not interactable"));
         }
-        #else
-        if(!(args.CurrentHoldingItem is MaterialItem materialItem)) {
-          return (new ToolInteractArgs {});
-        }
         #endif
         this.BeforeInteract?.Invoke(this, args);
         if (this.IsFinished) {
@@ -60,60 +56,10 @@ namespace SHG
               this.ReceiveMaterialItem(args.CurrentHoldingItem)));
         }
         return (this.ReturnWithEvent(
-            this.DecreseInteractionCount()));
+            this.DecreseInteractionCount(this.RemainingTime)));
       }
 
-      ToolInteractArgs DecreseInteractionCount()
-      {
-        this.RemainingInteractionCount -= 1;
-        return (new ToolInteractArgs {
-          ReceivedItem = null,
-          DurationToPlayerStay = this.RemainingTime,
-          IsMaterialItemTaken = false,
-          OnTrigger = this.OnTriggered
-        });
-      }
-
-      ToolInteractArgs ReceiveMaterialItem(MaterialItem materialItem)
-      {
-        this.HoldingItem = materialItem;  
-        this.isInteracting = true;
-        ToolInteractArgs result = new ToolInteractArgs {
-          ReceivedItem = null,
-          DurationToPlayerStay = 0,
-          IsMaterialItemTaken = true,
-          OnTrigger = this.OnTriggered
-        };
-        return (result);
-      }
-
-      ToolInteractArgs ReturnItem()
-      {
-        var item = this.ItemToReturn;
-        this.ResetInteraction();
-        return (new ToolInteractArgs {
-          ReceivedItem = item,
-          DurationToPlayerStay = 0,
-          IsMaterialItemTaken = false,
-          OnTrigger = this.OnTriggered
-        });
-      }
-
-      ToolInteractArgs ReturnWithEvent(in ToolInteractArgs result)
-      {
-        this.AfterInteract?.Invoke(this, result);
-        return (result);
-      }
-
-      void ResetInteraction()
-      {
-        this.RemainingTime = this.DefaultRequiredTime;
-        this.RemainingInteractionCount = this.DefaultRequiredInteractCount;
-        this.HoldingItem = null;
-        this.isInteracting = false;
-      }
-
-      void OnTriggered(IInteractable interactable)
+      protected override void OnTriggered(IInteractable interactable)
       {
         this.OnInteractionTriggered?.Invoke(interactable);
       }
