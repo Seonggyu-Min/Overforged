@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SHG
 {
 
-  public class ItemData: ScriptableObject
+  public class TestItemData: ScriptableObject
   {
     public string Name;
     public GameObject prefab;
@@ -14,8 +14,8 @@ namespace SHG
 
   public class TestItem
   {
-    public ItemData Data;
-    public TestItem(ItemData data)
+    public TestItemData Data;
+    public TestItem(TestItemData data)
     {
       this.Data = data;
     }
