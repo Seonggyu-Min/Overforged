@@ -101,7 +101,7 @@ namespace SHG
 
     void OnInteractionTriggered(IInteractable interactable)
     {
-      if (interactable == this) {
+      if (System.Object.ReferenceEquals(this, interactable)) {
         this.meshRenderer.material.color = this.normalColor;
       }
     }
