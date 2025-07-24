@@ -76,7 +76,6 @@ namespace SHG
       return (new PlayerInteractArgs {
           CurrentHoldingItem = this.HoldingItem,
           PlayerNetworkId = 1,
-          OnCancel = this.OnTriggerInteraction,
           OnTrigger = this.OnTriggerInteraction
         });
     }
