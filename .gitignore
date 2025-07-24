@@ -78,39 +78,4 @@ Assets/StreamingAssets/google-services-desktop.json
 Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset
 /Assets/Imports
 /Assets/Firebase/Plugins
-
-### Linux ###
-*~
-
-# Linux trash folder which might appear on any partition or disk
-.Trash-*
-
-### Vim ###
-
-# Swap
-[._]*.s[a-v][a-z]
-!*.svg  # comment out if you don't need vector files
-[._]*.sw[a-p]
-[._]s[a-rt-v][a-z]
-[._]ss[a-gi-z]
-[._]sw[a-p]
-
-# Session
-Session.vim
-Sessionx.vim
-
-# Temporary
-.netrwhist
-
-# Auto-generated tag files
-**/tags
-**/tags.meta
-
-# Persistent undo
-[._]*.un~
-
-# Parrel sync setting
-[Aa]ssets/[Pp]lugins/ParrelSync/ScriptableOjects/
-.vscode/extensions.json
-.vscode/launch.json
-.vscode/settings.json
+/.vscode
