@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SHG
 {
   [CreateAssetMenu(menuName = "GameData/Test/MaterialItem")]
-  public class TestMaterialItemData: TestItemData
+  public class TestMaterialItemData: ItemData
   {
     public TestMaterialType Type;
     public TestMaterialItemData RefinedResult;

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3127b297ac8afc7469328c0756168423, type: 3}
+  m_Name: New Material Data
+  m_EditorClassIdentifier: 
+  Gold: {fileID: 2100000, guid: edaf13bb72049a542aff6528892c5555, type: 2}
+  Copper: {fileID: 2100000, guid: 34c85bbc3b82812408ea4e35444770e8, type: 2}
+  Steel: {fileID: 2100000, guid: 13d57757d7c997b40a6a0fb67d981213, type: 2}
+  Wood: {fileID: 2100000, guid: f95a3e18bb6769c42bfdcfff3d485c52, type: 2}
+  Stone: {fileID: 2100000, guid: 638df8d89b0f1c84aa447e7883732d5d, type: 2}
+  None: {fileID: 2100000, guid: 09ec03d8ebc40d74da44769b2aee8ad2, type: 2}
+  Birch: {fileID: 2100000, guid: 3e8baab972d90ce47b169ef546b74f4c, type: 2}
+  HotMetal: {fileID: 2100000, guid: db9b0a13f32a9ce45b1fff33499c4101, type: 2}
