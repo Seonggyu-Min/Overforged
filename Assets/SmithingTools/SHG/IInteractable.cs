@@ -17,7 +17,6 @@ namespace SHG
   {
     public MaterialItem CurrentHoldingItem;
     public int PlayerNetworkId;
-    public Action<IInteractable> OnTrigger;
 
     public override string ToString()
     {
@@ -30,6 +29,7 @@ namespace SHG
     public Item ReceivedItem;
     public float DurationToPlayerStay;
     public bool IsMaterialItemTaken;
+    public Action<IInteractable> OnTrigger;
 
     public override string ToString()
     {
