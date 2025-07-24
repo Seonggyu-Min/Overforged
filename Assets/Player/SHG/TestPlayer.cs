@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using UnityEngine;
+using EditorAttributes;
 
 namespace SHG
 {
-  [RequireComponent(typeof(Rigidbody))]
+  [RequireComponent(typeof(Rigidbody), typeof(MeshRenderer))]
   public class TestPlayer : MonoBehaviour
   {
 
@@ -15,6 +17,13 @@ namespace SHG
     TestMaterialItemData HoldingItemData;
     public Action<IInteractable> OnTriggerInteraction;
     IInteractable lastInteractable;
+    [SerializeField]
+    Color normalColor;
+    [SerializeField]
+    Color interactColor;
+    float interactionDuration;
+    Coroutine toolInteractionRoutine;
+    MeshRenderer meshRenderer;
 
     public TestMaterialItem HoldingItem => this.HoldingItemData != null ?  new TestMaterialItem(this.HoldingItemData): null;
 
@@ -75,18 +84,44 @@ namespace SHG
     {
       return (new PlayerInteractArgs {
           CurrentHoldingItem = this.HoldingItem,
-          PlayerNetworkId = 1,
-          OnTrigger = this.OnTriggerInteraction
+          PlayerNetworkId = 1
         });
     }
 
     void Interact(in IInteractable interactable, in PlayerInteractArgs args)
     {
+      this.lastInteractable = interactable;
       ToolInteractArgs result = interactable.Interact(
           this.GetInteractArgs());
-      this.lastInteractable = interactable;
+      this.OnTriggerInteraction = result.OnTrigger;
+      if (result.ReceivedItem != null && 
+        result.ReceivedItem.Data is TestMaterialItemData materialItemData) {
+        this.HoldingItemData = materialItemData;
+      }
+      else if (result.IsMaterialItemTaken) {
+        this.HoldingItemData = null;
+      }
+      if (result.DurationToPlayerStay != 0) {
+        this.interactionDuration = result.DurationToPlayerStay;
+        this.StartInteractionRoutine();
+      }
+      else {
+        this.OnTriggerInteraction?.Invoke(this.lastInteractable);
+      }
+    }
+
+    void StartInteractionRoutine()
+    {
+      this.toolInteractionRoutine = this.StartCoroutine(
+        this.InteractionRoutine());   
+    }
+
+    IEnumerator InteractionRoutine()
+    {
+      this.meshRenderer.material.color = this.interactColor;
+      yield return (new WaitForSeconds(this.interactionDuration));
+      this.meshRenderer.material.color = this.normalColor;
       this.OnTriggerInteraction?.Invoke(this.lastInteractable);
-      Debug.Log($"interaction result: {result}");
     }
 
     #region Test code
@@ -123,6 +158,7 @@ namespace SHG
     void Awake()
     {
       this.rb = this.GetComponent<Rigidbody>();
+      this.meshRenderer = this.GetComponent<MeshRenderer>();
     }
     #endregion
   }

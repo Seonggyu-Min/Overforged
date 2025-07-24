@@ -10,17 +10,34 @@ namespace MIN
         Trash,
         Ore,
         Bar,
-        HeatedBlade,
-        CooledBlade,
+        Blade,
+        String,
+        BowBase,
+        AxeBlade,
+        HammerHead,
         Wood,
-        Handle,
-        Finished
+        Handle
+    }
+    public enum ProductType
+    {
+        Bow,
+        Sword,
+        Axe,
+        Hammer
+    }
+
+        public enum MaterialType
+    {
+        None,
+        Metallic,
+        Wooden
+
     }
 
     public enum OreType
     {
         None,
-        Iron,
+        Steel,
         Copper,
         Gold
     }
@@ -31,4 +48,5 @@ namespace MIN
         Oak,    // 참나무
         Birch   // 자작나무
     }
+
 }
