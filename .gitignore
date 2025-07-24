@@ -79,10 +79,4 @@ Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset
 /Assets/Imports
 /Assets/Firebase/Plugins
 /.vscode
-
-# Zenject
-/[Aa]ssets/[Pp]lugins/[Zz]enject/
-/[Aa]ssets/[Pp]lugins/[Zz]enject.meta
-/[Aa]ssets/[Pp]hoton/
-/[Aa]ssets/[Pp]hoton.meta
-
+/Assets/Plugins/Demigiant
