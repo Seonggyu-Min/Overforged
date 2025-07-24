@@ -1,8 +1,9 @@
+using Photon.Pun;
 using UnityEngine;
 
 namespace SCR
 {
-    public class Player : MonoBehaviour
+    public class Player : MonoBehaviourPun
     {
         private Rigidbody _rigidbody;
         private Collider _collider;
@@ -34,18 +35,22 @@ namespace SCR
             _collider = GetComponent<Collider>();
             animator = GetComponent<Animator>();
             audioSource = GetComponent<AudioSource>();
-            playerController = gameObject.AddComponent<PlayerController>();
+            if (photonView.IsMine)
+                playerController = gameObject.AddComponent<PlayerController>();
             playerPhysical = gameObject.AddComponent<PlayerPhysical>();
-            SetTeam(1);
         }
 
-        public void SetTeam(int team)
+        public void SetTeam(int team, Color color)
         {
             this.team = team;
-            // team을 받아서 스카프의 색을 변경
-            // _renderer.material.color = Color[team];
-            // 캐릭터의 정보를 받아와서 스탯을 바꿔준다.
-            playerPhysical.SetPhysical(3f, 5f, 1f);
+            _renderer.material.color = color;
+        }
+
+        public void SetCharacter(Character character)
+        {
+            playerPhysical.SetPhysical(character.walkSpeed,
+                                    character.dashForce,
+                                    character.workSpeed);
         }
     }
 }
