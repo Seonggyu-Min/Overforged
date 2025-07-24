@@ -9,18 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c13b17088ce587d42acf16f2050ab374, type: 3}
-  m_Name: HammerHead
+  m_Script: {fileID: 11500000, guid: dddc959e1036d3a41a48d2febf8353e0, type: 3}
+  m_Name: Sword
   m_EditorClassIdentifier: 
-  ID: 109
+  ID: 0
   Name: 
   ItemType: 0
   OreType: 0
   WoodType: 0
   NeedTongs: 0
   Image: {fileID: 0}
-  ItemPrefab: {fileID: -259972160606440404, guid: a55ba290b477e1a47886b6f080d6e895, type: 3}
+  ItemPrefab: {fileID: 727144303207958803, guid: 141351361084ffb429b43216fa442c39, type: 3}
   NextItem: {fileID: 0}
-  CombineObjType: 7
-  materialType: 2
-  nextMaterial: {fileID: 11400000, guid: 1b516dbf2a3b38c449e85c63bfd908b4, type: 2}
+  CombineObjType: 0
+  productType: 1

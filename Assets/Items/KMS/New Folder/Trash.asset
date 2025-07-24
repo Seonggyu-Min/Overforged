@@ -12,10 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c13b17088ce587d42acf16f2050ab374, type: 3}
   m_Name: Trash
   m_EditorClassIdentifier: 
-  ID: 0
+  ID: 100
   Name: 
+  ItemType: 0
+  OreType: 0
+  WoodType: 0
+  NeedTongs: 0
   Image: {fileID: 0}
   ItemPrefab: {fileID: 3832049445580987983, guid: 80db561baed58c34da12e9e7ce1a0700, type: 3}
+  NextItem: {fileID: 0}
   CombineObjType: 0
-  materialType: 1
+  materialType: 0
   nextMaterial: {fileID: 0}
