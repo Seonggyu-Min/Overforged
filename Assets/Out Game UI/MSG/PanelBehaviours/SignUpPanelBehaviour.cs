@@ -66,7 +66,7 @@ namespace MIN
                     }
                     if (task.IsFaulted)
                     {
-                        _infoText.text = "회원가입 중 오류가 발생했습니다.";
+                        _infoText.text = $"회원가입 중 오류가 발생했습니다.{task.Exception}";
                         StartInfoTextCoroutine();
                         return;
                     }
