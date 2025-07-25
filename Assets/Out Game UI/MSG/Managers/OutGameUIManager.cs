@@ -96,6 +96,13 @@ namespace MIN
                     return;
                 }
 
+                if (topPanel.IsPopUp) // 팝업 패널은 그냥 닫기
+                {
+                    topPanel.HideAnimation();
+                    _panelStack.Pop();
+                    return;
+                }
+
                 _panelStack.Pop();
                 UIPanel previousPanel = _panelStack.Peek();
 
