@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c13b17088ce587d42acf16f2050ab374, type: 3}
   m_Name: Handle
   m_EditorClassIdentifier: 
-  ID: 0
+  ID: 105
   Name: 
   Image: {fileID: 0}
   ItemPrefab: {fileID: 2766212503428324877, guid: a55ba290b477e1a47886b6f080d6e895, type: 3}
-  CombineObjType: 9
-  materialType: 2
-  nextMaterial: {fileID: 0}
+  materialItemType: 9
+  materialType: 3
+  nextMaterial: {fileID: 11400000, guid: 6cb14106c0dd60b41aa2edec90ec8fb6, type: 2}

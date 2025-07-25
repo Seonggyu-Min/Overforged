@@ -17,7 +17,6 @@ namespace MIN
         private FirebaseAuth _auth;
         private FirebaseDatabase _database;
 
-
         public FirebaseApp App
         {
             get
@@ -53,6 +52,7 @@ namespace MIN
                 return _database;
             }
         }
+
         #endregion
 
         private void Start()

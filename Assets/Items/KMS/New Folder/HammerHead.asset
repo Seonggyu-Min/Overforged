@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c13b17088ce587d42acf16f2050ab374, type: 3}
   m_Name: HammerHead
   m_EditorClassIdentifier: 
-  ID: 0
+  ID: 109
   Name: 
   Image: {fileID: 0}
   ItemPrefab: {fileID: -259972160606440404, guid: a55ba290b477e1a47886b6f080d6e895, type: 3}
-  CombineObjType: 7
-  materialType: 1
-  nextMaterial: {fileID: 0}
+  materialItemType: 7
+  materialType: 2
+  nextMaterial: {fileID: 11400000, guid: 1b516dbf2a3b38c449e85c63bfd908b4, type: 2}

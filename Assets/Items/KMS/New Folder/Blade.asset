@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c13b17088ce587d42acf16f2050ab374, type: 3}
   m_Name: Blade
   m_EditorClassIdentifier: 
-  ID: 0
+  ID: 107
   Name: 
   Image: {fileID: 0}
-  ItemPrefab: {fileID: -7334951474422550414, guid: b22d1fbfdd0aa3f44bd6bc8685e3995f, type: 3}
-  CombineObjType: 3
-  materialType: 1
-  nextMaterial: {fileID: 0}
+  ItemPrefab: {fileID: -7334951474422550414, guid: f442190307bb3974a9bca57366eb782b, type: 3}
+  materialItemType: 3
+  materialType: 2
+  nextMaterial: {fileID: 11400000, guid: 5ad36b537bb22564c9c06458ef1dd5d9, type: 2}
