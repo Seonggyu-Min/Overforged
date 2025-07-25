@@ -13,12 +13,12 @@ namespace SHG
     const float MAX_TEMPARATURE = 1000f;
     const float MIN_TEMPARATURE = 20f;
     public override bool IsFinished => this.Progress >= 1.0f;
-        
+
     public bool IsIgnited { get; private set; }
     public Action<bool> OnTurnIgnited;
     public Action OnFinished;
     public float Temparature { get; private set; }
-    public Action<IInteractable> OnInteractionTrigged;
+    public Action OnInteractionTrigged;
 
     public Furnace(SmithingToolData data) : base(data)
     {
@@ -32,34 +32,6 @@ namespace SHG
     protected override TestItem ItemToReturn => (
       this.HoldingItem != null ? this.HoldingItem.GetRefinedResult(): null);
 
-    public override ToolInteractArgs Interact(PlayerInteractArgs args)
-    {
-      #if UNITY_EDITOR
-      if (!this.IsInteractable(args)) {
-        throw (new ApplicationException($"Player is not interactable with {nameof(Furnace)}"));
-      }
-      #endif
-      this.BeforeInteract?.Invoke(this, args);
-      if (!this.IsIgnited) {
-        this.IsIgnited = true;
-        return (this.ReturnWithEvent(
-            new ToolInteractArgs {
-              ReceivedItem = null,
-              DurationToPlayerStay = 0f,
-              IsMaterialItemTaken = false,
-              OnTrigger = this.OnInteractionTrigged,
-            }));
-      }
-      if (args.CurrentHoldingItem != null) {
-          return (this.ReturnWithEvent(
-            this.ReceiveMaterialItem(args.CurrentHoldingItem)));
-      }
-      if (this.IsFinished) {
-        return (this.ReturnWithEvent( this.ReturnItem()));
-      }
-      return (new ToolInteractArgs());
-    }
-
     ToolInteractArgs TurnIgnited()
     {
       this.IsIgnited = !this.IsIgnited;
@@ -69,7 +41,7 @@ namespace SHG
         DurationToPlayerStay = 0,
         IsMaterialItemTaken = false,
         OnTrigger = this.OnTriggerIgnited
-      });
+        });
     }
 
     void OnTriggerIgnited(IInteractable interactable)
@@ -92,25 +64,41 @@ namespace SHG
       }
     }
 
-    public override bool IsInteractable(PlayerInteractArgs args)
+    protected override void OnTriggered()
     {
-      if (!this.IsIgnited) {
-        return (true);
-      }
-      if (this.IsFinished) {
-        Debug.Log($"IsFinished");
-        return (args.CurrentHoldingItem == null);
-      }
-      if (this.HoldingItem == null && args.CurrentHoldingItem != null)
-      {
-        return (true);
-      }
-      return (false);
+      this.OnInteractionTrigged?.Invoke();
     }
 
-    protected override void OnTriggered(IInteractable interactable)
+    public override bool CanTransferItem(ToolTransferArgs args)
     {
-      this.OnInteractionTrigged?.Invoke(interactable);
+      if (args.ItemToGive != null) {
+        return (this.HoldingItem == null);
+      }
+      else {
+        return (this.ItemToReturn != null && this.IsFinished);
+      }
+    }
+
+    public override bool CanWork()
+    {
+      return (!this.IsIgnited);
+    }
+
+    public override ToolWorkResult Work()
+    {
+      if (!this.IsIgnited) {
+        this.IsIgnited = true;
+      }
+      else {
+        // TODO: turn off fire?
+      }
+      return (
+        this.ReturnWithEvent(
+          new ToolWorkResult {
+            Trigger = this.OnTriggered,
+            DurationToStay = 0 
+          }
+      ));
     }
   }
 }

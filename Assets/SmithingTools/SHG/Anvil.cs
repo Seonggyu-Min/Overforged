@@ -26,7 +26,7 @@ namespace SHG
       if (args.ItemToGive == null) {
         return (this.HoldingItem != null && this.IsFinished);
       }
-      if (this.HoldingItem != null) {
+      if (this.ItemToReturn != null) {
         return (false);
       }
       return (Array.IndexOf(this.AllowedMaterials, args.ItemToGive.MaterialType) != -1);
