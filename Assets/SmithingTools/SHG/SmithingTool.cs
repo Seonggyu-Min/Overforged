@@ -137,8 +137,10 @@ namespace SHG
 
     protected ToolWorkResult ChangeMaterial(float durationToStay)
     {
-      this.HoldingItem = this.HoldingItem.GetRefinedResult();
+      var nextItem = this.HoldingItem.GetRefinedResult();
       this.interactionToTrigger = InteractionType.Work;
+      this.ResetInteraction();
+      this.HoldingItem = nextItem;
       return (new ToolWorkResult {
         Trigger = this.OnTriggered,
         DurationToStay = durationToStay
