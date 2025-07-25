@@ -82,13 +82,13 @@ classDiagram
     class PlayerInteractArgs {
         +CurrentHoldingItem: Nullable~MaterialItem~
         +PlayerNetworkId: int
-        +OnTrigger: Action~SmithingTool~
     }
 
     class ToolInteractArgs {
         +ReceivedItem: Nullable~Item~
         +DurationToPlayerStay: float
         +IsMaterialItemTaken bool
+        +OnTrigger: Action~SmithingTool~
     }
 
     class SmithingToolData {
@@ -119,7 +119,7 @@ classDiagram
         +Interact(PlayerInteractArgs) ToolInteractArgs
     }
 
-    class WoodWorkTable {
+    class CraftTable {
         +HasCraftableItem(Player) bool
         +ShowPrductIconUI()
         -CraftList: List~CraftData~
