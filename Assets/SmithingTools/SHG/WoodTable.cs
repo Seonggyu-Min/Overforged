@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace SHG
 {
@@ -6,8 +7,8 @@ namespace SHG
   using MaterialItem = TestMaterialItem;
 
   //TODO
-  // 재료 아이템 또는 플레이어의 상태에 따라 작업효율 차등 적용
-  public class Anvil : SmithingTool, IInteractable
+  //재료, 플레이어의 상태에 따라 작업효율 차등 적용
+  public class WoodTable: SmithingTool
   {
     public override bool IsFinished => (this.RemainingInteractionCount < 1);
 
@@ -17,7 +18,7 @@ namespace SHG
     protected override Item ItemToReturn => (
       this.HoldingItem != null ? this.HoldingItem.GetRefinedResult() : null);
 
-    public Anvil(SmithingToolData data): base(data)
+    public WoodTable(SmithingToolData data): base(data)
     {
     }
 

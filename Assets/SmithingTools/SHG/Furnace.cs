@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace SHG
 {
+  //TODO
+  //재료 아이템에 효율을 차등 적용
+  //온도에 따라 효율을 차등 적용
   public class Furnace : SmithingTool
   {
     const float TEMP_INCREASE_DELTA = 10f;
