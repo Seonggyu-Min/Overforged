@@ -2,8 +2,6 @@ using System;
 
 namespace SHG
 {
-  using Item = TestItem;
-  using MaterialItem = TestMaterialItem;
 
   //TODO
   // 재료 아이템 또는 플레이어의 상태에 따라 작업효율 차등 적용
@@ -13,8 +11,6 @@ namespace SHG
 
     protected override bool isPlayerMovable => true;
     protected override bool isRemamingTimeElapse => false;
-    protected override Item ItemToReturn => (
-      this.HoldingItem != null ? this.HoldingItem.GetRefinedResult() : null);
 
     public Anvil(SmithingToolData data): base(data)
     {
@@ -28,7 +24,7 @@ namespace SHG
       if (this.ItemToReturn != null) {
         return (false);
       }
-      return (Array.IndexOf(this.AllowedMaterials, args.ItemToGive.MaterialType) != -1);
+      return (Array.IndexOf(this.AllowedMaterials, args.ItemToGive.Variation) != -1);
     }
 
     public override bool CanWork()
@@ -36,13 +32,8 @@ namespace SHG
       if (this.HoldingItem == null) {
         return (false);
       }
-      if (!this.IsFinished) {
-        return (true);
-      }
-      else {
-        var nextItem = this.HoldingItem.GetRefinedResult();
-        return (nextItem != null);
-      }
+      // 로테이션 방식으로 계속 변경
+      return (true);
     }
 
     public override ToolWorkResult Work()

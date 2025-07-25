@@ -7,7 +7,6 @@ using Void = EditorAttributes.Void;
 
 namespace SHG
 {
-  using Item = TestItem;
 
   public class FurnaceComponent : MonoBehaviour, IInteractableTool
   {

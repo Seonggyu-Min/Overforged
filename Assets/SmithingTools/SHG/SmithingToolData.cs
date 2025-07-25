@@ -5,7 +5,6 @@ using Void = EditorAttributes.Void;
 
 namespace SHG
 {
-  using MaterialType = TestMaterialType;
 
   [Serializable]
   [CreateAssetMenu(menuName = "GameData/SmithingToolData")]
@@ -19,7 +18,7 @@ namespace SHG
     [HideInInspector]
     public GameObject Prefab => this.prefab;
     [HideInInspector]
-    public MaterialType[] AllowedMaterials => this.allowdMaterialTypes;
+    public MaterialVariation[] AllowedMaterials => this.allowdMaterialTypes;
     [HideInInspector]
     public float TimeRequiredInSeconds => this.timeRequiredInSeconds;
     [HideInInspector]
@@ -32,7 +31,7 @@ namespace SHG
     [SerializeField] [ReadOnly, Validate("No material", nameof(NoMaterialType), MessageMode.Error, buildKiller: true)]
     Void noMaterialCheck;
     [SerializeField]
-    MaterialType[] allowdMaterialTypes;
+    MaterialVariation[] allowdMaterialTypes;
     [SerializeField] [Validate("Invalid required time", nameof(HasInValidTimeRequired), MessageMode.Error, buildKiller: true)]
     float timeRequiredInSeconds;
     [SerializeField] [Validate("Invalid required count", nameof(HasInValidCountRequired), MessageMode.Error, buildKiller: true)]

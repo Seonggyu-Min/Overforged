@@ -28,9 +28,6 @@ namespace SHG
 
     protected override bool isRemamingTimeElapse => true;
 
-    protected override TestItem ItemToReturn => (
-      this.HoldingItem != null ? this.HoldingItem.GetRefinedResult(): null);
-
     void OnTriggerIgnited()
     {
       this.OnTurnIgnited?.Invoke(this.IsIgnited);

@@ -16,9 +16,7 @@ namespace SHG
     [SerializeField] [Range(1f, 10f)]
     float interactRange; 
     [SerializeField]
-    TestMaterialItemData HoldingItemData;
-    [SerializeField]
-    TestItemData HodlingProductData;
+    Item HodlingProduct;
     public Action OnTriggerInteraction;
     [SerializeField]
     Color normalColor;
@@ -28,7 +26,8 @@ namespace SHG
     Coroutine toolInteractionRoutine;
     MeshRenderer meshRenderer;
 
-    public TestMaterialItem HoldingItem => this.HoldingItemData != null ?  new TestMaterialItem(this.HoldingItemData): null;
+    [SerializeField]
+    public MaterialItem HoldingItem;
 
     bool IsTryingInteract()
     {
@@ -96,20 +95,13 @@ namespace SHG
 
     void TransferItem(IInteractableTool tool, in ToolTransferArgs args)
     {
-      if (this.HoldingItem != null)
-      {
-        this.HoldingItemData = null;
-      }
       ToolTransferResult result = tool.Transfer(args);
       if (result.ReceivedItem != null) {
-        if (result.ReceivedItem is TestMaterialItem materialItem)
-        {
-          this.HoldingItemData = (TestMaterialItemData)materialItem.Data;
-
+        if (result.ReceivedItem is MaterialItem materialItem) {
+          this.HoldingItem = materialItem;
         }
-        else
-        {
-          this.HodlingProductData = result.ReceivedItem.Data;
+        else {
+          this.HodlingProduct = result.ReceivedItem;
         }
       }
     }

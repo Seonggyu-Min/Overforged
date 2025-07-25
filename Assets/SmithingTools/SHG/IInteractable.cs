@@ -4,8 +4,6 @@ using System.Collections;
 namespace SHG
 {
   using Player = TestPlayer;
-  using MaterialItem = TestMaterialItem;
-  using Item = TestItem;
 
   public interface IInteractableTool
   {

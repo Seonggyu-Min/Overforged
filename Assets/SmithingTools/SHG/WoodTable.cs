@@ -3,8 +3,6 @@ using UnityEngine;
 
 namespace SHG
 {
-  using Item = TestItem;
-  using MaterialItem = TestMaterialItem;
 
   //TODO
   //재료, 플레이어의 상태에 따라 작업효율 차등 적용
@@ -14,8 +12,6 @@ namespace SHG
 
     protected override bool isPlayerMovable => true;
     protected override bool isRemamingTimeElapse => false;
-    protected override Item ItemToReturn => (
-      this.HoldingItem != null ? this.HoldingItem.GetRefinedResult() : null);
 
     public WoodTable(SmithingToolData data): base(data)
     {
@@ -24,7 +20,7 @@ namespace SHG
     public override bool CanTransferItem(ToolTransferArgs args)
     {
       if (args.ItemToGive != null) {
-        if (Array.IndexOf(this.AllowedMaterials, args.ItemToGive.MaterialType) != -1) {
+        if (Array.IndexOf(this.AllowedMaterials, args.ItemToGive.Variation) != -1) {
           return (true);
         }
         return (false);

@@ -4,9 +4,6 @@ using EditorAttributes;
 
 namespace SHG
 {
-  using Item = TestItem;
-  using MaterialItem = TestMaterialItem;
-  using MaterialType = TestMaterialType;
 
   [Serializable]
   public abstract class SmithingTool : IInteractableTool
@@ -21,7 +18,7 @@ namespace SHG
     public abstract bool IsFinished { get; }
     [ShowInInspector]
     public MaterialItem HoldingItem { get; protected set; }
-    public MaterialType[] AllowedMaterials => this.Data.AllowedMaterials;
+    public MaterialVariation[] AllowedMaterials => this.Data.AllowedMaterials;
     public Action<SmithingTool> BeforeInteract;
     public Action<SmithingTool> AfterInteract;
     [ShowInInspector]
@@ -35,7 +32,7 @@ namespace SHG
     protected SmithingToolData Data;
     protected abstract bool isPlayerMovable { get; }
     protected abstract bool isRemamingTimeElapse { get; }
-    protected abstract Item ItemToReturn { get; }
+    protected virtual Item ItemToReturn => this.HoldingItem;
     [SerializeField]
     protected float DefaultRequiredTime => this.Data.TimeRequiredInSeconds;
     protected int DefaultRequiredInteractCount => this.Data.RequiredInteractCount;
@@ -137,10 +134,9 @@ namespace SHG
 
     protected ToolWorkResult ChangeMaterial(float durationToStay)
     {
-      var nextItem = this.HoldingItem.GetRefinedResult();
+      this.HoldingItem.ChangeToNext();
       this.interactionToTrigger = InteractionType.Work;
       this.ResetInteraction();
-      this.HoldingItem = nextItem;
       return (new ToolWorkResult {
         Trigger = this.OnTriggered,
         DurationToStay = durationToStay

@@ -6,7 +6,6 @@ using Void = EditorAttributes.Void;
 
 namespace SHG
 {
-  using Item = TestItem;
 
   [RequireComponent(typeof(MeshRenderer))]
   public class TableComponent: MonoBehaviour, IInteractableTool
