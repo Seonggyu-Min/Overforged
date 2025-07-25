@@ -1,6 +1,7 @@
 ﻿using Firebase.Auth;
 using Firebase.Extensions;
 using ModestTree;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -11,7 +12,7 @@ using Zenject;
 
 namespace MIN
 {
-    public class LogInPanelBehaviour : MonoBehaviour
+    public class LogInPanelBehaviour : MonoBehaviourPun
     {
         #region Fields And Properties
 
@@ -82,14 +83,17 @@ namespace MIN
                         // 1-2. 닉네임 설정도 완료한 경우
                         else
                         {
+                            PhotonNetwork.ConnectUsingSettings();
+
                             _outGameUIManager.Hide("Log In Panel", () =>
                             {
-                                _outGameUIManager.Show("Lobby Panel");
+                                _outGameUIManager.Show("Loading Panel");
                             });
                         }
                     }
                     else
                     {
+                        // 2. 이메일 인증을 아직 하지 않은 경우
                         _outGameUIManager.Hide("Log In Panel", () =>
                         {
                             _outGameUIManager.Show("Wait For Email Panel");
