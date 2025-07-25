@@ -29,6 +29,7 @@ namespace MIN
         public enum MaterialType
     {
         None,
+        Mineral,
         Metallic,
         Wooden
 

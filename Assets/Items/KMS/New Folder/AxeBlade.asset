@@ -12,10 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c13b17088ce587d42acf16f2050ab374, type: 3}
   m_Name: AxeBlade
   m_EditorClassIdentifier: 
-  ID: 0
+  ID: 108
   Name: 
+  ItemType: 0
+  OreType: 0
+  WoodType: 0
+  NeedTongs: 0
   Image: {fileID: 0}
   ItemPrefab: {fileID: -7334951474422550414, guid: 2114decc6eccacc4591e5d8d403ea377, type: 3}
+  NextItem: {fileID: 0}
   CombineObjType: 6
-  materialType: 1
-  nextMaterial: {fileID: 0}
+  materialType: 2
+  nextMaterial: {fileID: 11400000, guid: 5fdce99987ba2eb4d8b1653e6aca5979, type: 2}
