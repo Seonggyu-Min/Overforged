@@ -4,8 +4,6 @@ using UnityEngine;
 using MIN;
 using Unity.VisualScripting.Antlr3.Runtime;
 
-namespace KMS
-{
     public class ProductItem : Item
     {
         private ProductItemData productData;
@@ -85,4 +83,3 @@ namespace KMS
             }
         }
     }
-}

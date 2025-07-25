@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace MIN
-{
     [CreateAssetMenu(menuName = "ItemSO")]
     public class ItemData : ScriptableObject
     {
@@ -26,6 +24,6 @@ namespace MIN
         //public InteractionObject InterationObj; // 모루 등
 
         // public ItemData FinishedItem;
-        public ItemType CombineObjType;
+        //public ItemType CombineObjType;
     }
-}
+

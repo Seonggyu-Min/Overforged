@@ -14,13 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 105
   Name: 
-  ItemType: 0
-  OreType: 0
-  WoodType: 0
-  NeedTongs: 0
   Image: {fileID: 0}
   ItemPrefab: {fileID: 2766212503428324877, guid: a55ba290b477e1a47886b6f080d6e895, type: 3}
-  NextItem: {fileID: 0}
-  CombineObjType: 9
+  materialItemType: 9
   materialType: 3
   nextMaterial: {fileID: 11400000, guid: 6cb14106c0dd60b41aa2edec90ec8fb6, type: 2}

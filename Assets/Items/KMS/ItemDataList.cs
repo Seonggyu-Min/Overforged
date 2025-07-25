@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using MIN;
 using UnityEngine;
-namespace KMS
-{
     [CreateAssetMenu(menuName = "ItemDataList")]
     public class ItemDataList : ScriptableObject
     {
@@ -26,5 +24,4 @@ namespace KMS
 
 
     }
-}
 
