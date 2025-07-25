@@ -1,9 +1,7 @@
 ﻿using Photon.Pun;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
 
 namespace MIN
@@ -11,8 +9,6 @@ namespace MIN
     public class OutGameUIManager : MonoBehaviour, IOutGameUIManager
     {
         #region Fields And Properties
-
-        [Inject] private IFirebaseManager _firebaseManager;
 
         private Dictionary<string, UIPanel> _panels = new();
         private Stack<UIPanel> _panelStack = new();
@@ -22,17 +18,10 @@ namespace MIN
 
         #region Unity Methods
 
-        private void Start()
-        {
-            ShowAsFirst("Log In Panel");
-        }
-
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
-            {
                 CloseTopPanel();
-            }
         }
 
         #endregion
@@ -48,7 +37,7 @@ namespace MIN
             }
             else
             {
-                Debug.LogWarning($"패널 키{key}가 이미 등록되어있습니다. 등록에 실패했습니다.");
+                Debug.LogWarning($"패널 키{key}가 이미 등록되어있습니다.");
             }
         }
 
@@ -69,18 +58,16 @@ namespace MIN
 
         public void ShowAsFirst(string key)
         {
-            if (_panels.ContainsKey(key))
-            {
-                _panelStack.Push(_panels[key]);
-            }
+
         }
 
-        public void Hide(string key, Action onComplete = null)
+        public void Hide(string key)
         {
             if (_panels.TryGetValue(key, out UIPanel panel))
             {
                 if (!_panelStack.Contains(panel)) return;   // 스택에 없는 경우 return
-                panel.HideAnimation(onComplete);
+
+                panel.HideAnimation();
             }
         }
 
@@ -88,46 +75,25 @@ namespace MIN
         {
             if (_panelStack.Count > 1)
             {
-                UIPanel topPanel = _panelStack.Peek();
-
-                if (topPanel.IsRootPanel)
-                {
-                    Debug.Log("뒤로 갈 수 없는 패널입니다");
-                    return;
-                }
-
-                _panelStack.Pop();
+                UIPanel topPanel = _panelStack.Pop();
                 UIPanel previousPanel = _panelStack.Peek();
-
-                if (topPanel.HasToLogOutWhenClosed)
-                {
-                    _firebaseManager.Auth.SignOut();
-                }
 
                 if (topPanel != null)
                 {
-                    topPanel.HideAnimation(() =>
-                    {
-                        if (previousPanel != null)
-                        {
-                            previousPanel.gameObject.SetActive(true);
-                            previousPanel.ShowAnimation();
-                        }
-                    });
+                    topPanel.HideAnimation();
+                }
+
+                if (previousPanel != null)
+                {
+                    previousPanel.ShowAnimation();
                 }
             }
-            else
-            {
-                //Debug.Log($"현재 패널 스택 카운트: {_panelStack.Count}, 더 이상 닫을 수 없습니다.");
-            }
         }
-
-        public void Clear()
-        {
-            _panelStack.Clear();
-        }
+        public void Clear() { }
 
         #endregion
+
+
 
         #region Private Methods
         #endregion

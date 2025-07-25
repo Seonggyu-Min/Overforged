@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-    public enum MaterialVariation
+namespace MIN
+{
+    public enum ItemType
     {
         Trash,
         Ore,
@@ -26,10 +28,9 @@ using UnityEngine;
 
         public enum MaterialType
     {
-        None, //실
-        Mineral, //광석
-        Metallic, //주괴, 칼날 도끼날 망치머리
-        Wooden //통나무, 손잡이, 활대
+        None,
+        Metallic,
+        Wooden
 
     }
 
@@ -47,3 +48,5 @@ using UnityEngine;
         Oak,    // 참나무
         Birch   // 자작나무
     }
+
+}

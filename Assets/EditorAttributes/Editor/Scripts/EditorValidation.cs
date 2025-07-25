@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System.Linq;
 using System.Reflection;
@@ -83,14 +83,7 @@ namespace EditorAttributes.Editor
 #if HAS_ADDRESSABLES_PACKAGE
 			var settings = AddressableAssetSettingsDefaultObject.Settings;
 
-			if (settings == null)
-			{
-				Debug.LogWarning("Addressable settings이 null입니다. Addressable 에셋이 빌드에 포함되지 않습니다.");
-                return false;
-			}
-
-
-            foreach (var group in settings.groups)
+			foreach (var group in settings.groups)
 			{
 				if (group == null || group.entries.Count == 0)
 					continue;

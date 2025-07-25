@@ -1,6 +1,5 @@
 ﻿using Firebase.Auth;
 using Firebase.Extensions;
-using ModestTree;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -31,24 +30,27 @@ namespace MIN
 
         #region Public Methods
 
-        public void OnClickFindButton() => Find();
+        public void OnClickFindButton()
+        {
+            _outGameUIManager.Hide("Log In Panel");
+            _outGameUIManager.Show("Find Panel");
+        }
 
-        public void OnClickLoginButton() => LogIn();
+        public void OnClickLoginButton()
+        {
+            LogIn();
+        }
 
-        public void OnClickSignUpButton() => SignUp();
+        public void OnClickSignUpButton()
+        {
+            _outGameUIManager.Hide("Sign Up Panel");
+            _outGameUIManager.Show("Find Panel");
+        }
 
         #endregion
 
 
         #region Private Methods
-
-        private void Find()
-        {
-            _outGameUIManager.Hide("Log In Panel", () =>
-            {
-                _outGameUIManager.Show("Find Panel");
-            });
-        }
 
         private void LogIn()
         {
@@ -73,38 +75,17 @@ namespace MIN
                         // 1-1. 아직 닉네임 설정을 하지 않은 경우
                         if (user.DisplayName == "")
                         {
-                            _outGameUIManager.Hide("Log In Panel", () =>
-                            {
-                                _outGameUIManager.Show("Set Nickname Panel");
-                            });
-
+                            _outGameUIManager.Hide("Log In Panel");
+                            _outGameUIManager.Show("Set Nickname Panel");
                         }
                         // 1-2. 닉네임 설정도 완료한 경우
                         else
                         {
-                            _outGameUIManager.Hide("Log In Panel", () =>
-                            {
-                                _outGameUIManager.Show("Lobby Panel");
-                            });
+                            _outGameUIManager.Hide("Log In Panel");
+                            //_outGameUIManager.Show("Lobby Panel");
                         }
                     }
-                    else
-                    {
-                        _outGameUIManager.Hide("Log In Panel", () =>
-                        {
-                            _outGameUIManager.Show("Wait For Email Panel");
-                        });
-                    }
                 });
-
-        }
-
-        private void SignUp()
-        {
-            _outGameUIManager.Hide("Log In Panel", () =>
-            {
-                _outGameUIManager.Show("Sign Up Panel");
-            });
         }
 
         #endregion
