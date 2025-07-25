@@ -1,27 +1,16 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace SHG
 {
-  //TODO
-  //재료 아이템에 효율을 차등 적용
-  //온도에 따라 효율을 차등 적용
   public class Furnace : SmithingTool
   {
-    const float TEMP_INCREASE_DELTA = 10f;
-    const float TEMP_DECRESE_DELTA = -1f;
-    const float MAX_TEMPARATURE = 1000f;
-    const float MIN_TEMPARATURE = 20f;
-    public override bool IsFinished => this.Progress >= 1.0f;
-
     public bool IsIgnited { get; private set; }
     public Action<bool> OnTurnIgnited;
-    public Action OnFinished;
-    public float Temparature { get; private set; }
 
     public Furnace(SmithingToolData data) : base(data)
     {
-      this.Temparature = 0f;
     }
 
     protected override bool isPlayerMovable => true;
@@ -31,58 +20,66 @@ namespace SHG
     protected override TestItem ItemToReturn => (
       this.HoldingItem != null ? this.HoldingItem.GetRefinedResult(): null);
 
-    void OnTriggerIgnited()
+    public override ToolInteractArgs Interact(PlayerInteractArgs args)
     {
-      this.OnTurnIgnited?.Invoke(this.IsIgnited);
-    }
-
-    public override void OnUpdate(float deltaTime)
-    {
-      bool wasFinished = this.IsFinished;
-      if (this.IsIgnited) {
-        base.OnUpdate(deltaTime);
+      #if UNITY_EDITOR
+      if (!this.IsInteractable(args)) {
+        throw (new ApplicationException($"Player is not interactable with {nameof(Furnace)}"));
       }
-      this.Temparature += (this.IsIgnited ? 
-        TEMP_INCREASE_DELTA: TEMP_DECRESE_DELTA) * deltaTime;
-      this.Temparature = Math.Clamp(
-        this.Temparature, MIN_TEMPARATURE, MAX_TEMPARATURE);
-      if (!wasFinished && this.IsFinished) {
-        this.OnFinished?.Invoke();
-      }
-    }
-
-    public override bool CanTransferItem(ToolTransferArgs args)
-    {
-      if (args.ItemToGive != null) {
-        return (this.HoldingItem == null);
-      }
-      else {
-        return (this.ItemToReturn != null && this.IsFinished);
-      }
-    }
-
-    public override bool CanWork()
-    {
-      return (!this.IsIgnited);
-    }
-
-    public override ToolWorkResult Work()
-    {
-      this.interactionToTrigger = InteractionType.Work;
-      this.BeforeInteract?.Invoke(this);
+      #endif
+      this.BeforeInteract?.Invoke(this, args);
       if (!this.IsIgnited) {
         this.IsIgnited = true;
       }
-      else {
-        // TODO: turn off fire?
+      if (args.CurrentHoldingItem != null) {
+          return (this.ReturnWithEvent(
+            this.ReceiveMaterialItem(args.CurrentHoldingItem)));
       }
-      return (
-        this.ReturnWithEvent(
-          new ToolWorkResult {
-            Trigger = this.OnTriggered,
-            DurationToStay = 0 
-          }
-      ));
+      if (this.IsFinished) {
+        return (this.ReturnWithEvent( this.ReturnItem()));
+      }
+      return (new ToolInteractArgs());
+    }
+
+    ToolInteractArgs TurnIgnited()
+    {
+      this.IsIgnited = !this.IsIgnited;
+
+      return (new ToolInteractArgs {
+        ReceivedItem = null,
+        DurationToPlayerStay = 0,
+        IsMaterialItemTaken = false,
+        OnTrigger = this.OnTriggerIgnited
+      });
+    }
+
+    void OnTriggerIgnited(IInteractable interactable)
+    {
+      if (System.Object.ReferenceEquals(this, interactable)) {
+        this.OnTurnIgnited?.Invoke(this.IsIgnited);
+      }
+    }
+
+    public override bool IsInteractable(PlayerInteractArgs args)
+    {
+      if (!this.IsIgnited)
+      {
+        return (true);
+      }
+      if (this.IsFinished)
+      {
+        return (args.CurrentHoldingItem == null);
+      }
+      if (this.HoldingItem == null && args.CurrentHoldingItem != null)
+      {
+        return (true);
+      }
+      return (false);
+    }
+
+    protected override void OnTriggered(IInteractable interactable)
+    {
+      Debug.Log($"{nameof(OnTriggered)}  in {nameof(Furnace)}");
     }
   }
 }

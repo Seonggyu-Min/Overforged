@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using EditorAttributes;
-using Unity.VisualScripting;
-using UnityEditor;
 
 namespace SHG
 {
@@ -17,9 +15,8 @@ namespace SHG
     float interactRange; 
     [SerializeField]
     TestMaterialItemData HoldingItemData;
-    [SerializeField]
-    TestItemData HodlingProductData;
-    public Action OnTriggerInteraction;
+    public Action<IInteractable> OnTriggerInteraction;
+    IInteractable lastInteractable;
     [SerializeField]
     Color normalColor;
     [SerializeField]
@@ -40,15 +37,15 @@ namespace SHG
       return (Input.GetKeyDown(KeyCode.G));
     }
 
-    bool TryFindInteratable(out IInteractableTool interactable)
+    bool TryFindInteratable(out IInteractable interactable)
     {
-#if UNITY_EDITOR
+      #if UNITY_EDITOR
       Debug.DrawLine(
         start: this.transform.position,
         end: this.transform.position + this.transform.forward * this.interactRange,
         color: Color.blue,
         duration: 0.5f);
-#endif
+      #endif
       bool isHit = Physics.SphereCast(
         origin: this.transform.position,
         radius: this.interactRadius,
@@ -59,7 +56,7 @@ namespace SHG
         interactable = null;
         return (false);
       } 
-      interactable = hitInfo.collider.GetComponent<IInteractableTool>();
+      interactable = hitInfo.collider.GetComponent<IInteractable>();
       return (interactable != null);
     }
 
@@ -75,61 +72,46 @@ namespace SHG
       }
 
       if (this.IsTryingInteract() &&
-        this.TryFindInteratable(out IInteractableTool workTool) &&
-        workTool.CanWork())
-      {
-        this.Work(workTool);
-      }
-      else if (this.IsTryingGrab() &&
-        this.TryFindInteratable(out IInteractableTool transferTool))
-      {
-        ToolTransferArgs args = new ToolTransferArgs
-        {
-          ItemToGive = this.HoldingItem,
-          PlayerNetworkId = 1
-        };
-        if (transferTool.CanTransferItem(args)) { 
-          this.TransferItem(transferTool, args);
+        this.TryFindInteratable(out IInteractable interactable)) {
+        PlayerInteractArgs args = this.GetInteractArgs();
+        if (interactable.IsInteractable(args)) {
+          this.Interact(interactable, args);
         }
       }
     }
 
-    void TransferItem(IInteractableTool tool, in ToolTransferArgs args)
+    PlayerInteractArgs GetInteractArgs()
     {
-      if (this.HoldingItem != null)
-      {
+      return (new PlayerInteractArgs {
+          CurrentHoldingItem = this.HoldingItem,
+          PlayerNetworkId = 1
+        });
+    }
+
+    void Interact(in IInteractable interactable, in PlayerInteractArgs args)
+    {
+      this.lastInteractable = interactable;
+      ToolInteractArgs result = interactable.Interact(
+          this.GetInteractArgs());
+      this.OnTriggerInteraction = result.OnTrigger;
+      if (result.ReceivedItem != null && 
+        result.ReceivedItem.Data is TestMaterialItemData materialItemData) {
+        this.HoldingItemData = materialItemData;
+      }
+      else if (result.IsMaterialItemTaken) {
         this.HoldingItemData = null;
       }
-      ToolTransferResult result = tool.Transfer(args);
-      if (result.ReceivedItem != null) {
-        if (result.ReceivedItem is TestMaterialItem materialItem)
-        {
-          this.HoldingItemData = (TestMaterialItemData)materialItem.Data;
-
-        }
-        else
-        {
-          this.HodlingProductData = result.ReceivedItem.Data;
-        }
-      }
-    }
-
-    void Work(in IInteractableTool tool)
-    {
-      this.OnTriggerInteraction = null;
-      ToolWorkResult result = tool.Work();
-      if (result.DurationToStay != 0) {
-        this.StartInteractionRoutine(result);
+      if (result.DurationToPlayerStay != 0) {
+        this.interactionDuration = result.DurationToPlayerStay;
+        this.StartInteractionRoutine();
       }
       else {
-        result.Trigger?.Invoke();
+        this.OnTriggerInteraction?.Invoke(this.lastInteractable);
       }
     }
 
-    void StartInteractionRoutine(ToolWorkResult work)
+    void StartInteractionRoutine()
     {
-      this.interactionDuration = work.DurationToStay;
-      this.OnTriggerInteraction = work.Trigger;
       this.toolInteractionRoutine = this.StartCoroutine(
         this.InteractionRoutine());   
     }
@@ -139,7 +121,7 @@ namespace SHG
       this.meshRenderer.material.color = this.interactColor;
       yield return (new WaitForSeconds(this.interactionDuration));
       this.meshRenderer.material.color = this.normalColor;
-      this.OnTriggerInteraction?.Invoke();
+      this.OnTriggerInteraction?.Invoke(this.lastInteractable);
     }
 
     #region Test code
