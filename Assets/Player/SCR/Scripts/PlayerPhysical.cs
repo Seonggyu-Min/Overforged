@@ -20,14 +20,22 @@ namespace SCR
         void Awake()
         {
             player = GetComponent<Player>();
-            rayLength = 1f;
-            HoldingObjLayer = LayerMask.NameToLayer("item");
+            rayLength = 0.8f;
+            HoldingObjLayer = LayerMask.GetMask("Item", "InteractionObject");
+            IsDash = false;
+            IsHold = false;
+            UseTongs = false;
         }
 
         void Update()
         {
             centralPos = transform.position;
-            centralPos.y = 0.3f;
+            centralPos.y = 0.2f;
+
+        }
+
+        void FixedUpdate()
+        {
             Debug.DrawRay(centralPos, transform.forward * rayLength, Color.yellow);
         }
 
