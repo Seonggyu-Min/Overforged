@@ -7,7 +7,6 @@ using Void = EditorAttributes.Void;
 namespace SHG
 {
   using Item = TestItem;
-  using ItemData = TestItemData;
 
   [RequireComponent(typeof(MeshRenderer))]
   public class AnvilComponent : MonoBehaviour, IInteractable
@@ -47,6 +46,9 @@ namespace SHG
 
     void BeforeInteract(SmithingTool tool, PlayerInteractArgs args)
     {
+      if (tool != this.anvil) {
+        return;
+      }
       Debug.Log("BeforeInteract args");
       Debug.Log(args);
       Debug.Log($"tool holding item: {tool.HoldingItem}");
@@ -56,6 +58,9 @@ namespace SHG
 
     void AfterInteract(SmithingTool tool, ToolInteractArgs result)
     {
+      if (tool != this.anvil) {
+        return;
+      }
       Debug.Log("AfterInteract result");
       Debug.Log(result);
       Debug.Log($"tool holding item: {tool.HoldingItem}");

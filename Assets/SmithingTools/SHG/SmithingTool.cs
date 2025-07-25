@@ -11,7 +11,7 @@ namespace SHG
   [Serializable]
   public abstract class SmithingTool : IInteractable
   {
-    public virtual bool IsFinished { get; }
+    public abstract bool IsFinished { get; }
     [ShowInInspector]
     public MaterialItem HoldingItem { get; protected set; }
     public MaterialType[] AllowedMaterials => this.Data.AllowedMaterials;
@@ -41,6 +41,9 @@ namespace SHG
 
     public virtual void OnUpdate(float deltaTime)
     {
+      if (this.IsFinished) {
+        return ;
+      }
       if (!this.isRemamingTimeElapse ||
       this.HoldingItem == null || this.IsFinished) {
         return;
@@ -61,7 +64,8 @@ namespace SHG
         (float)this.DefaultRequiredInteractCount;
       var timeProgress = (this.DefaultRequiredTime - this.RemainingTime) /
         this.DefaultRequiredTime;
-      return (countProgress + (timeProgress / (float)this.DefaultRequiredInteractCount));
+      var progress = (countProgress + (timeProgress / (float)this.DefaultRequiredInteractCount));
+      return (Math.Min(progress, 1f));
     }
 
     protected ToolInteractArgs DecreseInteractionCount(float durationToStay)

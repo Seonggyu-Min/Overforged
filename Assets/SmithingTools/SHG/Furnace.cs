@@ -1,16 +1,25 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 
 namespace SHG
 {
   public class Furnace : SmithingTool
   {
+    const float TEMP_INCREASE_DELTA = 10f;
+    const float TEMP_DECRESE_DELTA = -1f;
+    const float MAX_TEMPARATURE = 1000f;
+    const float MIN_TEMPARATURE = 20f;
+    public override bool IsFinished => this.Progress >= 1.0f;
+        
     public bool IsIgnited { get; private set; }
     public Action<bool> OnTurnIgnited;
+    public Action OnFinished;
+    public float Temparature { get; private set; }
+    public Action<IInteractable> OnInteractionTrigged;
 
     public Furnace(SmithingToolData data) : base(data)
     {
+      this.Temparature = 0f;
     }
 
     protected override bool isPlayerMovable => true;
@@ -30,6 +39,13 @@ namespace SHG
       this.BeforeInteract?.Invoke(this, args);
       if (!this.IsIgnited) {
         this.IsIgnited = true;
+        return (this.ReturnWithEvent(
+            new ToolInteractArgs {
+              ReceivedItem = null,
+              DurationToPlayerStay = 0f,
+              IsMaterialItemTaken = false,
+              OnTrigger = this.OnInteractionTrigged,
+            }));
       }
       if (args.CurrentHoldingItem != null) {
           return (this.ReturnWithEvent(
@@ -60,14 +76,26 @@ namespace SHG
       }
     }
 
+    public override void OnUpdate(float deltaTime)
+    {
+      bool wasFinished = this.IsFinished;
+      base.OnUpdate(deltaTime);
+      this.Temparature += (this.IsIgnited ? 
+        TEMP_INCREASE_DELTA: TEMP_DECRESE_DELTA) * deltaTime;
+      this.Temparature = Math.Clamp(
+        this.Temparature, MIN_TEMPARATURE, MAX_TEMPARATURE);
+      if (!wasFinished && this.IsFinished) {
+        this.OnFinished?.Invoke();
+      }
+    }
+
     public override bool IsInteractable(PlayerInteractArgs args)
     {
-      if (!this.IsIgnited)
-      {
+      if (!this.IsIgnited) {
         return (true);
       }
-      if (this.IsFinished)
-      {
+      if (this.IsFinished) {
+        Debug.Log($"IsFinished");
         return (args.CurrentHoldingItem == null);
       }
       if (this.HoldingItem == null && args.CurrentHoldingItem != null)
@@ -79,7 +107,7 @@ namespace SHG
 
     protected override void OnTriggered(IInteractable interactable)
     {
-      Debug.Log($"{nameof(OnTriggered)}  in {nameof(Furnace)}");
+      this.OnInteractionTrigged?.Invoke(interactable);
     }
   }
 }
