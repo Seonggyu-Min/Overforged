@@ -18,7 +18,6 @@ namespace SHG
     public Action<bool> OnTurnIgnited;
     public Action OnFinished;
     public float Temparature { get; private set; }
-    public Action OnInteractionTrigged;
 
     public Furnace(SmithingToolData data) : base(data)
     {
@@ -32,29 +31,17 @@ namespace SHG
     protected override TestItem ItemToReturn => (
       this.HoldingItem != null ? this.HoldingItem.GetRefinedResult(): null);
 
-    ToolInteractArgs TurnIgnited()
+    void OnTriggerIgnited()
     {
-      this.IsIgnited = !this.IsIgnited;
-
-      return (new ToolInteractArgs {
-        ReceivedItem = null,
-        DurationToPlayerStay = 0,
-        IsMaterialItemTaken = false,
-        OnTrigger = this.OnTriggerIgnited
-        });
-    }
-
-    void OnTriggerIgnited(IInteractable interactable)
-    {
-      if (System.Object.ReferenceEquals(this, interactable)) {
-        this.OnTurnIgnited?.Invoke(this.IsIgnited);
-      }
+      this.OnTurnIgnited?.Invoke(this.IsIgnited);
     }
 
     public override void OnUpdate(float deltaTime)
     {
       bool wasFinished = this.IsFinished;
-      base.OnUpdate(deltaTime);
+      if (this.IsIgnited) {
+        base.OnUpdate(deltaTime);
+      }
       this.Temparature += (this.IsIgnited ? 
         TEMP_INCREASE_DELTA: TEMP_DECRESE_DELTA) * deltaTime;
       this.Temparature = Math.Clamp(
@@ -62,11 +49,6 @@ namespace SHG
       if (!wasFinished && this.IsFinished) {
         this.OnFinished?.Invoke();
       }
-    }
-
-    protected override void OnTriggered()
-    {
-      this.OnInteractionTrigged?.Invoke();
     }
 
     public override bool CanTransferItem(ToolTransferArgs args)
@@ -86,6 +68,8 @@ namespace SHG
 
     public override ToolWorkResult Work()
     {
+      this.interactionToTrigger = InteractionType.Work;
+      this.BeforeInteract?.Invoke(this);
       if (!this.IsIgnited) {
         this.IsIgnited = true;
       }

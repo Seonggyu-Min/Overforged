@@ -11,7 +11,6 @@ namespace SHG
   {
     public override bool IsFinished => (this.RemainingInteractionCount < 1);
 
-    public Action OnInteractionTriggered;
     protected override bool isPlayerMovable => true;
     protected override bool isRemamingTimeElapse => false;
     protected override Item ItemToReturn => (
@@ -48,6 +47,8 @@ namespace SHG
 
     public override ToolWorkResult Work()
     {
+      this.interactionToTrigger = InteractionType.Work;
+      this.BeforeInteract?.Invoke(this);  
       if (!this.IsFinished) {
         return (this.ReturnWithEvent(
             this.DecreseInteractionCount(this.RemainingTime)));
@@ -56,11 +57,6 @@ namespace SHG
         return (this.ReturnWithEvent(
           this.ChangeMaterial(this.RemainingTime)));
       }
-    }
-
-    protected override void OnTriggered()
-    {
-      this.OnInteractionTriggered?.Invoke();
     }
   }
 }

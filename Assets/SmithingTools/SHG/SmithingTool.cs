@@ -11,6 +11,13 @@ namespace SHG
   [Serializable]
   public abstract class SmithingTool : IInteractableTool
   {
+    public enum InteractionType 
+    {
+      ReceivedItem,
+      ReturnItem,
+      Work
+    }
+
     public abstract bool IsFinished { get; }
     [ShowInInspector]
     public MaterialItem HoldingItem { get; protected set; }
@@ -22,6 +29,7 @@ namespace SHG
     [ShowInInspector]
     public int RemainingInteractionCount { get; protected set; }
     public float Progress => this.CalcProgress();
+    public Action<InteractionType> OnInteractionTriggered;
 
     [SerializeField]
     protected SmithingToolData Data;
@@ -31,6 +39,7 @@ namespace SHG
     [SerializeField]
     protected float DefaultRequiredTime => this.Data.TimeRequiredInSeconds;
     protected int DefaultRequiredInteractCount => this.Data.RequiredInteractCount;
+    protected InteractionType interactionToTrigger;
 
     protected SmithingTool(SmithingToolData data)
     {
@@ -92,7 +101,7 @@ namespace SHG
     protected ToolTransferResult ReceiveMaterialItem(MaterialItem materialItem)
     {
       this.HoldingItem = materialItem;
-
+      this.interactionToTrigger = InteractionType.ReceivedItem;
       ToolTransferResult result = new ToolTransferResult {
         ReceivedItem = null
       };
@@ -101,6 +110,7 @@ namespace SHG
 
     protected ToolTransferResult ReturnItem()
     {
+      this.interactionToTrigger = InteractionType.ReturnItem;
       var item = this.ItemToReturn;
       this.ResetInteraction();
       return (new ToolTransferResult { ReceivedItem = item });
@@ -128,13 +138,17 @@ namespace SHG
     protected ToolWorkResult ChangeMaterial(float durationToStay)
     {
       this.HoldingItem = this.HoldingItem.GetRefinedResult();
+      this.interactionToTrigger = InteractionType.Work;
       return (new ToolWorkResult {
         Trigger = this.OnTriggered,
         DurationToStay = durationToStay
       });
     }
 
-    protected abstract void OnTriggered();
+    protected virtual void OnTriggered()
+    {
+      this.OnInteractionTriggered?.Invoke(this.interactionToTrigger);
+    }
   }
 }
 
