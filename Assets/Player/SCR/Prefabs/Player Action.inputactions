@@ -43,6 +43,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "ChangeState",
+                    "type": "Button",
+                    "id": "b30d1247-0804-4610-b990-4ee8114daf61",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "ShowOff",
                     "type": "Button",
                     "id": "a3a82be0-9a6e-4b81-be09-1e3abf377a7c",
@@ -149,6 +158,17 @@
                     "processors": "",
                     "groups": ";PC",
                     "action": "ShowOff",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d29b3f9a-bafe-4fec-8c21-7d79fff4c497",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeState",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
