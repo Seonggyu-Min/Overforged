@@ -42,6 +42,8 @@ using Photon.Pun;
 
         private MaterialItemData matData;
 
+    public MaterialVariation Variation => matData.materialVariation;
+
         void Awake()
         {
             mesh = model.GetComponent<MeshFilter>();
