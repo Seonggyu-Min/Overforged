@@ -9,7 +9,7 @@ namespace SHG
   using MaterialType = TestMaterialType;
 
   [Serializable]
-  public abstract class SmithingTool : IInteractable
+  public abstract class SmithingTool : IInteractableTool
   {
     public abstract bool IsFinished { get; }
     [ShowInInspector]
@@ -54,8 +54,26 @@ namespace SHG
       }
     }
 
-    public abstract bool IsInteractable(PlayerInteractArgs args);
-    public abstract ToolInteractArgs Interact(PlayerInteractArgs args);
+    public virtual bool CanTransferItem(ToolTransferArgs args)
+    {
+      if (args.ItemToGive != null) {
+        return (this.HoldingItem == null);
+      }
+      return (this.HoldingItem != null && this.IsFinished);
+    }
+
+    public virtual ToolTransferResult Transfer(ToolTransferArgs args) 
+    {
+      if (args.ItemToGive != null) {
+        return (this.ReturnWithEvent(
+            this.ReceiveMaterialItem()));
+      }
+      return (this.ReturnWithEvent(
+          this.ReturnItem()));    
+    }
+
+    public abstract bool CanWork();
+    public abstract ToolWorkResult Work();
 
     protected float CalcProgress()
     {
@@ -79,28 +97,21 @@ namespace SHG
       });
     }
 
-    protected ToolInteractArgs ReceiveMaterialItem(MaterialItem materialItem, float durationToStay = 0)
+    protected ToolTransferResult ReceiveMaterialItem(MaterialItem materialItem)
     {
       this.HoldingItem = materialItem;
-      ToolInteractArgs result = new ToolInteractArgs {
-        ReceivedItem = null,
-        DurationToPlayerStay = durationToStay,
-        IsMaterialItemTaken = true,
-        OnTrigger = this.OnTriggered
+
+      ToolTransferResult result = new ToolTransferResult {
+        ReceivedItem = null
       };
       return (result);
     }
 
-    protected ToolInteractArgs ReturnItem(float durationToStay = 0)
+    protected ToolTransferResult ReturnItem()
     {
       var item = this.ItemToReturn;
       this.ResetInteraction();
-      return (new ToolInteractArgs {
-        ReceivedItem = item,
-        DurationToPlayerStay = durationToStay,
-        IsMaterialItemTaken = false,
-        OnTrigger = this.OnTriggered
-      });
+      return (new ToolTransferResult { ReceivedItem = item });
     }
 
     protected ToolInteractArgs ReturnWithEvent(in ToolInteractArgs result)
