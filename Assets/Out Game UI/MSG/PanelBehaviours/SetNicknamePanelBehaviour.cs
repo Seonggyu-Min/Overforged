@@ -1,6 +1,7 @@
 ﻿using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -11,7 +12,7 @@ using Zenject;
 
 namespace MIN
 {
-    public class SetNicknamePanelBehaviour : MonoBehaviour
+    public class SetNicknamePanelBehaviour : MonoBehaviourPun
     {
         #region Fields And Properties
         
@@ -92,10 +93,13 @@ namespace MIN
                         }
 
                         _infoText.text = "닉네임이 성공적으로 설정되었습니다.";
+
+                        PhotonNetwork.ConnectUsingSettings();
+
                         _outGameUIManager.Hide("Set Nickname Panel", () =>
                         {
                             _outGameUIManager.Clear();
-                            _outGameUIManager.Show("Lobby Panel");
+                            _outGameUIManager.Show("Loading Panel");
                         });
                     });
                 });
