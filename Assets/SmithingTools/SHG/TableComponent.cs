@@ -9,7 +9,7 @@ namespace SHG
   using Item = TestItem;
 
   [RequireComponent(typeof(MeshRenderer))]
-  public class TableComponent: MonoBehaviour, IInteractable
+  public class TableComponent: MonoBehaviour, IInteractableTool
   {
     [SerializeField]
     WoodTable woodTable;
@@ -31,41 +31,26 @@ namespace SHG
     Color interactColor;
     MeshRenderer meshRenderer;
 
-    public ToolInteractArgs Interact(PlayerInteractArgs args)
-    {
-      Debug.Log("Interact");
-      return (this.woodTable.Interact(args));
-    }
-
-    public bool IsInteractable(PlayerInteractArgs args)
-    {
-      bool isInteractable = this.woodTable.IsInteractable(args);
-      Debug.Log($"IsInteractable: {isInteractable}");
-      return (isInteractable);
-    }
-
-    void BeforeInteract(SmithingTool tool, PlayerInteractArgs args)
+    void BeforeInteract(SmithingTool tool)
     {
       if (tool != this.woodTable) {
         return;
       }
       Debug.Log("BeforeInteract args");
-      Debug.Log(args);
       Debug.Log($"tool holding item: {tool.HoldingItem}");
       Debug.Log($"tool interaction count: {tool.RemainingInteractionCount}");
       this.meshRenderer.material.color = this.interactColor;
     }
 
-    void AfterInteract(SmithingTool tool, ToolInteractArgs result)
+    void AfterInteract(SmithingTool tool)
     {
       if (tool != this.woodTable) {
         return;
       }
       Debug.Log("AfterInteract result");
-      Debug.Log(result);
       Debug.Log($"tool holding item: {tool.HoldingItem}");
       Debug.Log($"tool interaction count: {tool.RemainingInteractionCount}");
-      if (this.uiCanvas.enabled && result.ReceivedItem != null) {
+      if (this.uiCanvas.enabled && tool.HoldingItem == null) {
         this.uiCanvas.enabled = false;
       }
       else if (!this.uiCanvas.enabled && tool.HoldingItem != null) {
@@ -104,11 +89,37 @@ namespace SHG
       this.woodTable.OnUpdate(Time.deltaTime);
     }
 
-    void OnInteractionTriggered(IInteractable interactable)
+    void OnInteractionTriggered()
     {
-      if (System.Object.ReferenceEquals(this, interactable)) {
-        this.meshRenderer.material.color = this.normalColor;
-      }
+      this.meshRenderer.material.color = this.normalColor;
+    }
+
+    public bool CanTransferItem(ToolTransferArgs args)
+    {
+      bool canTransfer = this.woodTable.CanTransferItem(args);
+      Debug.Log($"{nameof(CanTransferItem)} : {canTransfer}");
+      return (canTransfer);
+    }
+
+    public ToolTransferResult Transfer(ToolTransferArgs args)
+    {
+      var result = this.woodTable.Transfer(args);
+      Debug.Log($"{nameof(Transfer)} result: {result}");
+      return (result);
+    }
+
+    public bool CanWork()
+    {
+      bool canwork = this.woodTable.CanWork();
+      Debug.Log($"{nameof(canwork)}: {canwork}");
+      return (canwork);
+    }
+
+    public ToolWorkResult Work()
+    {
+      var result = this.woodTable.Work();
+      Debug.Log($"{nameof(Work)} result: {result}");
+      return (result);
     }
   }
 }

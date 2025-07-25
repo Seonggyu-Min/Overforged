@@ -12,7 +12,7 @@ namespace SHG
   {
     public override bool IsFinished => (this.RemainingInteractionCount < 1);
 
-    public Action<IInteractable> OnInteractionTriggered;
+    public Action OnInteractionTriggered;
     protected override bool isPlayerMovable => true;
     protected override bool isRemamingTimeElapse => false;
     protected override Item ItemToReturn => (
@@ -22,43 +22,42 @@ namespace SHG
     {
     }
 
-    public override bool IsInteractable(PlayerInteractArgs args)
+    protected override void OnTriggered()
     {
-      if (this.HoldingItem != null) {
-        return (args.CurrentHoldingItem == null);
+      this.OnInteractionTriggered?.Invoke();
+    }
+
+    public override bool CanTransferItem(ToolTransferArgs args)
+    {
+      if (args.ItemToGive != null) {
+        if (Array.IndexOf(this.AllowedMaterials, args.ItemToGive.MaterialType) != -1) {
+          return (true);
+        }
+        return (false);
       }
-      if (args.CurrentHoldingItem == null ||
-        !(args.CurrentHoldingItem is MaterialItem materialItem) ||
-        Array.IndexOf(this.AllowedMaterials, materialItem.MaterialType) == -1) {
+      return (this.IsFinished && this.ItemToReturn != null);
+    }
+
+    public override bool CanWork()
+    {
+      if (this.HoldingItem == null) {
+        return (false);
+      }
+      if (this.IsFinished) {
         return (false);
       }
       return (true);
     }
 
-    public override ToolInteractArgs Interact(PlayerInteractArgs args)
+    public override ToolWorkResult Work()
     {
-#if UNITY_EDITOR
-      if (!this.IsInteractable(args)) {
-        throw (
-          new ApplicationException(
-            "player try to interact but not interactable"));
-      }
-#endif
-      this.BeforeInteract?.Invoke(this, args);
-      if (this.IsFinished) {
-        return (this.ReturnWithEvent(this.ReturnItem()));
-      }
-      if (this.HoldingItem == null) {
+      if (!this.IsFinished) {
         return (this.ReturnWithEvent(
-            this.ReceiveMaterialItem(args.CurrentHoldingItem)));
+          this.DecreseInteractionCount(
+            this.RemainingTime)));
       }
       return (this.ReturnWithEvent(
-          this.DecreseInteractionCount(this.RemainingTime)));
-    }
-
-    protected override void OnTriggered(IInteractable interactable)
-    {
-      this.OnInteractionTriggered?.Invoke(interactable);
+          this.ChangeMaterial(this.RemainingTime)));
     }
   }
 }

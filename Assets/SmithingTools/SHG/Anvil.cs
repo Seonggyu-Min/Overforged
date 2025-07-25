@@ -34,6 +34,9 @@ namespace SHG
 
     public override bool CanWork()
     {
+      if (this.HoldingItem == null) {
+        return (false);
+      }
       if (!this.IsFinished) {
         return (true);
       }
@@ -53,15 +56,6 @@ namespace SHG
         return (this.ReturnWithEvent(
           this.ChangeMaterial(this.RemainingTime)));
       }
-    }
-
-    ToolWorkResult ChangeMaterial(float durationToStay)
-    {
-      this.HoldingItem = this.HoldingItem.GetRefinedResult();
-      return (new ToolWorkResult {
-        Trigger = this.OnTriggered,
-        DurationToStay = durationToStay
-      });
     }
 
     protected override void OnTriggered()

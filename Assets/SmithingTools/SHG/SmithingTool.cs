@@ -124,6 +124,16 @@ namespace SHG
       this.RemainingInteractionCount = this.DefaultRequiredInteractCount;
       this.HoldingItem = null;
     }
+
+    protected ToolWorkResult ChangeMaterial(float durationToStay)
+    {
+      this.HoldingItem = this.HoldingItem.GetRefinedResult();
+      return (new ToolWorkResult {
+        Trigger = this.OnTriggered,
+        DurationToStay = durationToStay
+      });
+    }
+
     protected abstract void OnTriggered();
   }
 }
