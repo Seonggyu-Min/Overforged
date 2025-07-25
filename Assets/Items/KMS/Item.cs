@@ -7,8 +7,6 @@ using Photon.Pun;
 
 
 
-namespace KMS
-{
 
     public class Item : MonoBehaviourPun, ICarryable
     {
@@ -44,5 +42,4 @@ namespace KMS
         }
 
     }
-}
 

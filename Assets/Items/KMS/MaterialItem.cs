@@ -4,8 +4,6 @@ using UnityEngine;
 using MIN;
 using Photon.Pun;
 
-namespace KMS
-{
     public class MaterialItem : Item
     {
         private bool isHot;
@@ -107,4 +105,3 @@ namespace KMS
             
         }
     }   
-}

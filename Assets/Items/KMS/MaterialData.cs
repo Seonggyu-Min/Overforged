@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MIN;
 using UnityEngine;
-namespace KMS
-{
+
     [CreateAssetMenu(menuName = "MaterialData")]
     public class MaterialData : ScriptableObject
     {
@@ -38,4 +37,3 @@ namespace KMS
 
 
     }   
-}
