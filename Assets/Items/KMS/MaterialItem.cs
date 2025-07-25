@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MIN;
-using Photon.Pun;
 
+namespace KMS
+{
     public class MaterialItem : Item
     {
         private bool isHot;
@@ -37,9 +38,6 @@ using Photon.Pun;
         private MeshFilter mesh;
         private MeshRenderer render;
 
-        private Material CurrentOreMat => matCatalog.OreDict[ore];
-        private Material CurrentWoodMat => matCatalog.WoodDict[wood];
-
         private MaterialItemData matData;
 
         void Awake()
@@ -55,31 +53,20 @@ using Photon.Pun;
             matData = itemdata as MaterialItemData;
             mesh.sharedMesh = data.ItemPrefab.GetComponent<MeshFilter>().sharedMesh;
             render.sharedMaterials = data.ItemPrefab.GetComponent<MeshRenderer>().sharedMaterials;
-            SetMaterial();
-            if (isHot) render.sharedMaterial = matCatalog.HotMetal;
 
         }
-        [PunRPC]
+
         public void Heat()
         {
             isHot = true;
-            if (matData.materialType == MaterialType.Metallic)
-            {
-                render.sharedMaterial = matCatalog.HotMetal;
-
-            }
-            else if (matData.materialType == MaterialType.Mineral)
-            {
-                render.sharedMaterials = new Material[] {matCatalog.HotMetal, matCatalog.HotMetal};
-            }
+            render.sharedMaterial = matCatalog.HotMetal;
         }
-        [PunRPC]
         public void Cool()
         {
             isHot = false;
             SetMaterial();
         }
-        [PunRPC]
+
         public void ChangeToNext()
         {
             if (data == null) return;
@@ -90,18 +77,32 @@ using Photon.Pun;
         {
             if (matData.materialType == MaterialType.Metallic)
             {
-                render.sharedMaterial = CurrentOreMat;
+                switch (ore)
+                {
+                    case OreType.Steel:
+                        render.sharedMaterial = matCatalog.Steel;
+                        break;
+                    case OreType.Copper:
+                        render.sharedMaterial = matCatalog.Copper;
+                        break;
+                    case OreType.Gold:
+                        render.sharedMaterial = matCatalog.Gold;
+                        break;
+                }
 
             }
             else if (matData.materialType == MaterialType.Wooden)
             {
-                render.sharedMaterial = CurrentWoodMat;
-
+                switch (wood)
+                {
+                    case WoodType.Oak:
+                        render.sharedMaterial = matCatalog.Wood;
+                        break;
+                    case WoodType.Birch:
+                        render.sharedMaterial = matCatalog.Birch;
+                        break;
+                }
             }
-            else if (matData.materialType == MaterialType.Mineral)
-            {
-                render.sharedMaterials = new Material[] {matCatalog.Stone, CurrentOreMat};
-            }
-            
         }
     }   
+}

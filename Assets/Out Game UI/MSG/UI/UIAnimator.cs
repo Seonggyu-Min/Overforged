@@ -40,9 +40,15 @@ namespace MIN
 
     public class UIAnimator : MonoBehaviour
     {
+        #region Fields And Properties
+
         [Header("애니메이션 그룹 등록")]
         [SerializeField] private List<UIGroup> _uiGroups;
 
+        #endregion
+
+
+        #region Private Methods
 
         public IEnumerator AnimateIn(Action onComplete = null)
         {
@@ -92,6 +98,8 @@ namespace MIN
                 ? new Vector2(offset, rect.anchoredPosition.y)
                 : new Vector2(rect.anchoredPosition.x, offset);
         }
+
+        #endregion
     }
 }
 

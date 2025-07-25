@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using MIN;
 using UnityEngine.ResourceManagement.ResourceProviders.Simulation;
-using Photon.Pun;
 
 
 
+namespace KMS
+{
 
-    public class Item : MonoBehaviourPun, ICarryable
+    public class Item : MonoBehaviour, ICarryable
     {
 
         [SerializeField] protected MaterialData matCatalog;
@@ -42,4 +43,5 @@ using Photon.Pun;
         }
 
     }
+}
 
