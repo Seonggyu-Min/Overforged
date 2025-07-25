@@ -9,19 +9,27 @@ namespace SHG
   using MaterialType = TestMaterialType;
 
   [Serializable]
-  public abstract class SmithingTool : IInteractable
+  public abstract class SmithingTool : IInteractableTool
   {
-    public virtual bool IsFinished { get; }
+    public enum InteractionType 
+    {
+      ReceivedItem,
+      ReturnItem,
+      Work
+    }
+
+    public abstract bool IsFinished { get; }
     [ShowInInspector]
     public MaterialItem HoldingItem { get; protected set; }
     public MaterialType[] AllowedMaterials => this.Data.AllowedMaterials;
-    public Action<SmithingTool, PlayerInteractArgs> BeforeInteract;
-    public Action<SmithingTool, ToolInteractArgs> AfterInteract;
+    public Action<SmithingTool> BeforeInteract;
+    public Action<SmithingTool> AfterInteract;
     [ShowInInspector]
     public float RemainingTime { get; protected set; }
     [ShowInInspector]
     public int RemainingInteractionCount { get; protected set; }
     public float Progress => this.CalcProgress();
+    public Action<InteractionType> OnInteractionTriggered;
 
     [SerializeField]
     protected SmithingToolData Data;
@@ -31,6 +39,7 @@ namespace SHG
     [SerializeField]
     protected float DefaultRequiredTime => this.Data.TimeRequiredInSeconds;
     protected int DefaultRequiredInteractCount => this.Data.RequiredInteractCount;
+    protected InteractionType interactionToTrigger;
 
     protected SmithingTool(SmithingToolData data)
     {
@@ -41,6 +50,9 @@ namespace SHG
 
     public virtual void OnUpdate(float deltaTime)
     {
+      if (this.IsFinished) {
+        return ;
+      }
       if (!this.isRemamingTimeElapse ||
       this.HoldingItem == null || this.IsFinished) {
         return;
@@ -51,8 +63,20 @@ namespace SHG
       }
     }
 
-    public abstract bool IsInteractable(PlayerInteractArgs args);
-    public abstract ToolInteractArgs Interact(PlayerInteractArgs args);
+    public abstract bool CanTransferItem(ToolTransferArgs args);
+    public virtual ToolTransferResult Transfer(ToolTransferArgs args) 
+    {
+      this.BeforeInteract?.Invoke(this);
+      if (args.ItemToGive != null) {
+        return (this.ReturnWithEvent(
+            this.ReceiveMaterialItem(args.ItemToGive)));
+      }
+      return (this.ReturnWithEvent(
+          this.ReturnItem()));    
+    }
+
+    public abstract bool CanWork();
+    public abstract ToolWorkResult Work();
 
     protected float CalcProgress()
     {
@@ -61,47 +85,46 @@ namespace SHG
         (float)this.DefaultRequiredInteractCount;
       var timeProgress = (this.DefaultRequiredTime - this.RemainingTime) /
         this.DefaultRequiredTime;
-      return (countProgress + (timeProgress / (float)this.DefaultRequiredInteractCount));
+      var progress = (countProgress + (timeProgress / (float)this.DefaultRequiredInteractCount));
+      return (Math.Min(progress, 1f));
     }
 
-    protected ToolInteractArgs DecreseInteractionCount(float durationToStay)
+    protected ToolWorkResult DecreseInteractionCount(float durationToStay)
     {
       this.RemainingInteractionCount -= 1;
-      return (new ToolInteractArgs {
-        ReceivedItem = null,
-        DurationToPlayerStay = durationToStay,
-        IsMaterialItemTaken = false,
-        OnTrigger = this.OnTriggered
+      return (new ToolWorkResult {
+        Trigger = this.OnTriggered,
+        DurationToStay = durationToStay
       });
     }
 
-    protected ToolInteractArgs ReceiveMaterialItem(MaterialItem materialItem, float durationToStay = 0)
+    protected ToolTransferResult ReceiveMaterialItem(MaterialItem materialItem)
     {
       this.HoldingItem = materialItem;
-      ToolInteractArgs result = new ToolInteractArgs {
-        ReceivedItem = null,
-        DurationToPlayerStay = durationToStay,
-        IsMaterialItemTaken = true,
-        OnTrigger = this.OnTriggered
+      this.interactionToTrigger = InteractionType.ReceivedItem;
+      ToolTransferResult result = new ToolTransferResult {
+        ReceivedItem = null
       };
       return (result);
     }
 
-    protected ToolInteractArgs ReturnItem(float durationToStay = 0)
+    protected ToolTransferResult ReturnItem()
     {
+      this.interactionToTrigger = InteractionType.ReturnItem;
       var item = this.ItemToReturn;
       this.ResetInteraction();
-      return (new ToolInteractArgs {
-        ReceivedItem = item,
-        DurationToPlayerStay = durationToStay,
-        IsMaterialItemTaken = false,
-        OnTrigger = this.OnTriggered
-      });
+      return (new ToolTransferResult { ReceivedItem = item });
     }
 
-    protected ToolInteractArgs ReturnWithEvent(in ToolInteractArgs result)
+    protected ToolTransferResult ReturnWithEvent(in ToolTransferResult result)
     {
-      this.AfterInteract?.Invoke(this, result);
+      this.AfterInteract?.Invoke(this);
+      return (result);
+    }
+
+    protected ToolWorkResult ReturnWithEvent(in ToolWorkResult result)
+    {
+      this.AfterInteract?.Invoke(this);
       return (result);
     }
 
@@ -111,7 +134,23 @@ namespace SHG
       this.RemainingInteractionCount = this.DefaultRequiredInteractCount;
       this.HoldingItem = null;
     }
-    protected abstract void OnTriggered(IInteractable interactable);
+
+    protected ToolWorkResult ChangeMaterial(float durationToStay)
+    {
+      var nextItem = this.HoldingItem.GetRefinedResult();
+      this.interactionToTrigger = InteractionType.Work;
+      this.ResetInteraction();
+      this.HoldingItem = nextItem;
+      return (new ToolWorkResult {
+        Trigger = this.OnTriggered,
+        DurationToStay = durationToStay
+      });
+    }
+
+    protected virtual void OnTriggered()
+    {
+      this.OnInteractionTriggered?.Invoke(this.interactionToTrigger);
+    }
   }
 }
 
