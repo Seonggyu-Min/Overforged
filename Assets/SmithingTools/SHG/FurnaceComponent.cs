@@ -9,7 +9,7 @@ namespace SHG
 {
   using Item = TestItem;
 
-  public class FurnaceComponent : MonoBehaviour, IInteractable
+  public class FurnaceComponent : MonoBehaviour, IInteractableTool
   {
     [SerializeField] [Required()]
     SmithingToolData furnaceData;
@@ -34,23 +34,21 @@ namespace SHG
     MeshRenderer meshRenderer;
     bool isIgnited;
 
-    void BeforeInteract(SmithingTool tool, PlayerInteractArgs args)
+    void BeforeInteract(SmithingTool tool)
     {
       if (tool != this.furnace) {
         return; 
       }
       Debug.Log($"Before Interact");
-      Debug.Log(args);
     }
 
-    void AfterInteract(SmithingTool tool, ToolInteractArgs result)
+    void AfterInteract(SmithingTool tool)
     {
       if (tool != this.furnace) {
         return; 
       }
       Debug.Log($"After Interact");
-      Debug.Log(result);
-      if (this.uiCanvas.enabled && result.ReceivedItem != null) {
+      if (this.uiCanvas.enabled && tool.HoldingItem == null) {
         this.uiCanvas.enabled = false;
       }
       else if (!this.uiCanvas.enabled && tool.HoldingItem != null) {
@@ -93,24 +91,39 @@ namespace SHG
       this.itemProgressLabel.text = $"Progress: {this.furnace.Progress * 100}%";
     }
 
-    public bool IsInteractable(PlayerInteractArgs args)
-    {
-      bool isInteractable = this.furnace.IsInteractable(args);
-      Debug.Log($"IsInteractable: {isInteractable}");
-      return (isInteractable);
-    }
-
-    public ToolInteractArgs Interact(PlayerInteractArgs args)
-    {
-      Debug.Log("Interact");
-      return (this.furnace.Interact(args));
-    }
-
     void OnInteractionTriggered(IInteractable interactable)
     {
       if (System.Object.ReferenceEquals(interactable, this)) {
         Debug.Log("OnInteractionTriggered");
       }
+    }
+
+    public bool CanTransferItem(ToolTransferArgs args)
+    {
+      bool canTransfer = this.furnace.CanTransferItem(args);
+      Debug.Log($"{nameof(CanTransferItem)}: {canTransfer}");
+      return (canTransfer);
+    }
+
+    public ToolTransferResult Transfer(ToolTransferArgs args)
+    {
+      var result = this.furnace.Transfer(args);
+      Debug.Log($"${nameof(Transfer)} result: {result}");
+      return (result);
+    }
+
+    public bool CanWork()
+    {
+      bool canwork = this.furnace.CanWork();
+      Debug.Log($"{nameof(canwork)}: {canwork}");
+      return (canwork);
+    }
+
+    public ToolWorkResult Work()
+    {
+      var result = this.furnace.Work();
+      Debug.Log($"{nameof(Work)} result: {result}");
+      return (result);
     }
   }
 }

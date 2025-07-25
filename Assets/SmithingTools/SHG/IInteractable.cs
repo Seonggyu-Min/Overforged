@@ -7,10 +7,50 @@ namespace SHG
   using MaterialItem = TestMaterialItem;
   using Item = TestItem;
 
+  public interface IInteractableTool
+  {
+    public bool CanTransferItem(ToolTransferArgs args);
+    public ToolTransferResult Transfer(ToolTransferArgs args);
+    public bool CanWork();
+    public ToolWorkResult Work();
+  }
+
   public interface IInteractable
   {
     public bool IsInteractable(PlayerInteractArgs args);
     public ToolInteractArgs Interact(PlayerInteractArgs args);
+  }
+
+  public struct ToolTransferArgs
+  {
+    public MaterialItem ItemToGive;
+    public int PlayerNetworkId;
+
+    public override string ToString()
+    {
+      return ($"[{nameof(ToolTransferArgs)}; {nameof(ItemToGive)}: {this.ItemToGive}; {nameof(PlayerNetworkId)}: {this.PlayerNetworkId};]");
+    }
+  }
+
+  public struct ToolTransferResult 
+  {
+    public Item ReceivedItem;
+
+    public override string ToString()
+    {
+      return ($"[{nameof(ToolTransferResult)}; {nameof(ReceivedItem)}: {this.ReceivedItem};]");
+    }
+  }
+
+  public struct ToolWorkResult
+  {
+    public Action Trigger;
+    public float DurationToStay;
+    
+    public override string ToString()
+    {
+      return ($"[{nameof(ToolWorkResult)}; {nameof(Trigger)}: {this.Trigger}; {nameof(DurationToStay)}: {this.DurationToStay};]");
+    }
   }
 
   public struct PlayerInteractArgs
