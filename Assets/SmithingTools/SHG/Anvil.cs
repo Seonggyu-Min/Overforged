@@ -1,62 +1,67 @@
 using System;
+using UnityEngine;
+using EditorAttributes;
 
 namespace SHG
 {
   using Item = TestItem;
   using MaterialItem = TestMaterialItem;
 
-  //TODO
-  // 재료 아이템 또는 플레이어의 상태에 따라 작업효율 차등 적용
-  public class Anvil : SmithingTool
-  {
-    public override bool IsFinished => (this.RemainingInteractionCount < 1);
-
-    protected override bool isPlayerMovable => true;
-    protected override bool isRemamingTimeElapse => false;
-    protected override Item ItemToReturn => (
-      this.HoldingItem != null ? this.HoldingItem.GetRefinedResult() : null);
-
-    public Anvil(SmithingToolData data): base(data)
+    [Serializable]
+    public class Anvil : SmithingTool, IInteractable
     {
-    }
+      public override bool IsFinished => (this.RemainingInteractionCount < 1);
 
-    public override bool CanTransferItem(ToolTransferArgs args)
-    {
-      if (args.ItemToGive == null) {
-        return (this.HoldingItem != null && this.IsFinished);
-      }
-      if (this.ItemToReturn != null) {
-        return (false);
-      }
-      return (Array.IndexOf(this.AllowedMaterials, args.ItemToGive.MaterialType) != -1);
-    }
+      public Action<IInteractable> OnInteractionTriggered;
+      protected override bool isPlayerMovable => true;
+      protected override bool isRemamingTimeElapse => false;
+      protected override Item ItemToReturn => (
+        this.HoldingItem != null ? this.HoldingItem.GetRefinedResult() : null);
 
-    public override bool CanWork()
-    {
-      if (this.HoldingItem == null) {
-        return (false);
+      public Anvil(SmithingToolData data): base(data)
+      {
       }
-      if (!this.IsFinished) {
+
+      public override bool IsInteractable(PlayerInteractArgs args)
+      {
+        if (this.HoldingItem != null) {
+          return (args.CurrentHoldingItem == null);
+        }
+        if (args.CurrentHoldingItem == null ||
+          !(args.CurrentHoldingItem is MaterialItem materialItem) ||
+          Array.IndexOf(this.AllowedMaterials, materialItem.MaterialType) == -1) {
+          return (false);
+        }
         return (true);
       }
-      else {
-        var nextItem = this.HoldingItem.GetRefinedResult();
-        return (nextItem != null);
-      }
-    }
 
-    public override ToolWorkResult Work()
-    {
-      this.interactionToTrigger = InteractionType.Work;
-      this.BeforeInteract?.Invoke(this);  
-      if (!this.IsFinished) {
+      public override ToolInteractArgs Interact(PlayerInteractArgs args)
+      {
+        #if UNITY_EDITOR
+        if (!this.IsInteractable(args)) {
+          throw (
+            new ApplicationException(
+              "player try to interact but not interactable"));
+        }
+        #endif
+        this.BeforeInteract?.Invoke(this, args);
+        if (this.IsFinished) {
+          return (this.ReturnWithEvent(this.ReturnItem()));
+        }
+        //TODO
+        //1.재료 아이템을 도구로 이동하거나 숨기고 아이콘 표시
+        //2. 재료 아이템 또는 플레이어의 상태에 따라 남은 시간을 차등 적용
+        if (this.HoldingItem == null) {
+          return (this.ReturnWithEvent(
+              this.ReceiveMaterialItem(args.CurrentHoldingItem)));
+        }
         return (this.ReturnWithEvent(
             this.DecreseInteractionCount(this.RemainingTime)));
       }
-      else {
-        return (this.ReturnWithEvent(
-          this.ChangeMaterial(this.RemainingTime)));
+
+      protected override void OnTriggered(IInteractable interactable)
+      {
+        this.OnInteractionTriggered?.Invoke(interactable);
       }
     }
-  }
 }

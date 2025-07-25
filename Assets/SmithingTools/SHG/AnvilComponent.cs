@@ -7,9 +7,10 @@ using Void = EditorAttributes.Void;
 namespace SHG
 {
   using Item = TestItem;
+  using ItemData = TestItemData;
 
   [RequireComponent(typeof(MeshRenderer))]
-  public class AnvilComponent : MonoBehaviour, IInteractableTool
+  public class AnvilComponent : MonoBehaviour, IInteractable
   {
     [SerializeField]
     Anvil anvil;
@@ -31,28 +32,35 @@ namespace SHG
     Color interactColor;
     MeshRenderer meshRenderer;
 
-    void BeforeInteract(SmithingTool tool)
+    public ToolInteractArgs Interact(PlayerInteractArgs args)
     {
-      if (tool != this.anvil) {
-        return;
-      }
-      Debug.Log("BeforeInteract args");
-      Debug.Log($"tool holding item: {tool.HoldingItem}");
-      Debug.Log($"tool interaction count: {tool.RemainingInteractionCount}");
-      if (this.anvil.HoldingItem != null) {
-        this.meshRenderer.material.color = this.interactColor;
-      }
+      Debug.Log("Interact");
+      return (this.anvil.Interact(args));
     }
 
-    void AfterInteract(SmithingTool tool)
+    public bool IsInteractable(PlayerInteractArgs args)
     {
-      if (tool != this.anvil) {
-        return;
-      }
-      Debug.Log("AfterInteract result");
+      bool isInteractable = this.anvil.IsInteractable(args);
+      Debug.Log($"IsInteractable: {isInteractable}");
+      return (isInteractable);
+    }
+
+    void BeforeInteract(SmithingTool tool, PlayerInteractArgs args)
+    {
+      Debug.Log("BeforeInteract args");
+      Debug.Log(args);
       Debug.Log($"tool holding item: {tool.HoldingItem}");
       Debug.Log($"tool interaction count: {tool.RemainingInteractionCount}");
-      if (this.uiCanvas.enabled && tool.HoldingItem == null) {
+      this.meshRenderer.material.color = this.interactColor;
+    }
+
+    void AfterInteract(SmithingTool tool, ToolInteractArgs result)
+    {
+      Debug.Log("AfterInteract result");
+      Debug.Log(result);
+      Debug.Log($"tool holding item: {tool.HoldingItem}");
+      Debug.Log($"tool interaction count: {tool.RemainingInteractionCount}");
+      if (this.uiCanvas.enabled && result.ReceivedItem != null) {
         this.uiCanvas.enabled = false;
       }
       else if (!this.uiCanvas.enabled && tool.HoldingItem != null) {
@@ -91,39 +99,11 @@ namespace SHG
       this.anvil.OnUpdate(Time.deltaTime);
     }
 
-    void OnInteractionTriggered(SmithingTool.InteractionType interactionType)
+    void OnInteractionTriggered(IInteractable interactable)
     {
-      if (interactionType == SmithingTool.InteractionType.Work) {
+      if (System.Object.ReferenceEquals(this, interactable)) {
         this.meshRenderer.material.color = this.normalColor;
       }
-    }
-
-    public bool CanTransferItem(ToolTransferArgs args)
-    {
-      bool canTransfer = this.anvil.CanTransferItem(args);
-      Debug.Log($"{nameof(CanTransferItem)}: {canTransfer}");
-      return (canTransfer);
-    }
-
-    public ToolTransferResult Transfer(ToolTransferArgs args)
-    {
-      var result = this.anvil.Transfer(args);
-      Debug.Log($"Transfer result: {result}");
-      return (result);
-    }
-
-    public bool CanWork()
-    {
-      bool canWork = this.anvil.CanWork();
-      Debug.Log($"canwork: {canWork}");
-      return (canWork);
-    }
-
-    public ToolWorkResult Work()
-    {
-      var result = this.anvil.Work();
-      Debug.Log($"{nameof(Work)} result: {result}");
-      return (result);
     }
   }
 }
