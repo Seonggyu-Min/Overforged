@@ -7,11 +7,11 @@ namespace SHG
 
   //TODO
   // 재료 아이템 또는 플레이어의 상태에 따라 작업효율 차등 적용
-  public class Anvil : SmithingTool, IInteractable
+  public class Anvil : SmithingTool
   {
     public override bool IsFinished => (this.RemainingInteractionCount < 1);
 
-    public Action<IInteractable> OnInteractionTriggered;
+    public Action OnInteractionTriggered;
     protected override bool isPlayerMovable => true;
     protected override bool isRemamingTimeElapse => false;
     protected override Item ItemToReturn => (
@@ -21,43 +21,52 @@ namespace SHG
     {
     }
 
-    public override bool IsInteractable(PlayerInteractArgs args)
+    public override bool CanTransferItem(ToolTransferArgs args)
     {
-      if (this.HoldingItem != null) {
-        return (args.CurrentHoldingItem == null);
+      if (args.ItemToGive == null) {
+        return (this.HoldingItem != null && this.IsFinished);
       }
-      if (args.CurrentHoldingItem == null ||
-        !(args.CurrentHoldingItem is MaterialItem materialItem) ||
-        Array.IndexOf(this.AllowedMaterials, materialItem.MaterialType) == -1) {
+      if (this.HoldingItem != null) {
         return (false);
       }
-      return (true);
+      return (Array.IndexOf(this.AllowedMaterials, args.ItemToGive.MaterialType) != -1);
     }
 
-    public override ToolInteractArgs Interact(PlayerInteractArgs args)
+    public override bool CanWork()
     {
-#if UNITY_EDITOR
-      if (!this.IsInteractable(args)) {
-        throw (
-          new ApplicationException(
-            "player try to interact but not interactable"));
+      if (!this.IsFinished) {
+        return (true);
       }
-#endif
-      this.BeforeInteract?.Invoke(this, args);
-      if (this.IsFinished) {
-        return (this.ReturnWithEvent(this.ReturnItem()));
+      else {
+        var nextItem = this.HoldingItem.GetRefinedResult();
+        return (nextItem != null);
       }
-      if (this.HoldingItem == null) {
+    }
+
+    public override ToolWorkResult Work()
+    {
+      if (!this.IsFinished) {
         return (this.ReturnWithEvent(
-            this.ReceiveMaterialItem(args.CurrentHoldingItem)));
+            this.DecreseInteractionCount(this.RemainingTime)));
       }
-      return (this.ReturnWithEvent(
-          this.DecreseInteractionCount(this.RemainingTime)));
+      else {
+        return (this.ReturnWithEvent(
+          this.ChangeMaterial(this.RemainingTime)));
+      }
     }
 
-    protected override void OnTriggered(IInteractable interactable)
+    ToolWorkResult ChangeMaterial(float durationToStay)
     {
-      this.OnInteractionTriggered?.Invoke(interactable);
+      this.HoldingItem = this.HoldingItem.GetRefinedResult();
+      return (new ToolWorkResult {
+        Trigger = this.OnTriggered,
+        DurationToStay = durationToStay
+      });
+    }
+
+    protected override void OnTriggered()
+    {
+      this.OnInteractionTriggered?.Invoke();
     }
   }
 }

@@ -15,8 +15,8 @@ namespace SHG
     [ShowInInspector]
     public MaterialItem HoldingItem { get; protected set; }
     public MaterialType[] AllowedMaterials => this.Data.AllowedMaterials;
-    public Action<SmithingTool, PlayerInteractArgs> BeforeInteract;
-    public Action<SmithingTool, ToolInteractArgs> AfterInteract;
+    public Action<SmithingTool> BeforeInteract;
+    public Action<SmithingTool> AfterInteract;
     [ShowInInspector]
     public float RemainingTime { get; protected set; }
     [ShowInInspector]
@@ -54,19 +54,13 @@ namespace SHG
       }
     }
 
-    public virtual bool CanTransferItem(ToolTransferArgs args)
-    {
-      if (args.ItemToGive != null) {
-        return (this.HoldingItem == null);
-      }
-      return (this.HoldingItem != null && this.IsFinished);
-    }
-
+    public abstract bool CanTransferItem(ToolTransferArgs args);
     public virtual ToolTransferResult Transfer(ToolTransferArgs args) 
     {
+      this.BeforeInteract?.Invoke(this);
       if (args.ItemToGive != null) {
         return (this.ReturnWithEvent(
-            this.ReceiveMaterialItem()));
+            this.ReceiveMaterialItem(args.ItemToGive)));
       }
       return (this.ReturnWithEvent(
           this.ReturnItem()));    
@@ -86,14 +80,12 @@ namespace SHG
       return (Math.Min(progress, 1f));
     }
 
-    protected ToolInteractArgs DecreseInteractionCount(float durationToStay)
+    protected ToolWorkResult DecreseInteractionCount(float durationToStay)
     {
       this.RemainingInteractionCount -= 1;
-      return (new ToolInteractArgs {
-        ReceivedItem = null,
-        DurationToPlayerStay = durationToStay,
-        IsMaterialItemTaken = false,
-        OnTrigger = this.OnTriggered
+      return (new ToolWorkResult {
+        Trigger = this.OnTriggered,
+        DurationToStay = durationToStay
       });
     }
 
@@ -114,9 +106,15 @@ namespace SHG
       return (new ToolTransferResult { ReceivedItem = item });
     }
 
-    protected ToolInteractArgs ReturnWithEvent(in ToolInteractArgs result)
+    protected ToolTransferResult ReturnWithEvent(in ToolTransferResult result)
     {
-      this.AfterInteract?.Invoke(this, result);
+      this.AfterInteract?.Invoke(this);
+      return (result);
+    }
+
+    protected ToolWorkResult ReturnWithEvent(in ToolWorkResult result)
+    {
+      this.AfterInteract?.Invoke(this);
       return (result);
     }
 
@@ -126,7 +124,7 @@ namespace SHG
       this.RemainingInteractionCount = this.DefaultRequiredInteractCount;
       this.HoldingItem = null;
     }
-    protected abstract void OnTriggered(IInteractable interactable);
+    protected abstract void OnTriggered();
   }
 }
 
