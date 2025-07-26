@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c13b17088ce587d42acf16f2050ab374, type: 3}
-  m_Name: IronOre
+  m_Name: HammerHead
   m_EditorClassIdentifier: 
-  ID: 102
-  Name: IronOre
-  Image: {fileID: 21300000, guid: c9f995f5a266f15e7bd8962219c83087, type: 3}
-  ItemPrefab: {fileID: 485200612604217011, guid: b481d1e017609fb439d6cfeb8b8e2496, type: 3}
-  materialVariation: 1
-  materialType: 1
-  nextMaterial: {fileID: 11400000, guid: d00ccd45e0a962457965c4617055a845, type: 2}
+  ID: 109
+  Name: Hammer head
+  Image: {fileID: 21300000, guid: 9f9a9b75dd53b7d9cb8f603734ac043e, type: 3}
+  ItemPrefab: {fileID: -259972160606440404, guid: a55ba290b477e1a47886b6f080d6e895, type: 3}
+  materialVariation: 7
+  materialType: 2
+  nextMaterial: {fileID: 11400000, guid: e96a76f4d33efc64f97c9e037dce9f0f, type: 2}

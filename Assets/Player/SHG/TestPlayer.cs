@@ -2,8 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using EditorAttributes;
-using Unity.VisualScripting;
-using UnityEditor;
+using Void = EditorAttributes.Void;
 
 namespace SHG
 {
@@ -15,19 +14,44 @@ namespace SHG
     float interactRadius;
     [SerializeField] [Range(1f, 10f)]
     float interactRange; 
-    [SerializeField]
-    Item HodlingProduct;
+    [SerializeField] [Range(1f, 5f)]
+    float movingSpeed;
+    [SerializeField, ReadOnly, HideInInspector]
+    Item HoldingItem;
     public Action OnTriggerInteraction;
     [SerializeField]
     Color normalColor;
     [SerializeField]
     Color interactColor;
-    float interactionDuration;
+    [SerializeField]
+    Transform hand;
+    [SerializeField, TabGroup(nameof(HoldingItem), nameof(itemToCreate), nameof(itemPrefab))]
+    Void itemGroup;
     Coroutine toolInteractionRoutine;
     MeshRenderer meshRenderer;
+    [SerializeField, HideInInspector]
+    ItemData itemToCreate;
+    [SerializeField, HideInInspector]
+    GameObject itemPrefab;
+    float interactionDuration;
 
-    [SerializeField]
-    public MaterialItem HoldingItem;
+    [Button]
+    void CreateItem()
+    {
+      GameObject itemObjct = GameObject.Instantiate(this.itemPrefab); 
+      MaterialItem item = itemObjct.GetComponent<MaterialItem>();
+      item.Data = this.itemToCreate;
+      item.Ore = OreType.Gold;
+      this.GrabItem(item);
+    }
+
+    void GrabItem(Item item)
+    {
+      Debug.Log($"GrabItem {item}");
+      this.HoldingItem = item;
+      item.transform.SetParent(this.hand);
+      item.transform.localPosition = Vector3.zero;
+    }
 
     bool IsTryingInteract()
     {
@@ -37,6 +61,13 @@ namespace SHG
     bool IsTryingGrab()
     {
       return (Input.GetKeyDown(KeyCode.G));
+    }
+
+    public void LooseItem()
+    {
+      if (this.HoldingItem != null) {
+        this.HoldingItem = null;
+      }
     }
 
     bool TryFindInteratable(out IInteractableTool interactable)
@@ -82,11 +113,19 @@ namespace SHG
       else if (this.IsTryingGrab() &&
         this.TryFindInteratable(out IInteractableTool transferTool))
       {
-        ToolTransferArgs args = new ToolTransferArgs
-        {
-          ItemToGive = this.HoldingItem,
-          PlayerNetworkId = 1
-        };
+        ToolTransferArgs args;
+        if (this.HoldingItem is MaterialItem materialItem) {
+          args = new ToolTransferArgs {
+            ItemToGive = materialItem,
+            PlayerNetworkId = 1
+          };
+        }
+        else {
+          args = new ToolTransferArgs { 
+            ItemToGive = null,
+            PlayerNetworkId = 1 
+          };
+        }
         if (transferTool.CanTransferItem(args)) { 
           this.TransferItem(transferTool, args);
         }
@@ -96,13 +135,9 @@ namespace SHG
     void TransferItem(IInteractableTool tool, in ToolTransferArgs args)
     {
       ToolTransferResult result = tool.Transfer(args);
+      this.LooseItem();
       if (result.ReceivedItem != null) {
-        if (result.ReceivedItem is MaterialItem materialItem) {
-          this.HoldingItem = materialItem;
-        }
-        else {
-          this.HodlingProduct = result.ReceivedItem;
-        }
+        this.GrabItem(result.ReceivedItem);
       }
     }
 
@@ -136,8 +171,6 @@ namespace SHG
 
     #region Test code
     Rigidbody rb;
-    [SerializeField] [Range(1f, 5f)]
-    float movingSpeed;
 
     void Move(in Vector2 input)
     {

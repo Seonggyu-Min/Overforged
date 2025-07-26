@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c13b17088ce587d42acf16f2050ab374, type: 3}
-  m_Name: IronOre
+  m_Name: AxeBlade
   m_EditorClassIdentifier: 
-  ID: 102
-  Name: IronOre
-  Image: {fileID: 21300000, guid: c9f995f5a266f15e7bd8962219c83087, type: 3}
-  ItemPrefab: {fileID: 485200612604217011, guid: b481d1e017609fb439d6cfeb8b8e2496, type: 3}
-  materialVariation: 1
-  materialType: 1
-  nextMaterial: {fileID: 11400000, guid: d00ccd45e0a962457965c4617055a845, type: 2}
+  ID: 108
+  Name: Axe head
+  Image: {fileID: 21300000, guid: 5098c9248dd260a708c27417114d1111, type: 3}
+  ItemPrefab: {fileID: -7334951474422550414, guid: 2114decc6eccacc4591e5d8d403ea377, type: 3}
+  materialVariation: 6
+  materialType: 2
+  nextMaterial: {fileID: 11400000, guid: f17880363e1d8fbf5aeb8459d1b96dbd, type: 2}

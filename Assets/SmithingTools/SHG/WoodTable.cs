@@ -25,7 +25,7 @@ namespace SHG
         }
         return (false);
       }
-      return (this.IsFinished && this.ItemToReturn != null);
+      return (this.ItemToReturn != null);
     }
 
     public override bool CanWork()
@@ -49,7 +49,7 @@ namespace SHG
             this.RemainingTime)));
       }
       return (this.ReturnWithEvent(
-          this.ChangeMaterial(this.RemainingTime)));
+          this.ChangeMaterial(this.InteractionTime)));
     }
   }
 }

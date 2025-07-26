@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace SHG
 {
@@ -18,11 +19,8 @@ namespace SHG
 
     public override bool CanTransferItem(ToolTransferArgs args)
     {
-      if (args.ItemToGive == null) {
-        return (this.HoldingItem != null && this.IsFinished);
-      }
       if (this.ItemToReturn != null) {
-        return (false);
+        return (args.ItemToGive == null);
       }
       return (Array.IndexOf(this.AllowedMaterials, args.ItemToGive.Variation) != -1);
     }
@@ -40,14 +38,14 @@ namespace SHG
     {
       this.interactionToTrigger = InteractionType.Work;
       this.BeforeInteract?.Invoke(this);  
+      ToolWorkResult result = new ToolWorkResult {};
       if (!this.IsFinished) {
-        return (this.ReturnWithEvent(
-            this.DecreseInteractionCount(this.RemainingTime)));
+        result = this.DecreseInteractionCount(this.InteractionTime);
       }
-      else {
-        return (this.ReturnWithEvent(
-          this.ChangeMaterial(this.RemainingTime)));
+      if (this.IsFinished) {
+        result = this.ChangeMaterial(this.InteractionTime);
       }
+      return (this.ReturnWithEvent(result));
     }
   }
 }

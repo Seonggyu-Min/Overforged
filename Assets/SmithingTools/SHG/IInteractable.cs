@@ -33,10 +33,11 @@ namespace SHG
   public struct ToolTransferResult 
   {
     public Item ReceivedItem;
+    public bool IsDone;
 
     public override string ToString()
     {
-      return ($"[{nameof(ToolTransferResult)}; {nameof(ReceivedItem)}: {this.ReceivedItem};]");
+      return ($"[{nameof(ToolTransferResult)}; {nameof(ReceivedItem)}: {this.ReceivedItem}; {nameof(IsDone)}: {this.IsDone};]");
     }
   }
 

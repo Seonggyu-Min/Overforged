@@ -44,6 +44,7 @@ namespace SHG
       this.Temparature = Math.Clamp(
         this.Temparature, MIN_TEMPARATURE, MAX_TEMPARATURE);
       if (!wasFinished && this.IsFinished) {
+        this.HoldingItem.ChangeToNext();
         this.OnFinished?.Invoke();
       }
     }
@@ -54,10 +55,10 @@ namespace SHG
         return (this.HoldingItem == null);
       }
       else {
-        return (this.ItemToReturn != null && this.IsFinished);
+        return (this.ItemToReturn != null);
       }
     }
-
+        
     public override bool CanWork()
     {
       return (!this.IsIgnited);
@@ -77,7 +78,7 @@ namespace SHG
         this.ReturnWithEvent(
           new ToolWorkResult {
             Trigger = this.OnTriggered,
-            DurationToStay = 0 
+            DurationToStay = this.InteractionTime
           }
       ));
     }
