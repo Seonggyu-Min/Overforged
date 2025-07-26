@@ -16,6 +16,8 @@ public class Item : MonoBehaviourPun, ICarryable
 
     protected ItemData data;
 
+    public virtual string Name {get;}
+
 
     //아이템이 참조할 아이템 스크립터블 오브젝트
     public ItemData Data

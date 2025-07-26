@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: String
   m_EditorClassIdentifier: 
   ID: 101
-  Name: 
+  Name: string
   Image: {fileID: 0}
   ItemPrefab: {fileID: 4676254348787820899, guid: 7f8af38c43bd414479e801615c520b0f, type: 3}
-  materialItemType: 4
+  materialVariation: 0
   materialType: 0
   nextMaterial: {fileID: 0}

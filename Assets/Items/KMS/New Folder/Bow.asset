@@ -13,13 +13,7 @@ MonoBehaviour:
   m_Name: Bow
   m_EditorClassIdentifier: 
   ID: 0
-  Name: 
-  ItemType: 0
-  OreType: 0
-  WoodType: 0
-  NeedTongs: 0
+  Name: Bow
   Image: {fileID: 0}
   ItemPrefab: {fileID: 1561835443239050545, guid: b6e83d5e2c75ca840a38544a212fb11d, type: 3}
-  NextItem: {fileID: 0}
-  CombineObjType: 0
   productType: 0

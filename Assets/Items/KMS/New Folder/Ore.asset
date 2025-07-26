@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Ore
   m_EditorClassIdentifier: 
   ID: 102
-  Name: 
+  Name: Ore
   Image: {fileID: 0}
   ItemPrefab: {fileID: 485200612604217011, guid: b481d1e017609fb439d6cfeb8b8e2496, type: 3}
-  materialItemType: 1
+  materialVariation: 0
   materialType: 1
   nextMaterial: {fileID: 11400000, guid: 73625ab38447c8b478c18e49e4591608, type: 2}

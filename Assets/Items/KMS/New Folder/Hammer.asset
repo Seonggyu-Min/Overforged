@@ -13,13 +13,7 @@ MonoBehaviour:
   m_Name: Hammer
   m_EditorClassIdentifier: 
   ID: 0
-  Name: 
-  ItemType: 0
-  OreType: 0
-  WoodType: 0
-  NeedTongs: 0
+  Name: Hammer
   Image: {fileID: 0}
   ItemPrefab: {fileID: 1459689668687645485, guid: 569c740ac9e6aa945b807094a597b155, type: 3}
-  NextItem: {fileID: 0}
-  CombineObjType: 0
   productType: 3
