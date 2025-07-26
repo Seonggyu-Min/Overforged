@@ -7,12 +7,12 @@ using Void = EditorAttributes.Void;
 namespace SHG
 {
 
-  public class FurnaceComponent : MonoBehaviour, IInteractableTool
+  public class FurnaceComponent : SmithingToolComponent
   {
     [SerializeField] [Required()]
     SmithingToolData furnaceData;
     [SerializeField] 
-      Furnace furnace;
+    Furnace furnace;
     [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(itemProgressLabel), nameof(tempLabel))]
     Void uiGroup;
     [SerializeField] [HideProperty]
@@ -79,6 +79,7 @@ namespace SHG
       this.furnace.OnFinished += this.OnFinished;
       this.uiCanvas.enabled = false;
       this.meshRenderer = this.GetComponent<MeshRenderer>();
+      Debug.Log($"SceneId {this.SceneId}");
     }
 
     // Update is called once per frame
@@ -89,36 +90,14 @@ namespace SHG
       this.itemProgressLabel.text = $"Progress: {this.furnace.Progress * 100}%";
     }
 
-    public bool CanTransferItem(ToolTransferArgs args)
+    public override void OnRpc(string method, float latencyInSeconds, object[] args = null)
     {
-      bool canTransfer = this.furnace.CanTransferItem(args);
-      Debug.Log($"{nameof(CanTransferItem)}: {canTransfer}");
-      return (canTransfer);
+      throw new System.NotImplementedException();
     }
 
-    public ToolTransferResult Transfer(ToolTransferArgs args)
+    public override void SendRpc(string method, object[] args)
     {
-      var result = this.furnace.Transfer(args);
-      Debug.Log($"{nameof(Transfer)} result: {result}");
-      if (args.ItemToGive != null) {
-        args.ItemToGive.transform.SetParent(this.transform);
-        args.ItemToGive.transform.localPosition = Vector3.up;
-      }
-      return (result);
-    }
-
-    public bool CanWork()
-    {
-      bool canwork = this.furnace.CanWork();
-      Debug.Log($"{nameof(canwork)}: {canwork}");
-      return (canwork);
-    }
-
-    public ToolWorkResult Work()
-    {
-      var result = this.furnace.Work();
-      Debug.Log($"{nameof(Work)} result: {result}");
-      return (result);
+      throw new System.NotImplementedException();
     }
   }
 }

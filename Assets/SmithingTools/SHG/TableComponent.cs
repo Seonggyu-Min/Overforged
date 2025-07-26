@@ -13,7 +13,7 @@ namespace SHG
   using CraftTableData = TestCraftData;
 
   [RequireComponent(typeof(MeshRenderer))]
-  public class TableComponent: MonoBehaviour, IInteractableTool
+  public class TableComponent: SmithingToolComponent
   {
     [SerializeField]
     WoodTable woodTable;
@@ -63,7 +63,7 @@ namespace SHG
     }
     IInteractableTool currentWorkingTool;
 
-    public bool CanTransferItem(ToolTransferArgs args)
+    public override bool CanTransferItem(ToolTransferArgs args)
     {
       if (args.ItemToGive != null &&
         this.CurrentWorkingTool == this.woodTable) {
@@ -90,7 +90,7 @@ namespace SHG
       }
     }
 
-    public ToolTransferResult Transfer(ToolTransferArgs args)
+    public override ToolTransferResult Transfer(ToolTransferArgs args)
     {
       if (args.ItemToGive != null) {
         args.ItemToGive.transform.SetParent(this.transform);
@@ -145,7 +145,7 @@ namespace SHG
       return (this.craftTable.Transfer(args));
     }
 
-    public bool CanWork()
+    public override bool CanWork()
     {
       if (this.CurrentWorkingTool != null) {
         bool canWork = this.CurrentWorkingTool.CanWork();
@@ -158,7 +158,7 @@ namespace SHG
       return (false);
     }
 
-    public ToolWorkResult Work()
+    public override ToolWorkResult Work()
     {
       if (this.CurrentWorkingTool != null) {
         var result = this.CurrentWorkingTool.Work();
@@ -300,5 +300,14 @@ namespace SHG
       this.woodTable.OnUpdate(Time.deltaTime);
     }
 
+    public override void OnRpc(string method, float latencyInSeconds, object[] args = null)
+    {
+      throw new NotImplementedException();
+    }
+
+    public override void SendRpc(string method, object[] args)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

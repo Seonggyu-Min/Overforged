@@ -11,11 +11,9 @@ namespace SHG
     [Button]
     void Generate()
     {
-      var allBehaviours = GameObject.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
-      foreach (var behaviour in allBehaviours) {
-        if (behaviour is INetSynchronizable synchronizable) {
-          synchronizable.SceneId = this.nextSceneId++;
-        } 
+      var allSmithingTools = GameObject.FindObjectsByType<SmithingToolComponent>(FindObjectsSortMode.None);
+      foreach (var smithingTool in allSmithingTools) {
+        smithingTool.SceneId = this.nextSceneId++;
       }
     }
   }

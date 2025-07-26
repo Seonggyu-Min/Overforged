@@ -1,3 +1,27 @@
+## 도구 Network 클래스
+
+```mermaid
+classDiagram
+    class INetSynchronizable {
+        +PlayerNetworkId: int
+        +IsOwner: bool
+        +SceneId: int
+        +OnRpc(method: string, latency: float, args: Array~object~)
+        -SendRpc(method: string, args: Array~object~)
+    }
+
+    class NetworkSyncrhonizer {
+        +PlayerNetworkId: int
+        +AllSynchronizables: Dictionary&ltsceneId: int, syncrhonizable: INetSynchronizable&gt
+        +RegisterSynchroizable(syncrhonizable: INetSynchronizable)
+        +SendRpc(sceneId: int, method: string, args: Array~object~)
+        -ReceiveRpc(data: Array~object~)
+        -forwardRpc(target: INetSynchronizable, method: string, latency: float, args: Array~object~)
+    }
+
+    INetSynchronizable "*" o-- NetworkSyncrhonizer: has
+```
+
 ## Tool 클래스
 
 #### 외부 인터페이스

@@ -6,9 +6,8 @@ using Void = EditorAttributes.Void;
 
 namespace SHG
 {
-
   [RequireComponent(typeof(MeshRenderer))]
-  public class AnvilComponent : MonoBehaviour, IInteractableTool
+  public class AnvilComponent : SmithingToolComponent
   {
     [SerializeField]
     Anvil anvil;
@@ -90,36 +89,14 @@ namespace SHG
       this.meshRenderer.material.color = this.normalColor;
     }
 
-    public bool CanTransferItem(ToolTransferArgs args)
+    public override void OnRpc(string method, float latencyInSeconds, object[] args = null)
     {
-      bool canTransfer = this.anvil.CanTransferItem(args);
-      Debug.Log($"{nameof(CanTransferItem)}: {canTransfer}");
-      return (canTransfer);
+      throw new System.NotImplementedException();
     }
 
-    public ToolTransferResult Transfer(ToolTransferArgs args)
+    public override void SendRpc(string method, object[] args)
     {
-      if (args.ItemToGive != null) {
-        args.ItemToGive.transform.SetParent(this.transform);
-        args.ItemToGive.transform.localPosition = Vector3.up;
-      }
-      var result = this.anvil.Transfer(args);
-      Debug.Log($"Transfer result: {result}");
-      return (result);
-    }
-
-    public bool CanWork()
-    {
-      bool canWork = this.anvil.CanWork();
-      Debug.Log($"canwork: {canWork}");
-      return (canWork);
-    }
-
-    public ToolWorkResult Work()
-    {
-      var result = this.anvil.Work();
-      Debug.Log($"{nameof(Work)} result: {result}");
-      return (result);
+      throw new System.NotImplementedException();
     }
   }
 }

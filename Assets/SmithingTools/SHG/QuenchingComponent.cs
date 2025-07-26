@@ -6,7 +6,7 @@ using Void = EditorAttributes.Void;
 
 namespace SHG
 {
-  public class QuenchingComponent : MonoBehaviour, IInteractableTool
+  public class QuenchingComponent : SmithingToolComponent
   {
     [SerializeField] [Required()]
     SmithingToolData quenchingToolData;
@@ -100,36 +100,14 @@ namespace SHG
       this.meshRenderer = this.GetComponent<MeshRenderer>();
     }
 
-    public bool CanTransferItem(ToolTransferArgs args)
+    public override void OnRpc(string method, float latencyInSeconds, object[] args = null)
     {
-      bool canTransfer = this.quenchingTool.CanTransferItem(args);
-      Debug.Log($"{nameof(CanTransferItem)}: {canTransfer}");
-      return (canTransfer);
+      throw new System.NotImplementedException();
     }
 
-    public ToolTransferResult Transfer(ToolTransferArgs args)
+    public override void SendRpc(string method, object[] args)
     {
-      var result = this.quenchingTool.Transfer(args);
-      Debug.Log($"{nameof(Transfer)} result: {result}");
-      if (args.ItemToGive != null) {
-        args.ItemToGive.transform.SetParent(this.transform);
-        args.ItemToGive.transform.localPosition = Vector3.up;
-      }
-      return (result);
-    }
-
-    public bool CanWork()
-    {
-      bool canwork = this.quenchingTool.CanWork();
-      Debug.Log($"{nameof(canwork)}: {canwork}");
-      return (canwork);
-    }
-
-    public ToolWorkResult Work()
-    {
-      var result = this.quenchingTool.Work();
-      Debug.Log($"{nameof(Work)} result: {result}");
-      return (result);
+      throw new System.NotImplementedException();
     }
   }
 }
