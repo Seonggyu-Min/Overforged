@@ -9,11 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fd9578c79781667eb4767d61fa7689e, type: 3}
-  m_Name: SwordHandle
+  m_Script: {fileID: 11500000, guid: c13b17088ce587d42acf16f2050ab374, type: 3}
+  m_Name: Handle
   m_EditorClassIdentifier: 
-  Name: sword_handle
-  prefab: {fileID: 3628974982378273630, guid: 71b1b2d929018c248a0e6ced4b6a9cb6, type: 3}
+  ID: 105
+  Name: Handle
   Image: {fileID: 21300000, guid: 6a3dd416d176d8f80badba540c97122c, type: 3}
-  Type: 0
-  RefinedResult: {fileID: 0}
+  ItemPrefab: {fileID: 2766212503428324877, guid: a55ba290b477e1a47886b6f080d6e895, type: 3}
+  materialVariation: 9
+  materialType: 3
+  nextMaterial: {fileID: 11400000, guid: 22234c3c5173ead90995b3e419720df7, type: 2}

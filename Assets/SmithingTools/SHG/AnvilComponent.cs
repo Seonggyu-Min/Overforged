@@ -38,9 +38,6 @@ namespace SHG
       Debug.Log("BeforeInteract args");
       Debug.Log($"tool holding item: {tool.HoldingItem}");
       Debug.Log($"tool interaction count: {tool.RemainingInteractionCount}");
-      if (this.anvil.HoldingItem != null) {
-        this.meshRenderer.material.color = this.interactColor;
-      }
     }
 
     void AfterInteract(SmithingTool tool)
@@ -56,6 +53,9 @@ namespace SHG
       }
       else if (tool.HoldingItem != null) {
         this.SetItemUI(tool.HoldingItem);
+        if (tool.InteractionToTrigger == SmithingTool.InteractionType.Work) {
+          this.meshRenderer.material.color = this.interactColor;
+        }
       }
     }
 
@@ -87,9 +87,7 @@ namespace SHG
 
     void OnInteractionTriggered(SmithingTool.InteractionType interactionType)
     {
-      if (interactionType == SmithingTool.InteractionType.Work) {
-        this.meshRenderer.material.color = this.normalColor;
-      }
+      this.meshRenderer.material.color = this.normalColor;
     }
 
     public bool CanTransferItem(ToolTransferArgs args)

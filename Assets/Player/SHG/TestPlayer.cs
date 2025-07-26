@@ -38,11 +38,26 @@ namespace SHG
     [Button]
     void CreateItem()
     {
+      if (this.itemToCreate == null) {
+        Debug.LogError("no item to create");
+        return ;
+      }
       GameObject itemObjct = GameObject.Instantiate(this.itemPrefab); 
       MaterialItem item = itemObjct.GetComponent<MaterialItem>();
       item.Data = this.itemToCreate;
       item.Ore = OreType.Gold;
       this.GrabItem(item);
+    }
+
+    [Button]
+    void DestroyItem()
+    {
+      if (this.HoldingItem == null) {
+        Debug.LogError("no item to destroy");
+        return ;
+      }
+      Destroy(this.HoldingItem.gameObject);
+      this.HoldingItem = null;
     }
 
     void GrabItem(Item item)

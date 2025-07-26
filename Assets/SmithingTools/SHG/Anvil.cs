@@ -36,7 +36,7 @@ namespace SHG
 
     public override ToolWorkResult Work()
     {
-      this.interactionToTrigger = InteractionType.Work;
+      this.InteractionToTrigger = InteractionType.Work;
       this.BeforeInteract?.Invoke(this);  
       ToolWorkResult result = new ToolWorkResult {};
       if (!this.IsFinished) {

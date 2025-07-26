@@ -20,10 +20,7 @@ namespace SHG
     public override bool CanTransferItem(ToolTransferArgs args)
     {
       if (args.ItemToGive != null) {
-        if (Array.IndexOf(this.AllowedMaterials, args.ItemToGive.Variation) != -1) {
-          return (true);
-        }
-        return (false);
+        return (Array.IndexOf(this.AllowedMaterials, args.ItemToGive.Variation) != -1);
       }
       return (this.ItemToReturn != null);
     }
@@ -41,15 +38,16 @@ namespace SHG
 
     public override ToolWorkResult Work()
     {
-      this.interactionToTrigger = InteractionType.Work;
-      this.BeforeInteract?.Invoke(this);
+      this.InteractionToTrigger = InteractionType.Work;
+      this.BeforeInteract?.Invoke(this);  
+      ToolWorkResult result = new ToolWorkResult {};
       if (!this.IsFinished) {
-        return (this.ReturnWithEvent(
-          this.DecreseInteractionCount(
-            this.RemainingTime)));
+        result = this.DecreseInteractionCount(this.InteractionTime);
       }
-      return (this.ReturnWithEvent(
-          this.ChangeMaterial(this.InteractionTime)));
+      if (this.IsFinished) {
+        result = this.ChangeMaterial(this.InteractionTime);
+      }
+      return (this.ReturnWithEvent(result));
     }
   }
 }

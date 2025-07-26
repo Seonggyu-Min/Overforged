@@ -30,7 +30,7 @@ namespace SHG
     protected float DefaultRequiredTime => this.Data.TimeRequiredInSeconds;
     protected float InteractionTime => this.Data.InteractionTime;
     protected int DefaultRequiredInteractCount => this.Data.RequiredInteractCount;
-    protected InteractionType interactionToTrigger;
+    public InteractionType InteractionToTrigger { get; protected set; }
 
     protected SmithingTool(SmithingToolData data)
     {
@@ -93,7 +93,7 @@ namespace SHG
     protected ToolTransferResult ReceiveMaterialItem(MaterialItem materialItem)
     {
       this.HoldingItem = materialItem;
-      this.interactionToTrigger = InteractionType.ReceivedItem;
+      this.InteractionToTrigger = InteractionType.ReceivedItem;
       ToolTransferResult result = new ToolTransferResult {
         ReceivedItem = null,
         IsDone = false
@@ -103,7 +103,7 @@ namespace SHG
 
     protected ToolTransferResult ReturnItem()
     {
-      this.interactionToTrigger = InteractionType.ReturnItem;
+      this.InteractionToTrigger = InteractionType.ReturnItem;
       var item = this.ItemToReturn;
       this.HoldingItem = null;
       this.ResetInteraction();
@@ -134,7 +134,7 @@ namespace SHG
     protected ToolWorkResult ChangeMaterial(float durationToStay)
     {
       this.HoldingItem.ChangeToNext();
-      this.interactionToTrigger = InteractionType.Work;
+      this.InteractionToTrigger = InteractionType.Work;
       this.ResetInteraction();
       return (new ToolWorkResult {
         Trigger = this.OnTriggered,
@@ -144,7 +144,7 @@ namespace SHG
 
     protected virtual void OnTriggered()
     {
-      this.OnInteractionTriggered?.Invoke(this.interactionToTrigger);
+      this.OnInteractionTriggered?.Invoke(this.InteractionToTrigger);
     }
   }
 }

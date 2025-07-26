@@ -267,7 +267,7 @@ MonoBehaviour:
   normalColor: {r: 1, g: 1, b: 1, a: 0}
   interactColor: {r: 0.44276744, g: 0.5635926, b: 1, a: 0}
   hand: {fileID: 1558981915}
-  itemToCreate: {fileID: 11400000, guid: 5695d1a6db10e7c6dad23a508c0ca84d, type: 2}
+  itemToCreate: {fileID: 11400000, guid: 2d3e674292df1a6ccbe40a43eac660cc, type: 2}
   itemPrefab: {fileID: 6715732851768598378, guid: 323832ae104adf6e4a8e843265542acb, type: 3}
 --- !u!54 &215012612
 Rigidbody:
@@ -1263,7 +1263,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Item Progress
+  m_text: 'Material
 
 '
   m_isRightToLeft: 0
@@ -1592,9 +1592,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 401284810}
     - target: {fileID: 8943876421648319000, guid: 0a00b6106ef4b3e8697aa98a3ffddc7d, type: 3}
+      propertyPath: craftListData.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943876421648319000, guid: 0a00b6106ef4b3e8697aa98a3ffddc7d, type: 3}
       propertyPath: woodTableItemProgressLabel
       value: 
       objectReference: {fileID: 236243852}
+    - target: {fileID: 8943876421648319000, guid: 0a00b6106ef4b3e8697aa98a3ffddc7d, type: 3}
+      propertyPath: craftListData.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 27eed9f9150b6806d95f6ad07634988c, type: 2}
+    - target: {fileID: 8943876421648319000, guid: 0a00b6106ef4b3e8697aa98a3ffddc7d, type: 3}
+      propertyPath: craftListData.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 96dc76a8cabd7c0c1acb9f0e10179170, type: 2}
+    - target: {fileID: 8943876421648319000, guid: 0a00b6106ef4b3e8697aa98a3ffddc7d, type: 3}
+      propertyPath: craftListData.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: babdee263b87a5f389ca560e87dd73ba, type: 2}
     - target: {fileID: 9177546376438052479, guid: 0a00b6106ef4b3e8697aa98a3ffddc7d, type: 3}
       propertyPath: m_Name
       value: Table

@@ -14,8 +14,8 @@ namespace SHG
     public ProductItemData CraftableProduct { get; private set; }
     public Action<MaterialItem> OnMaterialAdded;
     public Action<MaterialItem> OnMaterialRemoved;
-    public Action<ProductItem> OnProductCrafted;
-    public Action<ProductItem> OnProductRemoved;
+    public Action<ProductItemData> OnProductCrafted;
+    public Action<ProductItemData> OnProductRemoved;
     public Action<CraftTable> BeforeInteract;
     public Action OnCraftableChanged;
 
@@ -38,11 +38,11 @@ namespace SHG
 
     public ToolTransferResult Transfer(ToolTransferArgs args)
     {
-      this.BeforeInteract(this);
+      this.BeforeInteract?.Invoke(this);
       if (this.Product != null) {
         ProductItem product = this.Product;
         this.Product = null;
-        this.OnProductRemoved?.Invoke(product);
+        this.OnProductRemoved?.Invoke(product.Data as ProductItemData);
         return (new ToolTransferResult { 
           ReceivedItem = product,
           IsDone = true
@@ -95,8 +95,7 @@ namespace SHG
         #endif
         return (new ToolWorkResult {});
       }
-      this.Product = new ProductItem();
-      this.Product.Data = craft.ProductItemData;
+      this.Product = craft.CreateProduct();
       this.HoldingMaterials.Clear();
       this.CraftableProduct = null;
       this.OnCraftableChanged?.Invoke();
@@ -124,7 +123,7 @@ namespace SHG
 
     void OnTrigger()
     {
-      this.OnProductCrafted?.Invoke(this.Product);
+      this.OnProductCrafted?.Invoke(this.Product.Data as ProductItemData);
     }
   }
 }

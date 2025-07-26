@@ -52,7 +52,7 @@ namespace SHG
     public override bool CanTransferItem(ToolTransferArgs args)
     {
       if (args.ItemToGive != null) {
-        return (this.HoldingItem == null);
+        return (Array.IndexOf(this.AllowedMaterials, args.ItemToGive.Variation) != -1);
       }
       else {
         return (this.ItemToReturn != null);
@@ -66,7 +66,7 @@ namespace SHG
 
     public override ToolWorkResult Work()
     {
-      this.interactionToTrigger = InteractionType.Work;
+      this.InteractionToTrigger = InteractionType.Work;
       this.BeforeInteract?.Invoke(this);
       if (!this.IsIgnited) {
         this.IsIgnited = true;
