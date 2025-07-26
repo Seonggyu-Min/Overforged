@@ -21,6 +21,7 @@ namespace SHG
     public float RemainingTime { get; protected set; }
     public int RemainingInteractionCount { get; protected set; }
     public float Progress => this.CalcProgress();
+    public InteractionType InteractionToTrigger { get; protected set; }
     public Action<InteractionType> OnInteractionTriggered;
 
     protected SmithingToolData Data;
@@ -30,7 +31,6 @@ namespace SHG
     protected float DefaultRequiredTime => this.Data.TimeRequiredInSeconds;
     protected float InteractionTime => this.Data.InteractionTime;
     protected int DefaultRequiredInteractCount => this.Data.RequiredInteractCount;
-    public InteractionType InteractionToTrigger { get; protected set; }
 
     protected SmithingTool(SmithingToolData data)
     {
@@ -41,9 +41,6 @@ namespace SHG
 
     public virtual void OnUpdate(float deltaTime)
     {
-      if (this.IsFinished) {
-        return ;
-      }
       if (!this.isRemamingTimeElapse ||
       this.HoldingItem == null || this.IsFinished) {
         return;

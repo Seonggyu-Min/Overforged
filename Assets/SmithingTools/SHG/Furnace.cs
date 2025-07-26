@@ -39,6 +39,10 @@ namespace SHG
       if (this.IsIgnited) {
         base.OnUpdate(deltaTime);
       }
+      if (this.HoldingItem != null &&
+        !wasFinished && this.IsFinished) {
+        this.HoldingItem.Heat();
+      }
       this.Temparature += (this.IsIgnited ? 
         TEMP_INCREASE_DELTA: TEMP_DECRESE_DELTA) * deltaTime;
       this.Temparature = Math.Clamp(

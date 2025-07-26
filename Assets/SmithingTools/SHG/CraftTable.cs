@@ -31,7 +31,8 @@ namespace SHG
         return (args.ItemToGive == null);
       }
       if (args.ItemToGive != null) {
-        return (true);
+        return (this.IsCraftMaterial(
+            args.ItemToGive.Data as MaterialItemData));
       }
       return (this.HoldingMaterials.Count > 0);
     }
@@ -124,6 +125,16 @@ namespace SHG
     void OnTrigger()
     {
       this.OnProductCrafted?.Invoke(this.Product.Data as ProductItemData);
+    }
+
+    bool IsCraftMaterial(MaterialItemData materialData)
+    {
+      foreach (Craft craft in this.craftList) {
+        if (craft.Materials.Contains(materialData)) {
+          return (true);
+        }
+      }
+      return (false);
     }
   }
 }

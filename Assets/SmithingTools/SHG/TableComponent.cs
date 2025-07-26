@@ -78,7 +78,7 @@ namespace SHG
       }
       else if (this.CurrentWorkingTool != null) {
         bool canTransfer = this.CurrentWorkingTool.CanTransferItem(args);
-        Debug.Log($"{nameof(CanTransferItem)} {nameof(this.CurrentWorkingTool)} : {canTransfer}");
+        Debug.Log($"{nameof(CanTransferItem)} {this.CurrentWorkingTool} : {canTransfer}");
         return (canTransfer);
       }
       else {
@@ -108,22 +108,23 @@ namespace SHG
         if (result.IsDone) {
           this.CurrentWorkingTool = null;
         }
+        if (this.CurrentWorkingTool == this.craftTable &&
+          this.craftTable.HoldingMaterials.Count == 0) {
+          this.CurrentWorkingTool = null;
+        }
         return (result);
       }
       else {
         if (this.woodTable.CanTransferItem(args)) {
           this.CurrentWorkingTool = this.woodTable;
-          var result = this.CurrentWorkingTool.Transfer(args);
-          Debug.Log($"{nameof(Transfer)} result: {result}");
-          return (result);
         }
         else if (this.craftTable.CanTransferItem(args)) {
           this.CurrentWorkingTool = this.craftTable;
-          var result = this.woodTable.Transfer(args);
-          Debug.Log($"{nameof(Transfer)} result: {result}");
-          return (result);
         }
-        #if UNITY_EDITOR
+        var result = this.CurrentWorkingTool.Transfer(args);
+        Debug.Log($"{this.CurrentWorkingTool} {nameof(Transfer)} result: {result}");
+        return (result);
+#if UNITY_EDITOR
         throw (new ApplicationException($"{nameof(TableComponent)} is not able Transfer"));
         #endif
         return ( new ToolTransferResult {} );
