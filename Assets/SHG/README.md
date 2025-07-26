@@ -10,16 +10,21 @@ classDiagram
         -SendRpc(method: string, args: Array~object~)
     }
 
-    class NetworkSyncrhonizer {
+    class INetworkSyncrhonizer {
         +PlayerNetworkId: int
-        +AllSynchronizables: Dictionary&ltsceneId: int, syncrhonizable: INetSynchronizable&gt
         +RegisterSynchroizable(syncrhonizable: INetSynchronizable)
         +SendRpc(sceneId: int, method: string, args: Array~object~)
-        -ReceiveRpc(data: Array~object~)
-        -forwardRpc(target: INetSynchronizable, method: string, latency: float, args: Array~object~)
+        #ReceiveRpc(data: Array~object~)
+        #forwardRpc(target: INetSynchronizable, method: string, latency: float, args: Array~object~)
     }
 
-    INetSynchronizable "*" o-- NetworkSyncrhonizer: has
+    class SmithingToolSynchronizer {
+        -syncrhonizables: Dictionary&ltsceneId: int, syncrhonizable: INetSynchronizable&gt
+    }
+
+    INetSynchronizable "*" o-- INetworkSyncrhonizer: has
+    INetSynchronizable <|-- SmithingToolComponent: implement
+    INetworkSyncrhonizer <|-- SmithingToolSynchronizer: implement
 ```
 
 ## Tool 클래스

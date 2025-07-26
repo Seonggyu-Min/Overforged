@@ -79,7 +79,6 @@ namespace SHG
       this.furnace.OnFinished += this.OnFinished;
       this.uiCanvas.enabled = false;
       this.meshRenderer = this.GetComponent<MeshRenderer>();
-      Debug.Log($"SceneId {this.SceneId}");
     }
 
     // Update is called once per frame

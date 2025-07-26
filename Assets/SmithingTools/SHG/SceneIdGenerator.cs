@@ -1,20 +1,25 @@
 using UnityEngine;
-using EditorAttributes;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace SHG
 {
-  public class SceneIdGenerator: MonoBehaviour
+  #if UNITY_EDITOR
+  public static class SceneIdGenerator
   {
-    [SerializeField]
-    int nextSceneId = 0;
 
-    [Button]
-    void Generate()
+    [MenuItem("Edit/SceneIdGenerator/SmithingTool")]
+    static void GenerateSmithingToolId()
     {
+      int nextSceneId = 0;
       var allSmithingTools = GameObject.FindObjectsByType<SmithingToolComponent>(FindObjectsSortMode.None);
       foreach (var smithingTool in allSmithingTools) {
-        smithingTool.SceneId = this.nextSceneId++;
+        var so = new SerializedObject(smithingTool);
+        so.FindProperty("id").intValue = nextSceneId++;
+        so.ApplyModifiedProperties(); 
       }
     }
   }
+  #endif
 }

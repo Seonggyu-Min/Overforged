@@ -1,16 +1,35 @@
 using UnityEngine;
+using Zenject;
+using EditorAttributes;
 
 namespace SHG
 {
     public abstract class SmithingToolComponent : MonoBehaviour, IInteractableTool, INetSynchronizable
   {
+    [Inject]
+    public INetworkSynchronizer<SmithingToolComponent> NetworkSynchronizer { get; private set; }
+
     protected SmithingTool tool;
+    public bool IsOwner {
+      get => this.isOwner;
+      set => this.isOwner = value;
+    }
+    public int PlayerNetworkId {
+      get => this.playerId;
+      set => this.playerId = value;
+    }
+    public int SceneId => this.id;
+    [SerializeField]
+    int id;
+    [SerializeField]
+    int playerId;
+    [SerializeField, ReadOnly]
+    bool isOwner;
 
-    public int PlayerNetworkId { get; set; }
-
-    public bool IsOwner { get; protected set; }
-
-    public int SceneId { get; set; }
+    protected virtual void Start()
+    {
+      this.NetworkSynchronizer.RegisterSynchronizable(this);
+    }
 
     public virtual bool CanTransferItem(ToolTransferArgs args)
     {
@@ -47,6 +66,5 @@ namespace SHG
     public abstract void OnRpc(string method, float latencyInSeconds, object[] args = null);
 
     public abstract void SendRpc(string method, object[] args);
-
   }
 }

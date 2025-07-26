@@ -3,6 +3,7 @@ using EditorAttributes;
 using UnityEngine.UI;
 using TMPro;
 using Void = EditorAttributes.Void;
+using Zenject;
 
 namespace SHG
 {
@@ -72,12 +73,6 @@ namespace SHG
     void OnFinished()
     {
       this.meshRenderer.material.color = this.coolColor;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
     }
 
     // Update is called once per frame
