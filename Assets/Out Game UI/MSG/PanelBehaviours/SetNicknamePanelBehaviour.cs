@@ -98,7 +98,6 @@ namespace MIN
 
                         _outGameUIManager.Hide("Set Nickname Panel", () =>
                         {
-                            _outGameUIManager.Clear();
                             _outGameUIManager.Show("Loading Panel");
                         });
                     });
