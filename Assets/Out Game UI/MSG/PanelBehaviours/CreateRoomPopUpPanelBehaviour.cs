@@ -113,6 +113,12 @@ namespace MIN
             };
 
             PhotonNetwork.CreateRoom(_roomNameInputField.text, roomOptions);
+
+            _outGameUIManager.CloseTopPanel();
+            _outGameUIManager.Hide("Lobby Panel", () =>
+            {
+                _outGameUIManager.Show("Room Panel");
+            });
         }
 
         private void PlusMaxPlayer()
