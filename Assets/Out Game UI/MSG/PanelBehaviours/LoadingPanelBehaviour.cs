@@ -9,30 +9,28 @@ using Zenject;
 
 namespace MIN
 {
-    // TODO: UI 스택 비우고 넘어가기
     public class LoadingPanelBehaviour : MonoBehaviourPunCallbacks
     {
         [Inject] IOutGameUIManager _outGameUIManager;
-        [Inject] IFirebaseManager _firebaseManager;
 
         [SerializeField] private TMP_Text _loadingText;
 
 
         public override void OnEnable()
         {
-            Debug.Log("LoadingPanelBehaviour OnEnable 호출");
+            PhotonNetwork.AddCallbackTarget(this);
             Init();
+        }
+
+        public override void OnDisable()
+        {
+            PhotonNetwork.RemoveCallbackTarget(this);
         }
 
         // 디버그용
         private void Update()
         {
             _loadingText.text = PhotonNetwork.NetworkClientState.ToString();
-        }
-
-        public override void OnConnectedToMaster()
-        {
-            Init();
         }
 
         public override void OnDisconnected(DisconnectCause cause)
@@ -50,10 +48,12 @@ namespace MIN
 
         public override void OnJoinedLobby()
         {
-            Debug.Log("로비에 성공적으로 접속했습니다.");
-            _outGameUIManager.Hide("Loading Panel");
-            _outGameUIManager.Show("Lobby Panel");
+            _outGameUIManager.Hide("Loading Panel", () =>
+                {
+                    _outGameUIManager.Show("Lobby Panel");
+                });
         }
+
 
         private void Init()
         {
@@ -67,13 +67,18 @@ namespace MIN
                 Debug.Log("이미 마스터 서버에 연결되어 있음. JoinLobby 호출");
                 PhotonNetwork.JoinLobby();
             }
+            // 예외 처리: 연결이 안되어있을 경우 기다리기
+            else
+            {
+                StartCoroutine(Wait());
+            }
         }
 
-        [ContextMenu("Test Go To Lobby")]
-        private void TestGoToLobby()
+        private IEnumerator Wait()
         {
-            _outGameUIManager.Hide("Loading Panel");
-            _outGameUIManager.Show("Lobby Panel");
+            yield return new WaitUntil(() => PhotonNetwork.NetworkClientState == ClientState.ConnectedToMasterServer);
+            Debug.Log("마스터 서버에 연결됨. 로비에 입장합니다.");
+            PhotonNetwork.JoinLobby();
         }
     }
 }
