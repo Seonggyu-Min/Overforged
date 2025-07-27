@@ -197,38 +197,48 @@ namespace SHG
       else {
         this.rb.velocity = Vector2.zero;
       }
-
       if (this.IsTryingGrab() &&
         this.TryFindItem(out Item item)) {
         this.GrabItem(item);
         return ;
       }
-
-      if (this.IsTryingInteract() &&
-        this.TryFindInteratable(out IInteractableTool workTool) &&
-        workTool.CanWork())
-      {
-        this.Work(workTool);
+      if (!this.TryFindInteratable(out IInteractableTool interactable)) {
+        return ;
       }
-      else if (this.IsTryingGrab() &&
-        this.TryFindInteratable(out IInteractableTool transferTool))
-      {
-        ToolTransferArgs args;
-        if (this.HoldingItem is MaterialItem materialItem) {
-          args = new ToolTransferArgs {
-            ItemToGive = materialItem,
-            PlayerNetworkId = 1
-          };
+      ToolTransferArgs transferArgs;
+      if (this.HoldingItem != null && 
+        this.HoldingItem is MaterialItem materialItem) {
+        transferArgs = new ToolTransferArgs {
+          ItemToGive = materialItem,
+          PlayerNetworkId = 1
+        };
+      }
+      else {
+        transferArgs = new ToolTransferArgs { 
+          ItemToGive = null,
+          PlayerNetworkId = 1 
+        };
+      }
+      bool canTransfer = interactable.CanTransferItem(transferArgs);
+
+      if (interactable is SmithingToolComponent smithingTool) {
+        if (smithingTool.CanWork()) {
+          smithingTool.HighlightInstantly(Color.green); 
+        }
+        else if (canTransfer) {
+          smithingTool.HighlightInstantly(Color.blue); 
         }
         else {
-          args = new ToolTransferArgs { 
-            ItemToGive = null,
-            PlayerNetworkId = 1 
-          };
+          smithingTool.HighlightInstantly(Color.yellow);
         }
-        if (transferTool.CanTransferItem(args)) { 
-          this.TransferItem(transferTool, args);
-        }
+      }
+
+      if (this.IsTryingInteract() &&
+        interactable.CanWork()) {
+        this.Work(interactable);
+      }
+      else if (this.IsTryingGrab() && canTransfer) {
+        this.TransferItem(interactable, transferArgs);
       }
     }
 

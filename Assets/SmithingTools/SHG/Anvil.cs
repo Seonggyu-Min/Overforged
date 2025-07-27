@@ -19,10 +19,10 @@ namespace SHG
 
     public override bool CanTransferItem(ToolTransferArgs args)
     {
-      if (this.ItemToReturn != null) {
-        return (args.ItemToGive == null);
+      if (args.ItemToGive != null) {
+        return (Array.IndexOf(this.AllowedMaterials, args.ItemToGive.Variation) != -1);
       }
-      return (Array.IndexOf(this.AllowedMaterials, args.ItemToGive.Variation) != -1);
+      return (this.ItemToReturn != null);
     }
 
     public override bool CanWork()

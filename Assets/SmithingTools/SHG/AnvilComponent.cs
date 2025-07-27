@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using EditorAttributes;
 using TMPro;
 using Void = EditorAttributes.Void;
-using Zenject;
 
 namespace SHG
 {
@@ -28,7 +27,6 @@ namespace SHG
     Color normalColor;
     [SerializeField]
     Color interactColor;
-    MeshRenderer meshRenderer;
 
     protected override SmithingTool tool => this.anvil;
 
@@ -56,7 +54,7 @@ namespace SHG
       else if (tool.HoldingItem != null) {
         this.SetItemUI(tool.HoldingItem);
         if (tool.InteractionToTrigger == SmithingTool.InteractionType.Work) {
-          this.meshRenderer.material.color = this.interactColor;
+          this.highlighter.HighlightedMaterial.color = this.interactColor;
         }
       }
     }
@@ -71,25 +69,19 @@ namespace SHG
       this.itemProgressLabel.text = $"Progress: {this.anvil.Progress * 100}%";
     }
 
-    void Awake()
+    protected override void Awake()
     {
+      base.Awake();
       this.anvil = new Anvil(this.data);
       this.anvil.BeforeInteract += this.BeforeInteract;
       this.anvil.AfterInteract += this.AfterInteract;
       this.anvil.OnInteractionTriggered += this.OnInteractionTriggered;
       this.uiCanvas.enabled = false;
-      this.meshRenderer = this.GetComponent<MeshRenderer>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-      this.anvil.OnUpdate(Time.deltaTime);
     }
 
     void OnInteractionTriggered(SmithingTool.InteractionType interactionType)
     {
-      this.meshRenderer.material.color = this.normalColor;
+      this.highlighter.HighlightedMaterial.color = this.normalColor;
     }
   }
 }

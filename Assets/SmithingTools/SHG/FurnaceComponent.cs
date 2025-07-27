@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using EditorAttributes;
 using UnityEngine.UI;
@@ -26,12 +25,16 @@ namespace SHG
     TMP_Text itemProgressLabel;
     [SerializeField] [HideProperty]
     TMP_Text tempLabel;
-    [SerializeField]
-    Color normalColor;
-    [SerializeField]
-    Color ignitedColor;
-    MeshRenderer meshRenderer;
     bool isIgnited;
+
+    [SerializeField] [VerticalGroup(10f, true, nameof(HightlightColor), nameof(normalColor), nameof(ignitedColor))]
+    Void colorGroup;
+    [SerializeField] [HideInInspector]
+    Color normalColor;
+    [SerializeField] [HideInInspector]
+    Color ignitedColor;
+    [SerializeField] [HideInInspector]
+    public Color HightlightColor;
 
     protected override SmithingTool tool => this.furnace;
 
@@ -57,7 +60,7 @@ namespace SHG
       }
       if (this.isIgnited != this.furnace.IsIgnited) {
         this.isIgnited = this.furnace.IsIgnited;
-        this.meshRenderer.material.color = this.isIgnited ? 
+        this.highlighter.HighlightedMaterial.color = this.isIgnited ? 
           this.ignitedColor: this.normalColor;
       } 
     }
@@ -74,20 +77,20 @@ namespace SHG
       this.itemNameLabel.text += " (done)";
     }
 
-    void Awake()
+    protected override void Awake()
     {
+      base.Awake();
       this.furnace = new Furnace(this.furnaceData);
       this.furnace.BeforeInteract += this.BeforeInteract;
       this.furnace.AfterInteract += this.AfterInteract;
       this.furnace.OnFinished += this.OnFinished;
       this.uiCanvas.enabled = false;
-      this.meshRenderer = this.GetComponent<MeshRenderer>();
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-      this.furnace.OnUpdate(Time.deltaTime);
+      base.Update();
       this.tempLabel.text = $"Temp: {this.furnace.Temparature}";
       this.itemProgressLabel.text = $"Progress: {this.furnace.Progress * 100}%";
     }

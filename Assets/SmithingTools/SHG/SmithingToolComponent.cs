@@ -6,7 +6,8 @@ using EditorAttributes;
 
 namespace SHG
 {
-    public abstract class SmithingToolComponent : MonoBehaviour, IInteractableTool, INetworkSynchronizable
+  [RequireComponent(typeof(MeshRenderer))]
+  public abstract class SmithingToolComponent : MonoBehaviour, IInteractableTool, INetworkSynchronizable, IHighlightable
   {
     [Inject]
     protected INetworkSynchronizer<SmithingToolComponent> NetworkSynchronizer { get; private set; }
@@ -21,6 +22,16 @@ namespace SHG
       set => this.playerId = value;
     }
     public int SceneId => this.id;
+
+    public bool IsHighlighted => this.highlighter.IsHighlighted;
+
+    public Color HighlightColor { 
+      get => this.highlighter.HighlightColor;
+      set => this.highlighter.HighlightColor = value; 
+    }
+    protected MeshRenderer meshRenderer;
+    protected GameObjectHighlighter highlighter;
+
     [SerializeField]
     int id;
     [SerializeField]
@@ -30,16 +41,28 @@ namespace SHG
     public Action<SmithingToolComponent, ToolTransferArgs, ToolTransferResult> OnTransfered;
     public Action<SmithingToolComponent, ToolWorkResult> OnWorked;
 
+    protected virtual void Awake()
+    {
+      this.meshRenderer = this.GetComponent<MeshRenderer>();
+      this.highlighter = new GameObjectHighlighter(
+        this.meshRenderer.material);
+      this.meshRenderer.material = this.highlighter.HighlightedMaterial;
+    }
+
     protected virtual void Start()
     {
       this.NetworkSynchronizer.RegisterSynchronizable(this);
     }
 
+    protected virtual void Update()
+    {
+      this.highlighter.OnUpdate(Time.deltaTime);
+      this.tool.OnUpdate(Time.deltaTime);
+    }
+
     public virtual bool CanTransferItem(ToolTransferArgs args)
     {
-      bool canTransfer = this.IsOwner && this.tool.CanTransferItem(args);
-      Debug.Log($"{nameof(CanTransferItem)}: {canTransfer}");
-      return (canTransfer);
+      return (this.IsOwner && this.tool.CanTransferItem(args));
     }
 
     public virtual ToolTransferResult Transfer(ToolTransferArgs args)
@@ -61,9 +84,7 @@ namespace SHG
 
     public virtual bool CanWork() 
     {
-      bool canwork = this.IsOwner && this.tool.CanWork();
-      Debug.Log($"{nameof(canwork)}: {canwork}");
-      return (canwork);
+      return (this.IsOwner && this.tool.CanWork());
     }
 
     public virtual ToolWorkResult Work()
@@ -115,11 +136,11 @@ namespace SHG
             PlayerNetworkId = playerNetworkId
             });
         }
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         else {
           Debug.LogError($"item not found for {args[0]}");
         }
-#endif
+        #endif
       }
       else{
         //FIXME: Return item to player
@@ -129,6 +150,16 @@ namespace SHG
           PlayerNetworkId = playerNetworkId
           });
       }
+    }
+
+    public void HighlightInstantly(Color color)
+    {
+      this.highlighter.HighlightInstantly(color);
+    }
+
+    public void HighlightForSeconds(float seconds, Color color)
+    {
+      this.highlighter.HighlightForSeconds(seconds, color);
     }
   }
 }

@@ -989,6 +989,18 @@ PrefabInstance:
       propertyPath: playerId
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2041989572920517652, guid: 314d56e39b5c8d4fdbbc589dc31286b0, type: 3}
+      propertyPath: HightlightColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041989572920517652, guid: 314d56e39b5c8d4fdbbc589dc31286b0, type: 3}
+      propertyPath: HightlightColor.g
+      value: 0.7394293
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041989572920517652, guid: 314d56e39b5c8d4fdbbc589dc31286b0, type: 3}
+      propertyPath: HightlightColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2679972382185275914, guid: 314d56e39b5c8d4fdbbc589dc31286b0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5
