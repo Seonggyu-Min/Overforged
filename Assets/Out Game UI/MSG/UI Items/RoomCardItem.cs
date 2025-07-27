@@ -43,8 +43,7 @@ namespace MIN
 
             if (_roomInfo != null && _roomInfo.PlayerCount < _roomInfo.MaxPlayers)
             {
-
-                _uiManager.Hide("Room Card Panel", () =>
+                _uiManager.Hide("Lobby Panel", () =>
                 {
                     _uiManager.Show("Room Panel");
                     PhotonNetwork.JoinRoom(_roomInfo.Name);
