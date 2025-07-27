@@ -83,8 +83,13 @@ namespace MIN
                         // 1-2. 닉네임 설정도 완료한 경우
                         else
                         {
-                            PhotonNetwork.ConnectUsingSettings();
+                            if (!PhotonNetwork.IsConnected)
+                            {
+                                Debug.Log("Photon 네트워크에 연결되지 않았습니다. 연결을 시도합니다.");
+                                PhotonNetwork.ConnectUsingSettings();
+                            }                            
 
+                            Debug.Log("로그인 성공, 로딩화면으로 이동합니다.");
                             _outGameUIManager.Hide("Log In Panel", () =>
                             {
                                 _outGameUIManager.Show("Loading Panel");
