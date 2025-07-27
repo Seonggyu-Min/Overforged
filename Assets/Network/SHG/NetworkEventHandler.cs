@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -6,27 +7,93 @@ using EditorAttributes;
 using Zenject;
 using EventData = ExitGames.Client.Photon.EventData;
 using SendOptions = ExitGames.Client.Photon.SendOptions;
-using System.Collections.Generic;
 
 namespace SHG
 {
-  public class NetworkEventHandler : IConnectionCallbacks, INetworkEventHandler, IMatchmakingCallbacks
+  public class NetworkEventHandler: INetworkEventHandler, IConnectionCallbacks, IMatchmakingCallbacks, IOnEventCallback
   {
-    byte customCode = 100;
+    byte customCode = 101;
 
     [Inject] DiContainer container;
-
     [SerializeField]
     GameObject prefab;
-
     public Action OnNetworkConnected { get; set; }
     public Action OnNetworkDisconnected { get; set; }
     public Action OnJoinedToRoom { get; set; }
+    Dictionary<object, byte> codeBySenders;
+    Dictionary<byte, object> receiverByCodes;
 
     public NetworkEventHandler()
     {
+      this.codeBySenders = new ();
+      this.receiverByCodes = new ();
       PhotonNetwork.AddCallbackTarget(this);
       this.CheckConnection();
+    }
+
+    void INetworkEventHandler.Register<T>(T sender)
+    {
+      if (this.codeBySenders.TryGetValue(sender, out byte code)) {
+        #if UNITY_EDITOR
+        throw (new ArgumentException($"{sender} is already registered"));
+        #endif
+        this.receiverByCodes[code] = sender;
+      }
+      else {
+        this.codeBySenders[sender] = this.customCode;
+        this.receiverByCodes[this.customCode] = sender;
+        Debug.Log($"register {sender} for {this.customCode}");
+        this.customCode += 1;
+      }
+    }
+
+    void INetworkEventHandler.SendEvent<T>(T sender, object[] data)
+    {
+      if (!this.codeBySenders.TryGetValue(sender, out byte eventCode)) {
+        #if UNITY_EDITOR
+        throw (new ApplicationException($"{sender} is not registered"));
+        #endif
+      }
+      RaiseEventOptions raiseEventOptions = new RaiseEventOptions
+      {
+        Receivers = ReceiverGroup.Others,
+        CachingOption = EventCaching.AddToRoomCache
+      };
+      SendOptions sendOptions = new SendOptions
+      {
+        Reliability = true
+      };
+      PhotonNetwork.RaiseEvent(
+        eventCode, data, raiseEventOptions, sendOptions);
+    }
+
+    public void OnEvent(EventData photonEvent)
+    {
+      if (photonEvent.Code <= 100 || photonEvent.Code >= 200) {
+        return ;
+      }
+      if (!this.receiverByCodes.TryGetValue(
+          photonEvent.Code, out object found) ||
+        !(found is INetworkEventReciever networkEventReciever)) {
+        #if UNITY_EDITOR
+        Debug.Log($"{nameof(OnEvent)}: reciever for event code {photonEvent.Code} not registered or not {nameof(INetworkEventReciever)}");
+        #endif
+        return ;
+      }
+      networkEventReciever.ReceiveEvent((object[])photonEvent.CustomData);
+    }
+
+    void OnSpawnCharcter(EventData photonEvent)
+    {
+//      if (photonEvent.Code == this.characterCode) {
+//        object[] data = (object[]) photonEvent.CustomData;
+//        GameObject player = this.container
+//          .InstantiatePrefab(this.prefab);
+//        player.transform.position = (Vector3)data[0];
+//        player.transform.rotation = (Quaternion)data[1];
+//        PhotonView photonView = player.GetComponent<PhotonView>();
+//        photonView.ViewID = (int) data[2];
+//      }
     }
 
     [Button]
@@ -67,19 +134,6 @@ namespace SHG
       {
         Debug.LogError("Failed to allocate a ViewId.");
         GameObject.Destroy(player);
-      }
-    }
-
-    public void OnEvent(EventData photonEvent)
-    {
-      if (photonEvent.Code == this.customCode) {
-        object[] data = (object[]) photonEvent.CustomData;
-        GameObject player = this.container
-          .InstantiatePrefab(this.prefab);
-        player.transform.position = (Vector3)data[0];
-        player.transform.rotation = (Quaternion)data[1];
-        PhotonView photonView = player.GetComponent<PhotonView>();
-        photonView.ViewID = (int) data[2];
       }
     }
 
@@ -165,6 +219,5 @@ namespace SHG
       Debug.Log(nameof(OnLeftRoom));
     }
     #endregion
-  }
-
+    }
 }

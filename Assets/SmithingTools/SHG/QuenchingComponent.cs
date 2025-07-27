@@ -3,7 +3,6 @@ using EditorAttributes;
 using UnityEngine.UI;
 using TMPro;
 using Void = EditorAttributes.Void;
-using Zenject;
 
 namespace SHG
 {
@@ -32,6 +31,8 @@ namespace SHG
     [SerializeField]
     Color heatedColor;
     MeshRenderer meshRenderer;
+
+    protected override SmithingTool tool => this.quenchingTool;
 
     void BeforeInteract(SmithingTool tool)
     {
@@ -95,14 +96,5 @@ namespace SHG
       this.meshRenderer = this.GetComponent<MeshRenderer>();
     }
 
-    public override void OnRpc(string method, float latencyInSeconds, object[] args = null)
-    {
-      throw new System.NotImplementedException();
-    }
-
-    public override void SendRpc(string method, object[] args)
-    {
-      throw new System.NotImplementedException();
-    }
   }
 }

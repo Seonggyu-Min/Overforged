@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using EditorAttributes;
 using UnityEngine.UI;
@@ -31,6 +32,8 @@ namespace SHG
     Color ignitedColor;
     MeshRenderer meshRenderer;
     bool isIgnited;
+
+    protected override SmithingTool tool => this.furnace;
 
     void BeforeInteract(SmithingTool tool)
     {
@@ -87,16 +90,6 @@ namespace SHG
       this.furnace.OnUpdate(Time.deltaTime);
       this.tempLabel.text = $"Temp: {this.furnace.Temparature}";
       this.itemProgressLabel.text = $"Progress: {this.furnace.Progress * 100}%";
-    }
-
-    public override void OnRpc(string method, float latencyInSeconds, object[] args = null)
-    {
-      throw new System.NotImplementedException();
-    }
-
-    public override void SendRpc(string method, object[] args)
-    {
-      throw new System.NotImplementedException();
     }
   }
 }

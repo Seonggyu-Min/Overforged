@@ -30,6 +30,8 @@ namespace SHG
     Color interactColor;
     MeshRenderer meshRenderer;
 
+    protected override SmithingTool tool => this.anvil;
+
     void BeforeInteract(SmithingTool tool)
     {
       if (tool != this.anvil) {
@@ -88,16 +90,6 @@ namespace SHG
     void OnInteractionTriggered(SmithingTool.InteractionType interactionType)
     {
       this.meshRenderer.material.color = this.normalColor;
-    }
-
-    public override void OnRpc(string method, float latencyInSeconds, object[] args = null)
-    {
-      throw new System.NotImplementedException();
-    }
-
-    public override void SendRpc(string method, object[] args)
-    {
-      throw new System.NotImplementedException();
     }
   }
 }

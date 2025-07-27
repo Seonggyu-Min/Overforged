@@ -45,7 +45,7 @@ namespace SHG
     protected bool IsNameEmpty() => (
       this.Name == null || this.Name .Replace(" ", "").Length == 0);
     protected bool IsPrefabNone() => (this.Prefab == null);
-    protected bool NoMaterialType() => (
+    protected virtual bool NoMaterialType() => (
       this.AllowedMaterials == null || this.AllowedMaterials.Length == 0);
     protected bool HasInValidTimeRequired => (
       this.TimeRequiredInSeconds < 0 ||

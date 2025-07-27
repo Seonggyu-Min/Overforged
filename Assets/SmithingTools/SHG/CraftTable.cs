@@ -6,26 +6,32 @@ namespace SHG
 {
   using Craft = TestCraft;
 
-  public class CraftTable : IInteractableTool
+  public class CraftTable: SmithingTool
   {
     Craft[] craftList;
     public List<MaterialItem> HoldingMaterials { get; private set; }
     public ProductItem Product { get; private set; }
     public ProductItemData CraftableProduct { get; private set; }
+    public override bool IsFinished => this.Product != null;
+    protected override bool isPlayerMovable => true;
+    protected override bool isRemamingTimeElapse => false;
+
     public Action<MaterialItem> OnMaterialAdded;
     public Action<MaterialItem> OnMaterialRemoved;
     public Action<ProductItemData> OnProductCrafted;
     public Action<ProductItemData> OnProductRemoved;
-    public Action<CraftTable> BeforeInteract;
     public Action OnCraftableChanged;
 
-    public CraftTable(Craft[] craftList)
+    public CraftTable(CraftTableData data): base(data)
     {
-      this.craftList = craftList;
+      this.craftList = new Craft[data.CraftList.Length];
+      for (int i = 0; i < craftList.Length; i++) {
+        this.craftList[i] = new Craft(data.CraftList[i]); 
+      }
       this.HoldingMaterials = new List<MaterialItem>();
     }
 
-    public bool CanTransferItem(ToolTransferArgs args)
+    public override bool CanTransferItem(ToolTransferArgs args)
     {
       if (this.Product != null) {
         return (args.ItemToGive == null);
@@ -37,14 +43,14 @@ namespace SHG
       return (this.HoldingMaterials.Count > 0);
     }
 
-    public ToolTransferResult Transfer(ToolTransferArgs args)
+    public override ToolTransferResult Transfer(ToolTransferArgs args)
     {
       this.BeforeInteract?.Invoke(this);
       if (this.Product != null) {
         ProductItem product = this.Product;
         this.Product = null;
         this.OnProductRemoved?.Invoke(product.Data as ProductItemData);
-        return (new ToolTransferResult { 
+        return ( new ToolTransferResult { 
           ReceivedItem = product,
           IsDone = true
           });
@@ -79,7 +85,7 @@ namespace SHG
       }
     }
 
-    public bool CanWork()
+    public override bool CanWork()
     {
       if (this.HoldingMaterials.Count > 0 &&
         this.FindCraftable(out Craft found)) {
@@ -88,7 +94,7 @@ namespace SHG
       return (false);
     }
 
-    public ToolWorkResult Work()
+    public override ToolWorkResult Work()
     {
       if (!this.FindCraftable(out Craft craft)) {
         #if UNITY_EDITOR
@@ -97,6 +103,9 @@ namespace SHG
         return (new ToolWorkResult {});
       }
       this.Product = craft.CreateProduct();
+      foreach (var material in this.HoldingMaterials) {
+        GameObject.Destroy(material.gameObject);
+      }
       this.HoldingMaterials.Clear();
       this.CraftableProduct = null;
       this.OnCraftableChanged?.Invoke();

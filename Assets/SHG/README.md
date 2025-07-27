@@ -7,15 +7,14 @@ classDiagram
         +IsOwner: bool
         +SceneId: int
         +OnRpc(method: string, latency: float, args: Array~object~)
-        -SendRpc(method: string, args: Array~object~)
     }
 
     class INetworkSyncrhonizer {
-        +PlayerNetworkId: int
         +RegisterSynchroizable(syncrhonizable: INetSynchronizable)
         +SendRpc(sceneId: int, method: string, args: Array~object~)
-        #ReceiveRpc(data: Array~object~)
-        #forwardRpc(target: INetSynchronizable, method: string, latency: float, args: Array~object~)
+        +TryFindComponentFromNetworkId~U~(int networId, U found) bool
+        -ReceiveRpc( data: Array~object~)
+        -PlayerNetworkId: int
     }
 
     class SmithingToolSynchronizer {

@@ -6,13 +6,9 @@ using UnityEngine.UI;
 using EditorAttributes;
 using TMPro;
 using Void = EditorAttributes.Void;
-using Zenject;
 
 namespace SHG
 {
-  using Craft = TestCraft;
-  using CraftTableData = TestCraftData;
-
   [RequireComponent(typeof(MeshRenderer))]
   public class TableComponent: SmithingToolComponent
   {
@@ -23,7 +19,7 @@ namespace SHG
     [SerializeField]
     CraftTable craftTable;
     [SerializeField]
-    CraftTableData[] craftListData;
+    CraftTableData craftTableData;
 
     [SerializeField] [VerticalGroup(10f, true, nameof(woodTableCanvas), nameof(woodTableItemImage), nameof(woodTableItemNameLabel), nameof(woodTableItemProgressLabel))]
     Void woodTableGroup;
@@ -62,6 +58,7 @@ namespace SHG
         this.currentWorkingTool = value;
       }
     }
+    protected override SmithingTool tool => this.woodTable;
     IInteractableTool currentWorkingTool;
 
     public override bool CanTransferItem(ToolTransferArgs args)
@@ -100,7 +97,9 @@ namespace SHG
           !this.woodTable.CanTransferItem(args) &&
           this.woodTable.HoldingItem != null &&
           this.craftTable.CanTransferItem(args)) {
-          return (this.MoveMaterialToCraftTable(args));      
+          var result = this.MoveMaterialToCraftTable(args);      
+          this.OnTransfered?.Invoke(this, args, result);
+          return (result);
         }
       }
       if (this.CurrentWorkingTool != null) {
@@ -113,6 +112,7 @@ namespace SHG
           this.craftTable.HoldingMaterials.Count == 0) {
           this.CurrentWorkingTool = null;
         }
+        this.OnTransfered?.Invoke(this, args, result);
         return (result);
       }
       else {
@@ -124,6 +124,7 @@ namespace SHG
         }
         var result = this.CurrentWorkingTool.Transfer(args);
         Debug.Log($"{this.CurrentWorkingTool} {nameof(Transfer)} result: {result}");
+        this.OnTransfered?.Invoke(this, args, result);
         return (result);
 #if UNITY_EDITOR
         throw (new ApplicationException($"{nameof(TableComponent)} is not able Transfer"));
@@ -164,6 +165,7 @@ namespace SHG
       if (this.CurrentWorkingTool != null) {
         var result = this.CurrentWorkingTool.Work();
         Debug.Log($"{nameof(Work)} result: {result}");
+        this.OnWorked?.Invoke(this, result);
         return (result);
       }
       else {
@@ -189,9 +191,10 @@ namespace SHG
       if (tool != this.woodTable) {
         return;
       }
-      Debug.Log("AfterInteract result");
+      Debug.Log("AfterInteract");
       Debug.Log($"tool holding item: {tool.HoldingItem}");
       Debug.Log($"tool interaction count: {tool.RemainingInteractionCount}");
+      Debug.Log($"currentWorkingTool: {this.currentWorkingTool}");
       if (tool.HoldingItem != null) {
         this.SetItemUI(tool.HoldingItem);
         if (tool.InteractionToTrigger == SmithingTool.InteractionType.Work) {
@@ -272,6 +275,46 @@ namespace SHG
       this.craftMaterialListLabel.text = builder.ToString();
     }
 
+    protected override void HandleNetworkTransfer(object[] args)
+    {
+      var dict = args[0] as Dictionary<string, object>;
+      int playerNetworkId =  (int)dict[ToolTransferArgs.PLAYER_NETWORK_ID_KEY];
+      if (dict.TryGetValue(
+          ToolTransferArgs.ITEM_ID_KEY, out object itemId) &&
+        itemId != null) {
+        if (this.NetworkSynchronizer.TryFindComponentFromNetworkId(
+            networId: (int)itemId,
+            out MaterialItem foundItem
+            )) {
+          this.Transfer(new ToolTransferArgs {
+            ItemToGive = foundItem,
+            PlayerNetworkId = playerNetworkId
+            });
+        }
+#if UNITY_EDITOR
+        else {
+          Debug.LogError($"item not found for {args[0]}");
+        }
+#endif
+      }
+      else{
+        //FIXME: Return item to player
+        if (this.woodTable.HoldingItem != null) {
+          this.woodTable.HoldingItem.transform.SetParent(null);
+        }
+        else if (this.craftTable.Product != null) {
+          this.craftTable.Product.transform.SetParent(null);
+        }
+        else if (this.craftTable.HoldingMaterials.Count > 0) {
+          this.craftTable.HoldingMaterials[this.craftTable.HoldingMaterials.Count - 1].transform.SetParent(null);
+        }
+        this.Transfer(new ToolTransferArgs {
+          ItemToGive = null,
+          PlayerNetworkId = playerNetworkId
+          });
+      }
+    }
+
     void Awake()
     {
       this.woodTable = new WoodTable(this.woodTableData);
@@ -279,11 +322,7 @@ namespace SHG
       this.woodTable.AfterInteract += this.AfterWoodTableInteract;
       this.woodTable.OnInteractionTriggered += this.OnWoodTableTriggered;
       this.woodTableCanvas.enabled = false;
-      var craftList = new Craft[this.craftListData.Length];
-      for (int i = 0; i < craftList.Length; i++) {
-        craftList[i] = new Craft(this.craftListData[i]); 
-      }
-      this.craftTable = new CraftTable(craftList);
+      this.craftTable = new CraftTable(this.craftTableData);
       this.craftTable.OnMaterialAdded += this.OnCraftMaterialAdded;
       this.craftTable.OnMaterialRemoved += this.OnCraftMaterialRemoved;
       this.craftTable.OnProductCrafted += this.OnCraftProductCrafted;
@@ -295,20 +334,25 @@ namespace SHG
       this.craftTableCanvas.enabled = false;
     }
 
+    protected override void HandleNetworkWork(object[] args)
+    {
+      // TODO: handle work result
+      Debug.Log("HandleNetworkWork");
+      var dict = args[0] as Dictionary<string, object>;
+      foreach (var (key, value) in dict) {
+        Debug.Log($"{key}: {value}");
+      }
+      this.Work();
+      // TODO: handle work trigger
+      if (this.CurrentWorkingTool == this.woodTable) {
+        this.woodTable.OnInteractionTriggered?.Invoke(this.tool.InteractionToTrigger);
+      }
+    }
+
     // Update is called once per frame
     void Update()
     {
       this.woodTable.OnUpdate(Time.deltaTime);
-    }
-
-    public override void OnRpc(string method, float latencyInSeconds, object[] args = null)
-    {
-      throw new NotImplementedException();
-    }
-
-    public override void SendRpc(string method, object[] args)
-    {
-      throw new NotImplementedException();
     }
   }
 }

@@ -1174,11 +1174,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef18b6230e37770ed9b8aaae56fa6283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 3
+  playerId: 0
+  isOwner: 0
   woodTableData: {fileID: 11400000, guid: a719b1e45263d10b7b3f075007c4e848, type: 2}
-  craftListData:
-  - {fileID: 11400000, guid: 27eed9f9150b6806d95f6ad07634988c, type: 2}
-  - {fileID: 11400000, guid: 96dc76a8cabd7c0c1acb9f0e10179170, type: 2}
-  - {fileID: 11400000, guid: babdee263b87a5f389ca560e87dd73ba, type: 2}
+  craftTableData: {fileID: 11400000, guid: 8c1d5fe141b4381ec8024c9d999b8ee4, type: 2}
   woodTableCanvas: {fileID: 6541052400766217572}
   woodTableItemImage: {fileID: 2105630911550010261}
   woodTableItemNameLabel: {fileID: 8362801668667396349}
