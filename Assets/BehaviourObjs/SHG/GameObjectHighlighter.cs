@@ -12,8 +12,9 @@ namespace SHG
     [ShowInInspector]
     public bool IsHighlighted { get; private set; }
     [ShowInInspector]
-    public Material HighlightedMaterial { get; private set; }
+    public Material[] HighlightedMaterials { get; private set; }
     [HideInInspector]
+
     public Color HighlightColor
     {
       get => this.highlightColor;
@@ -21,7 +22,9 @@ namespace SHG
         if (this.highlightColor == value) {
           return ;
         }
-        this.HighlightedMaterial.SetColor("_EmissionColor", value);
+        foreach (var material in this.HighlightedMaterials) {
+          material.SetColor("_EmissionColor", value);
+        }
         this.highlightColor = value;
       }
     }
@@ -30,9 +33,11 @@ namespace SHG
     [SerializeField]
     float durationToHighlight;
 
-    public GameObjectHighlighter(Material baseMaterial)
+    public GameObjectHighlighter(Material[] baseMaterials)
     {
-      this.HighlightedMaterial = new Material(baseMaterial);
+      this.HighlightedMaterials = Array.ConvertAll<Material, Material>(
+        baseMaterials,
+        material => new Material(material));
     }
 
     public void HighlightForSeconds(float seconds, Color color)
@@ -40,7 +45,9 @@ namespace SHG
       this.durationToHighlight = seconds;
       this.HighlightColor = color;
       this.IsHighlighted = true;
-      this.HighlightedMaterial.EnableKeyword(EMISSION_KEYWORD); 
+      foreach (var material in this.HighlightedMaterials) {
+        material.EnableKeyword(EMISSION_KEYWORD); 
+      }
     }
 
     public void HighlightInstantly(Color color)
@@ -49,7 +56,9 @@ namespace SHG
         INSTANT_HIGHLIGHTED_DURATION, this.durationToHighlight);
       this.HighlightColor = color;
       this.IsHighlighted = true;
-      this.HighlightedMaterial.EnableKeyword(EMISSION_KEYWORD); 
+      foreach (var material in this.HighlightedMaterials) {
+        material.EnableKeyword(EMISSION_KEYWORD); 
+      }
     }
 
     public void OnUpdate(float deltaTime)
@@ -58,7 +67,9 @@ namespace SHG
         this.durationToHighlight -= deltaTime;
         if (this.durationToHighlight < 0) {
           this.IsHighlighted = false;
-          this.HighlightedMaterial.DisableKeyword(EMISSION_KEYWORD);
+          foreach (var material in this.HighlightedMaterials) {
+            material.DisableKeyword(EMISSION_KEYWORD); 
+          }
         }
       }
     }

@@ -81,7 +81,7 @@ namespace SHG
       }
       if (this.isIgnited != this.furnace.IsIgnited) {
         this.isIgnited = this.furnace.IsIgnited;
-        this.highlighter.HighlightedMaterial.color = this.isIgnited ? 
+        this.highlighter.HighlightColor = this.isIgnited ? 
           this.ignitedColor: this.normalColor;
         if (this.isIgnited != this.effecter.IsStateOn(ISmithingToolEffecter.State.Working)) {
           this.effecter.ToggleState(ISmithingToolEffecter.State.Working);

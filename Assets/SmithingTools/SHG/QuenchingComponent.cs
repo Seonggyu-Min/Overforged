@@ -56,10 +56,10 @@ namespace SHG
         this.SetItemUI(tool.HoldingItem);
       }
       if (tool.InteractionToTrigger == SmithingTool.InteractionType.ReceivedItem) {
-        this.highlighter.HighlightedMaterial.color = this.heatedColor;
+        this.highlighter.HighlightColor = this.heatedColor;
       } 
       else if (tool.InteractionToTrigger == SmithingTool.InteractionType.ReturnItem) {
-        this.highlighter.HighlightedMaterial.color = this.normalColor;
+        this.highlighter.HighlightColor = this.normalColor;
       }
     }
 
@@ -74,7 +74,7 @@ namespace SHG
 
     void OnFinished()
     {
-      this.highlighter.HighlightedMaterial.color = this.coolColor;
+      this.highlighter.HighlightColor = this.coolColor;
     }
 
     // Update is called once per frame

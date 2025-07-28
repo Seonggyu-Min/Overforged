@@ -191,7 +191,7 @@ namespace SHG
       if (tool.HoldingItem != null) {
         this.SetItemUI(tool.HoldingItem);
         if (tool.InteractionToTrigger == SmithingTool.InteractionType.Work) {
-        this.highlighter.HighlightedMaterial.color = this.interactColor;
+        this.highlighter.HighlightColor = this.interactColor;
         }
       }
       else {
@@ -201,7 +201,7 @@ namespace SHG
 
     void OnWoodTableTriggered(SmithingTool.InteractionType interactionType)
     {
-      this.highlighter.HighlightedMaterial.color = this.normalColor;
+      this.highlighter.HighlightColor = this.normalColor;
     }
 
     void SetItemUI(Item item)

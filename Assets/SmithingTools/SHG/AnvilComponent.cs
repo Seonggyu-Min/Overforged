@@ -13,6 +13,9 @@ namespace SHG
     Anvil anvil;
     [SerializeField]
     SmithingToolData data;
+    [SerializeField]
+    MeshRenderer standRenderer;
+
     [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(itemProgressLabel))]
     Void uiGroup;
     [SerializeField] [HideProperty]
@@ -63,7 +66,7 @@ namespace SHG
       else if (tool.HoldingItem != null) {
         this.SetItemUI(tool.HoldingItem);
         if (tool.InteractionToTrigger == SmithingTool.InteractionType.Work) {
-          this.highlighter.HighlightedMaterial.color = this.interactColor;
+          this.highlighter.HighlightColor = this.interactColor;
         }
       }
     }
@@ -80,7 +83,11 @@ namespace SHG
 
     protected override void Awake()
     {
-      base.Awake();
+      this.meshRenderer = this.GetComponent<MeshRenderer>();
+      this.highlighter = new GameObjectHighlighter(
+        new Material[] { this.meshRenderer.material, this.standRenderer.material });
+      this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
+      this.standRenderer.material = this.highlighter.HighlightedMaterials[1];
       this.anvil = new Anvil(this.data);
       this.anvil.BeforeInteract += this.BeforeInteract;
       this.anvil.AfterInteract += this.AfterInteract;
@@ -97,7 +104,7 @@ namespace SHG
 
     void OnInteractionTriggered(SmithingTool.InteractionType interactionType)
     {
-      this.highlighter.HighlightedMaterial.color = this.normalColor;
+      this.highlighter.HighlightColor = this.normalColor;
       if (interactionType == SmithingTool.InteractionType.Work) {
         this.effecter.TriggerWorkEffect();
       }

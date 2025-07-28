@@ -47,8 +47,8 @@ namespace SHG
     {
       this.meshRenderer = this.GetComponent<MeshRenderer>();
       this.highlighter = new GameObjectHighlighter(
-        this.meshRenderer.material);
-      this.meshRenderer.material = this.highlighter.HighlightedMaterial;
+        new Material[] { this.meshRenderer.material });
+      this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
     }
 
     protected virtual void Start()
