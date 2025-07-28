@@ -12,7 +12,7 @@ namespace MIN
         [Header("커스텀 프로퍼티 키")]
         public string propertyKey;
 
-        [Header("적용할 int 값")]
+        [Header("적용할 Enum의 int 값")]
         public int propertyValue;
 
         private Toggle _toggle;
@@ -21,6 +21,11 @@ namespace MIN
         {
             _toggle = GetComponent<Toggle>();
             _toggle.onValueChanged.AddListener(OnToggleChanged);
+        }
+
+        private void OnDisable()
+        {
+            _toggle.onValueChanged.RemoveListener(OnToggleChanged);
         }
 
         private void OnToggleChanged(bool isOn)
