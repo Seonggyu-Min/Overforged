@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b2ee1b85affc35a2b99345fcb18f3a3, type: 3}
+  m_Name: CraftTableData
+  m_EditorClassIdentifier: 
+  toolName: Craft Table
+  prefab: {fileID: 9177546376438052479, guid: 0a00b6106ef4b3e8697aa98a3ffddc7d, type: 3}
+  allowdMaterialTypes: 
+  timeRequiredInSeconds: 0
+  interactionTime: 0.5
+  requiredInteractCount: 1
+  craftList:
+  - {fileID: 11400000, guid: 96dc76a8cabd7c0c1acb9f0e10179170, type: 2}
+  - {fileID: 11400000, guid: babdee263b87a5f389ca560e87dd73ba, type: 2}
+  - {fileID: 11400000, guid: 27eed9f9150b6806d95f6ad07634988c, type: 2}

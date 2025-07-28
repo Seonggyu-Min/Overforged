@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using EditorAttributes;
 using UnityEngine.UI;
@@ -7,12 +8,12 @@ using Void = EditorAttributes.Void;
 namespace SHG
 {
 
-  public class FurnaceComponent : MonoBehaviour, IInteractableTool
+  public class FurnaceComponent : SmithingToolComponent
   {
     [SerializeField] [Required()]
     SmithingToolData furnaceData;
     [SerializeField] 
-      Furnace furnace;
+    Furnace furnace;
     [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(itemProgressLabel), nameof(tempLabel))]
     Void uiGroup;
     [SerializeField] [HideProperty]
@@ -31,6 +32,8 @@ namespace SHG
     Color ignitedColor;
     MeshRenderer meshRenderer;
     bool isIgnited;
+
+    protected override SmithingTool tool => this.furnace;
 
     void BeforeInteract(SmithingTool tool)
     {
@@ -87,38 +90,6 @@ namespace SHG
       this.furnace.OnUpdate(Time.deltaTime);
       this.tempLabel.text = $"Temp: {this.furnace.Temparature}";
       this.itemProgressLabel.text = $"Progress: {this.furnace.Progress * 100}%";
-    }
-
-    public bool CanTransferItem(ToolTransferArgs args)
-    {
-      bool canTransfer = this.furnace.CanTransferItem(args);
-      Debug.Log($"{nameof(CanTransferItem)}: {canTransfer}");
-      return (canTransfer);
-    }
-
-    public ToolTransferResult Transfer(ToolTransferArgs args)
-    {
-      var result = this.furnace.Transfer(args);
-      Debug.Log($"{nameof(Transfer)} result: {result}");
-      if (args.ItemToGive != null) {
-        args.ItemToGive.transform.SetParent(this.transform);
-        args.ItemToGive.transform.localPosition = Vector3.up;
-      }
-      return (result);
-    }
-
-    public bool CanWork()
-    {
-      bool canwork = this.furnace.CanWork();
-      Debug.Log($"{nameof(canwork)}: {canwork}");
-      return (canwork);
-    }
-
-    public ToolWorkResult Work()
-    {
-      var result = this.furnace.Work();
-      Debug.Log($"{nameof(Work)} result: {result}");
-      return (result);
     }
   }
 }

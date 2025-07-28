@@ -1,3 +1,31 @@
+## 도구 Network 클래스
+
+```mermaid
+classDiagram
+    class INetSynchronizable {
+        +PlayerNetworkId: int
+        +IsOwner: bool
+        +SceneId: int
+        +OnRpc(method: string, latency: float, args: Array~object~)
+    }
+
+    class INetworkSyncrhonizer {
+        +RegisterSynchroizable(syncrhonizable: INetSynchronizable)
+        +SendRpc(sceneId: int, method: string, args: Array~object~)
+        +TryFindComponentFromNetworkId~U~(int networId, U found) bool
+        -ReceiveRpc( data: Array~object~)
+        -PlayerNetworkId: int
+    }
+
+    class SmithingToolSynchronizer {
+        -syncrhonizables: Dictionary&ltsceneId: int, syncrhonizable: INetSynchronizable&gt
+    }
+
+    INetSynchronizable "*" o-- INetworkSyncrhonizer: has
+    INetSynchronizable <|-- SmithingToolComponent: implement
+    INetworkSyncrhonizer <|-- SmithingToolSynchronizer: implement
+```
+
 ## Tool 클래스
 
 #### 외부 인터페이스

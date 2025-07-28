@@ -3,12 +3,12 @@ using UnityEngine.UI;
 using EditorAttributes;
 using TMPro;
 using Void = EditorAttributes.Void;
+using Zenject;
 
 namespace SHG
 {
-
   [RequireComponent(typeof(MeshRenderer))]
-  public class AnvilComponent : MonoBehaviour, IInteractableTool
+  public class AnvilComponent : SmithingToolComponent
   {
     [SerializeField]
     Anvil anvil;
@@ -30,6 +30,8 @@ namespace SHG
     Color interactColor;
     MeshRenderer meshRenderer;
 
+    protected override SmithingTool tool => this.anvil;
+
     void BeforeInteract(SmithingTool tool)
     {
       if (tool != this.anvil) {
@@ -38,9 +40,6 @@ namespace SHG
       Debug.Log("BeforeInteract args");
       Debug.Log($"tool holding item: {tool.HoldingItem}");
       Debug.Log($"tool interaction count: {tool.RemainingInteractionCount}");
-      if (this.anvil.HoldingItem != null) {
-        this.meshRenderer.material.color = this.interactColor;
-      }
     }
 
     void AfterInteract(SmithingTool tool)
@@ -56,6 +55,9 @@ namespace SHG
       }
       else if (tool.HoldingItem != null) {
         this.SetItemUI(tool.HoldingItem);
+        if (tool.InteractionToTrigger == SmithingTool.InteractionType.Work) {
+          this.meshRenderer.material.color = this.interactColor;
+        }
       }
     }
 
@@ -87,41 +89,7 @@ namespace SHG
 
     void OnInteractionTriggered(SmithingTool.InteractionType interactionType)
     {
-      if (interactionType == SmithingTool.InteractionType.Work) {
-        this.meshRenderer.material.color = this.normalColor;
-      }
-    }
-
-    public bool CanTransferItem(ToolTransferArgs args)
-    {
-      bool canTransfer = this.anvil.CanTransferItem(args);
-      Debug.Log($"{nameof(CanTransferItem)}: {canTransfer}");
-      return (canTransfer);
-    }
-
-    public ToolTransferResult Transfer(ToolTransferArgs args)
-    {
-      if (args.ItemToGive != null) {
-        args.ItemToGive.transform.SetParent(this.transform);
-        args.ItemToGive.transform.localPosition = Vector3.up;
-      }
-      var result = this.anvil.Transfer(args);
-      Debug.Log($"Transfer result: {result}");
-      return (result);
-    }
-
-    public bool CanWork()
-    {
-      bool canWork = this.anvil.CanWork();
-      Debug.Log($"canwork: {canWork}");
-      return (canWork);
-    }
-
-    public ToolWorkResult Work()
-    {
-      var result = this.anvil.Work();
-      Debug.Log($"{nameof(Work)} result: {result}");
-      return (result);
+      this.meshRenderer.material.color = this.normalColor;
     }
   }
 }

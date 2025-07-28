@@ -3,13 +3,14 @@ using System.Collections;
 using UnityEngine;
 using EditorAttributes;
 using Void = EditorAttributes.Void;
+using Photon.Pun;
 
 namespace SHG
 {
-  [RequireComponent(typeof(Rigidbody), typeof(MeshRenderer))]
+  [RequireComponent(typeof(Rigidbody), typeof(MeshRenderer), typeof(PhotonView))]
   public class TestPlayer : MonoBehaviour
   {
-
+    
     [SerializeField] [Range(1f, 3f)]
     float interactRadius;
     [SerializeField] [Range(1f, 10f)]
@@ -25,7 +26,7 @@ namespace SHG
     Color interactColor;
     [SerializeField]
     Transform hand;
-    [SerializeField, TabGroup(nameof(HoldingItem), nameof(itemToCreate), nameof(itemPrefab))]
+    [SerializeField, TabGroup(nameof(HoldingItem), nameof(itemToCreate), nameof(itemPrefab), nameof(itemPrefabPath))]
     Void itemGroup;
     Coroutine toolInteractionRoutine;
     MeshRenderer meshRenderer;
@@ -33,24 +34,91 @@ namespace SHG
     ItemData itemToCreate;
     [SerializeField, HideInInspector]
     GameObject itemPrefab;
+    [SerializeField, HideInInspector]
+    string itemPrefabPath;
     float interactionDuration;
+    PhotonView photonView;
 
-    [Button]
+    [Button] [PunRPC]
     void CreateItem()
     {
-      GameObject itemObjct = GameObject.Instantiate(this.itemPrefab); 
-      MaterialItem item = itemObjct.GetComponent<MaterialItem>();
-      item.Data = this.itemToCreate;
-      item.Ore = OreType.Gold;
-      this.GrabItem(item);
+      if (this.itemToCreate == null) {
+        Debug.LogError("no item to create");
+        return ;
+      }
+      if (this.photonView.IsMine) {
+        //GameObject itemObjct = GameObject.Instantiate(this.itemPrefab); 
+        GameObject itemObject = PhotonNetwork.Instantiate(this.itemPrefabPath, Vector3.zero, Quaternion.identity);
+        MaterialItem item = itemObject.GetComponent<MaterialItem>();
+        item.Data = this.itemToCreate;
+        item.Ore = OreType.Gold;
+        this.GrabItem(item);
+        this.photonView.RPC(
+          methodName: nameof(CreateItem),
+          target: RpcTarget.OthersBuffered);
+      }
+      else if (this.HoldingItem != null) {
+        
+        this.HoldingItem.Data = this.itemToCreate;
+        if (this.HoldingItem is MaterialItem materialItem) {
+          materialItem.Ore = OreType.Gold;
+        }
+      }
     }
 
-    void GrabItem(Item item)
+    [Button]
+    void DestroyItem()
+    {
+      if (this.HoldingItem == null) {
+        Debug.LogError("no item to destroy");
+        return ;
+      }
+      PhotonNetwork.Destroy(this.HoldingItem.gameObject);
+      //Destroy(this.HoldingItem.gameObject);
+      this.HoldingItem = null;
+    }
+
+    [Button]
+    void ChangeCurrentItem()
+    {
+      if (this.HoldingItem == null) {
+        Debug.LogError("no item to change");
+        return; 
+      } 
+      this.HoldingItem.Data = this.itemToCreate;
+      if (this.HoldingItem is MaterialItem materialItem) {
+        materialItem.Ore = OreType.Gold;
+      }
+    }
+
+    public void GrabItem(Item item)
     {
       Debug.Log($"GrabItem {item}");
       this.HoldingItem = item;
       item.transform.SetParent(this.hand);
       item.transform.localPosition = Vector3.zero;
+      if (this.photonView.IsMine) {
+        this.photonView.RPC(
+          methodName: nameof(GrabItemNetwork),
+          target: RpcTarget.Others,
+          parameters: new object[] {
+          item.photonView.ViewID
+          });
+      }
+    }
+
+    [PunRPC]
+    public void GrabItemNetwork(int itemId)
+    {
+      Debug.Log($"GrabItemNetwork {itemId}");
+      PhotonView photonView = PhotonView.Find(itemId);
+      if (photonView != null) {
+        Item item = photonView.GetComponent<Item>(); 
+        Debug.Log($"GrabItemNetwork {item}");
+        if (item != null) {
+          this.GrabItem(item);
+        }
+      }
     }
 
     bool IsTryingInteract()
@@ -68,6 +136,29 @@ namespace SHG
       if (this.HoldingItem != null) {
         this.HoldingItem = null;
       }
+    }
+
+    bool TryFindItem(out Item item)
+    {
+      #if UNITY_EDITOR
+      Debug.DrawLine(
+        start: this.transform.position,
+        end: this.transform.position + this.transform.forward * this.interactRange,
+        color: Color.blue,
+        duration: 0.5f);
+      #endif
+      bool isHit = Physics.SphereCast(
+        origin: this.transform.position,
+        radius: this.interactRadius,
+        direction: this.transform.forward,
+        hitInfo: out RaycastHit hitInfo,
+        maxDistance: this.interactRange);
+      if (!isHit) {
+        item = null;
+        return (false);
+      } 
+      item = hitInfo.collider.GetComponent<Item>();
+      return (item!= null);
     }
 
     bool TryFindInteratable(out IInteractableTool interactable)
@@ -95,6 +186,9 @@ namespace SHG
 
     void Update()
     {
+      if (!this.photonView.IsMine) {
+        return ; 
+      }
       var movingInput = this.GetInput();
       if (movingInput != Vector2.zero) {
         this.Move(movingInput);
@@ -102,6 +196,12 @@ namespace SHG
       }
       else {
         this.rb.velocity = Vector2.zero;
+      }
+
+      if (this.IsTryingGrab() &&
+        this.TryFindItem(out Item item)) {
+        this.GrabItem(item);
+        return ;
       }
 
       if (this.IsTryingInteract() &&
@@ -202,6 +302,7 @@ namespace SHG
     {
       this.rb = this.GetComponent<Rigidbody>();
       this.meshRenderer = this.GetComponent<MeshRenderer>();
+      this.photonView = this.GetComponent<PhotonView>();
     }
     #endregion
   }

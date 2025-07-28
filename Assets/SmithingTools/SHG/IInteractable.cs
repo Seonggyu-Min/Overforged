@@ -1,5 +1,6 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
+using Photon.Pun;
 
 namespace SHG
 {
@@ -21,6 +22,8 @@ namespace SHG
 
   public struct ToolTransferArgs
   {
+    public const string ITEM_ID_KEY = "ItemId";
+    public const string PLAYER_NETWORK_ID_KEY = "PlayerNetworkId";
     public MaterialItem ItemToGive;
     public int PlayerNetworkId;
 
@@ -28,10 +31,20 @@ namespace SHG
     {
       return ($"[{nameof(ToolTransferArgs)}; {nameof(ItemToGive)}: {this.ItemToGive}; {nameof(PlayerNetworkId)}: {this.PlayerNetworkId};]");
     }
+
+    public object ConvertToNetworkArguments()
+    {
+      Dictionary<string, object> args = new ();
+      args[ITEM_ID_KEY] = this.ItemToGive != null ? this.ItemToGive.GetComponent<PhotonView>().ViewID: null;
+      args[PLAYER_NETWORK_ID_KEY] = this.PlayerNetworkId;
+      return (args);
+    }
   }
 
   public struct ToolTransferResult 
   {
+    public const string RECEIVED_ITEM_KEY = "RecievedItem";
+    public const string IS_DOEN_KEY = "IsDone";
     public Item ReceivedItem;
     public bool IsDone;
 
@@ -39,16 +52,32 @@ namespace SHG
     {
       return ($"[{nameof(ToolTransferResult)}; {nameof(ReceivedItem)}: {this.ReceivedItem}; {nameof(IsDone)}: {this.IsDone};]");
     }
+
+    public object ConvertToNetworkArguments()
+    {
+      Dictionary<string, object> args = new ();
+      args[RECEIVED_ITEM_KEY] = this.ReceivedItem!= null ? this.ReceivedItem.GetComponent<PhotonView>().ViewID: null;
+      args[IS_DOEN_KEY] = this.IsDone;
+      return (args);
+    }
   }
 
   public struct ToolWorkResult
   {
+    public const string DURATION_TO_STAY_KEY = "DurationToStay";
     public Action Trigger;
     public float DurationToStay;
     
     public override string ToString()
     {
       return ($"[{nameof(ToolWorkResult)}; {nameof(Trigger)}: {this.Trigger}; {nameof(DurationToStay)}: {this.DurationToStay};]");
+    }
+
+    public object ConvertToNetworkArguments()
+    {
+      Dictionary<string, object> args = new ();
+      args[DURATION_TO_STAY_KEY] = this.DurationToStay;
+      return (args);
     }
   }
 

@@ -250,7 +250,7 @@ GameObject:
   - component: {fileID: 32455965409565075}
   - component: {fileID: 1861175398363078898}
   m_Layer: 5
-  m_Name: ItemName (1)
+  m_Name: Temp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -783,11 +783,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d23ba184c8c0928eba8d79c75476c3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  furnaceData: {fileID: 0}
+  furnaceData: {fileID: 11400000, guid: f8ec7637fc63eccc6bfa35aedf0dea1e, type: 2}
   uiCanvas: {fileID: 48899883844513260}
   itemImage: {fileID: 5631424847381572637}
   itemNameLabel: {fileID: 2888634455132637945}
   itemProgressLabel: {fileID: 5182917260407041519}
-  tempLabel: {fileID: 0}
-  normalColor: {r: 1, g: 1, b: 1, a: 0}
-  ignitedColor: {r: 0, g: 0, b: 0, a: 0}
+  tempLabel: {fileID: 1861175398363078898}
+  normalColor: {r: 0.46450287, g: 0.7434261, b: 1, a: 0}
+  ignitedColor: {r: 1, g: 0.38102233, b: 0, a: 0}
