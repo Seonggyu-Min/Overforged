@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: HammerHead
   m_EditorClassIdentifier: 
   ID: 109
-  Name: 
+  Name: Hammer Head
   Image: {fileID: 0}
   ItemPrefab: {fileID: -259972160606440404, guid: a55ba290b477e1a47886b6f080d6e895, type: 3}
-  materialItemType: 7
+  materialVariation: 0
   materialType: 2
   nextMaterial: {fileID: 11400000, guid: 1b516dbf2a3b38c449e85c63bfd908b4, type: 2}

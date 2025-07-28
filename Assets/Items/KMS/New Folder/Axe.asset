@@ -13,13 +13,7 @@ MonoBehaviour:
   m_Name: Axe
   m_EditorClassIdentifier: 
   ID: 0
-  Name: 
-  ItemType: 0
-  OreType: 0
-  WoodType: 0
-  NeedTongs: 0
+  Name: Axe
   Image: {fileID: 0}
   ItemPrefab: {fileID: 6420927614769115594, guid: e4497736585d20b4aa8aa9c6bf1f2245, type: 3}
-  NextItem: {fileID: 0}
-  CombineObjType: 0
   productType: 2

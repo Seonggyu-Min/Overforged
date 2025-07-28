@@ -9,6 +9,10 @@ using UnityEngine;
 
 namespace MIN
 {
+    /// <summary>
+    /// Firebase를 관리하는 싱글톤 형태의 DontDestroyOnLoad MonoBehaviour입니다.
+    /// 주입을 통해 접근할 수 있습니다.
+    /// </summary>
     public class FirebaseManager : MonoBehaviour, IFirebaseManager
     {
         #region Fields And Properties

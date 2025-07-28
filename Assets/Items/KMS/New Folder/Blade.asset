@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Blade
   m_EditorClassIdentifier: 
   ID: 107
-  Name: 
+  Name: Blade
   Image: {fileID: 0}
   ItemPrefab: {fileID: -7334951474422550414, guid: f442190307bb3974a9bca57366eb782b, type: 3}
-  materialItemType: 3
+  materialVariation: 0
   materialType: 2
   nextMaterial: {fileID: 11400000, guid: 5ad36b537bb22564c9c06458ef1dd5d9, type: 2}
