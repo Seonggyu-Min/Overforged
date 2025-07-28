@@ -65,8 +65,11 @@ namespace SCR
 
         private void OnChangeState()
         {
-            workingMode = !workingMode;
-            ChangeState(workingMode);
+            if (CanChangeMode())
+            {
+                workingMode = !workingMode;
+                ChangeState(workingMode);
+            }
         }
 
         private void OnAction()
@@ -114,8 +117,11 @@ namespace SCR
         private void Walk(bool move)
         {
             player.Animator.SetBool("Walk", move);
-            player.AudioSource.PlayOneShot(player.SFX.Move);
-            if (move) player.WalkSfx.Play();
+            if (move)
+            {
+                if (!player.WalkSfx.isPlaying)
+                    player.WalkSfx.Play();
+            }
             else player.WalkSfx.Stop();
 
         }
@@ -183,6 +189,26 @@ namespace SCR
         #endregion
 
         #region 아이템, 오브젝트와의 상호작용
+
+        private bool CanUseTongs()
+        {
+            if (player.PlayerPhysical.IsHold)
+                return false;
+            else return true;
+        }
+
+        private bool CanChangeMode()
+        {
+            if (!workingMode)
+            {
+                if (player.PlayerPhysical.IsHold && player.PlayerPhysical.UseTongs)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         /// <summary>
         /// 집게 사용 함수
         /// </summary>
@@ -190,23 +216,28 @@ namespace SCR
         /// <param name="tongs">들어온 게임 오브젝트</param>
         private void UseTongs(bool useTong, GameObject tongs = null)
         {
+            if (CanUseTongs())
+            {
 
-            player.PlayerPhysical.UseTongs = useTong;
-            player.Animator.SetBool("UseTongs", useTong);
-            if (useTong)
-            {
-                tongs.SetActive(!useTong);
-                player.Tongs = tongs;
-                player.Tongs.transform.SetParent(player.HoldingPos);
-                player.Tongs.transform.localPosition = new Vector3(0, 0, 0);
-                player.Tongs.transform.rotation = Quaternion.identity;
+                if (useTong)
+                {
+                    tongs.SetActive(!useTong);
+                    player.Tongs = tongs;
+                    player.Tongs.transform.SetParent(player.HoldingPos);
+                    player.Tongs.transform.localPosition = new Vector3(0, 0, 0);
+                    player.Tongs.transform.rotation = Quaternion.identity;
+                }
+                else
+                {
+                    if (!CanUseTongs()) return;
+                    player.Tongs.SetActive(!useTong);
+                    player.Tongs.transform.SetParent(null);
+                    player.Tongs = null;
+                }
+                player.PlayerPhysical.UseTongs = useTong;
+                player.Animator.SetBool("UseTongs", useTong);
             }
-            else
-            {
-                player.Tongs.SetActive(!useTong);
-                player.Tongs.transform.SetParent(null);
-                player.Tongs = null;
-            }
+
         }
 
         /// <summary>

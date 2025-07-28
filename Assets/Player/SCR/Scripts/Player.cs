@@ -77,6 +77,8 @@ namespace SCR
             PhotonNetwork.NetworkingClient.EventReceived += AnymSyncFun;
             firstTime = true;
             walkSfx.clip = sfx.Move;
+            walkSfx.loop = true;
+            walkSfx.Stop();
         }
 
         private void Start()

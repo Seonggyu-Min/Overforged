@@ -38,7 +38,12 @@ namespace SCR
         public AudioClip ShowOff;
 
         [Header("맞았을 때")]
-        public AudioClip Hit;
+        public List<AudioClip> Hit;
+
+        public AudioClip RandonHit()
+        {
+            return Hit[Random.Range(0, Hit.Count - 1)];
+        }
     }
 }
 
