@@ -35,7 +35,7 @@ namespace MIN
         #region Unity Methods
 
         public override void OnEnable() => PhotonNetwork.AddCallbackTarget(this);
-        
+
         public override void OnDisable() => PhotonNetwork.RemoveCallbackTarget(this);
 
         // 디버그용
@@ -55,6 +55,7 @@ namespace MIN
 
         public override void OnJoinedRoom()
         {
+            ResetCustomProperties();
             UpdatePlayerCards();
             UpdateButtonText();
         }
@@ -153,7 +154,6 @@ namespace MIN
             }
         }
 
-
         private void UpdatePlayerCards()
         {
             // 현재 방에 존재하는 플레이어 ActorNumber 저장
@@ -195,6 +195,58 @@ namespace MIN
             }
         }
 
-        #endregion
+        private void ResetCustomProperties()
+        {
+            var props = PhotonNetwork.LocalPlayer.CustomProperties;
+
+            bool hasCharacter = props.TryGetValue(CustomPropertyKeys.CharacterId, out object charObj);
+            bool hasTeamColor = props.TryGetValue(CustomPropertyKeys.TeamColor, out object colorObj);
+
+            // 이미 캐릭터와 팀 색상이 설정되어 있다면 아무것도 하지 않음
+            if (hasCharacter && hasTeamColor) return;
+
+            int chosenCharacterId = GetRandomCharacterId();
+            int chosenColorId = GetRandomTeamColor();
+
+            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable
+            {
+                { CustomPropertyKeys.CharacterId, chosenCharacterId },
+                { CustomPropertyKeys.TeamColor, chosenColorId }
+            });
+        }
+
+        private int GetRandomCharacterId()
+        {
+            return Random.Range(0, System.Enum.GetValues(typeof(CharacterId)).Length);
+        }
+
+        private int GetRandomTeamColor()
+        {
+            int[] allIds = (int[])System.Enum.GetValues(typeof(TeamColorId)); // 모든 팀 색상 ID 가져오기
+            HashSet<int> usedIds = new(); // 이미 사용된 팀 색상 ID 저장
+
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
+                if (player.CustomProperties.TryGetValue(CustomPropertyKeys.TeamColor, out object value))
+                {
+                    usedIds.Add((int)value); // 사용된 팀 색상 ID 추가
+                }
+            }
+
+            List<int> available = new(); // 사용 가능한 팀 색상 ID 저장
+            foreach (int id in allIds)
+            {
+                if (!usedIds.Contains(id)) // 사용되지 않은 팀 색상 ID만 추가
+                {
+                    available.Add(id); 
+                }
+            }
+
+            return available.Count > 0
+                ? available[Random.Range(0, available.Count)] // 사용 가능한 색상이 있으면 그 중에서 선택
+                : allIds[Random.Range(0, allIds.Length)]; // 없으면 아무거나 선택
+        }
     }
+
+    #endregion
 }
