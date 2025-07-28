@@ -1,4 +1,5 @@
 ﻿using Firebase.Auth;
+using Firebase.Database;
 using Firebase.Extensions;
 using ModestTree;
 using Photon.Pun;
@@ -26,6 +27,13 @@ namespace MIN
         [SerializeField] private Button _findButton;
         [SerializeField] private Button _loginButton;
         [SerializeField] private Button _signUpButton;
+
+        #endregion
+
+
+        #region Unity Methods
+
+        private void OnEnable() => ClearText();
 
         #endregion
 
@@ -83,16 +91,19 @@ namespace MIN
                         // 1-2. 닉네임 설정도 완료한 경우
                         else
                         {
-                            if (!PhotonNetwork.IsConnected)
+                            SetNickName(() =>
                             {
-                                Debug.Log("Photon 네트워크에 연결되지 않았습니다. 연결을 시도합니다.");
-                                PhotonNetwork.ConnectUsingSettings();
-                            }                            
+                                if (!PhotonNetwork.IsConnected)
+                                {
+                                    Debug.Log("Photon 네트워크에 연결되지 않았습니다. 연결을 시도합니다.");
+                                    PhotonNetwork.ConnectUsingSettings();
+                                }
 
-                            Debug.Log("로그인 성공, 로딩화면으로 이동합니다.");
-                            _outGameUIManager.Hide("Log In Panel", () =>
-                            {
-                                _outGameUIManager.Show("Loading Panel");
+                                Debug.Log("로그인 성공, 로딩화면으로 이동합니다.");
+                                _outGameUIManager.Hide("Log In Panel", () =>
+                                {
+                                    _outGameUIManager.Show("Loading Panel");
+                                });    
                             });
                         }
                     }
@@ -114,6 +125,61 @@ namespace MIN
             {
                 _outGameUIManager.Show("Sign Up Panel");
             });
+        }
+
+        private void SetNickName(System.Action onComplete)
+        {
+            FirebaseUser user = _firebaseManager.Auth.CurrentUser;
+
+            if (user != null)
+            {
+                string uid = user.UserId;
+
+                _firebaseManager.Database
+                    .GetReference("users")
+                    .Child(uid)
+                    .GetValueAsync()
+                    .ContinueWithOnMainThread(task =>
+                    {
+                        if (task.IsCanceled)
+                        {
+                            Debug.LogError("사용자 정보를 가져오는 작업이 취소됨");
+                            return;
+                        }
+                        if (task.IsFaulted)
+                        {
+                            Debug.LogError($"사용자 정보를 가져오는 데 실패함. 이유: {task.Exception}");
+                            return;
+                        }
+
+                        DataSnapshot snapshot = task.Result;
+                        if (snapshot.Exists)
+                        {
+                            string nickname = snapshot.Child("nickname").Value.ToString();
+                            PhotonNetwork.NickName = nickname;
+                            Debug.Log($"닉네임 설정 완료: {nickname}");
+                        }
+                        else
+                        {
+                            Debug.LogWarning("사용자 정보가 존재하지 않습니다. 기본 닉네임을 설정합니다.");
+                            PhotonNetwork.NickName = "Guest";
+                        }
+
+                        onComplete?.Invoke();
+                    });
+            }
+            else
+            {
+                Debug.LogWarning("Firebase 사용자 정보가 없습니다. Nickname 설정을 건너뜁니다.");
+                PhotonNetwork.NickName = "Guest";
+                onComplete?.Invoke();
+            }
+        }
+
+        private void ClearText()
+        {
+            _idInputField.text = string.Empty;
+            _passwordInputField.text = string.Empty;
         }
 
         #endregion

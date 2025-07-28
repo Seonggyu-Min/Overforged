@@ -35,6 +35,14 @@ namespace MIN
         #endregion
 
 
+        #region Unity Methods
+
+        private void OnEnable() => ClearText();
+
+        #endregion
+
+
+
         #region Public Methods
 
         public void OnClickConfirmButton() => SignUp();
@@ -115,6 +123,13 @@ namespace MIN
             }
 
             _infoTextCo = StartCoroutine(ShowInfoTextRoutine());
+        }
+
+        private void ClearText()
+        {
+            _idInputField.text = string.Empty;
+            _passwordInputField.text = string.Empty;
+            _passwordConfirmInputField.text = string.Empty;
         }
 
         #endregion

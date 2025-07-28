@@ -17,6 +17,6 @@ namespace MIN
 
         public void CloseTopPanel();
 
-        public void Clear();
+        public UIPanel GetPanel(string panelName);
     }
 }
