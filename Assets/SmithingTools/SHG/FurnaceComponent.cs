@@ -13,17 +13,19 @@ namespace SHG
     SmithingToolData furnaceData;
     [SerializeField] 
     Furnace furnace;
+    [SerializeField]
+    FurnaceEffecter effecter;
     [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(itemProgressLabel), nameof(tempLabel))]
     Void uiGroup;
-    [SerializeField] [HideProperty]
+    [SerializeField] [HideInInspector]
     Canvas uiCanvas;
-    [SerializeField] [HideProperty]
+    [SerializeField] [HideInInspector]
     Image itemImage;
-    [SerializeField] [HideProperty]
+    [SerializeField] [HideInInspector]
     TMP_Text itemNameLabel;
-    [SerializeField] [HideProperty]
+    [SerializeField] [HideInInspector]
     TMP_Text itemProgressLabel;
-    [SerializeField] [HideProperty]
+    [SerializeField] [HideInInspector]
     TMP_Text tempLabel;
     bool isIgnited;
 
@@ -35,8 +37,24 @@ namespace SHG
     Color ignitedColor;
     [SerializeField] [HideInInspector]
     public Color HightlightColor;
-
     protected override SmithingTool tool => this.furnace;
+
+    [SerializeField] [VerticalGroup(10f, true, nameof(HightlightColor), nameof(normalColor), nameof(ignitedColor))]
+    Void effecterGroup;
+    [SerializeField] [HideInInspector]
+    ParticleSystem fireParticle;
+
+    [Button]
+    void TurnOnFire()
+    {
+      this.effecter.TurnOn();
+    }
+
+    [Button]
+    void TurnOffFire()
+    {
+      this.effecter.TurnOff();
+    }
 
     void BeforeInteract(SmithingTool tool)
     {
@@ -84,6 +102,7 @@ namespace SHG
       this.furnace.BeforeInteract += this.BeforeInteract;
       this.furnace.AfterInteract += this.AfterInteract;
       this.furnace.OnFinished += this.OnFinished;
+      this.effecter = new FurnaceEffecter(this.furnace);
       this.uiCanvas.enabled = false;
     }
 

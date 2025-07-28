@@ -51,7 +51,7 @@ namespace SHG
 
     protected virtual void Start()
     {
-      this.NetworkSynchronizer.RegisterSynchronizable(this);
+      this.NetworkSynchronizer?.RegisterSynchronizable(this);
     }
 
     protected virtual void Update()
@@ -127,7 +127,8 @@ namespace SHG
       if (dict.TryGetValue(
           ToolTransferArgs.ITEM_ID_KEY, out object itemId) &&
         itemId != null) {
-        if (this.NetworkSynchronizer.TryFindComponentFromNetworkId(
+        if (this.NetworkSynchronizer != null &&
+          this.NetworkSynchronizer.TryFindComponentFromNetworkId(
             networId: (int)itemId,
             out MaterialItem foundItem
             )) {

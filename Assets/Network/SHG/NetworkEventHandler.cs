@@ -146,7 +146,9 @@ namespace SHG
       }
       else {
         Debug.Log("PhotonNetwork IsConnected");
-        PhotonNetwork.JoinRandomOrCreateRoom();
+        if (!PhotonNetwork.CreateRoom("Test")) {
+          PhotonNetwork.JoinRoom("Test");
+        }
       }
     }
 
@@ -202,6 +204,7 @@ namespace SHG
     public void OnCreateRoomFailed(short returnCode, string message)
     {
       Debug.Log(nameof(OnCreateRoomFailed));
+      PhotonNetwork.JoinRoom("Test");
     }
 
     public void OnJoinRoomFailed(short returnCode, string message)
