@@ -25,19 +25,23 @@ namespace MIN
         [SerializeField] private TMP_Text _maxPlayerText;
         [SerializeField] private Button _maxPlayerPlusButton;
         [SerializeField] private Button _maxPlayerMinusButton;
-        private int _maxPlayerCount = 8;
+        private int _maxPlayerCount = 2;
+        private const int MAX_PLAYER_COUNT = 8;
+        private const int MIN_PLAYER_COUNT = 2;
 
         [Header("비밀 방 관련")]
-        [SerializeField] private Button _secretRoomCheckBoxButton;
-        [SerializeField] private Image _secretTrueImage;
-        [SerializeField] private Image _secretFalseImage;
+        [SerializeField] private TMP_Text _roomPasswordText;
         [SerializeField] private TMP_InputField _passWordInputField;
+        [SerializeField] private Button _secretRoomCheckBoxButton;
+        [SerializeField] private Sprite _secretTrueSprite;
+        [SerializeField] private Sprite _secretFalseSprite;
         private bool _isSecretRoom = false;
 
         [Header("안내 문구")]
         [SerializeField] private TMP_Text _infoText;
 
         #endregion
+
 
         #region Unity Methods
 
@@ -56,7 +60,7 @@ namespace MIN
 
         public void OnClickMinusButton() => MinusMaxPlayer();
 
-        public void OnClickSecretButton() => SecretRoomCheckBox();
+        public void OnClickSecretButton() => CheckSecretRoom();
 
         #endregion
 
@@ -65,11 +69,16 @@ namespace MIN
 
         private void Init()
         {
-            _maxPlayerCount = 8;
+            _maxPlayerCount = 2;
             _maxPlayerText.text = _maxPlayerCount.ToString();
 
+            // 비밀방 관련 UI 초기화
             _isSecretRoom = false;
-            _secretRoomCheckBoxButton.image = _secretFalseImage;
+            _secretRoomCheckBoxButton.image.sprite = _secretFalseSprite;
+            _passWordInputField.gameObject.SetActive(false);
+            _roomPasswordText.gameObject.SetActive(false);
+
+            ClearText();
         }
 
         private void Confirm()
@@ -123,30 +132,38 @@ namespace MIN
 
         private void PlusMaxPlayer()
         {
-            _maxPlayerCount = Mathf.Min(_maxPlayerCount + 1, 8);
+            _maxPlayerCount = Mathf.Min(_maxPlayerCount + 1, MAX_PLAYER_COUNT);
             _maxPlayerText.text = _maxPlayerCount.ToString();
         }
 
         private void MinusMaxPlayer()
         {
-            _maxPlayerCount = Mathf.Max(_maxPlayerCount - 1, 2);
+            _maxPlayerCount = Mathf.Max(_maxPlayerCount - 1, MIN_PLAYER_COUNT);
             _maxPlayerText.text = _maxPlayerCount.ToString();
         }
 
-        private void SecretRoomCheckBox()
+        private void CheckSecretRoom()
         {
             _isSecretRoom = !_isSecretRoom;
 
             if (_isSecretRoom)
             {
-                _secretRoomCheckBoxButton.image = _secretTrueImage;
+                _secretRoomCheckBoxButton.image.sprite = _secretTrueSprite;
                 _passWordInputField.gameObject.SetActive(true);
+                _roomPasswordText.gameObject.SetActive(true);
             }
             else
             {
-                _secretRoomCheckBoxButton.image = _secretFalseImage;
+                _secretRoomCheckBoxButton.image.sprite = _secretFalseSprite;
                 _passWordInputField.gameObject.SetActive(false);
+                _roomPasswordText.gameObject.SetActive(false);
             }
+        }
+
+        private void ClearText()
+        {
+            _roomNameInputField.text = string.Empty;
+            _passWordInputField.text = string.Empty;
         }
 
         #endregion
