@@ -103,7 +103,7 @@ namespace SCR
             player.Rigidbody.AddForce(transform.forward
                 * player.PlayerPhysical.DashForce, ForceMode.Impulse);
             player.SendPlayAnimationEvent(photonView.ViewID, "Dash", "Trigger");
-            player.AudioSource.PlayOneShot(player.SFX.Dash);
+            photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.Dash);
             float time = 0.8333f;
             while (time > 0.0f)
             {
@@ -130,8 +130,10 @@ namespace SCR
         {
             player.PlayerPhysical.IsHold = hold;
             player.Animator.SetBool("Hold", hold);
-            if (hold) player.AudioSource.PlayOneShot(player.SFX.Hold);
-            else player.AudioSource.PlayOneShot(player.SFX.Put);
+            if (hold)
+                photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.Hold);
+            else
+                photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.Put);
         }
 
         private void ChangeState(bool work)
@@ -139,7 +141,7 @@ namespace SCR
             player.Animator.SetBool("Work", work);
             player.SendPlayAnimationEvent(photonView.ViewID, "ChangeState", "Trigger");
             player.Hammer.SetActive(work);
-            player.AudioSource.PlayOneShot(player.SFX.ChangeState);
+            photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.ChangeState);
             StartCoroutine(TurnAround());
         }
 
@@ -159,15 +161,16 @@ namespace SCR
         {
             player.PlayerPhysical.IsHold = false;
             player.SendPlayAnimationEvent(photonView.ViewID, "Throw", "Trigger");
-            player.AudioSource.PlayOneShot(player.SFX.Throw);
+            photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.Throw);
         }
 
 
         private void Hammering(bool isWood = false)
         {
             player.SendPlayAnimationEvent(photonView.ViewID, "Hammering", "Trigger");
-            if (isWood) player.AudioSource.PlayOneShot(player.SFX.CutDown);
-            else player.AudioSource.PlayOneShot(player.SFX.Hammering);
+            if (isWood) photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.CutDown);
+
+            else photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.Hammering);
         }
 
 
@@ -176,7 +179,7 @@ namespace SCR
             player.PlayerPhysical.IsHold = false;
             canMove = false;
             player.SendPlayAnimationEvent(photonView.ViewID, "Tempering", "Trigger");
-            player.AudioSource.PlayOneShot(player.SFX.Put);
+            photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.Put);
         }
 
 
@@ -184,7 +187,7 @@ namespace SCR
         {
             canMove = false;
             player.SendPlayAnimationEvent(photonView.ViewID, "ShowOff", "Trigger");
-            player.AudioSource.PlayOneShot(player.SFX.ShowOff);
+            photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.ShowOff);
         }
         #endregion
 
@@ -401,5 +404,7 @@ namespace SCR
             }
         }
         #endregion
+
+
     }
 }
