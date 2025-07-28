@@ -100,6 +100,7 @@ namespace SCR
             player.Rigidbody.AddForce(transform.forward
                 * player.PlayerPhysical.DashForce, ForceMode.Impulse);
             player.SendPlayAnimationEvent(photonView.ViewID, "Dash", "Trigger");
+            player.AudioSource.PlayOneShot(player.SFX.Dash);
             float time = 0.8333f;
             while (time > 0.0f)
             {
@@ -113,12 +114,18 @@ namespace SCR
         private void Walk(bool move)
         {
             player.Animator.SetBool("Walk", move);
+            player.AudioSource.PlayOneShot(player.SFX.Move);
+            if (move) player.WalkSfx.Play();
+            else player.WalkSfx.Stop();
 
         }
 
         private void Holding(bool hold)
         {
+            player.PlayerPhysical.IsHold = hold;
             player.Animator.SetBool("Hold", hold);
+            if (hold) player.AudioSource.PlayOneShot(player.SFX.Hold);
+            else player.AudioSource.PlayOneShot(player.SFX.Put);
         }
 
         private void ChangeState(bool work)
@@ -126,6 +133,7 @@ namespace SCR
             player.Animator.SetBool("Work", work);
             player.SendPlayAnimationEvent(photonView.ViewID, "ChangeState", "Trigger");
             player.Hammer.SetActive(work);
+            player.AudioSource.PlayOneShot(player.SFX.ChangeState);
             StartCoroutine(TurnAround());
         }
 
@@ -143,20 +151,26 @@ namespace SCR
 
         private void Throw()
         {
+            player.PlayerPhysical.IsHold = false;
             player.SendPlayAnimationEvent(photonView.ViewID, "Throw", "Trigger");
+            player.AudioSource.PlayOneShot(player.SFX.Throw);
         }
 
 
-        private void Hammering()
+        private void Hammering(bool isWood = false)
         {
             player.SendPlayAnimationEvent(photonView.ViewID, "Hammering", "Trigger");
+            if (isWood) player.AudioSource.PlayOneShot(player.SFX.CutDown);
+            else player.AudioSource.PlayOneShot(player.SFX.Hammering);
         }
 
 
         private void Tempering()
         {
+            player.PlayerPhysical.IsHold = false;
             canMove = false;
             player.SendPlayAnimationEvent(photonView.ViewID, "Tempering", "Trigger");
+            player.AudioSource.PlayOneShot(player.SFX.Put);
         }
 
 
@@ -164,6 +178,7 @@ namespace SCR
         {
             canMove = false;
             player.SendPlayAnimationEvent(photonView.ViewID, "ShowOff", "Trigger");
+            player.AudioSource.PlayOneShot(player.SFX.ShowOff);
         }
         #endregion
 
