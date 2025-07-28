@@ -43,11 +43,23 @@ namespace MIN
 
             if (_roomInfo != null && _roomInfo.PlayerCount < _roomInfo.MaxPlayers)
             {
-                _uiManager.Hide("Lobby Panel", () =>
+                if (_roomInfo.CustomProperties.TryGetValue(CustomPropertyKeys.Password, out object storedPasswordObj) &&
+                    storedPasswordObj is string)
                 {
-                    _uiManager.Show("Room Panel");
-                    PhotonNetwork.JoinRoom(_roomInfo.Name);
-                });
+                    var panel = _uiManager.GetPanel("Password Input Panel");
+                    var passwordInputPanel = panel.GetComponent<PasswordInputPanelBehaviour>();
+                    passwordInputPanel.Init(_roomInfo);
+
+                    _uiManager.Show("Password Input Panel");
+                }
+                else
+                {
+                    _uiManager.Hide("Lobby Panel", () =>
+                    {
+                        _uiManager.Show("Room Panel");
+                        PhotonNetwork.JoinRoom(_roomInfo.Name);
+                    });
+                }
             }
             else
             {
