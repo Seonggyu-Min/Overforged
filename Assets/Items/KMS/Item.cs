@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MIN;
-using UnityEngine.ResourceManagement.ResourceProviders.Simulation;
 using Photon.Pun;
 
 
