@@ -1,3 +1,4 @@
+#define LOCAL_TEST
 using System;
 using System.Collections;
 using UnityEngine;
@@ -47,15 +48,21 @@ namespace SHG
         return ;
       }
       if (this.photonView.IsMine) {
-        //GameObject itemObjct = GameObject.Instantiate(this.itemPrefab); 
-        GameObject itemObject = PhotonNetwork.Instantiate(this.itemPrefabPath, Vector3.zero, Quaternion.identity);
+        GameObject itemObject;
+        #if LOCAL_TEST
+        itemObject = GameObject.Instantiate(this.itemPrefab); 
+        #else   
+        itemObject = PhotonNetwork.Instantiate(this.itemPrefabPath, Vector3.zero, Quaternion.identity);
+        #endif
         MaterialItem item = itemObject.GetComponent<MaterialItem>();
         item.Data = this.itemToCreate;
         item.Ore = OreType.Gold;
         this.GrabItem(item);
+        #if !LOCAL_TEST
         this.photonView.RPC(
           methodName: nameof(CreateItem),
           target: RpcTarget.OthersBuffered);
+        #endif
       }
       else if (this.HoldingItem != null) {
         
@@ -97,6 +104,7 @@ namespace SHG
       this.HoldingItem = item;
       item.transform.SetParent(this.hand);
       item.transform.localPosition = Vector3.zero;
+      #if !LOCAL_TEST
       if (this.photonView.IsMine) {
         this.photonView.RPC(
           methodName: nameof(GrabItemNetwork),
@@ -105,6 +113,7 @@ namespace SHG
           item.photonView.ViewID
           });
       }
+      #endif
     }
 
     [PunRPC]

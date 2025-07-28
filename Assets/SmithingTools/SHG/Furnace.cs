@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace SHG
 {
@@ -7,11 +8,12 @@ namespace SHG
   //온도에 따라 효율을 차등 적용
   public class Furnace : SmithingTool
   {
-    const float TEMP_INCREASE_DELTA = 10f;
-    const float TEMP_DECRESE_DELTA = -1f;
-    const float MAX_TEMPARATURE = 1000f;
-    const float MIN_TEMPARATURE = 20f;
+    const float TEMP_INCREASE_DELTA = 80f;
+    const float TEMP_DECRESE_DELTA = -50f;
+    public const float MAX_TEMPARATURE = 1000f;
+    public const float MIN_TEMPARATURE = 20f;
     public override bool IsFinished => this.Progress >= 1.0f;
+    public float NormalizedTemparature { get; private set; }
 
     public bool IsIgnited { get; private set; }
     public Action<bool> OnTurnIgnited;
@@ -35,21 +37,32 @@ namespace SHG
     public override void OnUpdate(float deltaTime)
     {
       bool wasFinished = this.IsFinished;
-      if (this.IsIgnited) {
-        base.OnUpdate(deltaTime);
-      }
-      if (this.HoldingItem != null &&
-        !wasFinished && this.IsFinished) {
-        this.HoldingItem.Heat();
+      if (this.HoldingItem != null != this.IsFinished) {
+        this.RemainingTime -= deltaTime * this.NormalizedTemparature;
+        if (this.RemainingTime < 0) {
+          this.RemainingInteractionCount -= 1;
+          this.RemainingTime = this.DefaultRequiredTime;
+        }
       }
       this.Temparature += (this.IsIgnited ? 
         TEMP_INCREASE_DELTA: TEMP_DECRESE_DELTA) * deltaTime;
       this.Temparature = Math.Clamp(
         this.Temparature, MIN_TEMPARATURE, MAX_TEMPARATURE);
+      this.NormalizedTemparature = Mathf.InverseLerp(
+        Furnace.MIN_TEMPARATURE,
+        Furnace.MAX_TEMPARATURE,
+        this.Temparature);
       if (!wasFinished && this.IsFinished) {
         this.HoldingItem.ChangeToNext();
         this.OnFinished?.Invoke();
       }
+    }
+
+    public void TurnOff()
+    {
+      this.IsIgnited = false;
+      this.InteractionToTrigger = InteractionType.Work; 
+      this.OnTriggered();
     }
 
     public override bool CanTransferItem(ToolTransferArgs args)
@@ -61,7 +74,17 @@ namespace SHG
         return (this.ItemToReturn != null);
       }
     }
-        
+
+    public override ToolTransferResult Transfer(ToolTransferArgs args)
+    {
+      ToolTransferResult result = base.Transfer(args);
+      if (this.HoldingItem != null && 
+        (this.IsIgnited || this.NormalizedTemparature > 0.5f)) {
+        this.HoldingItem.Heat();
+      }
+      return (result);
+    }
+
     public override bool CanWork()
     {
       return (!this.IsIgnited);
@@ -73,6 +96,9 @@ namespace SHG
       this.BeforeInteract?.Invoke(this);
       if (!this.IsIgnited) {
         this.IsIgnited = true;
+        if (this.HoldingItem != null) {
+          this.HoldingItem.Heat();
+        }
       }
       else {
         // TODO: turn off fire?
@@ -80,8 +106,8 @@ namespace SHG
       return (
         this.ReturnWithEvent(
           new ToolWorkResult {
-            Trigger = this.OnTriggered,
-            DurationToStay = this.InteractionTime
+          Trigger = this.OnTriggered,
+          DurationToStay = this.InteractionTime
           }
       ));
     }

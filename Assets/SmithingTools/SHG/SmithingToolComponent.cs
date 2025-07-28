@@ -1,11 +1,14 @@
+#define LOCAL_TEST
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using EditorAttributes;
 
+
 namespace SHG
 {
+
   [RequireComponent(typeof(MeshRenderer))]
   public abstract class SmithingToolComponent : MonoBehaviour, IInteractableTool, INetworkSynchronizable, IHighlightable
   {
@@ -62,7 +65,11 @@ namespace SHG
 
     public virtual bool CanTransferItem(ToolTransferArgs args)
     {
+      #if LOCAL_TEST
+      return (this.tool.CanTransferItem(args));
+      #else
       return (this.IsOwner && this.tool.CanTransferItem(args));
+      #endif
     }
 
     public virtual ToolTransferResult Transfer(ToolTransferArgs args)
@@ -84,6 +91,9 @@ namespace SHG
 
     public virtual bool CanWork() 
     {
+      #if LOCAL_TEST
+      return (this.tool.CanWork());
+      #endif
       return (this.IsOwner && this.tool.CanWork());
     }
 

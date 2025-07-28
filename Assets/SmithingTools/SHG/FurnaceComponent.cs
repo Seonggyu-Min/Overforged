@@ -39,21 +39,18 @@ namespace SHG
     public Color HightlightColor;
     protected override SmithingTool tool => this.furnace;
 
-    [SerializeField] [VerticalGroup(10f, true, nameof(HightlightColor), nameof(normalColor), nameof(ignitedColor))]
+    [SerializeField] [VerticalGroup(10f, true, 
+      nameof(fireParticle), nameof(sparkParticle))]
     Void effecterGroup;
-    [SerializeField] [HideInInspector]
+    [SerializeField] [Required, HideInInspector]
     ParticleSystem fireParticle;
+    [SerializeField] [Required, HideInInspector]
+    ParticleSystem sparkParticle;
 
     [Button]
-    void TurnOnFire()
+    void TurnOff()
     {
-      this.effecter.TurnOn();
-    }
-
-    [Button]
-    void TurnOffFire()
-    {
-      this.effecter.TurnOff();
+      this.furnace.TurnOff();
     }
 
     void BeforeInteract(SmithingTool tool)
@@ -80,6 +77,7 @@ namespace SHG
         this.isIgnited = this.furnace.IsIgnited;
         this.highlighter.HighlightedMaterial.color = this.isIgnited ? 
           this.ignitedColor: this.normalColor;
+        this.effecter.TurnOn();
       } 
     }
 
@@ -102,7 +100,10 @@ namespace SHG
       this.furnace.BeforeInteract += this.BeforeInteract;
       this.furnace.AfterInteract += this.AfterInteract;
       this.furnace.OnFinished += this.OnFinished;
-      this.effecter = new FurnaceEffecter(this.furnace);
+      this.effecter = new FurnaceEffecter(
+        furnace: this.furnace,
+        fireParticle: this.fireParticle,
+        sparkParticle: this.sparkParticle);
       this.uiCanvas.enabled = false;
     }
 
@@ -110,6 +111,7 @@ namespace SHG
     protected override void Update()
     {
       base.Update();
+      this.effecter.OnUpdate(Time.deltaTime);
       this.tempLabel.text = $"Temp: {this.furnace.Temparature}";
       this.itemProgressLabel.text = $"Progress: {this.furnace.Progress * 100}%";
     }
