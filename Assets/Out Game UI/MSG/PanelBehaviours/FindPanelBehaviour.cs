@@ -45,8 +45,8 @@ namespace MIN
 
         private void Init()
         {
+            ClearText();
             _infoText.text = "비밀번호를 재설정할 이메일을 입력하세요.";
-            _emailInput.text = string.Empty;
         }
 
         private void Send()
@@ -75,6 +75,11 @@ namespace MIN
 
                     _infoText.text = "비밀번호 재설정 이메일이 발송되었습니다.";
                 });
+        }
+
+        private void ClearText()
+        {
+            _emailInput.text = string.Empty;
         }
 
         #endregion
