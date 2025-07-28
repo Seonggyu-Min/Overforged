@@ -53,6 +53,8 @@ namespace MIN
         {
             _confirmButton.interactable = false;
             _infoText.text = "닉네임을 입력하고 중복 확인을 해주세요.";
+
+            ClearText();
         }
 
         private void Confirm()
@@ -94,6 +96,8 @@ namespace MIN
 
                         _infoText.text = "닉네임이 성공적으로 설정되었습니다.";
 
+                        SetNickName();
+
                         PhotonNetwork.ConnectUsingSettings();
 
                         _outGameUIManager.Hide("Set Nickname Panel", () =>
@@ -131,6 +135,57 @@ namespace MIN
                         _confirmButton.interactable = true;
                     }
                 });
+        }
+
+        private void SetNickName()
+        {
+            FirebaseUser user = _firebaseManager.Auth.CurrentUser;
+
+            if (user != null)
+            {
+                string uid = user.UserId;
+
+                _firebaseManager.Database
+                    .GetReference("users")
+                    .Child(uid)
+                    .GetValueAsync()
+                    .ContinueWithOnMainThread(task =>
+                    {
+                        if (task.IsCanceled)
+                        {
+                            Debug.LogError("사용자 정보를 가져오는 작업이 취소됨");
+                            return;
+                        }
+                        if (task.IsFaulted)
+                        {
+                            Debug.LogError($"사용자 정보를 가져오는 데 실패함. 이유: {task.Exception}");
+                            return;
+                        }
+
+                        DataSnapshot snapshot = task.Result;
+                        if (snapshot.Exists)
+                        {
+                            string nickname = snapshot.Child("nickname").Value.ToString();
+                            PhotonNetwork.NickName = nickname;
+                            Debug.Log($"닉네임 설정 완료: {nickname}");
+                        }
+                        else
+                        {
+                            Debug.LogWarning("사용자 정보가 존재하지 않습니다. 기본 닉네임을 설정합니다.");
+                            PhotonNetwork.NickName = "Guest";
+                        }
+                    });
+            }
+            else
+            {
+                Debug.LogWarning("Firebase 사용자 정보가 없습니다. Nickname 설정을 건너뜁니다.");
+                return;
+            }
+        }
+
+        private void ClearText()
+        {
+            _nicknameInputField.text = string.Empty;
         }
 
         #endregion
