@@ -5,19 +5,28 @@ using UnityEngine;
 using UnityEngine.UI;
 using ExitGames.Client.Photon;
 using TMPro;
+using Photon.Realtime;
 
 namespace JJY
 {
     // 게임 시작하는 Manager에 붙이면 될듯.
     public class GameTimer : MonoBehaviourPunCallbacks
     {
-        [SerializeField] private TextMeshProUGUI timerText;
+        [SerializeField] private TMP_Text timerText;
         [SerializeField] private float totalTime = 120f;
 
         private double startTime;
         private bool isRunning = false;
 
         private const string StartTimeKey = "StartTime";
+
+        void Awake() // 테스트용
+        {
+            PhotonNetwork.ConnectUsingSettings();
+            PhotonNetwork.JoinLobby();
+            PhotonNetwork.JoinOrCreateRoom("TestRoom", new RoomOptions(), TypedLobby.Default);
+            PhotonNetwork.OfflineMode = true;
+        }
 
         void Start()
         {
