@@ -24,7 +24,23 @@ namespace MIN
 
         private void Start()
         {
-            ShowAsFirst("Log In Panel");
+            // 로그인 안 되어있으면 로그인 화면
+            if (_firebaseManager.Auth.CurrentUser == null)
+            {
+                ShowAsFirst("Log In Panel");
+            }
+            // 게임 중이었다가 돌아온 경우
+            else if (PhotonNetwork.InRoom)
+            {
+                _panelStack.Push(_panels["Lobby Panel"]); // 로비패널 스택에 넣어 뒤로갈 수 있도록 함
+                ShowAsFirst("Room Panel");
+            }
+            // 예외 상황
+            else
+            {
+                Debug.LogWarning("로그인되어 있지만 방에 들어가있지 않습니다.");
+                ShowAsFirst("Lobby Panel");
+            }
         }
 
         private void Update()
@@ -58,6 +74,11 @@ namespace MIN
             {
                 if (_panelStack.Contains(panel)) return;    // 이미 스택에 있는 경우 return
 
+                if (panel.IsRootPanel)
+                {
+                    _panelStack.Clear(); // 루트 패널을 보여줄 때는 스택 비우기
+                }
+
                 panel.gameObject.SetActive(true);
                 _panelStack.Push(panel);
             }
@@ -69,9 +90,11 @@ namespace MIN
 
         public void ShowAsFirst(string key)
         {
-            if (_panels.ContainsKey(key))
+            if (_panels.TryGetValue(key, out UIPanel panel))
             {
-                _panelStack.Push(_panels[key]);
+                _panelStack.Clear();
+                panel.gameObject.SetActive(true);
+                _panelStack.Push(panel);
             }
         }
 
@@ -101,6 +124,11 @@ namespace MIN
                     topPanel.HideAnimation();
                     _panelStack.Pop();
                     return;
+                }
+
+                if (topPanel.HasToLeaveRoomWhenClosed && PhotonNetwork.InRoom)
+                {
+                    PhotonNetwork.LeaveRoom();
                 }
 
                 _panelStack.Pop();
@@ -134,9 +162,6 @@ namespace MIN
             _panelStack.Clear();
         }
 
-        #endregion
-
-        #region Private Methods
         #endregion
     }
 }

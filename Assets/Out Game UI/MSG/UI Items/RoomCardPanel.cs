@@ -12,6 +12,8 @@ namespace MIN
 {
     public class RoomCardPanel : MonoBehaviourPunCallbacks
     {
+        #region Fields And Properties
+
         [Inject] private DiContainer _diContainer;
 
         [SerializeField] private GameObject _roomCardPrefab;
@@ -25,6 +27,10 @@ namespace MIN
         private int _currentPage = 0;
         private const int RoomsPerPage = 6;
 
+        #endregion
+
+
+        #region Public Methods
 
         public void SetRoomList(List<RoomInfo> list)
         {
@@ -76,5 +82,7 @@ namespace MIN
                 UpdateRoomCards();
             }
         }
+
+        #endregion
     }
 }

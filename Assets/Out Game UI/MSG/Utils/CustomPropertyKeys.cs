@@ -13,5 +13,7 @@ namespace MIN
 
         // Custom Player Properties
         public const string IsReady = "IsReady";
+        public const string CharacterId = "CharacterId";
+        public const string TeamColor = "TeamColor";
     }
 }
