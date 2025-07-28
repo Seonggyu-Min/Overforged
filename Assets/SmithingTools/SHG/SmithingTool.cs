@@ -1,12 +1,7 @@
 using System;
-using UnityEngine;
-using EditorAttributes;
 
 namespace SHG
 {
-  using Item = TestItem;
-  using MaterialItem = TestMaterialItem;
-  using MaterialType = TestMaterialType;
 
   [Serializable]
   public abstract class SmithingTool : IInteractableTool
@@ -19,25 +14,21 @@ namespace SHG
     }
 
     public abstract bool IsFinished { get; }
-    [ShowInInspector]
     public MaterialItem HoldingItem { get; protected set; }
-    public MaterialType[] AllowedMaterials => this.Data.AllowedMaterials;
+    public MaterialVariation[] AllowedMaterials => this.Data.AllowedMaterials;
     public Action<SmithingTool> BeforeInteract;
     public Action<SmithingTool> AfterInteract;
-    [ShowInInspector]
     public float RemainingTime { get; protected set; }
-    [ShowInInspector]
     public int RemainingInteractionCount { get; protected set; }
     public float Progress => this.CalcProgress();
     public Action<InteractionType> OnInteractionTriggered;
 
-    [SerializeField]
     protected SmithingToolData Data;
     protected abstract bool isPlayerMovable { get; }
     protected abstract bool isRemamingTimeElapse { get; }
-    protected abstract Item ItemToReturn { get; }
-    [SerializeField]
+    protected virtual Item ItemToReturn => this.HoldingItem;
     protected float DefaultRequiredTime => this.Data.TimeRequiredInSeconds;
+    protected float InteractionTime => this.Data.InteractionTime;
     protected int DefaultRequiredInteractCount => this.Data.RequiredInteractCount;
     protected InteractionType interactionToTrigger;
 
@@ -70,7 +61,7 @@ namespace SHG
       if (args.ItemToGive != null) {
         return (this.ReturnWithEvent(
             this.ReceiveMaterialItem(args.ItemToGive)));
-      }
+      } 
       return (this.ReturnWithEvent(
           this.ReturnItem()));    
     }
@@ -83,7 +74,8 @@ namespace SHG
       var countProgress = ((float)this.DefaultRequiredInteractCount -
         (float)this.RemainingInteractionCount) /
         (float)this.DefaultRequiredInteractCount;
-      var timeProgress = (this.DefaultRequiredTime - this.RemainingTime) /
+      var timeProgress = this.DefaultRequiredTime == 0 ? 0: 
+        (this.DefaultRequiredTime - this.RemainingTime) /
         this.DefaultRequiredTime;
       var progress = (countProgress + (timeProgress / (float)this.DefaultRequiredInteractCount));
       return (Math.Min(progress, 1f));
@@ -103,7 +95,8 @@ namespace SHG
       this.HoldingItem = materialItem;
       this.interactionToTrigger = InteractionType.ReceivedItem;
       ToolTransferResult result = new ToolTransferResult {
-        ReceivedItem = null
+        ReceivedItem = null,
+        IsDone = false
       };
       return (result);
     }
@@ -112,8 +105,12 @@ namespace SHG
     {
       this.interactionToTrigger = InteractionType.ReturnItem;
       var item = this.ItemToReturn;
+      this.HoldingItem = null;
       this.ResetInteraction();
-      return (new ToolTransferResult { ReceivedItem = item });
+      return (new ToolTransferResult { 
+        ReceivedItem = item,
+        IsDone = true
+        });
     }
 
     protected ToolTransferResult ReturnWithEvent(in ToolTransferResult result)
@@ -132,15 +129,13 @@ namespace SHG
     {
       this.RemainingTime = this.DefaultRequiredTime;
       this.RemainingInteractionCount = this.DefaultRequiredInteractCount;
-      this.HoldingItem = null;
     }
 
     protected ToolWorkResult ChangeMaterial(float durationToStay)
     {
-      var nextItem = this.HoldingItem.GetRefinedResult();
+      this.HoldingItem.ChangeToNext();
       this.interactionToTrigger = InteractionType.Work;
       this.ResetInteraction();
-      this.HoldingItem = nextItem;
       return (new ToolWorkResult {
         Trigger = this.OnTriggered,
         DurationToStay = durationToStay

@@ -1,9 +1,8 @@
 using System;
+using UnityEngine;
 
 namespace SHG
 {
-  using Item = TestItem;
-  using MaterialItem = TestMaterialItem;
 
   //TODO
   // 재료 아이템 또는 플레이어의 상태에 따라 작업효율 차등 적용
@@ -13,8 +12,6 @@ namespace SHG
 
     protected override bool isPlayerMovable => true;
     protected override bool isRemamingTimeElapse => false;
-    protected override Item ItemToReturn => (
-      this.HoldingItem != null ? this.HoldingItem.GetRefinedResult() : null);
 
     public Anvil(SmithingToolData data): base(data)
     {
@@ -22,13 +19,10 @@ namespace SHG
 
     public override bool CanTransferItem(ToolTransferArgs args)
     {
-      if (args.ItemToGive == null) {
-        return (this.HoldingItem != null && this.IsFinished);
-      }
       if (this.ItemToReturn != null) {
-        return (false);
+        return (args.ItemToGive == null);
       }
-      return (Array.IndexOf(this.AllowedMaterials, args.ItemToGive.MaterialType) != -1);
+      return (Array.IndexOf(this.AllowedMaterials, args.ItemToGive.Variation) != -1);
     }
 
     public override bool CanWork()
@@ -36,27 +30,22 @@ namespace SHG
       if (this.HoldingItem == null) {
         return (false);
       }
-      if (!this.IsFinished) {
-        return (true);
-      }
-      else {
-        var nextItem = this.HoldingItem.GetRefinedResult();
-        return (nextItem != null);
-      }
+      // 로테이션 방식으로 계속 변경
+      return (true);
     }
 
     public override ToolWorkResult Work()
     {
       this.interactionToTrigger = InteractionType.Work;
       this.BeforeInteract?.Invoke(this);  
+      ToolWorkResult result = new ToolWorkResult {};
       if (!this.IsFinished) {
-        return (this.ReturnWithEvent(
-            this.DecreseInteractionCount(this.RemainingTime)));
+        result = this.DecreseInteractionCount(this.InteractionTime);
       }
-      else {
-        return (this.ReturnWithEvent(
-          this.ChangeMaterial(this.RemainingTime)));
+      if (this.IsFinished) {
+        result = this.ChangeMaterial(this.InteractionTime);
       }
+      return (this.ReturnWithEvent(result));
     }
   }
 }

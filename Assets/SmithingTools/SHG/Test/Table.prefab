@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 786107950018656984}
   - component: {fileID: 1347626713593015716}
   m_Layer: 0
-  m_Name: UI
+  m_Name: woodtableUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -541,7 +541,7 @@ GameObject:
   - component: {fileID: 669356502088143820}
   - component: {fileID: 8943876421648319000}
   m_Layer: 0
-  m_Name: WoodTable
+  m_Name: Table
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -647,7 +647,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   woodTableData: {fileID: 11400000, guid: a719b1e45263d10b7b3f075007c4e848, type: 2}
-  uiCanvas: {fileID: 6541052400766217572}
+  craftTableData: {fileID: 0}
+  woodTableCanvas: {fileID: 6541052400766217572}
   itemImage: {fileID: 2105630911550010261}
   itemNameLabel: {fileID: 8362801668667396349}
   itemProgressLabel: {fileID: 224158646472267120}

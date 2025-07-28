@@ -1,4 +1,3 @@
-using SHG;
 using UnityEngine;
 using EditorAttributes;
 using UnityEngine.UI;
@@ -7,7 +6,6 @@ using Void = EditorAttributes.Void;
 
 namespace SHG
 {
-  using Item = TestItem;
 
   public class FurnaceComponent : MonoBehaviour, IInteractableTool
   {
@@ -91,13 +89,6 @@ namespace SHG
       this.itemProgressLabel.text = $"Progress: {this.furnace.Progress * 100}%";
     }
 
-    void OnInteractionTriggered(IInteractable interactable)
-    {
-      if (System.Object.ReferenceEquals(interactable, this)) {
-        Debug.Log("OnInteractionTriggered");
-      }
-    }
-
     public bool CanTransferItem(ToolTransferArgs args)
     {
       bool canTransfer = this.furnace.CanTransferItem(args);
@@ -108,7 +99,11 @@ namespace SHG
     public ToolTransferResult Transfer(ToolTransferArgs args)
     {
       var result = this.furnace.Transfer(args);
-      Debug.Log($"${nameof(Transfer)} result: {result}");
+      Debug.Log($"{nameof(Transfer)} result: {result}");
+      if (args.ItemToGive != null) {
+        args.ItemToGive.transform.SetParent(this.transform);
+        args.ItemToGive.transform.localPosition = Vector3.up;
+      }
       return (result);
     }
 

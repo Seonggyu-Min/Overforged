@@ -6,7 +6,6 @@ using Void = EditorAttributes.Void;
 
 namespace SHG
 {
-  using Item = TestItem;
 
   [RequireComponent(typeof(MeshRenderer))]
   public class AnvilComponent : MonoBehaviour, IInteractableTool
@@ -55,11 +54,8 @@ namespace SHG
       if (this.uiCanvas.enabled && tool.HoldingItem == null) {
         this.uiCanvas.enabled = false;
       }
-      else if (!this.uiCanvas.enabled && tool.HoldingItem != null) {
+      else if (tool.HoldingItem != null) {
         this.SetItemUI(tool.HoldingItem);
-      }
-      if (tool.HoldingItem != null) {
-        this.UpdateProgress();
       }
     }
 
@@ -67,11 +63,9 @@ namespace SHG
     {
       this.itemImage.sprite = item.Data.Image;   
       this.itemNameLabel.text = item.Data.Name;
-      this.uiCanvas.enabled = true;
-    }
-
-    void UpdateProgress()
-    {
+      if (!this.uiCanvas.enabled) {
+        this.uiCanvas.enabled = true;
+      }
       this.itemProgressLabel.text = $"Progress: {this.anvil.Progress * 100}%";
     }
 
@@ -107,6 +101,10 @@ namespace SHG
 
     public ToolTransferResult Transfer(ToolTransferArgs args)
     {
+      if (args.ItemToGive != null) {
+        args.ItemToGive.transform.SetParent(this.transform);
+        args.ItemToGive.transform.localPosition = Vector3.up;
+      }
       var result = this.anvil.Transfer(args);
       Debug.Log($"Transfer result: {result}");
       return (result);

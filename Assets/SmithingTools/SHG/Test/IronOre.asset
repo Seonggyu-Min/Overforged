@@ -9,11 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fd9578c79781667eb4767d61fa7689e, type: 3}
+  m_Script: {fileID: 11500000, guid: c13b17088ce587d42acf16f2050ab374, type: 3}
   m_Name: IronOre
   m_EditorClassIdentifier: 
+  ID: 102
   Name: IronOre
-  prefab: {fileID: 1173522666420968482, guid: 2003ceecb5aa6554aa2a1281d4e635f6, type: 3}
   Image: {fileID: 21300000, guid: c9f995f5a266f15e7bd8962219c83087, type: 3}
-  Type: 2
-  RefinedResult: {fileID: 11400000, guid: 98a01bc8a13b1ba9d8d59b2bdb5bac44, type: 2}
+  ItemPrefab: {fileID: 485200612604217011, guid: b481d1e017609fb439d6cfeb8b8e2496, type: 3}
+  materialVariation: 1
+  materialType: 1
+  nextMaterial: {fileID: 11400000, guid: d00ccd45e0a962457965c4617055a845, type: 2}

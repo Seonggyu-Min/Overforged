@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolName: TestAnvil
   prefab: {fileID: 5175050888353610647, guid: efe94da8899def46eaf49243d9354d14, type: 3}
-  allowdMaterialTypes: 03000000
-  timeRequiredInSeconds: 1
+  allowdMaterialTypes: 02000000030000000600000007000000
+  timeRequiredInSeconds: 0
+  interactionTime: 0.5
   requiredInteractCount: 5
