@@ -34,6 +34,8 @@ namespace SCR
         public GameObject HoldObject;
         public GameObject Hammer;
         public GameObject Tongs;
+        public List<AudioClip> AudioList { get => audioList; }
+        private List<AudioClip> audioList;
 
 
         [Header("물건 드는 위치")]
@@ -79,6 +81,7 @@ namespace SCR
             walkSfx.clip = sfx.Move;
             walkSfx.loop = true;
             walkSfx.Stop();
+            SetSound();
         }
 
         private void Start()
@@ -182,6 +185,45 @@ namespace SCR
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
                 PhotonNetwork.RaiseEvent(PlayAnimationEventCode, content, raiseEventOptions, SendOptions.SendReliable);
             }
+        }
+
+        private void SetSound()
+        {
+            audioList = new()
+            {
+                SFX.Idle,
+                SFX.Move,
+                SFX.Dash,
+                SFX.Throw,
+                SFX.ChangeState,
+                SFX.Hold,
+                SFX.Put,
+                SFX.Hammering,
+                SFX.CutDown,
+                SFX.ShowOff,
+                SFX.RandonHit()
+            };
+        }
+        [PunRPC]
+        public void PlaySound(Vector3 pos, int audioClip)
+        {
+            AudioSource.transform.position = pos;
+            AudioSource.PlayOneShot(AudioList[audioClip]);
+        }
+
+        public enum CharSFXType
+        {
+            Idle,
+            Move,
+            Dash,
+            Throw,
+            ChangeState,
+            Hold,
+            Put,
+            Hammering,
+            CutDown,
+            ShowOff,
+            Hit
         }
     }
 }
