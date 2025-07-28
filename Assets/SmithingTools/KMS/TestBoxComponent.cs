@@ -19,6 +19,8 @@ public class TestBoxComponent : MonoBehaviour, IInteractableTool
 
     [SerializeField] Canvas UI;
 
+    [SerializeField] Transform hand;
+
 
     void Awake()
     {
@@ -81,7 +83,13 @@ public class TestBoxComponent : MonoBehaviour, IInteractableTool
         HoldingItem.Data = itemdata.list[id];
         if (ore != OreType.None) HoldingItem.Ore = ore;
         if (wood != WoodType.None) HoldingItem.Wood = wood;
-        Transfer(new ToolTransferArgs());
+
+        TestPlayerControl player = GameObject.Find("Player").GetComponent<TestPlayerControl>();
+        Transform hand = player.hand;
+        player.current = HoldingItem;
+        HoldingItem.Go(hand);
+        HoldingItem = null;
+        UI.enabled = false;
     }
 
     public void GenIronOre()

@@ -508,6 +508,8 @@ GameObject:
   - component: {fileID: 215012613}
   - component: {fileID: 215012612}
   - component: {fileID: 215012611}
+  - component: {fileID: 215012617}
+  - component: {fileID: 215012618}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -536,6 +538,7 @@ MonoBehaviour:
   hand: {fileID: 0}
   itemToCreate: {fileID: 0}
   itemPrefab: {fileID: 0}
+  itemPrefabPath: 
 --- !u!54 &215012612
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -650,8 +653,45 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 974746}
+  - {fileID: 1693404171}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &215012617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 215012610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &215012618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 215012610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 088ec307dbe712448be70bf6cb5d2152, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hand: {fileID: 1693404171}
+  current: {fileID: 0}
 --- !u!1 &243499440
 GameObject:
   m_ObjectHideFlags: 0
@@ -2093,6 +2133,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1580980985}
   m_CullTransparentMesh: 1
+--- !u!1 &1693404170
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1693404171}
+  m_Layer: 0
+  m_Name: hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1693404171
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1693404170}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.38}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 215012616}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1700431196
 GameObject:
   m_ObjectHideFlags: 0
@@ -2842,6 +2913,10 @@ PrefabInstance:
       propertyPath: UI
       value: 
       objectReference: {fileID: 251184098}
+    - target: {fileID: 1815469048872465108, guid: 1745c98aa72d7254cbbba3fa8e0eba41, type: 3}
+      propertyPath: hand
+      value: 
+      objectReference: {fileID: 1693404171}
     - target: {fileID: 5356291443787930902, guid: 1745c98aa72d7254cbbba3fa8e0eba41, type: 3}
       propertyPath: m_Name
       value: Box

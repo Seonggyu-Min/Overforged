@@ -8,95 +8,17 @@ using UnityEngine;
 
 public class TestPlayerControl : MonoBehaviourPun
 {
-    private Rigidbody rigid;
 
-    [SerializeField] GameObject item;
-    [SerializeField] GameObject product;
-    [SerializeField] ItemDataList itemList;
+    [SerializeField] public Transform hand;
 
-    [SerializeField] Transform hand;
-
-    private MaterialItem m;
-    private ProductItem p;
-
-    private PhotonView itemPv;
-
-
-    void Awake()
-    {
-        rigid = GetComponent<Rigidbody>();
-    }
-
-
-    // Update is called once per frame
+    public Item current;
     void Update()
     {
-        if (!photonView.IsMine)
+        if (Input.GetKeyDown(KeyCode.P))
         {
-            return;
-        }
-        if (Input.GetKeyDown(KeyCode.F3))
-        {
-            GameObject go = PhotonNetwork.Instantiate("MatItem", Vector3.zero, Quaternion.identity);
-            itemPv = go.GetComponent<PhotonView>();
-            int itemViewId = itemPv.ViewID;
-            photonView.RPC("SetMatItem", RpcTarget.All, itemViewId);
-        }
-        if (Input.GetKeyDown(KeyCode.F4))
-        {
-            itemPv.RPC("Heat", RpcTarget.All);
-            //m.Heat();
-        }
-        if (Input.GetKeyDown(KeyCode.F5))
-        {
-            itemPv.RPC("Cool", RpcTarget.All);
-            //m.Cool();
-        }
-        if (Input.GetKeyDown(KeyCode.F6))
-        {
-            itemPv.RPC("ChangeToNext", RpcTarget.All);
-            //m.ChangeToNext();
+            current.Abandon();
+            current = null;
         }
 
-        if (Input.GetKeyDown(KeyCode.PageUp))
-        {
-            GameObject go = PhotonNetwork.Instantiate("ProductItem", Vector3.zero, Quaternion.identity);
-            itemPv = go.GetComponent<PhotonView>();
-            int itemViewId = itemPv.ViewID;
-            photonView.RPC("SetProdItem", RpcTarget.All, itemViewId);
-        }
-
-    }
-
-    [PunRPC]
-    private void SetMatItem(int itemviewId)
-    {
-
-        PhotonView itemView = PhotonView.Find(itemviewId);
-        if (itemView != null)
-        {
-            itemPv = itemView;
-            m = itemView.GetComponent<MaterialItem>();
-            m.Data = itemList.list[3];
-            m.Ore = OreType.Gold;
-            itemView.transform.SetParent(hand);
-            itemView.transform.position = hand.position;
-        }
-    }
-    [PunRPC]
-    private void SetProdItem(int itemviewId)
-    {
-        
-        PhotonView itemView = PhotonView.Find(itemviewId);
-        if (itemView != null)
-        {
-            itemPv = itemView;
-            p = itemView.GetComponent<ProductItem>();
-            p.Data = itemList.productList[0];
-            p.Ore = OreType.Copper;
-            p.Wood = WoodType.Birch;
-            itemView.transform.SetParent(hand);
-            itemView.transform.position = hand.position;
-        }
     }
 }
