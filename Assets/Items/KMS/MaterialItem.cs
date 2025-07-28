@@ -40,6 +40,9 @@ public class MaterialItem : Item
     private Material CurrentOreMat => matCatalog.OreDict[ore];
     private Material CurrentWoodMat => matCatalog.WoodDict[wood];
 
+    public Color CurrentOreSpriteColor => matCatalog.oreColor[ore];
+    public Color CurrentWoodSpriteColor => matCatalog.woodColor[wood];
+
     private MaterialItemData matData;
 
     public MaterialVariation Variation => matData.materialVariation;

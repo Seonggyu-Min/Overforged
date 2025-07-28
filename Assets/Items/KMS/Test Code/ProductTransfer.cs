@@ -14,6 +14,8 @@ public class ProductTransfer : MonoBehaviour, IInteractableTool
     private OreType ore;
     private WoodType wood;
 
+    private ProductItem item;
+
     [SerializeField] GameObject productItem;
 
     [SerializeField] Canvas UI;
@@ -56,7 +58,7 @@ public class ProductTransfer : MonoBehaviour, IInteractableTool
 
     public bool CanTransferItem(ToolTransferArgs args)
     {
-        return false;
+        return true;
     }
 
     public ToolTransferResult Transfer(ToolTransferArgs args)
@@ -73,9 +75,6 @@ public class ProductTransfer : MonoBehaviour, IInteractableTool
     {
         return true;
     }
-
-
-    //상호작용 시 UI가 켜져있으면 끄고, 꺼져있으면 키고 못움직이도록 해보았습니다.
 
     public ToolWorkResult Work()
     {
@@ -121,7 +120,19 @@ public class ProductTransfer : MonoBehaviour, IInteractableTool
 
         if (prod == ProductType.Bow)
         {
-            
+            HoldingItem.Data = itemdata.Dict["Bow"];
+        }
+        else if (prod == ProductType.Sword)
+        {
+            HoldingItem.Data = itemdata.Dict["Sword"];
+        }
+        else if (prod == ProductType.Axe)
+        {
+            HoldingItem.Data = itemdata.Dict["Axe"];
+        }
+        else if (prod == ProductType.Hammer)
+        {
+            HoldingItem.Data = itemdata.Dict["Hammer"];
         }
         if (ore != OreType.None) HoldingItem.Ore = ore;
         if (wood != WoodType.None) HoldingItem.Wood = wood;
@@ -130,7 +141,6 @@ public class ProductTransfer : MonoBehaviour, IInteractableTool
         Transform hand = player.hand;
         player.current = HoldingItem;
         HoldingItem.Go(hand);
-        HoldingItem = null;
         UI.enabled = false;
     }
 
