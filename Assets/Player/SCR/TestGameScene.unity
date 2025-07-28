@@ -284,23 +284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02183286b6cd1334d949bfe0cbfcbdb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characters:
-  - name: Bunny
-    walkSpeed: 3
-    dashForce: 5
-    workSpeed: 1
-  - name: Cat
-    walkSpeed: 4
-    dashForce: 5
-    workSpeed: 0.8
-  - name: Dog
-    walkSpeed: 4
-    dashForce: 4
-    workSpeed: 1
-  - name: Duck
-    walkSpeed: 3
-    dashForce: 4
-    workSpeed: 1.2
+  characters: {fileID: 11400000, guid: a4be0cfa214185643ad6e9acb6181290, type: 2}
   TeamColor:
   - {r: 0.9843138, g: 0, b: 0, a: 0}
   - {r: 0.9725491, g: 0.5647059, b: 0, a: 0}

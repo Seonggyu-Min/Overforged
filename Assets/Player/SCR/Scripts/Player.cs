@@ -2,15 +2,16 @@ using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace SCR
 {
-    public class Player : MonoBehaviourPun
+    public class Player : MonoBehaviourPun, IPunObservable
     {
         private Rigidbody _rigidbody;
         private Collider _collider;
         private Animator animator;
-        private AudioSource audioSource;
+        [SerializeField] private AudioSource audioSource;
         public Rigidbody Rigidbody { get => _rigidbody; }
         public Collider Collider { get => _collider; }
         public Animator Animator { get => animator; }
@@ -18,12 +19,16 @@ namespace SCR
 
         private PlayerController playerController;
         private PlayerPhysical playerPhysical;
+        [SerializeField] private PlayerSFX sfx;
+        [SerializeField] private AudioSource walkSfx;
+        public AudioSource WalkSfx { get => walkSfx; }
         public PlayerController PlayerController { get => playerController; }
         public PlayerPhysical PlayerPhysical { get => playerPhysical; }
-
+        public PlayerSFX SFX { get => sfx; }
 
         private const byte PlayAnimationEventCode = 1;
 
+        private bool firstTime;
         private int team;
 
         public GameObject HoldObject;
@@ -38,22 +43,76 @@ namespace SCR
         [Header("팀 색상")]
         [SerializeField] private MeshRenderer _renderer;
 
+        [Header("캐릭터 설정")]
+        private int characterNum;
+        [SerializeField] private CharacterInfo character;
+        [SerializeField] private TeamColor teamColor;
+        [SerializeField] private List<MeshRenderer> _bodyrenderer;
+        [SerializeField] private GameObject _normalhead;
+        [SerializeField] private List<GameObject> _head;
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting)
+            {
+                stream.SendNext(characterNum);
+                stream.SendNext(team);
+            }
+            else if (stream.IsReading)
+            {
+                characterNum = (int)stream.ReceiveNext();
+                team = (int)stream.ReceiveNext();
+            }
+
+        }
+
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
             _collider = GetComponent<Collider>();
             animator = GetComponent<Animator>();
-            audioSource = GetComponent<AudioSource>();
             if (photonView.IsMine)
                 playerController = gameObject.AddComponent<PlayerController>();
             playerPhysical = gameObject.AddComponent<PlayerPhysical>();
             PhotonNetwork.NetworkingClient.EventReceived += AnymSyncFun;
+            firstTime = true;
+            walkSfx.clip = sfx.Move;
+            walkSfx.loop = true;
+            walkSfx.Stop();
         }
 
-        public void SetTeam(int team, Color color)
+        private void Start()
+        {
+            if (photonView.IsMine)
+            {
+                if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Character", out object character))
+                {
+                    SetCharacter((int)character);
+                }
+                if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Team", out object team))
+                {
+                    SetTeam((int)team);
+                }
+            }
+
+        }
+
+        public void SetTeam(int team)
         {
             this.team = team;
-            _renderer.material.color = color;
+            _renderer.material.color = teamColor.Color[team];
+        }
+
+        public void SetCharacter(int num)
+        {
+            characterNum = num;
+            playerPhysical.SetPhysical(character.characters[num].walkSpeed,
+                                    character.characters[num].dashForce,
+                                    character.characters[num].workSpeed * 0.2f);
+            _normalhead.SetActive(false);
+            _head[num].SetActive(true);
+            foreach (Renderer renderer in _bodyrenderer)
+                renderer.material = character.characters[num].color;
         }
 
         public void FixedUpdate()
@@ -69,11 +128,16 @@ namespace SCR
 
         }
 
-        public void SetCharacter(Character character)
+        public void Update()
         {
-            playerPhysical.SetPhysical(character.walkSpeed,
-                                    character.dashForce,
-                                    character.workSpeed);
+            if (firstTime)
+            {
+                if (!photonView.IsMine)
+                {
+                    SetCharacter(characterNum);
+                    SetTeam(team);
+                }
+            }
         }
 
         // 이벤트를 받는다
