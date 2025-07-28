@@ -52,8 +52,9 @@ public class MaterialItem : Item
         }
     }
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         mesh = model.GetComponent<MeshFilter>();
         render = model.GetComponent<MeshRenderer>();
         ore = OreType.None;

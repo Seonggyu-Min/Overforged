@@ -16,7 +16,10 @@ public class Item : MonoBehaviourPun, ICarryable
 
     protected ItemData data;
 
-    public virtual string Name {get;}
+    public virtual string Name { get; }
+
+    private BoxCollider collider;
+    private Rigidbody rigid;
 
 
     //아이템이 참조할 아이템 스크립터블 오브젝트
@@ -29,6 +32,7 @@ public class Item : MonoBehaviourPun, ICarryable
         set
         {
             data = value;
+            model.transform.localScale = data.Scale;
             InitItemData(data);
         }
     }
@@ -36,14 +40,19 @@ public class Item : MonoBehaviourPun, ICarryable
     {
     }
 
-    //아마도 플레이어 측에서 ICarryable 인터페이스를 getcomponent로 가져올 것.
-    // 다만 도구와의 상호작용에서는 그냥 함수를 호출해도 괜찮을 것 같음.
-    // 아무 곳에나 놓였을 경우 Icarryable을 받아와야 할 것 같다.
+    protected virtual void Awake()
+    {
+        collider = GetComponent<BoxCollider>();
+        rigid = GetComponent<Rigidbody>();
+    }
 
     public void Go(Transform otherTrs)
     {
-        transform.position = otherTrs.position;
         transform.SetParent(otherTrs);
+        transform.localPosition = Vector3.zero;
+        collider.isTrigger = true;
+        rigid.useGravity = false;
+        rigid.isKinematic = true;
     }
     public void Come(Transform otherTrs, Transform myTrs)
     {
@@ -53,6 +62,9 @@ public class Item : MonoBehaviourPun, ICarryable
     public void Abandon()
     {
         transform.SetParent(null);
+        collider.isTrigger = false;
+        rigid.useGravity = true;
+        rigid.isKinematic = false;
     }
 
 
