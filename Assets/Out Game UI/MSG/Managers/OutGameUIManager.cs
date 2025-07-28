@@ -157,9 +157,17 @@ namespace MIN
             }
         }
 
-        public void Clear()
+        public UIPanel GetPanel(string panelName)
         {
-            _panelStack.Clear();
+            if (_panels.TryGetValue(panelName, out UIPanel panel))
+            {
+                return panel;
+            }
+            else
+            {
+                Debug.LogError($"패널 이름 '{panelName}'이 등록되어 있지 않습니다.");
+                return null;
+            }
         }
 
         #endregion
