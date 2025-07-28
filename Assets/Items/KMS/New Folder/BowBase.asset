@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 106
   Name: Bow Frame
-  Image: {fileID: 0}
+  Image: {fileID: 21300000, guid: dfdc1a1de9d55384796fa947ca8598a2, type: 3}
   ItemPrefab: {fileID: 3355967116559691914, guid: 7f8af38c43bd414479e801615c520b0f, type: 3}
+  Scale: {x: 1, y: 1, z: 1}
   materialVariation: 0
   materialType: 3
   nextMaterial: {fileID: 0}

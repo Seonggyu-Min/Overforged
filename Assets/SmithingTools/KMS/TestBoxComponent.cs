@@ -76,11 +76,11 @@ public class TestBoxComponent : MonoBehaviour, IInteractableTool
         }
     }
 
-    private void GenerateItem(int id, OreType ore, WoodType wood)
+    private void GenerateItem(MaterialItemData data, OreType ore, WoodType wood)
     {
         GameObject go = Instantiate(matItem);
         HoldingItem = go.GetComponent<MaterialItem>();
-        HoldingItem.Data = itemdata.list[id];
+        HoldingItem.Data = data;
         if (ore != OreType.None) HoldingItem.Ore = ore;
         if (wood != WoodType.None) HoldingItem.Wood = wood;
 
@@ -92,28 +92,9 @@ public class TestBoxComponent : MonoBehaviour, IInteractableTool
         UI.enabled = false;
     }
 
-    public void GenIronOre()
+    public void ButtonClick(BoxButton btn)
     {
-        GenerateItem(3, OreType.Steel, WoodType.None);
-    }
-    public void GenCopperOre()
-    {
-        GenerateItem(3, OreType.Copper, WoodType.None);
-    }
-    public void GenGoldOre()
-    {
-        GenerateItem(3, OreType.Gold, WoodType.None);
-    }
-    public void GenOakWood()
-    {
-        GenerateItem(0, OreType.None, WoodType.Oak);
-    }
-    public void GenBirchWood()
-    {
-        GenerateItem(0, OreType.None, WoodType.Birch);
-    }
-    public void GenString()
-    {
-        GenerateItem(2, OreType.None, WoodType.None);
+        GenerateItem(btn.data, btn.ore, btn.wood);
+
     }
 }

@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 100
   Name: Trash
-  Image: {fileID: 0}
+  Image: {fileID: 21300000, guid: 158daacffc8df5d4593d4c7314bfbcb3, type: 3}
   ItemPrefab: {fileID: 3832049445580987983, guid: 80db561baed58c34da12e9e7ce1a0700, type: 3}
+  Scale: {x: 1, y: 1, z: 1}
   materialVariation: 0
   materialType: 0
   nextMaterial: {fileID: 0}

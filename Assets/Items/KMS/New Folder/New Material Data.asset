@@ -20,3 +20,11 @@ MonoBehaviour:
   None: {fileID: 2100000, guid: 09ec03d8ebc40d74da44769b2aee8ad2, type: 2}
   Birch: {fileID: 2100000, guid: 3e8baab972d90ce47b169ef546b74f4c, type: 2}
   HotMetal: {fileID: 2100000, guid: db9b0a13f32a9ce45b1fff33499c4101, type: 2}
+  colors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 0.6445485, b: 0.4198113, a: 1}
+  - {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
+  - {r: 1, g: 0.6606408, b: 0, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0.5566038, g: 0.40399477, b: 0.20741367, a: 1}
+  - {r: 0.6509434, g: 0.4693363, b: 0.19344072, a: 1}

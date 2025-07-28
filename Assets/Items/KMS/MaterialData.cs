@@ -19,11 +19,16 @@ public class MaterialData : ScriptableObject
 
     public Material HotMetal;
 
+    public List<Color> colors;
+
     public Dictionary<OreType, Material> OreDict;
     public Dictionary<WoodType, Material> WoodDict;
 
     public Dictionary<OreType, string> oreName;
     public Dictionary<WoodType, string> woodName;
+
+    public Dictionary<OreType, Color> oreColor;
+    public Dictionary<WoodType, Color> woodColor;
 
     void OnEnable()
     {
@@ -46,6 +51,19 @@ public class MaterialData : ScriptableObject
         woodName.Add(WoodType.None, "");
         woodName.Add(WoodType.Oak, "Oak ");
         woodName.Add(WoodType.Birch, "Birch ");
+
+        oreColor = new();
+        woodColor = new();
+
+        oreColor.Add(OreType.None, colors[0]);
+        oreColor.Add(OreType.Copper, colors[1]);
+        oreColor.Add(OreType.Steel, colors[2]);
+        oreColor.Add(OreType.Gold, colors[3]);
+        woodColor.Add(WoodType.None, colors[4]);
+        woodColor.Add(WoodType.Oak, colors[5]);
+        woodColor.Add(WoodType.Birch, colors[6]);
+
+        
 
 
     }

@@ -19,6 +19,7 @@ public class ProductItem : Item
         }
         set
         {
+            if (productData.productType == ProductType.Bow) return;
             ore = value;
             SetMetalicMaterial();
         }
