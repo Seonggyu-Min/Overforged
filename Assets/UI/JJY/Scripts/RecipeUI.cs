@@ -19,11 +19,13 @@ namespace JJY
 
         // 현재 이 UI가 표시하고 있는 레시피 데이터
         public RecipeData curRecipe { get; private set; }
+        public int uniqueID;
 
         // 외부에서 레시피 데이터 받아 UI 설정
-        public void Setup(RecipeData recipe)
+        public void Setup(RecipeData recipe, int id)
         {
             curRecipe = recipe;
+            uniqueID = id;
 
             outputImage.sprite = recipe.outputImage;
             recipeNameText.text = recipe.recipeName;

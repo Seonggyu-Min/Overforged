@@ -13,6 +13,7 @@ namespace JJY
         [SerializeField] private List<RecipeData> allRecipes;
         [SerializeField] private Transform recipeUIParent; // 왼쪽 위에 정렬될 위치
         [SerializeField] private GameObject recipeUIPrefab;
+        private int recipeUICounter = 0; // 유니크 ID용 카운터
 
         private List<RecipeUI> curUIs = new();
 
@@ -34,17 +35,18 @@ namespace JJY
         public void SpawnRandomRecipe() // 게임 시작시 호출
         {
             int index = Random.Range(0, allRecipes.Count);
-            photonView.RPC(nameof(RPC_AddRecipe), RpcTarget.AllBuffered, index);
+            int uiId = recipeUICounter++;
+            photonView.RPC(nameof(RPC_AddRecipe), RpcTarget.AllBuffered, index, uiId);
         }
 
         [PunRPC]
-        void RPC_AddRecipe(int index)
+        void RPC_AddRecipe(int index, int uiId)
         {
             RecipeData recipe = allRecipes[index];
             GameObject go = Instantiate(recipeUIPrefab, recipeUIParent);
             RecipeUI ui = go.GetComponent<RecipeUI>();
 
-            ui.Setup(recipe);
+            ui.Setup(recipe, uiId);
             curUIs.Add(ui);
 
             ReorderUI();
@@ -52,20 +54,24 @@ namespace JJY
 
         public void FulfillRecipe(RecipeData targetRecipe) // 출고시 호출
         {
-            photonView.RPC(nameof(RPC_RemoveRecipe), RpcTarget.All, targetRecipe.name);
+            // 중복된 레시피중 하나만 제거하기 위함.
+            RecipeUI targetUI = curUIs.FirstOrDefault(ui => ui.curRecipe == targetRecipe);
+            if (targetUI != null)
+            {
+                photonView.RPC(nameof(RPC_RemoveRecipe), RpcTarget.All, targetUI.uniqueID);
+            }
         }
 
         [PunRPC]
-        void RPC_RemoveRecipe(string recipeName)
+        void RPC_RemoveRecipe(int uiId)
         {
             // 중복된 레시피중 하나만 제거하기 위함.
-            var toRemove = curUIs.FirstOrDefault(ui => ui.curRecipe.recipeName == recipeName);
-            
+            var toRemove = curUIs.FirstOrDefault(ui => ui.uniqueID == uiId);
+
             if (toRemove != null)
             {
                 curUIs.Remove(toRemove);
                 Destroy(toRemove.gameObject);
-
                 ReorderUI();
             }
         }
