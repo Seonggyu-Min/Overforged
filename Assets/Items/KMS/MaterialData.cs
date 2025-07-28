@@ -40,12 +40,12 @@ public class MaterialData : ScriptableObject
         oreName = new();
         woodName = new();
         oreName.Add(OreType.None, "");
-        oreName.Add(OreType.Copper, "Copper");
-        oreName.Add(OreType.Steel, "Steel");
-        oreName.Add(OreType.Gold, "Gold");
+        oreName.Add(OreType.Copper, "Copper ");
+        oreName.Add(OreType.Steel, "Steel ");
+        oreName.Add(OreType.Gold, "Gold ");
         woodName.Add(WoodType.None, "");
-        woodName.Add(WoodType.Oak, "Oak");
-        woodName.Add(WoodType.Birch, "Birch");
+        woodName.Add(WoodType.Oak, "Oak ");
+        woodName.Add(WoodType.Birch, "Birch ");
 
 
     }

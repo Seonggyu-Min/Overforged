@@ -40,7 +40,7 @@ public class ProductItem : Item
     {
         get
         {
-            return $"{matCatalog.woodName[wood]} {matCatalog.oreName[ore]} {data.name}";
+            return $"{matCatalog.woodName[wood]}{matCatalog.oreName[ore]}{data.name}";
         }
     }
 
