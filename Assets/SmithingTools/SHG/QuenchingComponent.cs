@@ -30,9 +30,12 @@ namespace SHG
     Color coolColor;
     [SerializeField]
     Color heatedColor;
-    MeshRenderer meshRenderer;
 
     protected override SmithingTool tool => this.quenchingTool;
+
+    protected override ISmithingToolEffecter effecter => null;
+
+    protected override Transform materialPoint => this.transform;
 
     void BeforeInteract(SmithingTool tool)
     {
@@ -55,10 +58,10 @@ namespace SHG
         this.SetItemUI(tool.HoldingItem);
       }
       if (tool.InteractionToTrigger == SmithingTool.InteractionType.ReceivedItem) {
-        this.meshRenderer.material.color = this.heatedColor;
+        this.highlighter.HighlightColor = this.heatedColor;
       } 
       else if (tool.InteractionToTrigger == SmithingTool.InteractionType.ReturnItem) {
-        this.meshRenderer.material.color = this.normalColor;
+        this.highlighter.HighlightColor = this.normalColor;
       }
     }
 
@@ -73,27 +76,27 @@ namespace SHG
 
     void OnFinished()
     {
-      this.meshRenderer.material.color = this.coolColor;
+      this.highlighter.HighlightColor = this.coolColor;
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-      this.quenchingTool.OnUpdate(Time.deltaTime);
+      base.Update();
       if (this.uiCanvas.enabled) {
         this.tempLabel.text = $"temp: {this.quenchingTool.Temparature}";
         this.itemProgressLabel.text = $"progress: {this.quenchingTool.Progress * 100}%";
       }
     }
 
-    void Awake()
+    protected override void Awake()
     {
+      base.Awake();
       this.quenchingTool = new QuenchingTool(this.quenchingToolData);
       this.quenchingTool.BeforeInteract += this.BeforeInteract;
       this.quenchingTool.AfterInteract += this.AfterInteract;
       this.quenchingTool.OnFinished += this.OnFinished;
       this.uiCanvas.enabled = false;
-      this.meshRenderer = this.GetComponent<MeshRenderer>();
     }
 
   }

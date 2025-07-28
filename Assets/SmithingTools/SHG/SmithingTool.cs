@@ -48,6 +48,7 @@ namespace SHG
       this.RemainingTime -= deltaTime;
       if (this.RemainingTime < 0) {
         this.RemainingInteractionCount -= 1;
+        this.RemainingTime = this.DefaultRequiredTime;
       }
     }
 

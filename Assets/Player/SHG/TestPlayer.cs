@@ -1,3 +1,4 @@
+#define LOCAL_TEST
 using System;
 using System.Collections;
 using UnityEngine;
@@ -47,15 +48,21 @@ namespace SHG
         return ;
       }
       if (this.photonView.IsMine) {
-        //GameObject itemObjct = GameObject.Instantiate(this.itemPrefab); 
-        GameObject itemObject = PhotonNetwork.Instantiate(this.itemPrefabPath, Vector3.zero, Quaternion.identity);
+        GameObject itemObject;
+        #if LOCAL_TEST
+        itemObject = GameObject.Instantiate(this.itemPrefab); 
+        #else   
+        itemObject = PhotonNetwork.Instantiate(this.itemPrefabPath, Vector3.zero, Quaternion.identity);
+        #endif
         MaterialItem item = itemObject.GetComponent<MaterialItem>();
         item.Data = this.itemToCreate;
         item.Ore = OreType.Gold;
         this.GrabItem(item);
+        #if !LOCAL_TEST
         this.photonView.RPC(
           methodName: nameof(CreateItem),
           target: RpcTarget.OthersBuffered);
+        #endif
       }
       else if (this.HoldingItem != null) {
         
@@ -97,6 +104,7 @@ namespace SHG
       this.HoldingItem = item;
       item.transform.SetParent(this.hand);
       item.transform.localPosition = Vector3.zero;
+      #if !LOCAL_TEST
       if (this.photonView.IsMine) {
         this.photonView.RPC(
           methodName: nameof(GrabItemNetwork),
@@ -105,6 +113,7 @@ namespace SHG
           item.photonView.ViewID
           });
       }
+      #endif
     }
 
     [PunRPC]
@@ -197,38 +206,48 @@ namespace SHG
       else {
         this.rb.velocity = Vector2.zero;
       }
-
       if (this.IsTryingGrab() &&
         this.TryFindItem(out Item item)) {
         this.GrabItem(item);
         return ;
       }
-
-      if (this.IsTryingInteract() &&
-        this.TryFindInteratable(out IInteractableTool workTool) &&
-        workTool.CanWork())
-      {
-        this.Work(workTool);
+      if (!this.TryFindInteratable(out IInteractableTool interactable)) {
+        return ;
       }
-      else if (this.IsTryingGrab() &&
-        this.TryFindInteratable(out IInteractableTool transferTool))
-      {
-        ToolTransferArgs args;
-        if (this.HoldingItem is MaterialItem materialItem) {
-          args = new ToolTransferArgs {
-            ItemToGive = materialItem,
-            PlayerNetworkId = 1
-          };
+      ToolTransferArgs transferArgs;
+      if (this.HoldingItem != null && 
+        this.HoldingItem is MaterialItem materialItem) {
+        transferArgs = new ToolTransferArgs {
+          ItemToGive = materialItem,
+          PlayerNetworkId = 1
+        };
+      }
+      else {
+        transferArgs = new ToolTransferArgs { 
+          ItemToGive = null,
+          PlayerNetworkId = 1 
+        };
+      }
+      bool canTransfer = interactable.CanTransferItem(transferArgs);
+
+      if (interactable is SmithingToolComponent smithingTool) {
+        if (smithingTool.CanWork()) {
+          smithingTool.HighlightInstantly(Color.green); 
+        }
+        else if (canTransfer) {
+          smithingTool.HighlightInstantly(Color.blue); 
         }
         else {
-          args = new ToolTransferArgs { 
-            ItemToGive = null,
-            PlayerNetworkId = 1 
-          };
+          smithingTool.HighlightInstantly(Color.yellow);
         }
-        if (transferTool.CanTransferItem(args)) { 
-          this.TransferItem(transferTool, args);
-        }
+      }
+
+      if (this.IsTryingInteract() &&
+        interactable.CanWork()) {
+        this.Work(interactable);
+      }
+      else if (this.IsTryingGrab() && canTransfer) {
+        this.TransferItem(interactable, transferArgs);
       }
     }
 

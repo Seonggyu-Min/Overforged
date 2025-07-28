@@ -47,7 +47,6 @@ namespace SHG
     Color normalColor;
     [SerializeField]
     Color interactColor;
-    MeshRenderer meshRenderer;
 
     List<string> materialNames;
 
@@ -59,6 +58,11 @@ namespace SHG
       }
     }
     protected override SmithingTool tool => this.woodTable;
+
+    protected override ISmithingToolEffecter effecter => null;
+
+    protected override Transform materialPoint => this.transform;
+
     IInteractableTool currentWorkingTool;
 
     public override bool CanTransferItem(ToolTransferArgs args)
@@ -75,15 +79,11 @@ namespace SHG
         }
       }
       else if (this.CurrentWorkingTool != null) {
-        bool canTransfer = this.CurrentWorkingTool.CanTransferItem(args);
-        Debug.Log($"{nameof(CanTransferItem)} {this.CurrentWorkingTool} : {canTransfer}");
-        return (canTransfer);
+        return (this.CurrentWorkingTool.CanTransferItem(args));
       }
       else {
         bool canWoodTableTransfer = this.woodTable.CanTransferItem(args);
-        Debug.Log($"{nameof(CanTransferItem)} {nameof(WoodTable)} : {canWoodTableTransfer}");
         bool canCraftTableTransfer = this.craftTable.CanTransferItem(args);
-        Debug.Log($"{nameof(CanTransferItem)} {nameof(CraftTable)} : {canCraftTableTransfer}");
         return (canWoodTableTransfer || canCraftTableTransfer);
       }
     }
@@ -150,12 +150,7 @@ namespace SHG
     public override bool CanWork()
     {
       if (this.CurrentWorkingTool != null) {
-        bool canWork = this.CurrentWorkingTool.CanWork();
-        Debug.Log($"{nameof(canWork)}: {canWork}");
-        return (canWork);
-      }
-      else {
-        Debug.LogError("No Tool is selected");
+        return (this.CurrentWorkingTool.CanWork());
       }
       return (false);
     }
@@ -198,7 +193,7 @@ namespace SHG
       if (tool.HoldingItem != null) {
         this.SetItemUI(tool.HoldingItem);
         if (tool.InteractionToTrigger == SmithingTool.InteractionType.Work) {
-        this.meshRenderer.material.color = this.interactColor;
+        this.highlighter.HighlightColor = this.interactColor;
         }
       }
       else {
@@ -208,7 +203,7 @@ namespace SHG
 
     void OnWoodTableTriggered(SmithingTool.InteractionType interactionType)
     {
-      this.meshRenderer.material.color = this.normalColor;
+      this.highlighter.HighlightColor = this.normalColor;
     }
 
     void SetItemUI(Item item)
@@ -315,8 +310,9 @@ namespace SHG
       }
     }
 
-    void Awake()
+    protected override void Awake()
     {
+      base.Awake();
       this.woodTable = new WoodTable(this.woodTableData);
       this.woodTable.BeforeInteract += this.BeforeWoodTableInteract;
       this.woodTable.AfterInteract += this.AfterWoodTableInteract;
@@ -328,7 +324,6 @@ namespace SHG
       this.craftTable.OnProductCrafted += this.OnCraftProductCrafted;
       this.craftTable.OnProductRemoved += this.OnCraftProductRemoved;
       this.craftTable.OnCraftableChanged += this.OnCraftableChanged;
-      this.meshRenderer = this.GetComponent<MeshRenderer>();
       this.materialNames = new();
       this.woodTableCanvas.enabled = false;
       this.craftTableCanvas.enabled = false;
@@ -347,12 +342,6 @@ namespace SHG
       if (this.CurrentWorkingTool == this.woodTable) {
         this.woodTable.OnInteractionTriggered?.Invoke(this.tool.InteractionToTrigger);
       }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-      this.woodTable.OnUpdate(Time.deltaTime);
     }
   }
 }

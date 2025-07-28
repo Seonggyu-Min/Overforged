@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using EditorAttributes;
 using TMPro;
 using Void = EditorAttributes.Void;
-using Zenject;
 
 namespace SHG
 {
@@ -14,6 +13,11 @@ namespace SHG
     Anvil anvil;
     [SerializeField]
     SmithingToolData data;
+    [SerializeField]
+    MeshRenderer standRenderer;
+    [SerializeField] [Required]
+    Transform materialPosition;
+
     [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(itemProgressLabel))]
     Void uiGroup;
     [SerializeField] [HideProperty]
@@ -28,9 +32,18 @@ namespace SHG
     Color normalColor;
     [SerializeField]
     Color interactColor;
-    MeshRenderer meshRenderer;
+
+    [SerializeField] [VerticalGroup(10f, true, nameof(sparkPrefab))]
+    Void effecterGroup;
+    [SerializeField] [HideInInspector, Required]
+    GameObject sparkPrefab;
 
     protected override SmithingTool tool => this.anvil;
+    protected override ISmithingToolEffecter effecter => this.anvilEffecter;
+
+    protected override Transform materialPoint => this.materialPosition;
+
+    AnvilEffecter anvilEffecter;
 
     void BeforeInteract(SmithingTool tool)
     {
@@ -56,7 +69,7 @@ namespace SHG
       else if (tool.HoldingItem != null) {
         this.SetItemUI(tool.HoldingItem);
         if (tool.InteractionToTrigger == SmithingTool.InteractionType.Work) {
-          this.meshRenderer.material.color = this.interactColor;
+          this.highlighter.HighlightColor = this.interactColor;
         }
       }
     }
@@ -71,25 +84,32 @@ namespace SHG
       this.itemProgressLabel.text = $"Progress: {this.anvil.Progress * 100}%";
     }
 
-    void Awake()
+    protected override void Awake()
     {
+      this.meshRenderer = this.GetComponent<MeshRenderer>();
+      this.highlighter = new GameObjectHighlighter(
+        new Material[] { this.meshRenderer.material, this.standRenderer.material });
+      this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
+      this.standRenderer.material = this.highlighter.HighlightedMaterials[1];
       this.anvil = new Anvil(this.data);
       this.anvil.BeforeInteract += this.BeforeInteract;
       this.anvil.AfterInteract += this.AfterInteract;
       this.anvil.OnInteractionTriggered += this.OnInteractionTriggered;
+      var sparkPool = new MonoBehaviourPool<SimplePooledObject>(
+        poolSize: 10,
+        prefab: this.sparkPrefab);
+      this.anvilEffecter = new AnvilEffecter(
+        anvil: this.anvil,
+        sparkPool: sparkPool);
       this.uiCanvas.enabled = false;
-      this.meshRenderer = this.GetComponent<MeshRenderer>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-      this.anvil.OnUpdate(Time.deltaTime);
     }
 
     void OnInteractionTriggered(SmithingTool.InteractionType interactionType)
     {
-      this.meshRenderer.material.color = this.normalColor;
+      this.highlighter.HighlightColor = this.normalColor;
+      if (interactionType == SmithingTool.InteractionType.Work) {
+        this.effecter.TriggerWorkEffect();
+      }
     }
   }
 }

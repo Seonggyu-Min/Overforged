@@ -9,7 +9,7 @@ namespace SHG
   {
     INetworkEventHandler networkEventHandler;
 
-    const float MS_TO_SEC = 1f / 60f;
+    const float MS_TO_SEC = 1f / 1000f;
     Dictionary<int, SmithingToolComponent> smithingTools;
 
     public SmithingToolSynchronizer(INetworkEventHandler networkEventHandler)
