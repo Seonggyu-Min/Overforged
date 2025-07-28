@@ -6,7 +6,6 @@ using Void = EditorAttributes.Void;
 
 namespace SHG
 {
-
   public class FurnaceComponent : SmithingToolComponent
   {
     [SerializeField] [Required()]
@@ -14,7 +13,9 @@ namespace SHG
     [SerializeField] 
     Furnace furnace;
     [SerializeField]
-    FurnaceEffecter effecter;
+    FurnaceEffecter furnaceEffecter;
+    protected override ISmithingToolEffecter effecter => this.furnaceEffecter;
+
     [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(itemProgressLabel), nameof(tempLabel))]
     Void uiGroup;
     [SerializeField] [HideInInspector]
@@ -50,7 +51,12 @@ namespace SHG
     [Button]
     void TurnOff()
     {
-      this.furnace.TurnOff();
+      if (this.furnace.IsIgnited) {
+        this.furnace.TurnOff();
+      }
+      if (this.effecter.IsStateOn(ISmithingToolEffecter.State.Working)) {
+        this.effecter.ToggleState(ISmithingToolEffecter.State.Working);
+      }
     }
 
     void BeforeInteract(SmithingTool tool)
@@ -77,7 +83,9 @@ namespace SHG
         this.isIgnited = this.furnace.IsIgnited;
         this.highlighter.HighlightedMaterial.color = this.isIgnited ? 
           this.ignitedColor: this.normalColor;
-        this.effecter.TurnOn();
+        if (this.isIgnited != this.effecter.IsStateOn(ISmithingToolEffecter.State.Working)) {
+          this.effecter.ToggleState(ISmithingToolEffecter.State.Working);
+        }
       } 
     }
 
@@ -100,7 +108,7 @@ namespace SHG
       this.furnace.BeforeInteract += this.BeforeInteract;
       this.furnace.AfterInteract += this.AfterInteract;
       this.furnace.OnFinished += this.OnFinished;
-      this.effecter = new FurnaceEffecter(
+      this.furnaceEffecter = new FurnaceEffecter(
         furnace: this.furnace,
         fireParticle: this.fireParticle,
         sparkParticle: this.sparkParticle);
@@ -111,7 +119,6 @@ namespace SHG
     protected override void Update()
     {
       base.Update();
-      this.effecter.OnUpdate(Time.deltaTime);
       this.tempLabel.text = $"Temp: {this.furnace.Temparature}";
       this.itemProgressLabel.text = $"Progress: {this.furnace.Progress * 100}%";
     }

@@ -58,6 +58,9 @@ namespace SHG
       }
     }
     protected override SmithingTool tool => this.woodTable;
+
+    protected override ISmithingToolEffecter effecter => null;
+
     IInteractableTool currentWorkingTool;
 
     public override bool CanTransferItem(ToolTransferArgs args)

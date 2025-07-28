@@ -4,7 +4,7 @@ using UnityEngine;
 namespace SHG
 {
   [Serializable]
-  public class FurnaceEffecter : ISmithingToolEffecter<Furnace>
+  public class FurnaceEffecter : ISmithingToolEffecter
   {
     static class Constants
     {
@@ -37,16 +37,19 @@ namespace SHG
       this.fireParticleModule = fireParticle.main;
       this.sparkParticle = sparkParticle;
       this.sparkParticleModule = sparkParticle.main;
+      this.EffectStates = new bool[
+        Enum.GetValues(typeof(ISmithingToolEffecter.State)).Length
+      ];
       this.SetFireMagnitude(0f);
     }
 
-    public void TurnOn()
+    void TurnOn()
     {
       this.fireParticle.Play();
       this.sparkParticle.Play();
     }
 
-    public void TurnOff()
+    void TurnOff()
     {
       this.fireParticle.Stop();
       this.sparkParticle.Stop();
@@ -87,19 +90,27 @@ namespace SHG
       this.SetFireMagnitude(this.furnace.NormalizedTemparature);
     }
 
-    public bool IsStateOn(ToolEffectState state)
+    public bool IsStateOn(ISmithingToolEffecter.State state)
     {
       return (this.EffectStates[(int)state]);
     }
 
     public void TriggerWorkEffect()
     {
-
+       
     }
 
-    public void TurnOnState(ToolEffectState newState)
+    public void ToggleState(ISmithingToolEffecter.State state)
     {
-      throw new System.NotImplementedException();
+      this.EffectStates[(int)state] = !this.EffectStates[(int)state];
+      if (state == ISmithingToolEffecter.State.Working) {
+        if (this.EffectStates[(int)state]) {
+          this.TurnOn();
+        }
+        else {
+          this.TurnOff();
+        }
+      }
     }
   }
 }

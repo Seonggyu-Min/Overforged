@@ -5,10 +5,8 @@ using UnityEngine;
 using Zenject;
 using EditorAttributes;
 
-
 namespace SHG
 {
-
   [RequireComponent(typeof(MeshRenderer))]
   public abstract class SmithingToolComponent : MonoBehaviour, IInteractableTool, INetworkSynchronizable, IHighlightable
   {
@@ -43,6 +41,7 @@ namespace SHG
     bool isOwner;
     public Action<SmithingToolComponent, ToolTransferArgs, ToolTransferResult> OnTransfered;
     public Action<SmithingToolComponent, ToolWorkResult> OnWorked;
+    protected abstract ISmithingToolEffecter effecter { get; }
 
     protected virtual void Awake()
     {
@@ -61,6 +60,7 @@ namespace SHG
     {
       this.highlighter.OnUpdate(Time.deltaTime);
       this.tool.OnUpdate(Time.deltaTime);
+      this.effecter.OnUpdate(Time.deltaTime);
     }
 
     public virtual bool CanTransferItem(ToolTransferArgs args)
@@ -81,7 +81,7 @@ namespace SHG
         args.ItemToGive.transform.localPosition = Vector3.up;
       }
       if (this.PlayerNetworkId != args.PlayerNetworkId) {
-        #if UNITY_EDITOR
+        #if UNITY_EDITOR && !LOCAL_TEST
         throw (new ApplicationException($"{this} component is not owned by player"));
         #endif
       }

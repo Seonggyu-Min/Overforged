@@ -33,6 +33,8 @@ namespace SHG
 
     protected override SmithingTool tool => this.quenchingTool;
 
+    protected override ISmithingToolEffecter effecter => null;
+
     void BeforeInteract(SmithingTool tool)
     {
       if (tool != this.quenchingTool) {

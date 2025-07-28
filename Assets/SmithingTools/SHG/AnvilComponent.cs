@@ -28,7 +28,16 @@ namespace SHG
     [SerializeField]
     Color interactColor;
 
+    [SerializeField] [VerticalGroup(10f, true, nameof(sparkPrefab), nameof(sparkPoint))]
+    Void effecterGroup;
+    [SerializeField] [HideInInspector, Required]
+    GameObject sparkPrefab;
+    [SerializeField] [HideInInspector, Required]
+    Transform sparkPoint;
+
     protected override SmithingTool tool => this.anvil;
+    protected override ISmithingToolEffecter effecter => this.anvilEffecter;
+    AnvilEffecter anvilEffecter;
 
     void BeforeInteract(SmithingTool tool)
     {
@@ -76,12 +85,22 @@ namespace SHG
       this.anvil.BeforeInteract += this.BeforeInteract;
       this.anvil.AfterInteract += this.AfterInteract;
       this.anvil.OnInteractionTriggered += this.OnInteractionTriggered;
+      var sparkPool = new MonoBehaviourPool<SimplePooledObject>(
+        poolSize: 10,
+        prefab: this.sparkPrefab);
+      this.anvilEffecter = new AnvilEffecter(
+        anvil: this.anvil,
+        sparkPool: sparkPool,
+        sparkPoint: this.sparkPoint);
       this.uiCanvas.enabled = false;
     }
 
     void OnInteractionTriggered(SmithingTool.InteractionType interactionType)
     {
       this.highlighter.HighlightedMaterial.color = this.normalColor;
+      if (interactionType == SmithingTool.InteractionType.Work) {
+        this.effecter.TriggerWorkEffect();
+      }
     }
   }
 }
