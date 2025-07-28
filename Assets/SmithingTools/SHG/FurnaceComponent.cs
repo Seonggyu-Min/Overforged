@@ -14,6 +14,8 @@ namespace SHG
     Furnace furnace;
     [SerializeField]
     FurnaceEffecter furnaceEffecter;
+    [SerializeField] [Required]
+    Transform materialPosition;
     protected override ISmithingToolEffecter effecter => this.furnaceEffecter;
 
     [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(itemProgressLabel), nameof(tempLabel))]
@@ -40,8 +42,9 @@ namespace SHG
     public Color HightlightColor;
     protected override SmithingTool tool => this.furnace;
 
-    [SerializeField] [VerticalGroup(10f, true, 
-      nameof(fireParticle), nameof(sparkParticle))]
+    protected override Transform materialPoint => this.materialPosition;
+
+    [SerializeField] [VerticalGroup(10f, true, nameof(fireParticle), nameof(sparkParticle))]
     Void effecterGroup;
     [SerializeField] [Required, HideInInspector]
     ParticleSystem fireParticle;
@@ -54,9 +57,9 @@ namespace SHG
       if (this.furnace.IsIgnited) {
         this.furnace.TurnOff();
       }
-      if (this.effecter.IsStateOn(ISmithingToolEffecter.State.Working)) {
-        this.effecter.ToggleState(ISmithingToolEffecter.State.Working);
-      }
+      //if (this.effecter.IsStateOn(ISmithingToolEffecter.State.Working)) {
+      //  this.effecter.ToggleState(ISmithingToolEffecter.State.Working);
+      //}
     }
 
     void BeforeInteract(SmithingTool tool)

@@ -8,16 +8,13 @@ namespace SHG
     public bool[] EffectStates { get; private set; }
     Anvil anvil;
     MonoBehaviourPool<SimplePooledObject> sparkPool;
-    Transform sparkPoint;
 
     public AnvilEffecter( 
       Anvil anvil,
-      MonoBehaviourPool<SimplePooledObject> sparkPool,
-      Transform sparkPoint)
+      MonoBehaviourPool<SimplePooledObject> sparkPool)
     {
       this.anvil = anvil;
       this.sparkPool = sparkPool;
-      this.sparkPoint = sparkPoint;
       this.EffectStates = new bool[
         Enum.GetValues(typeof(ISmithingToolEffecter.State)).Length
       ];
@@ -36,8 +33,8 @@ namespace SHG
     public void TriggerWorkEffect()
     {
       var spark = this.sparkPool.Get();
-      spark.transform.position = this.sparkPoint.position;
-      spark.transform.forward = this.sparkPoint.forward;
+      spark.transform.position = this.anvil.HoldingItem.transform.position;
+      spark.transform.up = this.anvil.HoldingItem.transform.up;
       spark.gameObject.SetActive(true);
     }
 

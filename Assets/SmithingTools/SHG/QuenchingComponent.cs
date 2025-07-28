@@ -35,6 +35,8 @@ namespace SHG
 
     protected override ISmithingToolEffecter effecter => null;
 
+    protected override Transform materialPoint => this.transform;
+
     void BeforeInteract(SmithingTool tool)
     {
       if (tool != this.quenchingTool) {

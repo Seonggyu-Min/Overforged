@@ -61,6 +61,8 @@ namespace SHG
 
     protected override ISmithingToolEffecter effecter => null;
 
+    protected override Transform materialPoint => this.transform;
+
     IInteractableTool currentWorkingTool;
 
     public override bool CanTransferItem(ToolTransferArgs args)

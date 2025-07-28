@@ -32,6 +32,7 @@ namespace SHG
     }
     protected MeshRenderer meshRenderer;
     protected GameObjectHighlighter highlighter;
+    protected abstract Transform materialPoint { get; }
 
     [SerializeField]
     int id;
@@ -78,7 +79,8 @@ namespace SHG
       Debug.Log($"{nameof(Transfer)} result: {result}");
       if (args.ItemToGive != null) {
         args.ItemToGive.transform.SetParent(this.transform);
-        args.ItemToGive.transform.localPosition = Vector3.up;
+        args.ItemToGive.transform.position = this.materialPoint.position;
+        args.ItemToGive.transform.up = this.materialPoint.up;
       }
       if (this.PlayerNetworkId != args.PlayerNetworkId) {
         #if UNITY_EDITOR && !LOCAL_TEST

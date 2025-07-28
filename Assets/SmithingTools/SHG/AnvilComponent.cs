@@ -15,6 +15,8 @@ namespace SHG
     SmithingToolData data;
     [SerializeField]
     MeshRenderer standRenderer;
+    [SerializeField] [Required]
+    Transform materialPosition;
 
     [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(itemProgressLabel))]
     Void uiGroup;
@@ -31,15 +33,16 @@ namespace SHG
     [SerializeField]
     Color interactColor;
 
-    [SerializeField] [VerticalGroup(10f, true, nameof(sparkPrefab), nameof(sparkPoint))]
+    [SerializeField] [VerticalGroup(10f, true, nameof(sparkPrefab))]
     Void effecterGroup;
     [SerializeField] [HideInInspector, Required]
     GameObject sparkPrefab;
-    [SerializeField] [HideInInspector, Required]
-    Transform sparkPoint;
 
     protected override SmithingTool tool => this.anvil;
     protected override ISmithingToolEffecter effecter => this.anvilEffecter;
+
+    protected override Transform materialPoint => this.materialPosition;
+
     AnvilEffecter anvilEffecter;
 
     void BeforeInteract(SmithingTool tool)
@@ -97,8 +100,7 @@ namespace SHG
         prefab: this.sparkPrefab);
       this.anvilEffecter = new AnvilEffecter(
         anvil: this.anvil,
-        sparkPool: sparkPool,
-        sparkPoint: this.sparkPoint);
+        sparkPool: sparkPool);
       this.uiCanvas.enabled = false;
     }
 
