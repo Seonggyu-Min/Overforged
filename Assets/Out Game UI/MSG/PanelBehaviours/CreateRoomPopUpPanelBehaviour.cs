@@ -114,14 +114,26 @@ namespace MIN
                 { CustomPropertyKeys.Password, _isSecretRoom ? _passWordInputField.text : string.Empty }
             };
 
-            RoomOptions roomOptions = new RoomOptions
+            if (_isSecretRoom)
             {
-                MaxPlayers = (byte)_maxPlayerCount,
-                CustomRoomProperties = customProperties,
-                CustomRoomPropertiesForLobby = new string[] { CustomPropertyKeys.IsSecret, CustomPropertyKeys.Password },
-            };
+                RoomOptions roomOptions = new RoomOptions
+                {
+                    MaxPlayers = (byte)_maxPlayerCount,
+                    CustomRoomProperties = customProperties,
+                    CustomRoomPropertiesForLobby = new string[] { CustomPropertyKeys.IsSecret, CustomPropertyKeys.Password },
+                };
 
-            PhotonNetwork.CreateRoom(_roomNameInputField.text, roomOptions);
+                PhotonNetwork.CreateRoom(_roomNameInputField.text, roomOptions);
+            }
+            else
+            {
+                RoomOptions roomOptions = new RoomOptions
+                {
+                    MaxPlayers = (byte)_maxPlayerCount,
+                };
+
+                PhotonNetwork.CreateRoom(_roomNameInputField.text, roomOptions);
+            }
 
             _outGameUIManager.CloseTopPanel();
             _outGameUIManager.Hide("Lobby Panel", () =>
