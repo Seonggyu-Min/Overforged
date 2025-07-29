@@ -22,26 +22,26 @@ namespace JJY
         public int uniqueID;
 
         // 외부에서 레시피 데이터 받아 UI 설정
-        public void Setup(RecipeData recipe, int id)
+        public void Setup(RecipeData recipeData, int id)
         {
-            curRecipe = recipe;
+            curRecipe = recipeData;
             uniqueID = id;
 
-            outputImage.sprite = recipe.outputImage;
-            recipeNameText.text = recipe.recipeName;
+            outputImage.sprite = recipeData.outputImage;
+            recipeNameText.text = recipeData.recipeName;
 
             // ingredientImages는 고정된 슬롯이고,
             // 실제 레시피에 따라 일부만 활성화하거나 끔
             for (int i = 0; i < ingredientImages.Count; i++)
             {
-                if (i < recipe.ingredientImages.Count)
+                if (i < recipeData.ingredientImages.Count)
                 {
-                    ingredientImages[i].sprite = recipe.ingredientImages[i];
-                    ingredientImages[i].enabled = true;
+                    ingredientImages[i].gameObject.SetActive(true);
+                    ingredientImages[i].sprite = recipeData.ingredientImages[i];
                 }
                 else
                 {
-                    ingredientImages[i].enabled = false;
+                    ingredientImages[i].gameObject.SetActive(false);
                 }
             }
         }

@@ -9,14 +9,14 @@ public class ItemDataList : ScriptableObject
 
     public List<ItemData> productList;
 
-    public Dictionary<string, ItemData> Dict;
+    public Dictionary<string, ItemData> ProductDict;
 
     void OnEnable()
     {
-        Dict = new();
-        foreach (ItemData data in list)
+        ProductDict = new();
+        foreach (ItemData data in productList)
         {
-            Dict.Add(data.name, data);
+            ProductDict.Add(data.name, data);
         }
     }
 

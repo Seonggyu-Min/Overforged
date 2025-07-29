@@ -19,6 +19,7 @@ namespace MIN
         public override void OnEnable()
         {
             PhotonNetwork.AddCallbackTarget(this);
+            PhotonNetwork.AutomaticallySyncScene = true;
             Init();
         }
 

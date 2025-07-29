@@ -12,14 +12,16 @@ namespace SHG
   [RequireComponent(typeof(MeshRenderer))]
   public class TableComponent: SmithingToolComponent
   {
-    [SerializeField]
+    [SerializeField] [ReadOnly]
     WoodTable woodTable;
     [SerializeField]
     SmithingToolData woodTableData;
-    [SerializeField]
+    [SerializeField] [ReadOnly]
     CraftTable craftTable;
     [SerializeField]
     CraftTableData craftTableData;
+    [SerializeField] [Required()]
+    Transform materialPosition;
 
     [SerializeField] [VerticalGroup(10f, true, nameof(woodTableCanvas), nameof(woodTableItemImage), nameof(woodTableItemNameLabel), nameof(woodTableItemProgressLabel))]
     Void woodTableGroup;
@@ -48,6 +50,14 @@ namespace SHG
     [SerializeField]
     Color interactColor;
 
+    [SerializeField] [VerticalGroup(10f, true, nameof(sawDustParticle), nameof(confettiParticle))]
+    Void effecterGroup;
+    [SerializeField] [Required(), HideProperty]
+    ParticleSystem sawDustParticle;
+    [SerializeField] [Required(), HideProperty]
+    ParticleSystem confettiParticle;
+    TableEffecter tableEffecter;
+
     List<string> materialNames;
 
     IInteractableTool CurrentWorkingTool
@@ -59,9 +69,9 @@ namespace SHG
     }
     protected override SmithingTool tool => this.woodTable;
 
-    protected override ISmithingToolEffecter effecter => null;
+    protected override ISmithingToolEffecter effecter => this.tableEffecter;
 
-    protected override Transform materialPoint => this.transform;
+    protected override Transform materialPoint => this.materialPosition;
 
     IInteractableTool currentWorkingTool;
 
@@ -128,8 +138,9 @@ namespace SHG
         return (result);
 #if UNITY_EDITOR
         throw (new ApplicationException($"{nameof(TableComponent)} is not able Transfer"));
-        #endif
+        #else
         return ( new ToolTransferResult {} );
+        #endif
       }
     }
 
@@ -159,6 +170,9 @@ namespace SHG
     {
       if (this.CurrentWorkingTool != null) {
         var result = this.CurrentWorkingTool.Work();
+        if (this.CurrentWorkingTool == this.woodTable) {
+          this.tableEffecter.TriggerWorkEffect();
+        }
         Debug.Log($"{nameof(Work)} result: {result}");
         this.OnWorked?.Invoke(this, result);
         return (result);
@@ -166,8 +180,9 @@ namespace SHG
       else {
         #if UNITY_EDITOR
         throw new ApplicationException($"{nameof(TableComponent)} is not workable try ${nameof(CanWork)} first");
-        #endif
+        #else
         return (new ToolWorkResult {});
+        #endif
       }
     }
 
@@ -242,6 +257,7 @@ namespace SHG
     {
       this.craftProductNameLabel.text = craftedProduct.Name; 
       this.craftProductImage.sprite = craftedProduct.Image;
+      this.tableEffecter.TriggerWorkEffect();
     }
 
     void OnCraftProductRemoved(ProductItemData removedProduct)
@@ -324,6 +340,13 @@ namespace SHG
       this.craftTable.OnProductCrafted += this.OnCraftProductCrafted;
       this.craftTable.OnProductRemoved += this.OnCraftProductRemoved;
       this.craftTable.OnCraftableChanged += this.OnCraftableChanged;
+      this.tableEffecter = new TableEffecter(
+        woodTable: this.woodTable,
+        craftTable: this.craftTable,
+        sawDustParticleSystem: this.sawDustParticle,
+        confettiParticleSystem: this.confettiParticle,
+        getCurrentTool: () => this.CurrentWorkingTool
+        );
       this.materialNames = new();
       this.woodTableCanvas.enabled = false;
       this.craftTableCanvas.enabled = false;
@@ -340,7 +363,6 @@ namespace SHG
       this.Work();
       // TODO: handle work trigger
       if (this.CurrentWorkingTool == this.woodTable) {
-        this.woodTable.OnInteractionTriggered?.Invoke(this.tool.InteractionToTrigger);
       }
     }
   }

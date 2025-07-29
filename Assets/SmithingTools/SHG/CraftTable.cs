@@ -99,8 +99,9 @@ namespace SHG
       if (!this.FindCraftable(out Craft craft)) {
         #if UNITY_EDITOR
         throw (new ApplicationException($"{nameof(Work)}is not valid try  {nameof(CanWork)} first"));
-        #endif
+        #else
         return (new ToolWorkResult {});
+        #endif
       }
       this.Product = craft.CreateProduct();
       foreach (var material in this.HoldingMaterials) {
