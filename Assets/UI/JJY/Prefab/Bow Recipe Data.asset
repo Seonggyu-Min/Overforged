@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 709f68de9c8b4044e94137d34fa44690, type: 3}
-  m_Name: New Recipe Data
+  m_Name: Bow Recipe Data
   m_EditorClassIdentifier: 
-  recipeName: Hammer
-  outputImage: {fileID: 21300000, guid: 5c7edad07400e3e40a90961612eac77d, type: 3}
+  recipeName: Bow
+  outputImage: {fileID: 21300000, guid: 43a42ad483167d6b6983e863ee23eb78, type: 3}
   ingredientImages:
-  - {fileID: 21300000, guid: 04912536dbcc17e4cb328f98a0876089, type: 3}
-  - {fileID: 21300000, guid: 478ac4e56cd5ae2409bb6984e3e1d4fe, type: 3}
-  - {fileID: 21300000, guid: 18e5dc7c4d2b2204d9175f6f398f36ad, type: 3}
+  - {fileID: 21300000, guid: c410e3cf9732bd4438b29c6c50d93a5c, type: 3}
+  - {fileID: 21300000, guid: 373dd21e678ca814790543759832a934, type: 3}

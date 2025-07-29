@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using SHG;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.XR;
 
 public class TestBoxComponent : MonoBehaviourPun, IInteractableTool
 {
 
     [SerializeField] ItemDataList itemdata;
 
-    private MaterialItem HoldingItem;
-
-    [SerializeField] GameObject matItem;
-
     [SerializeField] Canvas UI;
 
-    [SerializeField] Transform hand;
+    [SerializeField] Transform up;
 
 
     void Awake()
@@ -32,11 +29,11 @@ public class TestBoxComponent : MonoBehaviourPun, IInteractableTool
     public ToolTransferResult Transfer(ToolTransferArgs args)
     {
         UI.enabled = false;
-        var item = HoldingItem;
-        this.HoldingItem = null;
+        //var item = HoldingItem;
+        //this.HoldingItem = null;
         return (new ToolTransferResult
         {
-            ReceivedItem = item,
+            //ReceivedItem = item,
             IsDone = true
         });
     }
@@ -71,20 +68,18 @@ public class TestBoxComponent : MonoBehaviourPun, IInteractableTool
             });
         }
     }
-    [PunRPC]
     private void GenerateItem(MaterialItemData data, OreType ore, WoodType wood)
     {
-        GameObject go = Instantiate(matItem);
-        HoldingItem = go.GetComponent<MaterialItem>();
-        HoldingItem.Data = data;
-        if (ore != OreType.None) HoldingItem.Ore = ore;
-        if (wood != WoodType.None) HoldingItem.Wood = wood;
+        GameObject go = PhotonNetwork.Instantiate("matItem", up.position, Quaternion.identity);
+        PhotonView itemPv = go.GetComponent<PhotonView>();
+        int itemViewId = itemPv.ViewID;
+        photonView.RPC("SetupItem", RpcTarget.All, data, ore, wood);
 
-        TestPlayerControl player = GameObject.Find("Player").GetComponent<TestPlayerControl>();
-        Transform hand = player.hand;
-        player.current = HoldingItem;
-        HoldingItem.Go(hand);
-        HoldingItem = null;
+        //TestPlayerControl player = GameObject.Find("Player").GetComponent<TestPlayerControl>();
+        //Transform hand = player.hand;
+        //player.current = HoldingItem;
+        //HoldingItem.Go(hand);
+        //HoldingItem = null;
         //UI.enabled = false;
     }
 
@@ -92,6 +87,22 @@ public class TestBoxComponent : MonoBehaviourPun, IInteractableTool
     {
         GenerateItem(btn.data, btn.ore, btn.wood);
         //photonView.RPC("GenerateItem", RpcTarget.All, btn.data, btn.ore, btn.wood);
+
+    }
+
+    [PunRPC]
+
+    public void SetupItem(int id, MaterialItemData data, OreType ore, WoodType wood)
+    {
+        PhotonView p = PhotonView.Find(id);
+        if (p != null)
+        {
+            MaterialItem HoldingItem = p.GetComponent<MaterialItem>();
+            HoldingItem.Data = data;
+            if (ore != OreType.None) HoldingItem.Ore = ore;
+            if (wood != WoodType.None) HoldingItem.Wood = wood;
+
+        }
 
     }
 }
