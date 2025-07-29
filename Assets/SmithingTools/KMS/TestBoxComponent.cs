@@ -7,13 +7,14 @@ using UnityEngine.XR;
 
 public class TestBoxComponent : MonoBehaviourPun, IInteractableTool
 {
+    [SerializeField] MaterialItemData data;
+    [SerializeField] OreType ore;
+    [SerializeField] WoodType wood;
 
+    [Header("설정 불필요 임시값")]
     [SerializeField] ItemDataList itemdata;
 
     private MaterialItem HoldingItem;
-
-    [SerializeField] GameObject matItem;
-    [SerializeField] MaterialItemData data1;
 
     [SerializeField] Canvas UI;
 
@@ -92,9 +93,9 @@ public class TestBoxComponent : MonoBehaviourPun, IInteractableTool
     {
         GameObject item = PhotonNetwork.Instantiate("MatItem", transform.position, Quaternion.identity);
         HoldingItem = item.GetComponent<MaterialItem>();
-        HoldingItem.Data = data1;
-        HoldingItem.Ore = OreType.Steel;
-        HoldingItem.Wood = WoodType.None;
+        HoldingItem.Data = data;
+        HoldingItem.Ore = ore;
+        HoldingItem.Wood = wood;
         return item;
     }
 
