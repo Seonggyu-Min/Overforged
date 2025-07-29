@@ -36,12 +36,12 @@ namespace JJY
             {
                 if (i < recipeData.ingredientImages.Count)
                 {
-                    ingredientImages[i].enabled = true;
+                    ingredientImages[i].gameObject.SetActive(true);
                     ingredientImages[i].sprite = recipeData.ingredientImages[i];
                 }
                 else
                 {
-                    ingredientImages[i].enabled = false;
+                    ingredientImages[i].gameObject.SetActive(false);
                 }
             }
         }
