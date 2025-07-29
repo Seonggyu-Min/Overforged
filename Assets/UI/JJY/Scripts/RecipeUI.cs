@@ -21,17 +21,19 @@ namespace JJY
         public RecipeData curRecipe { get; private set; }
         public int uniqueID;
 
-        public ProductItemData curProduct;
+        public CraftData curCraft;
         public WoodType curWood;
         public OreType curOre;
         public MaterialData matData;
 
+        private ProductItemData curProduct => curCraft.ProductItemData;
+
         // 외부에서 레시피 데이터 받아 UI 설정
-        public void Setup(ProductItemData itemdata, WoodType wood, OreType ore, int id)
+        public void Setup(CraftData craftdata, WoodType wood, OreType ore, int id)
         {
             RecipeData recipeData = null; // 컴파일 에러 제거용 코드
             //curRecipe = recipeData;
-            curProduct = itemdata;
+            curCraft = craftdata;
             curWood = wood;
             curOre = ore;
             uniqueID = id;
@@ -54,10 +56,10 @@ namespace JJY
                 //     ingredientImages[i].gameObject.SetActive(false);
                 // }
 
-                if (i < curProduct.MaterialList.Count)
+                if (i < curCraft.Materials.Length)
                 {
                     ingredientImages[i].gameObject.SetActive(true);
-                    ingredientImages[i].sprite = curProduct.MaterialList[i].Image;
+                    ingredientImages[i].sprite = curCraft.Materials[i].Image;
                     // i번째 이미지의 색은 matType마다 색이 바뀌어야함.
                     // i번째칸 이미지가 어떤 재료인지 비교.
                 }

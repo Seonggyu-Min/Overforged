@@ -9,6 +9,8 @@ public class ItemDataList : ScriptableObject
 
     public List<ProductItemData> productList;
 
+    public List<CraftData> craftList;
+
     public Dictionary<string, ProductItemData> ProductDict;
 
     void OnEnable()

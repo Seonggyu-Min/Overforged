@@ -39,7 +39,7 @@ namespace JJY
         public void SpawnRandomRecipe() // 게임 시작시 호출
         {
             //int index = Random.Range(0, allRecipes.Count);
-            int p = UnityEngine.Random.Range(0, itemDataList.productList.Count);
+            int p = UnityEngine.Random.Range(0, itemDataList.craftList.Count);
             int o = UnityEngine.Random.Range(1, materialData.ores.Count);
             int w = UnityEngine.Random.Range(1, materialData.woods.Count);
             int uiId = recipeUICounter++;
@@ -50,10 +50,10 @@ namespace JJY
         [PunRPC]
         void RPC_AddRecipe(int p, int o, int w, int uiId) //원래는 (int index, int uiId)
         {
-            ProductItemData prod = itemDataList.productList[p];
+            CraftData prod = itemDataList.craftList[p];
             WoodType wood = materialData.woods[w];
             OreType ore = OreType.None;
-            if (prod.productType != ProductType.Bow)
+            if (prod.ProductItemData.productType != ProductType.Bow)
             {
                 ore = materialData.ores[o];
             }
