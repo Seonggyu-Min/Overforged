@@ -12,12 +12,19 @@ namespace MIN
     public class InGameSceneInstaller : MonoInstaller
     {
         [SerializeField] private GameObject _gameManagerPrefab;
+        [SerializeField] private GameObject _scoreManagerPrefab;
 
         public override void InstallBindings()
         {
             Container.Bind<IGameManager>()
                 .To<GameManager>()
                 .FromComponentInNewPrefab(_gameManagerPrefab)
+                .AsSingle()
+                .NonLazy();
+
+            Container.Bind<IScoreManager>()
+                .To<ScoreManager>()
+                .FromComponentInNewPrefab(_scoreManagerPrefab)
                 .AsSingle()
                 .NonLazy();
         }
