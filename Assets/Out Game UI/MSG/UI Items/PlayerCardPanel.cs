@@ -34,7 +34,13 @@ namespace MIN
 
         #region Unity Methods
 
-        public override void OnEnable() => PhotonNetwork.AddCallbackTarget(this);
+        public override void OnEnable()
+        {
+            PhotonNetwork.AddCallbackTarget(this);
+            ResetCustomProperties();
+            UpdatePlayerCards();
+            UpdateButtonText();
+        }
 
         public override void OnDisable() => PhotonNetwork.RemoveCallbackTarget(this);
 
@@ -238,7 +244,7 @@ namespace MIN
             {
                 if (!usedIds.Contains(id)) // 사용되지 않은 팀 색상 ID만 추가
                 {
-                    available.Add(id); 
+                    available.Add(id);
                 }
             }
 

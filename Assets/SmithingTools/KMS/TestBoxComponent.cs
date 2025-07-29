@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using SHG;
 using UnityEngine;
@@ -70,10 +70,10 @@ public class TestBoxComponent : MonoBehaviourPun, IInteractableTool
     }
     private void GenerateItem(MaterialItemData data, OreType ore, WoodType wood)
     {
-        GameObject go = PhotonNetwork.Instantiate("matItem", up.position, Quaternion.identity);
+        GameObject go = PhotonNetwork.Instantiate("MatItem", up.position, Quaternion.identity);
         PhotonView itemPv = go.GetComponent<PhotonView>();
         int itemViewId = itemPv.ViewID;
-        photonView.RPC("SetupItem", RpcTarget.All, data, ore, wood);
+        photonView.RPC("SetupItem", RpcTarget.All, itemViewId, data, ore, wood);
 
         //TestPlayerControl player = GameObject.Find("Player").GetComponent<TestPlayerControl>();
         //Transform hand = player.hand;

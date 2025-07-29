@@ -2,6 +2,7 @@
 using Firebase.Database;
 using Firebase.Extensions;
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -85,6 +86,18 @@ namespace MIN
                         [$"users/{userId}/nickname"] = _nicknameInputField.text,
                         [$"nicknames/{_nicknameInputField.text}"] = userId
                     };
+
+                    PhotonNetwork.AuthValues = new AuthenticationValues(user.UserId);
+                    Debug.Log($"PhotonNetwork.AuthValues 설정: UserId: {user.UserId}");
+
+                    if (PhotonNetwork.IsConnected)
+                    {
+                        Debug.Log("AuthValues 설정 전에 Photon 네트워크에 이미 연결되어 있습니다.");
+                    }
+                    else
+                    {
+                        Debug.Log("AuthValues 설정 전에 Photon 네트워크에 연결되지 않았습니다.");
+                    }
 
                     db.UpdateChildrenAsync(updates).ContinueWithOnMainThread(setTask =>
                     {

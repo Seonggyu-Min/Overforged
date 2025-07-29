@@ -20,7 +20,7 @@ namespace MIN
 
         private void Start()
         {
-            PhotonNetwork.ConnectUsingSettings();
+            //PhotonNetwork.ConnectUsingSettings();
         }
 
 
