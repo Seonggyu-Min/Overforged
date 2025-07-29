@@ -7,14 +7,16 @@ public class ItemDataList : ScriptableObject
 {
     public List<ItemData> list;
 
-    public List<ItemData> productList;
+    public List<ProductItemData> productList;
 
-    public Dictionary<string, ItemData> ProductDict;
+    public List<CraftData> craftList;
+
+    public Dictionary<string, ProductItemData> ProductDict;
 
     void OnEnable()
     {
         ProductDict = new();
-        foreach (ItemData data in productList)
+        foreach (ProductItemData data in productList)
         {
             ProductDict.Add(data.name, data);
         }

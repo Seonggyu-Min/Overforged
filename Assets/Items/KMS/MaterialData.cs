@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MIN;
 using UnityEngine;
+using System;
 
 [CreateAssetMenu(menuName = "MaterialData")]
 public class MaterialData : ScriptableObject
@@ -29,6 +30,9 @@ public class MaterialData : ScriptableObject
 
     public Dictionary<OreType, Color> oreColor;
     public Dictionary<WoodType, Color> woodColor;
+
+    public List<OreType> ores;
+    public List<WoodType> woods;
 
     void OnEnable()
     {
@@ -63,7 +67,26 @@ public class MaterialData : ScriptableObject
         woodColor.Add(WoodType.Oak, colors[5]);
         woodColor.Add(WoodType.Birch, colors[6]);
 
-        
+        ores = new();
+        woods = new();
+        for (int i = 0; i < int.MaxValue; i++)
+        {
+            if (Enum.IsDefined(typeof(OreType), i))
+            {
+                ores.Add((OreType)i);
+            }
+            else break;
+        }
+        for (int i = 0; i < int.MaxValue; i++)
+        {
+            if (Enum.IsDefined(typeof(WoodType), i))
+            {
+                woods.Add((WoodType)i);
+            }
+            else break;
+        }
+
+
 
 
     }

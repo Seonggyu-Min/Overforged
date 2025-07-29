@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Photon.Pun;
 using UnityEngine;
+using System;
 
 namespace JJY
 {
@@ -16,6 +17,9 @@ namespace JJY
         private int recipeUICounter = 0; // 유니크 ID용 카운터
 
         private List<RecipeUI> curUIs = new();
+
+        [SerializeField] private ItemDataList itemDataList;
+        [SerializeField] private MaterialData materialData;
 
         void Update()
         {
@@ -34,19 +38,31 @@ namespace JJY
 
         public void SpawnRandomRecipe() // 게임 시작시 호출
         {
-            int index = Random.Range(0, allRecipes.Count);
+            //int index = Random.Range(0, allRecipes.Count);
+            int p = UnityEngine.Random.Range(0, itemDataList.craftList.Count);
+            int o = UnityEngine.Random.Range(1, materialData.ores.Count);
+            int w = UnityEngine.Random.Range(1, materialData.woods.Count);
             int uiId = recipeUICounter++;
-            photonView.RPC(nameof(RPC_AddRecipe), RpcTarget.AllBuffered, index, uiId);
+            //photonView.RPC(nameof(RPC_AddRecipe), RpcTarget.AllBuffered, index, uiId);
+            photonView.RPC(nameof(RPC_AddRecipe), RpcTarget.AllBuffered, p, o, w, uiId);
         }
 
         [PunRPC]
-        void RPC_AddRecipe(int index, int uiId)
+        void RPC_AddRecipe(int p, int o, int w, int uiId) //원래는 (int index, int uiId)
         {
-            RecipeData recipe = allRecipes[index];
+            CraftData prod = itemDataList.craftList[p];
+            WoodType wood = materialData.woods[w];
+            OreType ore = OreType.None;
+            if (prod.ProductItemData.productType != ProductType.Bow)
+            {
+                ore = materialData.ores[o];
+            }
+            //RecipeData recipe = allRecipes[index];
             GameObject go = Instantiate(recipeUIPrefab, recipeUIParent);
             RecipeUI ui = go.GetComponent<RecipeUI>();
 
-            ui.Setup(recipe, uiId);
+            //ui.Setup(recipe, uiId);
+            ui.Setup(prod, wood, ore, uiId);
             curUIs.Add(ui);
 
             ReorderUI();
@@ -56,6 +72,18 @@ namespace JJY
         {
             // 중복된 레시피중 하나만 제거하기 위함.
             RecipeUI targetUI = curUIs.FirstOrDefault(ui => ui.curRecipe == targetRecipe);
+            if (targetUI != null)
+            {
+                photonView.RPC(nameof(RPC_RemoveRecipe), RpcTarget.All, targetUI.uniqueID);
+            }
+        }
+
+        public void FulfillRecipe(ProductItemData data, OreType ore, WoodType wood) // 출고시 호출
+        {
+            // 중복된 레시피중 하나만 제거하기 위함.
+            RecipeUI targetUI = curUIs.FirstOrDefault(ui =>
+                ui.curProduct == data && ui.curOre == ore && ui.curWood == wood
+            );
             if (targetUI != null)
             {
                 photonView.RPC(nameof(RPC_RemoveRecipe), RpcTarget.All, targetUI.uniqueID);
