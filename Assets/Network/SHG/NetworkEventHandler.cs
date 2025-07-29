@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
@@ -28,7 +28,7 @@ namespace SHG
       this.codeBySenders = new ();
       this.receiverByCodes = new ();
       PhotonNetwork.AddCallbackTarget(this);
-      this.CheckConnection();
+      //this.CheckConnection();
     }
 
     void INetworkEventHandler.Register<T>(T sender)
@@ -157,7 +157,7 @@ namespace SHG
     {
       Debug.Log("OnConnectedToMaster");
       this.OnNetworkConnected?.Invoke();
-      PhotonNetwork.JoinRandomOrCreateRoom();
+      //PhotonNetwork.JoinRandomOrCreateRoom();
     }
 
     public void OnJoinedRoom()
@@ -205,7 +205,7 @@ namespace SHG
     public void OnCreateRoomFailed(short returnCode, string message)
     {
       Debug.Log(nameof(OnCreateRoomFailed));
-      PhotonNetwork.JoinRoom("Test");
+      //PhotonNetwork.JoinRoom("Test");
     }
 
     public void OnJoinRoomFailed(short returnCode, string message)
