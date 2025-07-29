@@ -147,6 +147,9 @@ namespace SHG
       }
       else {
         Debug.Log("PhotonNetwork IsConnected");
+        if (PhotonNetwork.CurrentRoom != null) {
+          return ;
+        }
         if (!PhotonNetwork.CreateRoom("Test")) {
           PhotonNetwork.JoinRoom("Test");
         }
