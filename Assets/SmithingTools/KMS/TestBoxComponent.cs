@@ -2,13 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using SHG;
 using UnityEngine;
-using EditorAttributes;
-using UnityEngine.UI;
-using TMPro;
-using Void = EditorAttributes.Void;
-using Zenject;
+using Photon.Pun;
 
-public class TestBoxComponent : MonoBehaviour, IInteractableTool
+public class TestBoxComponent : MonoBehaviourPun, IInteractableTool
 {
 
     [SerializeField] ItemDataList itemdata;
@@ -75,7 +71,7 @@ public class TestBoxComponent : MonoBehaviour, IInteractableTool
             });
         }
     }
-
+    [PunRPC]
     private void GenerateItem(MaterialItemData data, OreType ore, WoodType wood)
     {
         GameObject go = Instantiate(matItem);
@@ -95,6 +91,7 @@ public class TestBoxComponent : MonoBehaviour, IInteractableTool
     public void ButtonClick(BoxButton btn)
     {
         GenerateItem(btn.data, btn.ore, btn.wood);
+        //photonView.RPC("GenerateItem", RpcTarget.All, btn.data, btn.ore, btn.wood);
 
     }
 }
