@@ -20,7 +20,7 @@ public class TestBoxComponent : MonoBehaviourPun, IInteractableTool
 
     void Awake()
     {
-        UI.enabled = false;
+        //UI.enabled = false;
     }
 
 
@@ -85,7 +85,7 @@ public class TestBoxComponent : MonoBehaviourPun, IInteractableTool
         player.current = HoldingItem;
         HoldingItem.Go(hand);
         HoldingItem = null;
-        UI.enabled = false;
+        //UI.enabled = false;
     }
 
     public void ButtonClick(BoxButton btn)
