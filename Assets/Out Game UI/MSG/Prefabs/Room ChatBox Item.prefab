@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 1195918999757134245}
   - component: {fileID: 3931316263889124195}
   - component: {fileID: 8543919716289040880}
-  - component: {fileID: 2209342361746313529}
+  - component: {fileID: 1670052735082617552}
   m_Layer: 5
   m_Name: Room ChatBox Item
   m_TagString: Untagged
@@ -211,7 +211,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2209342361746313529
+--- !u!114 &1670052735082617552
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -220,7 +220,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5328025863693089219}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8da3c8069d770ea41ab904d2d4b8d8e6, type: 3}
+  m_Script: {fileID: 11500000, guid: e99bf4d44f2aa804c8eafd791ee6c326, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _messageText: {fileID: 7282356083297500232}
