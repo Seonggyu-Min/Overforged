@@ -63,6 +63,11 @@ namespace MIN
                 return;
             }
 
+            if (_firebaseManager.Auth.CurrentUser != null)
+            {
+                _firebaseManager.Auth.SignOut();
+            }
+
             _firebaseManager.Auth.CreateUserWithEmailAndPasswordAsync(_idInputField.text, _passwordInputField.text)
                 .ContinueWithOnMainThread(task =>
                 {
