@@ -119,6 +119,7 @@ namespace MIN
                 RoomOptions roomOptions = new RoomOptions
                 {
                     MaxPlayers = (byte)_maxPlayerCount,
+                    PublishUserId = true,
                     CustomRoomProperties = customProperties,
                     CustomRoomPropertiesForLobby = new string[] { CustomPropertyKeys.IsSecret, CustomPropertyKeys.Password },
                 };
@@ -130,6 +131,7 @@ namespace MIN
                 RoomOptions roomOptions = new RoomOptions
                 {
                     MaxPlayers = (byte)_maxPlayerCount,
+                    PublishUserId = true
                 };
 
                 PhotonNetwork.CreateRoom(_roomNameInputField.text, roomOptions);
