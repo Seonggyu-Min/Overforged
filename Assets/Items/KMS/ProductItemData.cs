@@ -9,8 +9,6 @@ public class ProductItemData : ItemData
 {
     public ProductType productType;
 
-    public List<MaterialItemData> MaterialList;
-
 
 
 }
