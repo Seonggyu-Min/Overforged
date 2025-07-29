@@ -1,3 +1,4 @@
+using SHG;
 using UnityEngine;
 namespace SCR
 {
@@ -16,7 +17,11 @@ namespace SCR
         public bool IsHold;
         public bool UseTongs;
         private Vector3 centralPos;
-
+        private RaycastHit hitInteractable;
+        public ToolTransferArgs TransferArgs { get => transferArgs; }
+        private ToolTransferArgs transferArgs;
+        public bool CanTransfer { get => canTransfer; }
+        private bool canTransfer;
         void Awake()
         {
             player = GetComponent<Player>();
@@ -31,7 +36,7 @@ namespace SCR
         {
             centralPos = transform.position;
             centralPos.y = 0.2f;
-
+            CheckInteractable();
         }
 
         void FixedUpdate()
@@ -56,6 +61,49 @@ namespace SCR
                 return hit.collider.gameObject;
             }
             return null;
+        }
+
+        private void CheckInteractable()
+        {
+            if (Physics.Raycast(centralPos, transform.forward, out hitInteractable, rayLength, HoldingObjLayer))
+            {
+                if (IsHold)
+                {
+                    Debug.Log(player.HoldObject.GetComponent<MaterialItem>());
+                    Debug.Log(player.HoldObject.GetComponent<MaterialItem>().Variation);
+                    transferArgs = new ToolTransferArgs
+                    {
+                        ItemToGive = player.HoldObject.GetComponent<MaterialItem>(),
+                        PlayerNetworkId = 1
+                    };
+                }
+                else
+                {
+                    transferArgs = new ToolTransferArgs
+                    {
+                        ItemToGive = null,
+                        PlayerNetworkId = 1
+                    };
+                }
+                IInteractableTool interactable = hitInteractable.collider.gameObject.GetComponent<IInteractableTool>();
+                if (interactable == null) return;
+                canTransfer = interactable.CanTransferItem(transferArgs);
+                if (interactable is SmithingToolComponent smithingTool)
+                {
+                    if (smithingTool.CanWork())
+                    {
+                        smithingTool.HighlightInstantly(Color.green);
+                    }
+                    else if (canTransfer)
+                    {
+                        smithingTool.HighlightInstantly(Color.blue);
+                    }
+                    else
+                    {
+                        smithingTool.HighlightInstantly(Color.yellow);
+                    }
+                }
+            }
         }
     }
 }

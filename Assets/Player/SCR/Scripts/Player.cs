@@ -3,6 +3,7 @@ using Photon.Realtime;
 using ExitGames.Client.Photon;
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 namespace SCR
 {
@@ -36,6 +37,8 @@ namespace SCR
         public GameObject Tongs;
         public List<AudioClip> AudioList { get => audioList; }
         private List<AudioClip> audioList;
+
+        public Action Trigger;
 
 
         [Header("물건 드는 위치")]
@@ -86,6 +89,7 @@ namespace SCR
 
         private void Start()
         {
+
             if (photonView.IsMine)
             {
                 if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Character", out object character))
@@ -263,6 +267,11 @@ namespace SCR
 
             HoldObject = null;
             PlayerPhysical.IsHold = false;
+        }
+
+        public void StartTrigger()
+        {
+            Trigger.Invoke();
         }
     }
 }

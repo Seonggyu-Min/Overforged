@@ -16,6 +16,7 @@ public class TestBoxComponent : MonoBehaviour, IInteractableTool
     private MaterialItem HoldingItem;
 
     [SerializeField] GameObject matItem;
+    [SerializeField] MaterialItemData data1;
 
     [SerializeField] Canvas UI;
 
@@ -90,6 +91,16 @@ public class TestBoxComponent : MonoBehaviour, IInteractableTool
         HoldingItem.Go(hand);
         HoldingItem = null;
         UI.enabled = false;
+    }
+
+    public GameObject CreateItem()
+    {
+        GameObject item = PhotonNetwork.Instantiate("MatItem", transform.position, Quaternion.identity);
+        HoldingItem = item.GetComponent<MaterialItem>();
+        HoldingItem.Data = data1;
+        HoldingItem.Ore = OreType.Steel;
+        HoldingItem.Wood = WoodType.None;
+        return item;
     }
 
     public void ButtonClick(BoxButton btn)

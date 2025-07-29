@@ -22,9 +22,15 @@ namespace SCR
         {
             base.OnConnectedToMaster();
             Debug.Log("마스터 연결");
+
             // if (_loadingPanel.activeSelf)
             //     _loadingPanel.SetActive(false);
             // else PhotonNetwork.JoinLobby();
+        }
+
+        public override void OnJoinedRoom()
+        {
+
         }
 
         public override void OnDisconnected(DisconnectCause cause)
