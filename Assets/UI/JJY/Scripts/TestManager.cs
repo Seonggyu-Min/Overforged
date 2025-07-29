@@ -20,13 +20,13 @@ namespace JJY
 
         private const string StartTimeKey = "StartTime";
 
-        void Awake() // 테스트용
-        {
-            PhotonNetwork.ConnectUsingSettings();
-            PhotonNetwork.JoinLobby();
-            PhotonNetwork.JoinOrCreateRoom("TestRoom", new RoomOptions(), TypedLobby.Default);
-            PhotonNetwork.OfflineMode = true;
-        }
+        // void Awake() // 테스트용
+        // {
+        //     PhotonNetwork.ConnectUsingSettings();
+        //     PhotonNetwork.JoinLobby();
+        //     PhotonNetwork.JoinOrCreateRoom("TestRoom", new RoomOptions(), TypedLobby.Default);
+        //     PhotonNetwork.OfflineMode = true;
+        // }
 
         void Start()
         {
