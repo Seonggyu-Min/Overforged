@@ -7,7 +7,6 @@ using EditorAttributes;
 
 namespace SHG
 {
-  [RequireComponent(typeof(MeshRenderer))]
   public abstract class SmithingToolComponent : MonoBehaviour, IInteractableTool, INetworkSynchronizable, IHighlightable
   {
     [Inject]
@@ -49,7 +48,9 @@ namespace SHG
       this.meshRenderer = this.GetComponent<MeshRenderer>();
       this.highlighter = new GameObjectHighlighter(
         new Material[] { this.meshRenderer.material });
-      this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
+      if (this.meshRenderer != null) {
+        this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
+      }
     }
 
     protected virtual void Start()
