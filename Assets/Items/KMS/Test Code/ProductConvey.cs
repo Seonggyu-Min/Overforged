@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using SHG;
 using UnityEngine;
 
-public class ProductTransfer : MonoBehaviour, IInteractableTool
+public class ProductConvey : MonoBehaviour, IInteractableTool
 {
     [SerializeField] ItemDataList itemdata;
 
@@ -27,12 +27,15 @@ public class ProductTransfer : MonoBehaviour, IInteractableTool
 
     void Awake()
     {
-        UI.enabled = false;
+        //UI.enabled = false;
+        datas = new();
+        ores = new();
+        woods = new();
         for (int i = 0; i < int.MaxValue; i++)
         {
             if (Enum.IsDefined(typeof(ProductType), i))
             {
-                datas[i] = (ProductType)i;
+                datas.Add((ProductType)i);
             }
             else break;
         }
@@ -40,7 +43,7 @@ public class ProductTransfer : MonoBehaviour, IInteractableTool
         {
             if (Enum.IsDefined(typeof(OreType), i))
             {
-                ores[i] = (OreType)i;
+                ores.Add((OreType)i);
             }
             else break;
         }
@@ -48,7 +51,7 @@ public class ProductTransfer : MonoBehaviour, IInteractableTool
         {
             if (Enum.IsDefined(typeof(WoodType), i))
             {
-                woods[i] = (WoodType)i;
+                woods.Add((WoodType)i);
             }
             else break;
         }
@@ -69,6 +72,15 @@ public class ProductTransfer : MonoBehaviour, IInteractableTool
             ReceivedItem = null,
             IsDone = true
         });
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Insert))
+        {
+            GenRequest();
+            GenItem();
+        }
     }
 
     public bool CanWork()
@@ -120,19 +132,19 @@ public class ProductTransfer : MonoBehaviour, IInteractableTool
 
         if (prod == ProductType.Bow)
         {
-            HoldingItem.Data = itemdata.Dict["Bow"];
+            HoldingItem.Data = itemdata.ProductDict["Bow"];
         }
         else if (prod == ProductType.Sword)
         {
-            HoldingItem.Data = itemdata.Dict["Sword"];
+            HoldingItem.Data = itemdata.ProductDict["Sword"];
         }
         else if (prod == ProductType.Axe)
         {
-            HoldingItem.Data = itemdata.Dict["Axe"];
+            HoldingItem.Data = itemdata.ProductDict["Axe"];
         }
         else if (prod == ProductType.Hammer)
         {
-            HoldingItem.Data = itemdata.Dict["Hammer"];
+            HoldingItem.Data = itemdata.ProductDict["Hammer"];
         }
         if (ore != OreType.None) HoldingItem.Ore = ore;
         if (wood != WoodType.None) HoldingItem.Wood = wood;
@@ -141,7 +153,7 @@ public class ProductTransfer : MonoBehaviour, IInteractableTool
         Transform hand = player.hand;
         player.current = HoldingItem;
         HoldingItem.Go(hand);
-        UI.enabled = false;
+        //UI.enabled = false;
     }
 
 }
