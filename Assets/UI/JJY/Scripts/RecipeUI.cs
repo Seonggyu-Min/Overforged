@@ -21,10 +21,18 @@ namespace JJY
         public RecipeData curRecipe { get; private set; }
         public int uniqueID;
 
+        public ProductItemData curProduct;
+        public WoodType curWood;
+        public OreType curOre;
+
         // 외부에서 레시피 데이터 받아 UI 설정
-        public void Setup(RecipeData recipeData, int id)
+        public void Setup(ProductItemData itemdata, WoodType wood, OreType ore, int id)
         {
-            curRecipe = recipeData;
+            RecipeData recipeData = null; // 컴파일 에러 제거용 코드
+            //curRecipe = recipeData;
+            curProduct = itemdata;
+            curWood = wood;
+            curOre = ore;
             uniqueID = id;
 
             outputImage.sprite = recipeData.outputImage;
