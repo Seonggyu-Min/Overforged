@@ -95,8 +95,9 @@ namespace SHG
     {
       #if LOCAL_TEST
       return (this.tool.CanWork());
-      #endif
+      #else
       return (this.IsOwner && this.tool.CanWork());
+      #endif
     }
 
     public virtual ToolWorkResult Work()
