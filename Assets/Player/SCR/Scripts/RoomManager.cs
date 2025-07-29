@@ -22,8 +22,8 @@ namespace SCR
         public void StartGame()
         {
             ExitGames.Client.Photon.Hashtable playerProperty = new();
-            playerProperty["Character"] = characterToggle.SelectIndex;
-            playerProperty["Team"] = teamToggle.SelectIndex;
+            playerProperty[MIN.CustomPropertyKeys.CharacterId] = characterToggle.SelectIndex;
+            playerProperty[MIN.CustomPropertyKeys.TeamColor] = teamToggle.SelectIndex;
             PhotonNetwork.LocalPlayer.SetCustomProperties(playerProperty);
             Debug.Log("게임 시작");
             PhotonNetwork.LoadLevel("TestGameScene");
