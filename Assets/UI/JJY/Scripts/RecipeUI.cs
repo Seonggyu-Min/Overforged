@@ -53,11 +53,13 @@ namespace JJY
                 // {
                 //     ingredientImages[i].gameObject.SetActive(false);
                 // }
-                
+
                 if (i < curProduct.MaterialList.Count)
                 {
                     ingredientImages[i].gameObject.SetActive(true);
+                    ingredientImages[i].sprite = curProduct.MaterialList[i].Image;
                     // i번째 이미지의 색은 matType마다 색이 바뀌어야함.
+                    // i번째칸 이미지가 어떤 재료인지 비교.
                 }
                 else
                 {

@@ -404,6 +404,10 @@ MonoBehaviour:
   - {fileID: 1584955793390486867}
   - {fileID: 4973919879159025641}
   uniqueID: 0
+  curProduct: {fileID: 0}
+  curWood: 0
+  curOre: 0
+  matData: {fileID: 11400000, guid: 693c33b29feef914cb892532fd31073c, type: 2}
 --- !u!114 &8700996117860519773
 MonoBehaviour:
   m_ObjectHideFlags: 0

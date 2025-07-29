@@ -18,8 +18,8 @@ namespace JJY
 
         private List<RecipeUI> curUIs = new();
 
-        private ItemDataList itemDataList;
-        private MaterialData materialData;
+        [SerializeField] private ItemDataList itemDataList;
+        [SerializeField] private MaterialData materialData;
 
         void Update()
         {
