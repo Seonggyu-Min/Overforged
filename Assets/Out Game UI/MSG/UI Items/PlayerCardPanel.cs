@@ -37,6 +37,7 @@ namespace MIN
         public override void OnEnable()
         {
             PhotonNetwork.AddCallbackTarget(this);
+            ResetReadyState();
             ResetCustomProperties();
             UpdatePlayerCards();
             UpdateButtonText();
@@ -61,6 +62,7 @@ namespace MIN
 
         public override void OnJoinedRoom()
         {
+            ResetReadyState();
             ResetCustomProperties();
             UpdatePlayerCards();
             UpdateButtonText();
@@ -251,6 +253,18 @@ namespace MIN
             return available.Count > 0
                 ? available[Random.Range(0, available.Count)] // 사용 가능한 색상이 있으면 그 중에서 선택
                 : allIds[Random.Range(0, allIds.Length)]; // 없으면 아무거나 선택
+        }
+
+        private void ResetReadyState()
+        {
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable
+                {
+                    { CustomPropertyKeys.IsReady, false }
+                });
+                _isReady = false;
+            }
         }
     }
 
