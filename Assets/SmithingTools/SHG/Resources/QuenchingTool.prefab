@@ -85,6 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1959091213081595120}
   - component: {fileID: 5737266517484349437}
+  - component: {fileID: 5654440332643020255}
   m_Layer: 0
   m_Name: QuenchingTool
   m_TagString: Untagged
@@ -128,10 +129,11 @@ MonoBehaviour:
   playerId: 0
   isOwner: 0
   quenchingToolData: {fileID: 11400000, guid: 8d824ea5e188b7cba90db22feff39a35, type: 2}
-  materialPosition: {fileID: 0}
+  materialPosition: {fileID: 1435349029254947537}
   toonWater: {fileID: 1141923680203069616}
-  renderer1: {fileID: 4947570114251633377}
-  renderer2: {fileID: 5703918726560903119}
+  renderers:
+  - {fileID: 4947570114251633377}
+  - {fileID: 5703918726560903119}
   uiCanvas: {fileID: 151094787816184286}
   itemImage: {fileID: 5554910898336137912}
   itemNameLabel: {fileID: 2283302489220717909}
@@ -140,6 +142,29 @@ MonoBehaviour:
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   coolColor: {r: 0, g: 0.6812067, b: 1, a: 1}
   heatedColor: {r: 1, g: 0.62747383, b: 0.31851542, a: 1}
+--- !u!136 &5654440332643020255
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 899520042783882077}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Height: 2.81
+  m_Direction: 0
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &1114248185021493504
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,6 +280,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1435349029254947537}
+  - component: {fileID: 7065891792610220782}
   m_Layer: 0
   m_Name: MaterialPoint
   m_TagString: Untagged
@@ -277,6 +303,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1959091213081595120}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &7065891792610220782
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266996052449907624}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1488710743544941277
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,7 +656,7 @@ GameObject:
   - component: {fileID: 8287104233299925194}
   - component: {fileID: 6210475316948556889}
   - component: {fileID: 1141923680203069616}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Water
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -698,9 +747,9 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
+  m_Radius: 0.4
+  m_Height: 0.9
+  m_Direction: 0
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!114 &1141923680203069616
 MonoBehaviour:
@@ -718,14 +767,14 @@ MonoBehaviour:
   tileMaterial2: 1
   splashPS: {fileID: 100000, guid: 0a5d284add1d6404796c829f19daace5, type: 3}
   ripplePS: {fileID: 100000, guid: 76243b047f615d745a30d2006aa693c9, type: 3}
-  currentMultiplier: 0.1
+  currentMultiplier: 0
   _randomizeCurrent: 10
   maxCurrent: 0.5
   waveForce: 0
   waveForceHeight: 0.02
   waveForceSpeed: 0.2
-  autoAddFloat: 1
-  wave: 1
+  autoAddFloat: 0
+  wave: 0
   waveScale: 0
 --- !u!1 &3330755362418347718
 GameObject:

@@ -18,6 +18,8 @@ namespace SHG
     [SerializeField] [Required()]
     ToonWater toonWater;
     [SerializeField] [Required()]
+    ParticleSystem vaporParticle;
+    [SerializeField] [Required()]
     MeshRenderer[] renderers;
     [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(itemProgressLabel), nameof(tempLabel))]
     Void uiGroup;
@@ -112,6 +114,7 @@ namespace SHG
       this.quenchingEffecter = new QuenchingEffecter(
         quenchingTool: this.quenchingTool,
         toonWater: this.toonWater,
+        vaporParticle: this.vaporParticle,
         materialPoint: this.materialPoint
         );
       this.uiCanvas.enabled = false;

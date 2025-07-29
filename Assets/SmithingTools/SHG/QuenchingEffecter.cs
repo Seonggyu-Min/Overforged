@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace SHG
@@ -9,14 +7,17 @@ namespace SHG
     public bool[] EffectStates { get; private set; }
     ToonWater toonWater;
     Transform materialPoint;
+    ParticleSystem vaporParticle;
 
     public QuenchingEffecter(
       QuenchingTool quenchingTool,
       ToonWater toonWater,
+      ParticleSystem vaporParticle,
       Transform materialPoint)
     {
       this.toonWater = toonWater;
       this.materialPoint = materialPoint;
+      this.vaporParticle = vaporParticle;
     }
 
     public bool IsStateOn(ISmithingToolEffecter.State state)
@@ -36,7 +37,9 @@ namespace SHG
 
     public void TriggerWorkEffect()
     {
+      this.vaporParticle.Clear();
       this.toonWater.Splash(this.materialPoint);
+      this.vaporParticle.Play();
     }
   }
 }
