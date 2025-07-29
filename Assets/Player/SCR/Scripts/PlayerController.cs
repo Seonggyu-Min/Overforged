@@ -249,15 +249,11 @@ namespace SCR
         /// <param name="pickUpObject"></param>
         private void PickUpObject(GameObject pickUpObject)
         {
+            if (pickUpObject.transform.parent != null)
+                return;
             if (player.HoldObject == null)
             {
-                player.HoldObject = pickUpObject;
-                player.HoldObject.transform.SetParent(player.HoldingPos);
-                player.HoldObject.transform.localPosition = new Vector3(0, 0, 0);
-                player.HoldObject.transform.rotation = Quaternion.identity;
-                player.HoldObject.GetComponent<Collider>().isTrigger = true;
-                player.HoldObject.GetComponent<Rigidbody>().useGravity = false;
-                player.PlayerPhysical.IsHold = true;
+                photonView.RPC("PickUpObject", RpcTarget.All, pickUpObject.GetComponent<PhotonView>().ViewID);
                 Holding(true);
             }
         }
@@ -269,18 +265,7 @@ namespace SCR
         {
             if (player.HoldObject != null)
             {
-                player.HoldObject.transform.SetParent(null);
-                player.HoldObject.GetComponent<Collider>().isTrigger = false;
-                player.HoldObject.GetComponent<Rigidbody>().useGravity = true;
-                if (isThrow)
-                {
-                    float throwPower = 5f;
-                    if (player.PlayerPhysical.IsDash) throwPower *= 2;
-                    player.HoldObject.GetComponent<Rigidbody>().AddForce(transform.forward * throwPower, ForceMode.Impulse);
-                }
-
-                player.HoldObject = null;
-                player.PlayerPhysical.IsHold = false;
+                photonView.RPC("LayDownObject", RpcTarget.All, isThrow);
                 Holding(false);
             }
         }
