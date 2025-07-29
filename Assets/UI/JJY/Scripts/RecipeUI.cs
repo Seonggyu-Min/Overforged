@@ -26,7 +26,7 @@ namespace JJY
         public OreType curOre;
         public MaterialData matData;
 
-        private ProductItemData curProduct => curCraft.ProductItemData;
+        public ProductItemData curProduct => curCraft.ProductItemData;
 
         // 외부에서 레시피 데이터 받아 UI 설정
         public void Setup(CraftData craftdata, WoodType wood, OreType ore, int id)
@@ -60,6 +60,17 @@ namespace JJY
                 {
                     ingredientImages[i].gameObject.SetActive(true);
                     ingredientImages[i].sprite = curCraft.Materials[i].Image;
+
+                    switch (curCraft.Materials[i].materialType)
+                    {
+                        case MaterialType.Metallic:
+                            ingredientImages[i].color = matData.oreColor[curOre];
+                            break;
+                        case MaterialType.Wooden:
+                            ingredientImages[i].color = matData.woodColor[curWood];
+                            break;
+
+                    }
                     // i번째 이미지의 색은 matType마다 색이 바뀌어야함.
                     // i번째칸 이미지가 어떤 재료인지 비교.
                 }

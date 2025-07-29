@@ -60,7 +60,7 @@ namespace JJY
             //RecipeData recipe = allRecipes[index];
             GameObject go = Instantiate(recipeUIPrefab, recipeUIParent);
             RecipeUI ui = go.GetComponent<RecipeUI>();
-            
+
             //ui.Setup(recipe, uiId);
             ui.Setup(prod, wood, ore, uiId);
             curUIs.Add(ui);
@@ -72,6 +72,18 @@ namespace JJY
         {
             // 중복된 레시피중 하나만 제거하기 위함.
             RecipeUI targetUI = curUIs.FirstOrDefault(ui => ui.curRecipe == targetRecipe);
+            if (targetUI != null)
+            {
+                photonView.RPC(nameof(RPC_RemoveRecipe), RpcTarget.All, targetUI.uniqueID);
+            }
+        }
+
+        public void FulfillRecipe(ProductItemData data, OreType ore, WoodType wood) // 출고시 호출
+        {
+            // 중복된 레시피중 하나만 제거하기 위함.
+            RecipeUI targetUI = curUIs.FirstOrDefault(ui =>
+                ui.curProduct == data && ui.curOre == ore && ui.curWood == wood
+            );
             if (targetUI != null)
             {
                 photonView.RPC(nameof(RPC_RemoveRecipe), RpcTarget.All, targetUI.uniqueID);

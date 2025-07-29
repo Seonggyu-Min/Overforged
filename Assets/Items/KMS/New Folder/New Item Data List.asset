@@ -28,3 +28,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: aa84046d918895e45bfb4031b9b5e383, type: 2}
   - {fileID: 11400000, guid: 2f4fbe1bf4e997643a6c2a17cb3f775e, type: 2}
   - {fileID: 11400000, guid: 21388dec987344a48a43ec980ed23941, type: 2}
+  craftList:
+  - {fileID: 11400000, guid: 84edde7077c3bd242919c73a332533a9, type: 2}
+  - {fileID: 11400000, guid: b95af1da3c773704084b200d561828d4, type: 2}
+  - {fileID: 11400000, guid: dc55dacb50d71c1448ee62aeba505fc9, type: 2}
+  - {fileID: 11400000, guid: 246b6dac82b167b4ea437176195d70ae, type: 2}
