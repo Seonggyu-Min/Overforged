@@ -24,6 +24,7 @@ namespace JJY
         public ProductItemData curProduct;
         public WoodType curWood;
         public OreType curOre;
+        public MaterialData matData;
 
         // 외부에서 레시피 데이터 받아 UI 설정
         public void Setup(ProductItemData itemdata, WoodType wood, OreType ore, int id)
@@ -35,17 +36,28 @@ namespace JJY
             curOre = ore;
             uniqueID = id;
 
-            outputImage.sprite = recipeData.outputImage;
-            recipeNameText.text = recipeData.recipeName;
+            outputImage.sprite = curProduct.Image;
+
+            recipeNameText.text = $"{matData.oreName[curOre]}{matData.woodName[curWood]}{curProduct.Name}";
 
             // ingredientImages는 고정된 슬롯이고,
             // 실제 레시피에 따라 일부만 활성화하거나 끔
             for (int i = 0; i < ingredientImages.Count; i++)
             {
-                if (i < recipeData.ingredientImages.Count)
+                // if (i < recipeData.ingredientImages.Count)
+                // {
+                //     ingredientImages[i].gameObject.SetActive(true);
+                //     ingredientImages[i].sprite = recipeData.ingredientImages[i];
+                // }
+                // else
+                // {
+                //     ingredientImages[i].gameObject.SetActive(false);
+                // }
+                
+                if (i < curProduct.MaterialList.Count)
                 {
                     ingredientImages[i].gameObject.SetActive(true);
-                    ingredientImages[i].sprite = recipeData.ingredientImages[i];
+                    // i번째 이미지의 색은 matType마다 색이 바뀌어야함.
                 }
                 else
                 {
