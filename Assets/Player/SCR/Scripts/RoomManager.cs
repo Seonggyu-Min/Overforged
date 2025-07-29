@@ -14,7 +14,10 @@ namespace SCR
         void Awake()
         {
             StartBtn.onClick.AddListener(StartGame);
+
         }
+
+
 
         public void StartGame()
         {
