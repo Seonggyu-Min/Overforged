@@ -121,6 +121,16 @@ namespace MIN
 
         private void WinPlayer(Player player)
         {
+            if (player.UserId == null)
+            {
+                Debug.Log("player.UserId 가 null");
+            }
+            else
+            {
+                Debug.Log($"player.UserId 가 {player.UserId}");
+            }
+
+
             var statRef = _firebaseManager.Database.RootReference.Child("users")
                 .Child(player.UserId)
                 .Child("stats")
@@ -143,6 +153,16 @@ namespace MIN
 
         private void LosePlayer(Player player)
         {
+            if (player.UserId == null)
+            {
+                Debug.Log("player.UserId 가 null");
+            }
+            else
+            {
+                Debug.Log($"player.UserId 가 {player.UserId}");
+            }
+
+
             var statRef = _firebaseManager.Database.RootReference.Child("users")
                 .Child(player.UserId)
                 .Child("stats")
