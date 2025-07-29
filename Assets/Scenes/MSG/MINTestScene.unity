@@ -8358,9 +8358,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8997b8fc1fc739b498afaf898b714ce9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _messageInputField: {fileID: 702976167}
-  _chatContentParent: {fileID: 1531399762}
-  _chatBoxPrefab: {fileID: 0}
 --- !u!1 &697625048
 GameObject:
   m_ObjectHideFlags: 0
@@ -9140,7 +9137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b576b63010fa4741a5b8c5fb398b0ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _chatBoxPrefab: {fileID: 0}
+  _chatBoxPrefab: {fileID: 5328025863693089219, guid: 092c2d59b06b3fc4ab4aa34e18798fd1, type: 3}
   _messageInputField: {fileID: 1982442612}
   _chatContentParent: {fileID: 881358745}
   _photonView: {fileID: 732246167}
@@ -9282,7 +9279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b3efee3bbc008d40b4d3876dced04f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertyKey: TeamColor
+  propertyKey: Team
   propertyValue: 3
 --- !u!1 &740473347
 GameObject:
@@ -12410,7 +12407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b3efee3bbc008d40b4d3876dced04f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertyKey: TeamColor
+  propertyKey: Team
   propertyValue: 7
 --- !u!1 &972471658
 GameObject:
@@ -14034,7 +14031,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b3efee3bbc008d40b4d3876dced04f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertyKey: TeamColor
+  propertyKey: Team
   propertyValue: 5
 --- !u!1 &1116475332
 GameObject:
@@ -14820,7 +14817,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b3efee3bbc008d40b4d3876dced04f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertyKey: TeamColor
+  propertyKey: Team
   propertyValue: 1
 --- !u!1 &1207929065
 GameObject:
@@ -20693,7 +20690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b3efee3bbc008d40b4d3876dced04f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertyKey: TeamColor
+  propertyKey: Team
   propertyValue: 2
 --- !u!1 &1738487831
 GameObject:
@@ -21984,7 +21981,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b3efee3bbc008d40b4d3876dced04f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertyKey: TeamColor
+  propertyKey: Team
   propertyValue: 4
 --- !u!1 &1852918591
 GameObject:
@@ -24943,7 +24940,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b3efee3bbc008d40b4d3876dced04f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propertyKey: TeamColor
+  propertyKey: Team
   propertyValue: 6
 --- !u!1 &2060598012
 GameObject:
