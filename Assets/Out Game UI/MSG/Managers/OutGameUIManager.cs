@@ -25,13 +25,16 @@ namespace MIN
         private void Start()
         {
             // 로그인 안 되어있으면 로그인 화면
+            // 혹시 _firebaseManager.Auth.CurrentUser == null 이 아닌 상태로 시작할 수 있나?
             if (_firebaseManager.Auth.CurrentUser == null)
             {
+                _panelStack.Clear();
                 ShowAsFirst("Log In Panel");
             }
             // 게임 중이었다가 돌아온 경우
             else if (PhotonNetwork.InRoom)
             {
+                _panelStack.Clear();
                 _panelStack.Push(_panels["Lobby Panel"]); // 로비패널 스택에 넣어 뒤로갈 수 있도록 함
                 ShowAsFirst("Room Panel");
             }
@@ -39,8 +42,24 @@ namespace MIN
             else
             {
                 Debug.LogWarning("로그인되어 있지만 방에 들어가있지 않습니다.");
+                _panelStack.Clear();
                 ShowAsFirst("Lobby Panel");
             }
+
+            // 디버그용
+            //foreach (var panel in _panels)
+            //{
+            //    Debug.Log($"등록된 패널: {panel.Key}");
+            //}
+
+            //UIPanel[] panelArray = _panelStack.ToArray();
+            //Array.Reverse(panelArray); 
+
+            //Debug.Log("현재 패널 스택 상태 (Top → Bottom):");
+            //foreach (var panel in panelArray)
+            //{
+            //    Debug.Log($"- {panel.name}");
+            //}
         }
 
         private void Update()
@@ -92,7 +111,6 @@ namespace MIN
         {
             if (_panels.TryGetValue(key, out UIPanel panel))
             {
-                _panelStack.Clear();
                 panel.gameObject.SetActive(true);
                 _panelStack.Push(panel);
             }
