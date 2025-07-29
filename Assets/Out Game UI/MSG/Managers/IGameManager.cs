@@ -7,7 +7,6 @@ namespace MIN
 {
     public interface IGameManager
     {
-        public void GoToRoom();
-        public void CalculateResult(List<MatchPlayerData> result);
+        public void SetGameEnd();
     }
 }

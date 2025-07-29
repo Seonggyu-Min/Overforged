@@ -10,14 +10,6 @@ using Zenject;
 
 namespace MIN
 {
-    // TODO: 1대1이 아닐 경우, 봇이 존재할 경우 구조를 수정해야됨
-    public class MatchPlayerData
-    {
-        public Player MyPlayer;
-        //public Player OpponentPlayer; // TODO: 추후 전적 보기 등을 위해 여러 필드를 추가할 수 있음
-        public int Score;
-    }
-
     public class GameManager : MonoBehaviour ,IGameManager
     {
         [Inject] IFirebaseManager _firebaseManager;
@@ -29,81 +21,96 @@ namespace MIN
         /// 게임이 끝나고 방으로 되돌아가기 위해 호출하는 메서드.
         /// 마스터 클라이언트만 해당 메서드를 호출해야합니다.
         /// </summary>
-        public void GoToRoom()
+        public void SetGameEnd()
         {
             if (PhotonNetwork.LocalPlayer == PhotonNetwork.MasterClient)
             {
+                CalculateResult();
+
                 PhotonNetwork.CurrentRoom.IsOpen = true;
                 PhotonNetwork.CurrentRoom.IsVisible = true;
                 PhotonNetwork.LoadLevel(0);
             }
+            else
+            {
+                Debug.LogWarning("게임 종료는 마스터 클라이언트만 수행할 수 있습니다.");
+            }
         }
 
         // TODO: 만약 1대1구조가 아니라면, 추후 승패 관련 로직을 수정해야 함.
-
-        /// <summary>
-        /// 게임 결과를 계산하고 승패를 결정 및 저장합니다.
-        /// 마스터 클라이언트만 해당 메서드를 호출해야합니다.
-        /// </summary>
-        /// <param name="result">MatchPlayerData로 플레이어 데이터와 점수를 넘겨 승패를 결정합니다</param>
-        public void CalculateResult(List<MatchPlayerData> result)
+        private void CalculateResult()
         {
-            if (!PhotonNetwork.IsMasterClient)
+            var playerList = PhotonNetwork.PlayerList;
+
+            if (playerList.Length == 0)
             {
-                Debug.LogWarning("마스터 클라이언트만 결과를 계산할 수 있습니다.");
+                Debug.LogWarning("플레이어가 없습니다.");
                 return;
             }
 
-            if (result == null || result.Count == 0)
+            // 점수 딕셔너리 구성
+            Dictionary<Player, int> scores = new();
+
+            foreach (var player in playerList)
             {
-                Debug.LogWarning("플레이어 데이터가 없습니다.");
-                return;
+                int score = 0;
+
+                if (player.CustomProperties.TryGetValue(CustomPropertyKeys.Score, out var value))
+                {
+                    score = (int)value;
+                }
+                else
+                {
+                    score = 0;
+                }
+
+                scores[player] = score;
             }
 
-            int maxScore = result.Max(data => data.Score);
-            var topScorers = result.Where(data => data.Score == maxScore).ToList();
+            int maxScore = scores.Values.Max();
+            var topScorers = scores.Where(pair => pair.Value == maxScore).Select(pair => pair.Key).ToList();
 
+            // 승자가 한 명일 경우
             if (topScorers.Count == 1)
             {
-                // 단독 승자
-                foreach (var data in result)
+                foreach (var pair in scores)
                 {
-                    if (data.Score == maxScore)
+                    if (pair.Key == topScorers[0])
                     {
-                        WinPlayer(data.MyPlayer);
+                        WinPlayer(pair.Key);
                     }
                     else
                     {
-                        LosePlayer(data.MyPlayer);
+                        LosePlayer(pair.Key);
                     }
                 }
             }
-            else if (topScorers.Count > 1 && topScorers.Count < result.Count)
+            // 승자가 여러 명이면서 전부가 아닐 경우
+            else if (topScorers.Count > 1 && topScorers.Count < playerList.Length)
             {
-                // 동점자 다수일 경우 여러 명이 승자
-                foreach (var data in result)
+                foreach (var pair in scores)
                 {
-                    if (data.Score == maxScore)
+                    if (topScorers.Contains(pair.Key))
                     {
-                        WinPlayer(data.MyPlayer);
+                        WinPlayer(pair.Key);
                     }
                     else
                     {
-                        LosePlayer(data.MyPlayer);
+                        LosePlayer(pair.Key);
                     }
                 }
             }
-            else if (topScorers.Count == result.Count)
+            // 승자가 전부일 경우
+            else if (topScorers.Count == playerList.Length)
             {
-                // 모두 동점일 경우
-                foreach (var data in result)
+                foreach (var player in playerList)
                 {
-                    DrawPlayer(data.MyPlayer);
+                    DrawPlayer(player);
                 }
             }
             else
             {
-                Debug.LogWarning("예상치 못한 결과입니다. 플레이어 수와 점수 데이터가 일치하지 않습니다.");
+                Debug.LogWarning("예상치 못한 결과입니다.");
             }
         }
 
