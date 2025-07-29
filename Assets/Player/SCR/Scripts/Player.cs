@@ -1,4 +1,4 @@
-using Photon.Pun;
+﻿using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 using UnityEngine;
@@ -88,11 +88,11 @@ namespace SCR
         {
             if (photonView.IsMine)
             {
-                if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Character", out object character))
+                if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(MIN.CustomPropertyKeys.CharacterId, out object character))
                 {
                     SetCharacter((int)character);
                 }
-                if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Team", out object team))
+                if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(MIN.CustomPropertyKeys.TeamColor, out object team))
                 {
                     SetTeam((int)team);
                 }
