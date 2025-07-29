@@ -135,6 +135,11 @@ namespace MIN
                     yield break;
                 }
 
+                if (PhotonNetwork.InRoom)
+                {
+                    PhotonNetwork.LeaveRoom();
+                }
+
                 PhotonNetwork.JoinLobby();
                 Debug.Log("로비 입장 시도");
 
