@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Photon.Pun;
 using Photon.Realtime;
+using SHG;
+using System;
 
 namespace SCR
 {
@@ -159,15 +161,17 @@ namespace SCR
 
         private void Throw()
         {
-            player.PlayerPhysical.IsHold = false;
+            Holding(false);
             player.SendPlayAnimationEvent(photonView.ViewID, "Throw", "Trigger");
             photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.Throw);
         }
 
 
-        private void Hammering(bool isWood = false)
+        private void Hammering(Action trigger, bool isWood = false)
         {
             player.SendPlayAnimationEvent(photonView.ViewID, "Hammering", "Trigger");
+            player.Trigger = trigger;
+
             if (isWood) photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.CutDown);
 
             else photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.Hammering);
@@ -176,7 +180,8 @@ namespace SCR
 
         private void Tempering()
         {
-            player.PlayerPhysical.IsHold = false;
+            player.HoldObject = null;
+            Holding(false);
             canMove = false;
             player.SendPlayAnimationEvent(photonView.ViewID, "Tempering", "Trigger");
             photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.Put);
@@ -247,9 +252,9 @@ namespace SCR
         /// 물건을 들었을 때의 함수
         /// </summary>
         /// <param name="pickUpObject"></param>
-        private void PickUpObject(GameObject pickUpObject)
+        private void PickUpObject(GameObject pickUpObject, bool isPlayer = true)
         {
-            if (pickUpObject.transform.parent != null)
+            if (pickUpObject.transform.parent != null && isPlayer)
                 return;
             if (player.HoldObject == null)
             {
@@ -307,7 +312,10 @@ namespace SCR
                     {
                         // 해당 오브젝트에 집게로 집을 수 있는 아이템이 있다면
                         // 아이템 들기
-                        PickUpObject(ActionObj/*후에 바꿔야 됨*/);
+                        //PickUpObject(ActionObj/*후에 바꿔야 됨*/);
+
+                        // 아이템 상자라면
+                        PickUpObject(ActionObj.GetComponent<TestBoxComponent>().CreateItem());
                     }
                     else if (ActionObj.CompareTag("Item"))
                     {
@@ -332,7 +340,12 @@ namespace SCR
                     {
                         // 상호 작용 오브젝트가 비어있어 해당 아이템을 넣을 수 있으면 넣기
                         // 용광로일때, 담금질할때
-                        Tempering();
+                        if (player.PlayerPhysical.CanTransfer)
+                        {
+                            ActionObj.GetComponent<SmithingToolComponent>().Transfer(player.PlayerPhysical.TransferArgs);
+                            Tempering();
+                        }
+
                     }
 
                 }
@@ -346,7 +359,24 @@ namespace SCR
                     else if (ActionObj.CompareTag("InteractionObj"))
                     {
                         // 상호 작용 오브젝트에 집게 없이 들 수 있는 아이템이 있다면 먹기
-                        Holding(true);
+                        // 아이템 상자라면
+
+                        if (ActionObj.GetComponent<TestBoxComponent>() != null)
+                            PickUpObject(ActionObj.GetComponent<TestBoxComponent>().CreateItem());
+
+                        else
+                        {
+                            if (player.PlayerPhysical.CanTransfer)
+                            {
+                                var result = ActionObj.GetComponent<SmithingToolComponent>().Transfer(player.PlayerPhysical.TransferArgs);
+                                if (result.ReceivedItem != null)
+                                {
+                                    PickUpObject(result.ReceivedItem.gameObject, false);
+                                }
+
+                            }
+                        }
+
                     }
                     else if (ActionObj.CompareTag("Item"))
                     {
@@ -378,12 +408,20 @@ namespace SCR
 
                 if (player.PlayerPhysical.IsHold)
                 {
-                    // 해당 오브젝트에 아이템을 넣을 수 있으면 넣기
+                    if (player.PlayerPhysical.CanTransfer)
+                    {
+                        ActionObj.GetComponent<SmithingToolComponent>().Transfer(player.PlayerPhysical.TransferArgs);
+                        Tempering();
+                    }
                 }
                 else
                 {
-                    // 모루나 나무 작업대일때 안에 아이템이 있으면 작업
-                    Hammering();
+                    if (ActionObj.GetComponent<SmithingToolComponent>().CanWork())
+                    {
+                        var result = ActionObj.GetComponent<SmithingToolComponent>().Work();
+
+                        Hammering(result.Trigger);
+                    }
                 }
 
             }

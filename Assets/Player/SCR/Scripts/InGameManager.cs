@@ -17,18 +17,18 @@ namespace SCR
         void Start()
         {
             PhotonNetwork.JoinRandomOrCreateRoom();
+
         }
 
         public override void OnCreatedRoom()
         {
+
         }
         public override void OnJoinedRoom()
         {
             Debug.Log("입장 완료");
             PhotonNetwork.LocalPlayer.NickName = $"Player_{PhotonNetwork.LocalPlayer.ActorNumber}";
-
             SpwanPlayer();
-
         }
 
         public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)

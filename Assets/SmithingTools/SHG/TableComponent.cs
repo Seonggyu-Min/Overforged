@@ -49,6 +49,13 @@ namespace SHG
     Color normalColor;
     [SerializeField]
     Color interactColor;
+
+    [SerializeField] [VerticalGroup(10f, true, nameof(sawDustParticle), nameof(confettiParticle))]
+    Void effecterGroup;
+    [SerializeField] [Required(), HideProperty]
+    ParticleSystem sawDustParticle;
+    [SerializeField] [Required(), HideProperty]
+    ParticleSystem confettiParticle;
     TableEffecter tableEffecter;
 
     List<string> materialNames;
@@ -163,6 +170,9 @@ namespace SHG
     {
       if (this.CurrentWorkingTool != null) {
         var result = this.CurrentWorkingTool.Work();
+        if (this.CurrentWorkingTool == this.woodTable) {
+          this.tableEffecter.TriggerWorkEffect();
+        }
         Debug.Log($"{nameof(Work)} result: {result}");
         this.OnWorked?.Invoke(this, result);
         return (result);
@@ -247,6 +257,7 @@ namespace SHG
     {
       this.craftProductNameLabel.text = craftedProduct.Name; 
       this.craftProductImage.sprite = craftedProduct.Image;
+      this.tableEffecter.TriggerWorkEffect();
     }
 
     void OnCraftProductRemoved(ProductItemData removedProduct)
@@ -331,7 +342,10 @@ namespace SHG
       this.craftTable.OnCraftableChanged += this.OnCraftableChanged;
       this.tableEffecter = new TableEffecter(
         woodTable: this.woodTable,
-        craftTable: this.craftTable
+        craftTable: this.craftTable,
+        sawDustParticleSystem: this.sawDustParticle,
+        confettiParticleSystem: this.confettiParticle,
+        getCurrentTool: () => this.CurrentWorkingTool
         );
       this.materialNames = new();
       this.woodTableCanvas.enabled = false;
@@ -349,7 +363,6 @@ namespace SHG
       this.Work();
       // TODO: handle work trigger
       if (this.CurrentWorkingTool == this.woodTable) {
-        this.woodTable.OnInteractionTriggered?.Invoke(this.tool.InteractionToTrigger);
       }
     }
   }

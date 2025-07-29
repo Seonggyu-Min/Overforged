@@ -15,5 +15,6 @@ namespace MIN
         public const string IsReady = "IsReady";
         public const string CharacterId = "CharacterId";
         public const string TeamColor = "TeamColor";
+        public const string Score = "Score";
     }
 }

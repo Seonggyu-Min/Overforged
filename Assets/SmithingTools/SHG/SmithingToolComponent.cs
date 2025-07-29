@@ -1,3 +1,4 @@
+#define LOCAL_TEST
 using System;
 using System.Collections.Generic;
 using UnityEngine;
