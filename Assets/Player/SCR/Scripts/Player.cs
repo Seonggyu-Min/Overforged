@@ -225,5 +225,44 @@ namespace SCR
             ShowOff,
             Hit
         }
+
+
+        /// <summary>
+        /// 물건을 들었을 때의 함수
+        /// </summary>
+        /// <param name="itemId"></param>
+        [PunRPC]
+        private void PickUpObject(int itemId)
+        {
+            PhotonView photonView = PhotonView.Find(itemId);
+            HoldObject = photonView.gameObject;
+            HoldObject.transform.SetParent(HoldingPos);
+            HoldObject.transform.localPosition = new Vector3(0, 0, 0);
+            HoldObject.transform.rotation = Quaternion.identity;
+            HoldObject.GetComponent<Collider>().isTrigger = true;
+            HoldObject.GetComponent<Rigidbody>().useGravity = false;
+            PlayerPhysical.IsHold = true;
+        }
+
+        /// <summary>
+        /// 물건을 내려 놓을 때의 함수
+        /// </summary>
+        /// <param name="isThrow"></param>
+        [PunRPC]
+        private void LayDownObject(bool isThrow = false)
+        {
+            HoldObject.transform.SetParent(null);
+            HoldObject.GetComponent<Collider>().isTrigger = false;
+            HoldObject.GetComponent<Rigidbody>().useGravity = true;
+            if (isThrow)
+            {
+                float throwPower = 5f;
+                if (PlayerPhysical.IsDash) throwPower *= 2;
+                HoldObject.GetComponent<Rigidbody>().AddForce(transform.forward * throwPower, ForceMode.Impulse);
+            }
+
+            HoldObject = null;
+            PlayerPhysical.IsHold = false;
+        }
     }
 }
