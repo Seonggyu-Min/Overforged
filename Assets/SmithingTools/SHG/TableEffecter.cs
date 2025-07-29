@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace SHG
@@ -9,14 +8,23 @@ namespace SHG
     public bool[] EffectStates { get; private set; }
     WoodTable woodTable;
     CraftTable craftTable;
+    Func<IInteractableTool> getCurrentTool;
+    ParticleSystem sawDustParticleSystem;
+    ParticleSystem confettiParticleSystem;
 
     public TableEffecter(
       WoodTable woodTable,
-      CraftTable craftTable
+      CraftTable craftTable,
+      ParticleSystem sawDustParticleSystem,
+      ParticleSystem confettiParticleSystem,
+      Func<IInteractableTool> getCurrentTool
       )
     {
       this.woodTable = woodTable;
       this.craftTable = craftTable;
+      this.sawDustParticleSystem = sawDustParticleSystem;
+      this.confettiParticleSystem = confettiParticleSystem;
+      this.getCurrentTool = getCurrentTool;
     }
 
     public bool IsStateOn(ISmithingToolEffecter.State state)
@@ -37,7 +45,15 @@ namespace SHG
 
     public void TriggerWorkEffect()
     {
-
+      var currentTool = this.getCurrentTool();
+      if (currentTool is WoodTable) {
+        this.sawDustParticleSystem.Clear();
+        this.sawDustParticleSystem.Play();
+      }
+      else if (currentTool is CraftTable) {
+        this.confettiParticleSystem.Clear();
+        this.confettiParticleSystem.Play();
+      }
     }
   }
 }

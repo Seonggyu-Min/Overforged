@@ -654,6 +654,37 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &3475633166124367637
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 368084167923693834}
+  m_Layer: 0
+  m_Name: MaterialPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &368084167923693834
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3475633166124367637}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.673, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6669343098841093151}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3535461838639889697
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,7 +700,7 @@ GameObject:
   - component: {fileID: 4444868604396321427}
   m_Layer: 0
   m_Name: Table
-  m_TagString: Untagged
+  m_TagString: InteractionObj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -682,7 +713,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3535461838639889697}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -3.18, y: 0.32, z: 0.09}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
@@ -693,8 +724,9 @@ Transform:
   - {fileID: 1717708824364431525}
   - {fileID: 5930034547446822129}
   - {fileID: 6080122442326529882}
+  - {fileID: 368084167923693834}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &4745834854665619400
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -762,6 +794,7 @@ MonoBehaviour:
   isOwner: 0
   woodTableData: {fileID: 11400000, guid: a719b1e45263d10b7b3f075007c4e848, type: 2}
   craftTableData: {fileID: 11400000, guid: 8c1d5fe141b4381ec8024c9d999b8ee4, type: 2}
+  materialPosition: {fileID: 368084167923693834}
   woodTableCanvas: {fileID: 3428768252787328339}
   woodTableItemImage: {fileID: 6138413680533257096}
   woodTableItemNameLabel: {fileID: 1393698403935403912}

@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 3670318580000350036}
   - component: {fileID: 5170122967543702602}
   - component: {fileID: 224132458584653056}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Furnace
-  m_TagString: Untagged
+  m_TagString: InteractionObj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 502066291595689796}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -7.7552433, y: 0.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -37,7 +37,7 @@ Transform:
   - {fileID: 6885519255858943588}
   - {fileID: 2307916089002566602}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!33 &541767712711969142
 MeshFilter:
   m_ObjectHideFlags: 0
