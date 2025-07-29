@@ -78,7 +78,7 @@ namespace JJY
             }
         }
 
-        public void FulfillRecipe(ProductItemData data, OreType ore, WoodType wood) // 출고시 호출
+        public bool FulfillRecipe(ProductItemData data, OreType ore, WoodType wood) // 출고시 호출
         {
             // 중복된 레시피중 하나만 제거하기 위함.
             RecipeUI targetUI = curUIs.FirstOrDefault(ui =>
@@ -87,7 +87,9 @@ namespace JJY
             if (targetUI != null)
             {
                 photonView.RPC(nameof(RPC_RemoveRecipe), RpcTarget.All, targetUI.uniqueID);
+                return true;
             }
+            return false;
         }
 
         [PunRPC]

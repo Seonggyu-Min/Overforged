@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 6572213596821784144}
   - component: {fileID: 5006045342018721417}
   - component: {fileID: 6217876595374056910}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Convey
-  m_TagString: Untagged
+  m_TagString: InteractionObj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -118,7 +118,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1792e13d040899647a2097f61092cd7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemdata: {fileID: 11400000, guid: 874ceed52f5c8e74ab16991e45239d6b, type: 2}
-  materialData: {fileID: 11400000, guid: 693c33b29feef914cb892532fd31073c, type: 2}
-  productItem: {fileID: 8520703560508322494, guid: 8d617addb30b5774a9d29681921a49a8, type: 3}
-  UI: {fileID: 0}
+  recipeManager: {fileID: 0}
