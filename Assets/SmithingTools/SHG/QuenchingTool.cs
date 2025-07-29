@@ -50,8 +50,9 @@ namespace SHG
     {
       #if UNITY_EDITOR
       throw (new ApplicationException($"{typeof(QuenchingTool)} is not requrired work"));
-      #endif
+      #else
       return (new ToolWorkResult {});
+      #endif
     }
 
     public override void OnUpdate(float deltaTime)

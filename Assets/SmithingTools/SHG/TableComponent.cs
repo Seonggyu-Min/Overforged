@@ -12,14 +12,16 @@ namespace SHG
   [RequireComponent(typeof(MeshRenderer))]
   public class TableComponent: SmithingToolComponent
   {
-    [SerializeField]
+    [SerializeField] [ReadOnly]
     WoodTable woodTable;
     [SerializeField]
     SmithingToolData woodTableData;
-    [SerializeField]
+    [SerializeField] [ReadOnly]
     CraftTable craftTable;
     [SerializeField]
     CraftTableData craftTableData;
+    [SerializeField] [Required()]
+    Transform materialPosition;
 
     [SerializeField] [VerticalGroup(10f, true, nameof(woodTableCanvas), nameof(woodTableItemImage), nameof(woodTableItemNameLabel), nameof(woodTableItemProgressLabel))]
     Void woodTableGroup;
@@ -47,6 +49,7 @@ namespace SHG
     Color normalColor;
     [SerializeField]
     Color interactColor;
+    TableEffecter tableEffecter;
 
     List<string> materialNames;
 
@@ -59,9 +62,9 @@ namespace SHG
     }
     protected override SmithingTool tool => this.woodTable;
 
-    protected override ISmithingToolEffecter effecter => null;
+    protected override ISmithingToolEffecter effecter => this.tableEffecter;
 
-    protected override Transform materialPoint => this.transform;
+    protected override Transform materialPoint => this.materialPosition;
 
     IInteractableTool currentWorkingTool;
 
@@ -128,8 +131,9 @@ namespace SHG
         return (result);
 #if UNITY_EDITOR
         throw (new ApplicationException($"{nameof(TableComponent)} is not able Transfer"));
-        #endif
+        #else
         return ( new ToolTransferResult {} );
+        #endif
       }
     }
 
@@ -166,8 +170,9 @@ namespace SHG
       else {
         #if UNITY_EDITOR
         throw new ApplicationException($"{nameof(TableComponent)} is not workable try ${nameof(CanWork)} first");
-        #endif
+        #else
         return (new ToolWorkResult {});
+        #endif
       }
     }
 
@@ -324,6 +329,10 @@ namespace SHG
       this.craftTable.OnProductCrafted += this.OnCraftProductCrafted;
       this.craftTable.OnProductRemoved += this.OnCraftProductRemoved;
       this.craftTable.OnCraftableChanged += this.OnCraftableChanged;
+      this.tableEffecter = new TableEffecter(
+        woodTable: this.woodTable,
+        craftTable: this.craftTable
+        );
       this.materialNames = new();
       this.woodTableCanvas.enabled = false;
       this.craftTableCanvas.enabled = false;

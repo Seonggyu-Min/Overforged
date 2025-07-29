@@ -36,8 +36,9 @@ namespace SHG
       if (this.codeBySenders.TryGetValue(sender, out byte code)) {
         #if UNITY_EDITOR
         throw (new ArgumentException($"{sender} is already registered"));
-        #endif
+        #else
         this.receiverByCodes[code] = sender;
+        #endif
       }
       else {
         this.codeBySenders[sender] = this.customCode;
