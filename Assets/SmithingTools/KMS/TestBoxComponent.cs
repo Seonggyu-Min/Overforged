@@ -17,7 +17,7 @@ public class TestBoxComponent : MonoBehaviourPun, IInteractableTool
 
     void Awake()
     {
-        UI.enabled = false;
+        //UI.enabled = false;
     }
 
 
