@@ -4,6 +4,7 @@ namespace SHG
 {
   public class QuenchingEffecter : ISmithingToolEffecter
   {
+
     public bool[] EffectStates { get; private set; }
     ToonWater toonWater;
     Transform materialPoint;
@@ -13,7 +14,8 @@ namespace SHG
       QuenchingTool quenchingTool,
       ToonWater toonWater,
       ParticleSystem vaporParticle,
-      Transform materialPoint)
+      Transform materialPoint
+      )
     {
       this.toonWater = toonWater;
       this.materialPoint = materialPoint;
@@ -27,7 +29,7 @@ namespace SHG
 
     public void OnUpdate(float deltaTime)
     {
-      
+
     }
 
     public void ToggleState(ISmithingToolEffecter.State state)
@@ -38,8 +40,8 @@ namespace SHG
     public void TriggerWorkEffect()
     {
       this.vaporParticle.Clear();
-      this.toonWater.Splash(this.materialPoint);
       this.vaporParticle.Play();
+      this.toonWater.Splash(this.materialPoint);
     }
   }
 }

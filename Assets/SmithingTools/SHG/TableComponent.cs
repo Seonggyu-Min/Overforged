@@ -6,12 +6,15 @@ using UnityEngine.UI;
 using EditorAttributes;
 using TMPro;
 using Void = EditorAttributes.Void;
+using Zenject;
 
 namespace SHG
 {
   [RequireComponent(typeof(MeshRenderer))]
   public class TableComponent: SmithingToolComponent
   {
+    [Inject]
+    IAudioLibrary audioLibrary;
     [SerializeField] [ReadOnly]
     WoodTable woodTable;
     [SerializeField]
@@ -258,6 +261,9 @@ namespace SHG
       this.craftProductNameLabel.text = craftedProduct.Name; 
       this.craftProductImage.sprite = craftedProduct.Image;
       this.tableEffecter.TriggerWorkEffect();
+      this.audioLibrary.PlayRandomSound(
+        soundName: "success",
+        position: this.transform.position);
     }
 
     void OnCraftProductRemoved(ProductItemData removedProduct)

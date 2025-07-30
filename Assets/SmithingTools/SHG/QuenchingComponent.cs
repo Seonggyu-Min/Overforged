@@ -4,11 +4,15 @@ using EditorAttributes;
 using UnityEngine.UI;
 using TMPro;
 using Void = EditorAttributes.Void;
+using Zenject;
 
 namespace SHG
 {
   public class QuenchingComponent : SmithingToolComponent
   {
+
+    [Inject]
+    IAudioLibrary audioLibrary;
     [SerializeField] [Required()]
     SmithingToolData quenchingToolData;
     [SerializeField] 
@@ -68,6 +72,7 @@ namespace SHG
       if (tool.InteractionToTrigger == SmithingTool.InteractionType.ReceivedItem) {
         this.highlighter.HighlightColor = this.heatedColor;
         this.quenchingEffecter.TriggerWorkEffect();
+        this.audioLibrary.PlayRandomSound("quench");
       } 
       else if (tool.InteractionToTrigger == SmithingTool.InteractionType.ReturnItem) {
         this.highlighter.HighlightColor = this.normalColor;
@@ -119,6 +124,5 @@ namespace SHG
         );
       this.uiCanvas.enabled = false;
     }
-
   }
 }
