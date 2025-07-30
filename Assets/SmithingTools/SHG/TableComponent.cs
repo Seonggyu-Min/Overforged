@@ -314,6 +314,9 @@ namespace SHG
 
     void OnCraftProductCrafted(ProductItemData craftedProduct)
     {
+      if (!this.IsOwner && this.craftTable.Product != null) {
+        this.craftTable.Product.Data = craftedProduct;
+      }
       this.craftProductNameLabel.text = craftedProduct.Name;
       this.craftProductImage.sprite = craftedProduct.Image;
       this.tableEffecter.TriggerWorkEffect();
