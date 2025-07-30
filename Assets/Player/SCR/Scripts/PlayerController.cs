@@ -161,7 +161,7 @@ namespace SCR
 
         private void Throw()
         {
-            Holding(false);
+            LayDownObject(true, false);
             player.SendPlayAnimationEvent(photonView.ViewID, "Throw", "Trigger");
             photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.Throw);
         }
@@ -180,7 +180,7 @@ namespace SCR
 
         private void Tempering()
         {
-            LayDownObject(false, false);
+            LayDownObject(false, true);
             canMove = false;
             player.SendPlayAnimationEvent(photonView.ViewID, "Tempering", "Trigger");
             photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.Put);
