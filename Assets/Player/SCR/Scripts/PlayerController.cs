@@ -313,6 +313,8 @@ namespace SCR
                         // 뜨거운 재료 아이템의 경우
                         if (player.PlayerPhysical.CanTransfer)
                         {
+                            if (!ActionObj.GetComponent<SmithingTool>().HoldingItem.IsHot)
+                                return;
                             var result = ActionObj.GetComponent<IInteractableTool>().Transfer(player.PlayerPhysical.TransferArgs);
                             if (result.ReceivedItem != null)
                             {
@@ -376,11 +378,12 @@ namespace SCR
                         {
                             if (player.PlayerPhysical.CanTransfer)
                             {
+                                if (ActionObj.GetComponent<SmithingTool>().HoldingItem.IsHot)
+                                    return;
                                 var result = ActionObj.GetComponent<IInteractableTool>().Transfer(player.PlayerPhysical.TransferArgs);
                                 if (result.ReceivedItem != null)
                                 {
-                                    if (result.ReceivedItem.gameObject.GetComponent<MaterialItem>() != null &&
-                                    !result.ReceivedItem.gameObject.GetComponent<MaterialItem>().IsHot)
+                                    if (result.ReceivedItem.gameObject.GetComponent<MaterialItem>() != null)
                                         PickUpObject(result.ReceivedItem.gameObject, false);
                                 }
 
