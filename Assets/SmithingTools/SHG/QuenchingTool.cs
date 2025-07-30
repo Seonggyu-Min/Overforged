@@ -24,7 +24,7 @@ namespace SHG
       if (args.ItemToGive != null) {
         if (args.ItemToGive is MaterialItem materialItem) {
           if (this.HoldingItem != null) {
-            return (false);
+            return (materialItem.IsHot);
           }
           return (
             Array.IndexOf(
