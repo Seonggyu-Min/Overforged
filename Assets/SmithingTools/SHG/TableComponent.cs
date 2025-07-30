@@ -10,7 +10,7 @@ using Zenject;
 
 namespace SHG
 {
-  [RequireComponent(typeof(MeshRenderer))]
+  [RequireComponent(typeof(MeshRenderer), typeof(Animator))]
   public class TableComponent: SmithingToolComponent
   {
     [Inject]
@@ -53,12 +53,13 @@ namespace SHG
     [SerializeField]
     Color interactColor;
 
-    [SerializeField] [VerticalGroup(10f, true, nameof(sawDustParticle), nameof(confettiParticle))]
+    [SerializeField] [VerticalGroup(10f, true, nameof(sawDustParticle), nameof(confettiParticle), nameof(animator))]
     Void effecterGroup;
     [SerializeField] [Required(), HideProperty]
     ParticleSystem sawDustParticle;
     [SerializeField] [Required(), HideProperty]
     ParticleSystem confettiParticle;
+    Animator animator;
     TableEffecter tableEffecter;
 
     List<string> materialNames;
@@ -175,6 +176,10 @@ namespace SHG
         var result = this.CurrentWorkingTool.Work();
         if (this.CurrentWorkingTool == this.woodTable) {
           this.tableEffecter.TriggerWorkEffect();
+        }
+        else if (this.CurrentWorkingTool == this.craftTable)
+        {
+          this.animator.SetTrigger("Craft");
         }
         Debug.Log($"{nameof(Work)} result: {result}");
         this.OnWorked?.Invoke(this, result);
@@ -356,6 +361,7 @@ namespace SHG
       this.materialNames = new();
       this.woodTableCanvas.enabled = false;
       this.craftTableCanvas.enabled = false;
+      this.animator = this.GetComponent<Animator>();
     }
 
     protected override void HandleNetworkWork(object[] args)
