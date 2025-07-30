@@ -19,6 +19,7 @@ MonoBehaviour:
   interactionTime: 0.5
   requiredInteractCount: 1
   craftList:
-  - {fileID: 11400000, guid: 96dc76a8cabd7c0c1acb9f0e10179170, type: 2}
-  - {fileID: 11400000, guid: babdee263b87a5f389ca560e87dd73ba, type: 2}
-  - {fileID: 11400000, guid: 27eed9f9150b6806d95f6ad07634988c, type: 2}
+  - {fileID: 11400000, guid: b95af1da3c773704084b200d561828d4, type: 2}
+  - {fileID: 11400000, guid: 246b6dac82b167b4ea437176195d70ae, type: 2}
+  - {fileID: 11400000, guid: dc55dacb50d71c1448ee62aeba505fc9, type: 2}
+  - {fileID: 11400000, guid: 84edde7077c3bd242919c73a332533a9, type: 2}

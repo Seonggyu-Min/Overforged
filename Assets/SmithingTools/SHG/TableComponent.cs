@@ -6,12 +6,15 @@ using UnityEngine.UI;
 using EditorAttributes;
 using TMPro;
 using Void = EditorAttributes.Void;
+using Zenject;
 
 namespace SHG
 {
-  [RequireComponent(typeof(MeshRenderer))]
+  [RequireComponent(typeof(MeshRenderer), typeof(Animator))]
   public class TableComponent: SmithingToolComponent
   {
+    [Inject]
+    IAudioLibrary audioLibrary;
     [SerializeField] [ReadOnly]
     WoodTable woodTable;
     [SerializeField]
@@ -50,12 +53,13 @@ namespace SHG
     [SerializeField]
     Color interactColor;
 
-    [SerializeField] [VerticalGroup(10f, true, nameof(sawDustParticle), nameof(confettiParticle))]
+    [SerializeField] [VerticalGroup(10f, true, nameof(sawDustParticle), nameof(confettiParticle), nameof(animator))]
     Void effecterGroup;
     [SerializeField] [Required(), HideProperty]
     ParticleSystem sawDustParticle;
     [SerializeField] [Required(), HideProperty]
     ParticleSystem confettiParticle;
+    Animator animator;
     TableEffecter tableEffecter;
 
     List<string> materialNames;
@@ -173,6 +177,10 @@ namespace SHG
         if (this.CurrentWorkingTool == this.woodTable) {
           this.tableEffecter.TriggerWorkEffect();
         }
+        else if (this.CurrentWorkingTool == this.craftTable)
+        {
+          this.animator.SetTrigger("Craft");
+        }
         Debug.Log($"{nameof(Work)} result: {result}");
         this.OnWorked?.Invoke(this, result);
         return (result);
@@ -258,6 +266,9 @@ namespace SHG
       this.craftProductNameLabel.text = craftedProduct.Name; 
       this.craftProductImage.sprite = craftedProduct.Image;
       this.tableEffecter.TriggerWorkEffect();
+      this.audioLibrary.PlayRandomSound(
+        soundName: "success",
+        position: this.transform.position);
     }
 
     void OnCraftProductRemoved(ProductItemData removedProduct)
@@ -350,6 +361,7 @@ namespace SHG
       this.materialNames = new();
       this.woodTableCanvas.enabled = false;
       this.craftTableCanvas.enabled = false;
+      this.animator = this.GetComponent<Animator>();
     }
 
     protected override void HandleNetworkWork(object[] args)

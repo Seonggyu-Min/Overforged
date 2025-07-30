@@ -4,7 +4,7 @@ using Void = EditorAttributes.Void;
 
 namespace SHG
 {
-  using CraftData = TestCraftData;
+
   [CreateAssetMenu (menuName = "GameData/CraftTableData")]
   public class CraftTableData : SmithingToolData
   {

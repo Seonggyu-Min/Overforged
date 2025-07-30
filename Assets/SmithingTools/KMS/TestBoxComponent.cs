@@ -11,7 +11,7 @@ public class TestBoxComponent : MonoBehaviourPun, IInteractableTool
     [SerializeField] OreType ore;
     [SerializeField] WoodType wood;
 
-    [Header("설정 불필요 임시값")]
+    [Header("legacy")]
     [SerializeField] ItemDataList itemdata;
 
     private MaterialItem HoldingItem;
