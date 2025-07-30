@@ -79,6 +79,14 @@ namespace SHG
     TableEffecter tableEffecter;
 
     List<string> materialNames;
+    public override Item HoldingItem {
+      get {
+        if (this.woodTable.HoldingItem != null) {
+          return (this.woodTable.HoldingItem);
+        }
+        return (this.craftTable.HoldingItem);
+      }
+    }
 
     IInteractableTool CurrentWorkingTool
     {

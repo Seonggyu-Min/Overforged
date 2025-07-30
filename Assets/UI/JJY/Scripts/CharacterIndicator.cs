@@ -13,7 +13,7 @@ public class CharacterIndicator : MonoBehaviourPun
 
     void Start()
     {
-        if (true) // photonView.IsMine
+        if (photonView.IsMine)
         {
             if (indicatorPrefab != null)
             {
@@ -24,7 +24,7 @@ public class CharacterIndicator : MonoBehaviourPun
 
     void LateUpdate()
     {
-        if (currentIndicator != null) //photonView.IsMine && 
+        if (photonView.IsMine && currentIndicator != null)
         {
             currentIndicator.transform.position = transform.position + offset;
         }
@@ -33,7 +33,7 @@ public class CharacterIndicator : MonoBehaviourPun
     // 삭제 타이밍 언제?
     void OnDestroy()
     {
-        if (currentIndicator != null) // UI가 생성된 경우에만 photonView.IsMine && 
+        if (photonView.IsMine && currentIndicator != null) // UI가 생성된 경우에만
         {
             Destroy(currentIndicator);
         }
