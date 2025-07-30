@@ -20,6 +20,10 @@ namespace SHG
       this.networkEventHandler.Register<SmithingToolSynchronizer>(this);
       this.smithingTools = new ();
       var photonObject = new GameObject($"{nameof(SmithingToolSynchronizer)} photonObject");
+      int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
+      foreach (var smithingTool in this.smithingTools.Values) {
+        smithingTool.IsOwner = smithingTool.PlayerNetworkId == playerId;
+      }
     }
 
     public void RegisterSynchronizable(SmithingToolComponent smithingTool)
@@ -112,10 +116,10 @@ namespace SHG
 
     void OnJoinedToRoom()
     {
-      int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
-      foreach (var smithingTool in this.smithingTools.Values) {
-        smithingTool.IsOwner = smithingTool.PlayerNetworkId == playerId;
-      }
+//      int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
+//      foreach (var smithingTool in this.smithingTools.Values) {
+//        smithingTool.IsOwner = smithingTool.PlayerNetworkId == playerId;
+//      }
     }
 
     public void ReceiveEvent(object[] data)
