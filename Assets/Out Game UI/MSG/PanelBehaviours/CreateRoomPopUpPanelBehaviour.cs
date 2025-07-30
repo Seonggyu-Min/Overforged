@@ -120,6 +120,8 @@ namespace MIN
                 {
                     MaxPlayers = (byte)_maxPlayerCount,
                     PublishUserId = true,
+                    //IsOpen = true,
+                    //IsVisible = true,
                     CustomRoomProperties = customProperties,
                     CustomRoomPropertiesForLobby = new string[] { CustomPropertyKeys.IsSecret, CustomPropertyKeys.Password },
                 };
@@ -131,6 +133,8 @@ namespace MIN
                 RoomOptions roomOptions = new RoomOptions
                 {
                     MaxPlayers = (byte)_maxPlayerCount,
+                    //IsOpen = true,
+                    //IsVisible = true,
                     PublishUserId = true
                 };
 

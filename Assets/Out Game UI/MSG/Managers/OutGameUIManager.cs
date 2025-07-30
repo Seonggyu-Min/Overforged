@@ -39,11 +39,14 @@ namespace MIN
                 ShowAsFirst("Room Panel");
             }
             // 예외 상황
+            // 로그인 상황이 로컬 캐시에 남아있고, GameQuitManager의 TrySignOut이 아직 반영되지 않은 경우 해당 예외 상황으로 들어갈 것 같음
+            // 근데 최소 로그인 이전까지는 SignOut처리가 될 것 같아서 큰 문제는 없어보이는데, 아래의 디버그 로그가 나왔을 때 추가적인 버그가 있는지 확인해야될 듯
+            // 또한 방이 터질 수 있다면 다시 로그인 화면으로 돌아오게될 텐데, 만약 그런 현상이 보인다면 Show하는 패널의 조건 분기 처리 해야될 듯
             else
             {
                 Debug.LogWarning("로그인되어 있지만 방에 들어가있지 않습니다.");
                 _panelStack.Clear();
-                ShowAsFirst("Lobby Panel");
+                ShowAsFirst("Log In Panel");
             }
 
             // 디버그용
