@@ -4,6 +4,7 @@ using System.Linq;
 using Photon.Pun;
 using UnityEngine;
 using System;
+using Zenject;
 
 namespace JJY
 {
@@ -45,6 +46,7 @@ namespace JJY
             int uiId = recipeUICounter++;
             //photonView.RPC(nameof(RPC_AddRecipe), RpcTarget.AllBuffered, index, uiId);
             photonView.RPC(nameof(RPC_AddRecipe), RpcTarget.AllBuffered, p, o, w, uiId);
+            SpawnItemTest(p, o, w);
         }
 
         [PunRPC]
@@ -67,6 +69,30 @@ namespace JJY
 
             ReorderUI();
         }
+        int itemid;
+
+        void SpawnItemTest(int p, int o, int w)
+        {
+            GameObject i = PhotonNetwork.Instantiate("ProductItem", new Vector3(0, 2, 0), Quaternion.identity);
+            itemid = i.GetComponent<PhotonView>().ViewID;
+            photonView.RPC(nameof(SetItemTest), RpcTarget.AllBuffered, itemid, p, o, w);
+        }
+        [PunRPC]
+        void SetItemTest(int id, int p, int o, int w)
+        {
+            ProductItem pi = PhotonView.Find(id).GetComponent<ProductItem>();
+            ProductItemData prod = itemDataList.craftList[p].ProductItemData;
+            WoodType wood = materialData.woods[w];
+            OreType ore = OreType.None;
+            if (prod.productType != ProductType.Bow)
+            {
+                ore = materialData.ores[o];
+            }
+            pi.Data = prod;
+            pi.Ore = ore;
+            pi.Wood = wood;
+        }
+
 
         public void FulfillRecipe(RecipeData targetRecipe) // 출고시 호출
         {
