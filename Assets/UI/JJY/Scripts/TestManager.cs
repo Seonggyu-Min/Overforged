@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
@@ -6,12 +6,16 @@ using UnityEngine.UI;
 using ExitGames.Client.Photon;
 using TMPro;
 using Photon.Realtime;
+using Zenject;
+using MIN;
 
 namespace JJY
 {
     // 게임 시작하는 Manager에 붙이면 될듯.
     public class GameTimer : MonoBehaviourPunCallbacks
     {
+        [Inject] IGameManager _gameManager;
+
         [SerializeField] private TMP_Text timerText;
         [SerializeField] private float totalTime = 120f;
 
@@ -55,6 +59,8 @@ namespace JJY
                 isRunning = false;
                 timerText.text = "00:00";
                 Debug.Log("타이머 종료");
+
+                _gameManager.SetGameEnd();
 
                 // TODO : 타임 종료 UI 생성
             }
