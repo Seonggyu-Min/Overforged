@@ -297,6 +297,11 @@ namespace SCR
                     else if (ActionObj.CompareTag("InteractionObj"))
                     {
                         // 해당 오브젝트와 상호작용 아이템이고 사용 중이 아니라면 거기에 넣기
+                        if (player.PlayerPhysical.CanTransfer)
+                        {
+                            ActionObj.GetComponent<IInteractableTool>().Transfer(player.PlayerPhysical.TransferArgs);
+                            Tempering();
+                        }
                     }
 
                 }
@@ -313,14 +318,15 @@ namespace SCR
                         // 뜨거운 재료 아이템의 경우
                         if (player.PlayerPhysical.CanTransfer)
                         {
-                            if (!ActionObj.GetComponent<SmithingTool>().HoldingItem.IsHot)
+                            if (ActionObj.TryGetComponent<SmithingToolComponent>(out SmithingToolComponent STComponet) &&
+                                STComponet.HoldingItem != null && !STComponet.HoldingItem.IsHot)
+                            {
                                 return;
+                            }
                             var result = ActionObj.GetComponent<IInteractableTool>().Transfer(player.PlayerPhysical.TransferArgs);
                             if (result.ReceivedItem != null)
                             {
-                                if (result.ReceivedItem.gameObject.GetComponent<MaterialItem>() != null &&
-                                result.ReceivedItem.gameObject.GetComponent<MaterialItem>().IsHot)
-                                    PickUpObject(result.ReceivedItem.gameObject, false);
+                                PickUpObject(result.ReceivedItem.gameObject, false);
                             }
 
                         }
@@ -378,13 +384,15 @@ namespace SCR
                         {
                             if (player.PlayerPhysical.CanTransfer)
                             {
-                                if (ActionObj.GetComponent<SmithingTool>().HoldingItem.IsHot)
+                                if (ActionObj.TryGetComponent<SmithingToolComponent>(out SmithingToolComponent STComponet) &&
+                                STComponet.HoldingItem != null && STComponet.HoldingItem.IsHot)
+                                {
                                     return;
+                                }
                                 var result = ActionObj.GetComponent<IInteractableTool>().Transfer(player.PlayerPhysical.TransferArgs);
                                 if (result.ReceivedItem != null)
                                 {
-                                    if (result.ReceivedItem.gameObject.GetComponent<MaterialItem>() != null)
-                                        PickUpObject(result.ReceivedItem.gameObject, false);
+                                    PickUpObject(result.ReceivedItem.gameObject, false);
                                 }
 
                             }

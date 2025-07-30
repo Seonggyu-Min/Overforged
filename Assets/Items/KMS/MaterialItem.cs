@@ -6,8 +6,7 @@ using Photon.Pun;
 
 public class MaterialItem : Item
 {
-    private bool isHot;
-    public bool IsHot { get { return isHot; } }
+
     private OreType ore;
     public OreType Ore
     {
