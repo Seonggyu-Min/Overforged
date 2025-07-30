@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SCR;
+using SHG;
 
 namespace MIN
 {
@@ -19,6 +20,11 @@ namespace MIN
             Vector3 spawnPos = new Vector3(0, 0.5f, 0);
             GameObject playerobj = PhotonNetwork.Instantiate("Player", spawnPos, Quaternion.identity);
             Player player = playerobj.GetComponent<Player>();
+
+            var cameraController = CameraController.Instance; ;
+            Debug.Log($"cameraController : {cameraController}");
+            cameraController.Player = player.transform;
+            cameraController.gameObject.SetActive(true);
         }
     }
 }

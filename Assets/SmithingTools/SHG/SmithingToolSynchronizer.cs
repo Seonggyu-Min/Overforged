@@ -18,17 +18,18 @@ namespace SHG
       this.networkEventHandler.OnNetworkConnected += this.OnNetworkConnected;
       this.networkEventHandler.OnJoinedToRoom += this.OnJoinedToRoom;
       this.networkEventHandler.Register<SmithingToolSynchronizer>(this);
-      this.smithingTools = new ();
+      this.smithingTools = new();
       var photonObject = new GameObject($"{nameof(SmithingToolSynchronizer)} photonObject");
     }
 
     public void RegisterSynchronizable(SmithingToolComponent smithingTool)
     {
       if (!this.smithingTools.TryAdd(
-          smithingTool.SceneId, smithingTool)) {
-        #if UNITY_EDITOR
+          smithingTool.SceneId, smithingTool))
+      {
+#if UNITY_EDITOR
         throw (new ApplicationException($"{nameof(RegisterSynchronizable)} synchronizable: {smithingTool}"));
-        #endif
+#endif
       }
       smithingTool.OnTransfered += this.OnTranfered;
       smithingTool.OnWorked += this.OnWork;
@@ -38,23 +39,25 @@ namespace SHG
 
     void OnWork(SmithingToolComponent component, ToolWorkResult result)
     {
-      if (component.IsOwner) {
+      if (component.IsOwner)
+      {
         this.SendRpc(
           sceneId: component.SceneId,
           method: nameof(SmithingToolComponent.Work),
           args: new object[] {
             result.ConvertToNetworkArguments() }
-          ); 
-      } 
+          );
+      }
     }
 
     void OnTranfered(SmithingToolComponent component, ToolTransferArgs args, ToolTransferResult result)
     {
-      if (component.IsOwner) {
+      if (component.IsOwner)
+      {
         this.SendRpc(
           sceneId: component.SceneId,
           method: nameof(SmithingToolComponent.Transfer),
-          args: new object[] { 
+          args: new object[] {
             args.ConvertToNetworkArguments(),
             result.ConvertToNetworkArguments()
           }
@@ -65,11 +68,12 @@ namespace SHG
     public void SendRpc(int sceneId, in string method, object[] args)
     {
       object[] data = new object[
-        args == null ? 3: args.Length + 3];
+        args == null ? 3 : args.Length + 3];
       data[0] = sceneId;
       data[1] = method;
       data[2] = PhotonNetwork.ServerTimestamp;
-      if (args != null) {
+      if (args != null)
+      {
         Array.Copy(
         sourceArray: args,
         sourceIndex: 0,
@@ -87,23 +91,26 @@ namespace SHG
       string method = (string)data[1];
       float latency = (float)(PhotonNetwork.ServerTimestamp - (int)data[2]) * MS_TO_SEC;
       object[] args = null;
-      if (data.Length > 3) {
+      if (data.Length > 3)
+      {
         args = new object[data.Length - 3];
         Array.Copy(
           sourceArray: data,
           destinationArray: args,
           sourceIndex: 3,
-          destinationIndex:0,
+          destinationIndex: 0,
           length: data.Length - 3);
-      } 
+      }
       if (this.smithingTools.TryGetValue(
-          sceneId, out SmithingToolComponent smithingTool)) {
+          sceneId, out SmithingToolComponent smithingTool))
+      {
         smithingTool.OnRpc(method, latency, args);
       }
-      else {
-        #if UNITY_EDITOR
+      else
+      {
+#if UNITY_EDITOR
         throw (new ApplicationException($"{nameof(ReceiveRpc)}: fail to find {nameof(INetworkSynchronizable)} in {this.smithingTools} for {sceneId}"));
-        #endif
+#endif
       }
     }
 
@@ -114,10 +121,10 @@ namespace SHG
 
     void OnJoinedToRoom()
     {
-      int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
-      foreach (var smithingTool in this.smithingTools.Values) {
-        smithingTool.IsOwner = smithingTool.PlayerNetworkId == playerId;
-      }
+      //      int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
+      //      foreach (var smithingTool in this.smithingTools.Values) {
+      //        smithingTool.IsOwner = smithingTool.PlayerNetworkId == playerId;
+      //      }evelop
     }
 
     public void ReceiveEvent(object[] data)
@@ -127,9 +134,10 @@ namespace SHG
       int timestamp = (int)data[2];
       //TODO: adjust timestamp overflow 
       float latency = (float)(PhotonNetwork.ServerTimestamp - timestamp) * MS_TO_SEC;
-      object[] args = data.Length > 3 ? 
-        new object[data.Length - 3]: null;  
-      if (data.Length > 3) {
+      object[] args = data.Length > 3 ?
+        new object[data.Length - 3] : null;
+      if (data.Length > 3)
+      {
         Array.Copy(
         sourceArray: data,
         sourceIndex: 3,
@@ -138,7 +146,8 @@ namespace SHG
         length: args.Length);
       }
       if (this.smithingTools.TryGetValue(
-          sceneId, out SmithingToolComponent smithingTool)) {
+          sceneId, out SmithingToolComponent smithingTool))
+      {
         smithingTool.OnRpc(
           method: method,
           latencyInSeconds: latency,
@@ -147,11 +156,12 @@ namespace SHG
       }
     }
 
-    public bool TryFindComponentFromNetworkId<U>(int networId, out U found) where U: Component
+    public bool TryFindComponentFromNetworkId<U>(int networId, out U found) where U : Component
     {
       PhotonView foundView = PhotonView.Find(networId);
-      if (foundView != null) {
-        found = foundView.GetComponent<U>();  
+      if (foundView != null)
+      {
+        found = foundView.GetComponent<U>();
         return (found != null);
       }
       found = null;

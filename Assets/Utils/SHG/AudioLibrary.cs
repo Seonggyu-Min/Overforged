@@ -25,7 +25,7 @@ namespace SHG
     {
       this.rand = new();
       this.soundSources = new();
-      this.sfxControllerPrefab = Resources.Load<GameObject>("sfxController");
+      this.sfxControllerPrefab = Resources.Load<GameObject>("SHG/SfxController");
       this.sfxPool = new MonoBehaviourPool<SfxController>(
         poolSize: DEFAULT_SFX_POOL_SIZE,
         prefab: this.sfxControllerPrefab);

@@ -11,57 +11,75 @@ namespace SHG
   {
     [Inject]
     IAudioLibrary audioLibrary;
-    [SerializeField] [Required()]
+    [SerializeField]
+    [Required()]
     SmithingToolData furnaceData;
-    [SerializeField] 
+    [SerializeField]
     Furnace furnace;
     [SerializeField]
     FurnaceEffecter furnaceEffecter;
-    [SerializeField] [Required]
+    [SerializeField]
+    [Required]
     Transform materialPosition;
     protected override ISmithingToolEffecter effecter => this.furnaceEffecter;
 
-    [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(itemProgressLabel), nameof(tempLabel))]
+    [SerializeField]
+    [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(itemProgressLabel), nameof(tempLabel))]
     Void uiGroup;
-    [SerializeField] [HideInInspector]
+    [SerializeField]
+    [HideInInspector]
     Canvas uiCanvas;
-    [SerializeField] [HideInInspector]
+    [SerializeField]
+    [HideInInspector]
     Image itemImage;
-    [SerializeField] [HideInInspector]
+    [SerializeField]
+    [HideInInspector]
     TMP_Text itemNameLabel;
-    [SerializeField] [HideInInspector]
+    [SerializeField]
+    [HideInInspector]
     TMP_Text itemProgressLabel;
-    [SerializeField] [HideInInspector]
+    [SerializeField]
+    [HideInInspector]
     TMP_Text tempLabel;
     bool isIgnited;
+    [SerializeField] MeshRenderer Modeling;
 
-    [SerializeField] [VerticalGroup(10f, true, nameof(HightlightColor), nameof(normalColor), nameof(ignitedColor))]
+    [SerializeField]
+    [VerticalGroup(10f, true, nameof(HightlightColor), nameof(normalColor), nameof(ignitedColor))]
     Void colorGroup;
-    [SerializeField] [HideInInspector]
+    [SerializeField]
+    [HideInInspector]
     Color normalColor;
-    [SerializeField] [HideInInspector]
+    [SerializeField]
+    [HideInInspector]
     Color ignitedColor;
-    [SerializeField] [HideInInspector]
+    [SerializeField]
+    [HideInInspector]
     public Color HightlightColor;
     protected override SmithingTool tool => this.furnace;
 
     protected override Transform materialPoint => this.materialPosition;
 
-    [SerializeField] [VerticalGroup(10f, true, nameof(fireParticle), nameof(sparkParticle))]
+    [SerializeField]
+    [VerticalGroup(10f, true, nameof(fireParticle), nameof(sparkParticle))]
     Void effecterGroup;
-    [SerializeField] [Required, HideInInspector]
+    [SerializeField]
+    [Required, HideInInspector]
     ParticleSystem fireParticle;
-    [SerializeField] [Required, HideInInspector]
+    [SerializeField]
+    [Required, HideInInspector]
     ParticleSystem sparkParticle;
     SfxController burningSfx;
 
     [Button]
     void TurnOff()
     {
-      if (this.furnace.IsIgnited) {
+      if (this.furnace.IsIgnited)
+      {
         this.furnace.TurnOff();
       }
-      if (this.burningSfx != null) {
+      if (this.burningSfx != null)
+      {
         this.burningSfx
           .Stop()
           .gameObject.SetActive(false);
@@ -74,36 +92,42 @@ namespace SHG
 
     void BeforeInteract(SmithingTool tool)
     {
-      if (tool != this.furnace) {
-        return; 
+      if (tool != this.furnace)
+      {
+        return;
       }
       Debug.Log($"Before Interact");
     }
 
     void AfterInteract(SmithingTool tool)
     {
-      if (tool != this.furnace) {
-        return; 
+      if (tool != this.furnace)
+      {
+        return;
       }
       Debug.Log($"After Interact");
-      if (this.uiCanvas.enabled && tool.HoldingItem == null) {
+      if (this.uiCanvas.enabled && tool.HoldingItem == null)
+      {
         this.uiCanvas.enabled = false;
       }
-      else if (!this.uiCanvas.enabled && tool.HoldingItem != null) {
+      else if (!this.uiCanvas.enabled && tool.HoldingItem != null)
+      {
         this.SetItemUI(tool.HoldingItem);
       }
-      if (this.isIgnited != this.furnace.IsIgnited) {
+      if (this.isIgnited != this.furnace.IsIgnited)
+      {
         this.isIgnited = this.furnace.IsIgnited;
-        this.highlighter.HighlightColor = this.isIgnited ? 
-          this.ignitedColor: this.normalColor;
-        if (this.isIgnited != this.effecter.IsStateOn(ISmithingToolEffecter.State.Working)) {
+        this.highlighter.HighlightColor = this.isIgnited ?
+          this.ignitedColor : this.normalColor;
+        if (this.isIgnited != this.effecter.IsStateOn(ISmithingToolEffecter.State.Working))
+        {
           this.effecter.ToggleState(ISmithingToolEffecter.State.Working);
           this.audioLibrary.PlayRandomSound(
             soundName: "ignite",
             position: this.transform.position);
           this.Invoke(nameof(PlayBurningSound), 2f);
         }
-      } 
+      }
     }
 
     void PlayBurningSound()
@@ -116,7 +140,7 @@ namespace SHG
 
     void SetItemUI(Item item)
     {
-      this.itemImage.sprite = item.Data.Image;   
+      this.itemImage.sprite = item.Data.Image;
       this.itemNameLabel.text = item.Data.Name;
       this.uiCanvas.enabled = true;
     }
@@ -128,6 +152,7 @@ namespace SHG
 
     protected override void Awake()
     {
+      base.meshRenderer = Modeling;
       base.Awake();
       this.furnace = new Furnace(this.furnaceData);
       this.furnace.BeforeInteract += this.BeforeInteract;

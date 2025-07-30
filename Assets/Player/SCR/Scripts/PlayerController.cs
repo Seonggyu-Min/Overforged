@@ -180,8 +180,7 @@ namespace SCR
 
         private void Tempering()
         {
-            player.HoldObject = null;
-            Holding(false);
+            LayDownObject(false, false);
             canMove = false;
             player.SendPlayAnimationEvent(photonView.ViewID, "Tempering", "Trigger");
             photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.Put);
@@ -266,11 +265,11 @@ namespace SCR
         /// <summary>
         /// 물건을 내려 놓을 때의 함수
         /// </summary>
-        private void LayDownObject(bool isThrow = false)
+        private void LayDownObject(bool isThrow = false, bool isPut = false)
         {
             if (player.HoldObject != null)
             {
-                photonView.RPC("LayDownObject", RpcTarget.All, isThrow);
+                photonView.RPC("LayDownObject", RpcTarget.All, isThrow, isPut);
                 Holding(false);
             }
         }
@@ -297,6 +296,11 @@ namespace SCR
                     else if (ActionObj.CompareTag("InteractionObj"))
                     {
                         // 해당 오브젝트와 상호작용 아이템이고 사용 중이 아니라면 거기에 넣기
+                        if (player.PlayerPhysical.CanTransfer)
+                        {
+                            ActionObj.GetComponent<IInteractableTool>().Transfer(player.PlayerPhysical.TransferArgs);
+                            Tempering();
+                        }
                     }
 
                 }
@@ -310,17 +314,28 @@ namespace SCR
                     }
                     else if (ActionObj.CompareTag("InteractionObj"))
                     {
-                        // 해당 오브젝트에 집게로 집을 수 있는 아이템이 있다면
-                        // 아이템 들기
-                        //PickUpObject(ActionObj/*후에 바꿔야 됨*/);
+                        // 뜨거운 재료 아이템의 경우
+                        if (player.PlayerPhysical.CanTransfer)
+                        {
+                            if (ActionObj.TryGetComponent<SmithingToolComponent>(out SmithingToolComponent STComponet) &&
+                                STComponet.HoldingItem != null && !STComponet.HoldingItem.IsHot)
+                            {
+                                return;
+                            }
+                            var result = ActionObj.GetComponent<IInteractableTool>().Transfer(player.PlayerPhysical.TransferArgs);
+                            if (result.ReceivedItem != null)
+                            {
+                                PickUpObject(result.ReceivedItem.gameObject, false);
+                            }
 
-                        // 아이템 상자라면
-                        PickUpObject(ActionObj.GetComponent<BoxComponent>().CreateItem());
+                        }
                     }
                     else if (ActionObj.CompareTag("Item"))
                     {
                         // 아이템 들기
-                        PickUpObject(ActionObj);
+                        if (ActionObj.GetComponent<MaterialItem>() != null &&
+                        ActionObj.GetComponent<MaterialItem>().IsHot)
+                            PickUpObject(ActionObj);
                     }
 
                 }
@@ -368,6 +383,11 @@ namespace SCR
                         {
                             if (player.PlayerPhysical.CanTransfer)
                             {
+                                if (ActionObj.TryGetComponent<SmithingToolComponent>(out SmithingToolComponent STComponet) &&
+                                STComponet.HoldingItem != null && STComponet.HoldingItem.IsHot)
+                                {
+                                    return;
+                                }
                                 var result = ActionObj.GetComponent<IInteractableTool>().Transfer(player.PlayerPhysical.TransferArgs);
                                 if (result.ReceivedItem != null)
                                 {
@@ -381,7 +401,11 @@ namespace SCR
                     else if (ActionObj.CompareTag("Item"))
                     {
                         // 아이템 들고 있기
-                        PickUpObject(ActionObj);
+                        if (ActionObj.GetComponent<MaterialItem>() != null &&
+                        !ActionObj.GetComponent<MaterialItem>().IsHot)
+                            PickUpObject(ActionObj);
+                        if (ActionObj.GetComponent<ProductItem>() != null)
+                            PickUpObject(ActionObj);
                     }
                     else if (ActionObj.CompareTag("Tongs"))
                     {

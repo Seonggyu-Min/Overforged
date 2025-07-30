@@ -28,12 +28,22 @@ namespace MIN
             // 혹시 _firebaseManager.Auth.CurrentUser == null 이 아닌 상태로 시작할 수 있나?
             if (_firebaseManager.Auth.CurrentUser == null)
             {
+                Debug.Log("로그인되어 있지 않습니다. 로그인 패널을 보여줍니다.");
+                foreach (var panel in _panels)
+                {
+                    panel.Value.gameObject.SetActive(false);
+                }
                 _panelStack.Clear();
                 ShowAsFirst("Log In Panel");
             }
             // 게임 중이었다가 돌아온 경우
             else if (PhotonNetwork.InRoom)
             {
+                Debug.Log("로그인되어 있고 방에 들어가 있습니다. 방 패널을 보여줍니다.");
+                foreach (var panel in _panels)
+                {
+                    panel.Value.gameObject.SetActive(false);
+                }
                 _panelStack.Clear();
                 _panelStack.Push(_panels["Lobby Panel"]); // 로비패널 스택에 넣어 뒤로갈 수 있도록 함
                 ShowAsFirst("Room Panel");
@@ -45,6 +55,10 @@ namespace MIN
             else
             {
                 Debug.LogWarning("로그인되어 있지만 방에 들어가있지 않습니다.");
+                foreach (var panel in _panels)
+                {
+                    panel.Value.gameObject.SetActive(false);
+                }
                 _panelStack.Clear();
                 ShowAsFirst("Log In Panel");
             }
@@ -157,6 +171,7 @@ namespace MIN
 
                 if (topPanel.HasToLogOutWhenClosed)
                 {
+                    Debug.Log($"{topPanel.name}의 HasToLogOutWhenClosed가 true이기에 로그아웃 합니다");
                     _firebaseManager.Auth.SignOut();
                 }
 

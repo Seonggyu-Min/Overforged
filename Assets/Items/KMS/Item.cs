@@ -19,6 +19,8 @@ public class Item : MonoBehaviourPun, ICarryable
     private BoxCollider collider;
     private Rigidbody rigid;
 
+    protected bool isHot;
+    public bool IsHot { get { return isHot; } }
 
     //아이템이 참조할 아이템 스크립터블 오브젝트
     public ItemData Data

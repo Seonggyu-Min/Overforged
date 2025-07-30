@@ -13,11 +13,13 @@ namespace SHG
 
     protected abstract SmithingTool tool { get; }
     public virtual Item HoldingItem => this.tool.HoldingItem;
-    public bool IsOwner {
+    public bool IsOwner
+    {
       get => this.isOwner;
       set => this.isOwner = value;
     }
-    public int PlayerNetworkId {
+    public int PlayerNetworkId
+    {
       get => this.playerId;
       set => this.playerId = value;
     }
@@ -25,9 +27,10 @@ namespace SHG
 
     public bool IsHighlighted => this.highlighter.IsHighlighted;
 
-    public Color HighlightColor { 
+    public Color HighlightColor
+    {
       get => this.highlighter.HighlightColor;
-      set => this.highlighter.HighlightColor = value; 
+      set => this.highlighter.HighlightColor = value;
     }
     protected MeshRenderer meshRenderer;
     protected GameObjectHighlighter highlighter;
@@ -37,7 +40,7 @@ namespace SHG
     int id;
     [SerializeField]
     int playerId;
-    [SerializeField, ReadOnly]
+    [SerializeField]
     bool isOwner;
     public Action<SmithingToolComponent, ToolTransferArgs, ToolTransferResult> OnTransfered;
     public Action<SmithingToolComponent, ToolWorkResult> OnWorked;
@@ -45,10 +48,10 @@ namespace SHG
 
     protected virtual void Awake()
     {
-      this.meshRenderer = this.GetComponent<MeshRenderer>();
       this.highlighter = new GameObjectHighlighter(
         new Material[] { this.meshRenderer.material });
-      if (this.meshRenderer != null) {
+      if (this.meshRenderer != null)
+      {
         this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
       }
     }
@@ -67,38 +70,40 @@ namespace SHG
 
     public virtual bool CanTransferItem(ToolTransferArgs args)
     {
-      #if LOCAL_TEST
+#if LOCAL_TEST
       return (this.tool.CanTransferItem(args));
-      #else
+#else
       return (this.IsOwner && this.tool.CanTransferItem(args));
-      #endif
+#endif
     }
 
     public virtual ToolTransferResult Transfer(ToolTransferArgs args)
     {
       var result = this.tool.Transfer(args);
       Debug.Log($"{nameof(Transfer)} result: {result}");
-      if (args.ItemToGive != null) {
+      if (args.ItemToGive != null)
+      {
         args.ItemToGive.transform.SetParent(this.transform);
         args.ItemToGive.transform.position = this.materialPoint.position;
         args.ItemToGive.transform.up = this.materialPoint.up;
       }
-      if (this.PlayerNetworkId != args.PlayerNetworkId) {
-        #if UNITY_EDITOR && !LOCAL_TEST
+      if (this.PlayerNetworkId != args.PlayerNetworkId)
+      {
+#if UNITY_EDITOR && !LOCAL_TEST
         throw (new ApplicationException($"{this} component is not owned by player"));
-        #endif
+#endif
       }
       this.OnTransfered?.Invoke(this, args, result);
       return (result);
     }
 
-    public virtual bool CanWork() 
+    public virtual bool CanWork()
     {
-      #if LOCAL_TEST
+#if LOCAL_TEST
       return (this.tool.CanWork());
-      #else
+#else
       return (this.IsOwner && this.tool.CanWork());
-      #endif
+#endif
     }
 
     public virtual ToolWorkResult Work()
@@ -110,8 +115,9 @@ namespace SHG
     }
 
     public virtual void OnRpc(string method, float latencyInSeconds, object[] args = null)
-    {      
-      switch (method) {
+    {
+      switch (method)
+      {
         case nameof(Transfer):
           this.HandleNetworkTransfer(args);
           break;
@@ -126,7 +132,8 @@ namespace SHG
       // TODO: handle work result
       Debug.Log("HandleNetworkWork");
       var dict = args[0] as Dictionary<string, object>;
-      foreach (var (key, value) in dict) {
+      foreach (var (key, value) in dict)
+      {
         Debug.Log($"{key}: {value}");
       }
       this.Work();
@@ -137,33 +144,39 @@ namespace SHG
     protected virtual void HandleNetworkTransfer(object[] args)
     {
       var dict = args[0] as Dictionary<string, object>;
-      int playerNetworkId =  (int)dict[ToolTransferArgs.PLAYER_NETWORK_ID_KEY];
+      int playerNetworkId = (int)dict[ToolTransferArgs.PLAYER_NETWORK_ID_KEY];
       if (dict.TryGetValue(
           ToolTransferArgs.ITEM_ID_KEY, out object itemId) &&
-        itemId != null) {
+        itemId != null)
+      {
         if (this.NetworkSynchronizer != null &&
           this.NetworkSynchronizer.TryFindComponentFromNetworkId(
             networId: (int)itemId,
             out MaterialItem foundItem
-            )) {
-          this.Transfer(new ToolTransferArgs {
+            ))
+        {
+          this.Transfer(new ToolTransferArgs
+          {
             ItemToGive = foundItem,
             PlayerNetworkId = playerNetworkId
-            });
+          });
         }
-        #if UNITY_EDITOR
-        else {
+#if UNITY_EDITOR
+        else
+        {
           Debug.LogError($"item not found for {args[0]}");
         }
-        #endif
+#endif
       }
-      else{
+      else
+      {
         //FIXME: Return item to player
         this.tool.HoldingItem.transform.SetParent(null);
-        this.Transfer(new ToolTransferArgs {
+        this.Transfer(new ToolTransferArgs
+        {
           ItemToGive = null,
           PlayerNetworkId = playerNetworkId
-          });
+        });
       }
     }
 

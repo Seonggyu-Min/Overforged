@@ -36,6 +36,7 @@ namespace MIN
 
         private void OnEnable() => ClearText();
 
+
         #endregion
 
 
@@ -223,8 +224,6 @@ namespace MIN
             _idInputField.text = string.Empty;
             _passwordInputField.text = string.Empty;
         }
-
-
 
 #endregion
     }
