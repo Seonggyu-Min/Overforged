@@ -1653,6 +1653,14 @@ PrefabInstance:
       propertyPath: id
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 4712915487153106507, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: sceneViewId
+      value: 1002
+      objectReference: {fileID: 0}
+    - target: {fileID: 4720910069881748641, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: sceneViewId
+      value: 1001
+      objectReference: {fileID: 0}
     - target: {fileID: 4761429625394750882, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: m_Name
       value: Map
@@ -1708,6 +1716,10 @@ PrefabInstance:
     - target: {fileID: 6621727966731263198, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7103163096989756061, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: sceneViewId
+      value: 1003
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
