@@ -12,6 +12,7 @@ namespace SHG
     protected INetworkSynchronizer<SmithingToolComponent> NetworkSynchronizer { get; private set; }
 
     protected abstract SmithingTool tool { get; }
+    public virtual Item HoldingItem => this.tool.HoldingItem;
     public bool IsOwner {
       get => this.isOwner;
       set => this.isOwner = value;
