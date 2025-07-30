@@ -36,13 +36,14 @@ public class ProductConvey : MonoBehaviour, IInteractableTool
    public bool CanTransferItem(ToolTransferArgs args)
     {
         bool result = false;
-        if (HoldingItem == null && args.ItemToGive != null && args.ItemToGive is Item temp)
+        if (HoldingItem == null && args.ItemToGive != null)
         {
-            if (temp is ProductItem item)
+            if (args.ItemToGive is ProductItem item)
             {
                 result = recipeManager.Check(item.Data as ProductItemData, item.Ore, item.Wood);
             }
         }
+        Debug.Log(result);
         return result;
     }
 

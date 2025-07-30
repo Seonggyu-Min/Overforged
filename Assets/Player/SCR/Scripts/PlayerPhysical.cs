@@ -71,7 +71,7 @@ namespace SCR
                 {
                     transferArgs = new ToolTransferArgs
                     {
-                        ItemToGive = player.HoldObject.GetComponent<MaterialItem>(),
+                        ItemToGive = player.HoldObject.GetComponent<Item>(),
                         PlayerNetworkId = 1
                     };
                 }
