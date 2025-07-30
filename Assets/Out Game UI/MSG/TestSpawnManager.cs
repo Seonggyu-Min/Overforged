@@ -9,6 +9,8 @@ namespace MIN
 {
     public class TestSpawnManager : MonoBehaviour
     {
+        [SerializeField] private MapData mapData;
+
         private void Start()
         {
             SpwanPlayer();
@@ -17,7 +19,11 @@ namespace MIN
         [ContextMenu("SpawnPlayer")]
         public void SpwanPlayer()
         {
-            Vector3 spawnPos = new Vector3(0, 0.5f, 0);
+            int myNum = PhotonNetwork.LocalPlayer.ActorNumber - 1;
+
+            
+
+            Vector3 spawnPos = mapData.SpawnPoints[myNum].position;
             GameObject playerobj = PhotonNetwork.Instantiate("Player", spawnPos, Quaternion.identity);
             Player player = playerobj.GetComponent<Player>();
 

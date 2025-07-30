@@ -111,6 +111,7 @@ MonoBehaviour:
   itemNameLabel: {fileID: 398134143924170674}
   itemProgressLabel: {fileID: 6132714407963532171}
   tempLabel: {fileID: 7764093000994720125}
+  Modeling: {fileID: 0}
   normalColor: {r: 0.46450287, g: 0.7434261, b: 1, a: 0}
   ignitedColor: {r: 1, g: 0.38102233, b: 0, a: 0}
   HightlightColor: {r: 1, g: 0.7394293, b: 0, a: 0}
@@ -244,8 +245,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.13199997, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.45, y: 0.45, z: 0.45}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6885519255858943588}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
@@ -5767,8 +5768,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.132, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.61, y: 0.61, z: 0.61}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6885519255858943588}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}

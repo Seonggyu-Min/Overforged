@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using MIN;
 using TMPro;
@@ -25,7 +25,7 @@ public class AutoLogin : MonoBehaviour
             pwInputField.text = pw;
             lpb.OnClickLoginButton();
         }
-        if (Input.GetKeyDown(KeyCode.LeftAlt))
+        if (Input.GetKeyDown(KeyCode.RightAlt))
         {
             idInputField.text = id2;
             pwInputField.text = pw2;
