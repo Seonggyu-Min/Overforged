@@ -1,10 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using SHG;
 using UnityEngine;
 using Photon.Pun;
-using UnityEngine.XR;
-using SCR;
 
 namespace SCR
 {
