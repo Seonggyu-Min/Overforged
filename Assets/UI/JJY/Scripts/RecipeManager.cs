@@ -10,7 +10,7 @@ namespace JJY
 {
     public class RecipeManager : MonoBehaviourPun
     {
-        [SerializeField] private List<RecipeData> allRecipes;
+        // [SerializeField] private List<RecipeData> allRecipes;
         [SerializeField] private Transform recipeUIParent; // 왼쪽 위에 정렬될 위치
         [SerializeField] private GameObject recipeUIPrefab;
         private int recipeUICounter = 0; // 유니크 ID용 카운터
