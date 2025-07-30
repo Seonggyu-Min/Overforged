@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace SHG
 {
-  using Craft = TestCraft;
 
   public class CraftTable: SmithingTool
   {
