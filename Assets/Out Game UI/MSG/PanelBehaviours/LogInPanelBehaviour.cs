@@ -34,7 +34,15 @@ namespace MIN
 
         #region Unity Methods
 
-        private void OnEnable() => ClearText();
+        private void OnEnable()
+        {
+            if (_firebaseManager.Auth.CurrentUser != null)
+            {
+                _firebaseManager.Auth.SignOut();
+            }
+
+            ClearText();
+        }
 
         #endregion
 
@@ -223,8 +231,6 @@ namespace MIN
             _idInputField.text = string.Empty;
             _passwordInputField.text = string.Empty;
         }
-
-
 
 #endregion
     }
