@@ -5647,7 +5647,7 @@ GameObject:
   - component: {fileID: 1816970452203033942}
   - component: {fileID: 4444868604396321427}
   - component: {fileID: 47735625022124773}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Table
   m_TagString: InteractionObj
   m_Icon: {fileID: 0}
