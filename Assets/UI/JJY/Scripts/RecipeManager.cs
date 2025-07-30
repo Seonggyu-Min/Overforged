@@ -77,19 +77,28 @@ namespace JJY
                 photonView.RPC(nameof(RPC_RemoveRecipe), RpcTarget.All, targetUI.uniqueID);
             }
         }
-
-        public bool FulfillRecipe(ProductItemData data, OreType ore, WoodType wood) // 출고시 호출
+        RecipeUI targetUI = null;
+        public bool Check(ProductItemData data, OreType ore, WoodType wood) // 출고시 호출
         {
             // 중복된 레시피중 하나만 제거하기 위함.
-            RecipeUI targetUI = curUIs.FirstOrDefault(ui =>
+            targetUI = curUIs.FirstOrDefault(ui =>
                 ui.curProduct == data && ui.curOre == ore && ui.curWood == wood
             );
             if (targetUI != null)
             {
-                photonView.RPC(nameof(RPC_RemoveRecipe), RpcTarget.All, targetUI.uniqueID);
+                //photonView.RPC(nameof(RPC_RemoveRecipe), RpcTarget.All, targetUI.uniqueID);
                 return true;
             }
             return false;
+        }
+
+        public void FulfillRecipe() // 출고시 호출
+        {
+            if (targetUI != null)
+            {
+                photonView.RPC(nameof(RPC_RemoveRecipe), RpcTarget.All, targetUI.uniqueID);
+                targetUI = null;
+            }
         }
 
         [PunRPC]
