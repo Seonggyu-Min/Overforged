@@ -3,23 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using JJY;
+using Photon.Pun;
+using Photon.Realtime;
 using SHG;
 using UnityEngine;
-using UnityEngine.Jobs;
+using Zenject;
 
-public class ProductConvey : SmithingToolComponent
+public class ProductConvey : MonoBehaviour, IInteractableTool
 {
     [SerializeField] Transform ProductPoint;
     //씬에서 할당 필요
     [SerializeField] RecipeManager recipeManager;
 
+    [SerializeField] PhotonView photon;
+
+    [Inject] MIN.IScoreManager _scoreManager;
+
     Convey convey;
 
     private Item HoldingItem;
-    protected override SmithingTool tool => null;
-    protected override ISmithingToolEffecter effecter => null;
-
-    protected override Transform materialPoint => ProductPoint;
 
 
 
@@ -31,7 +33,7 @@ public class ProductConvey : SmithingToolComponent
     }
 
 
-    public override bool CanTransferItem(ToolTransferArgs args)
+    public bool CanTransferItem(ToolTransferArgs args)
     {
         bool result = false;
         if (HoldingItem == null && args.ItemToGive != null && args.ItemToGive is Item temp)
@@ -44,15 +46,13 @@ public class ProductConvey : SmithingToolComponent
         return result;
     }
 
-    public override ToolTransferResult Transfer(ToolTransferArgs args)
+    public ToolTransferResult Transfer(ToolTransferArgs args)
     {
         if (args.ItemToGive != null)
         {
-            HoldingItem = args.ItemToGive;
-            args.ItemToGive.transform.SetParent(this.transform);
-            args.ItemToGive.transform.position = this.materialPoint.position;
-            args.ItemToGive.transform.up = this.materialPoint.up;
-            StartCoroutine(ItemRemoveRoutine());
+
+            int id = args.ItemToGive.GetComponent<PhotonView>().ViewID;
+            photon.RPC("SetItemRPC", RpcTarget.All, args.PlayerNetworkId, id);
         }
         return (new ToolTransferResult
         {
@@ -61,12 +61,12 @@ public class ProductConvey : SmithingToolComponent
         });
     }
 
-    public override bool CanWork()
+    public bool CanWork()
     {
         return false;
     }
 
-    public override ToolWorkResult Work()
+    public ToolWorkResult Work()
     {
         return (new ToolWorkResult
         {
@@ -75,11 +75,25 @@ public class ProductConvey : SmithingToolComponent
         });
     }
 
-    private IEnumerator ItemRemoveRoutine()
+
+    [PunRPC]
+    private void SetItemRPC(int playerId, int itemId)
+    {
+        HoldingItem = PhotonView.Find(itemId).GetComponent<Item>();
+        HoldingItem.transform.SetParent(this.transform);
+        HoldingItem.transform.position = ProductPoint.position;
+        HoldingItem.transform.up = ProductPoint.up;
+        StartCoroutine(ItemRemoveRoutine(playerId));
+    }
+
+    private IEnumerator ItemRemoveRoutine(int playerid)
     {
         yield return new WaitForSeconds(3);
+        Destroy(HoldingItem);
         HoldingItem = null;
         recipeManager.FulfillRecipe();
+        //_scoreManager.AddScore(, 1);
+        
 
     }
 
