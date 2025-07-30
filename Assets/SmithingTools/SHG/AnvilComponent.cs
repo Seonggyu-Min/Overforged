@@ -15,27 +15,35 @@ namespace SHG
     SmithingToolData data;
     [SerializeField]
     MeshRenderer standRenderer;
-    [SerializeField] [Required]
+    [SerializeField]
+    [Required]
     Transform materialPosition;
 
-    [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(itemProgressLabel))]
+    [SerializeField]
+    [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(itemProgressLabel))]
     Void uiGroup;
-    [SerializeField] [HideProperty]
+    [SerializeField]
+    [HideProperty]
     Canvas uiCanvas;
-    [SerializeField] [HideProperty]
+    [SerializeField]
+    [HideProperty]
     Image itemImage;
-    [SerializeField] [HideProperty]
+    [SerializeField]
+    [HideProperty]
     TMP_Text itemNameLabel;
-    [SerializeField] [HideProperty]
+    [SerializeField]
+    [HideProperty]
     TMP_Text itemProgressLabel;
     [SerializeField]
     Color normalColor;
     [SerializeField]
     Color interactColor;
 
-    [SerializeField] [VerticalGroup(10f, true, nameof(sparkPrefab))]
+    [SerializeField]
+    [VerticalGroup(10f, true, nameof(sparkPrefab))]
     Void effecterGroup;
-    [SerializeField] [HideInInspector, Required]
+    [SerializeField]
+    [HideInInspector, Required]
     GameObject sparkPrefab;
 
     protected override SmithingTool tool => this.anvil;
@@ -47,7 +55,8 @@ namespace SHG
 
     void BeforeInteract(SmithingTool tool)
     {
-      if (tool != this.anvil) {
+      if (tool != this.anvil)
+      {
         return;
       }
       Debug.Log("BeforeInteract args");
@@ -57,18 +66,22 @@ namespace SHG
 
     void AfterInteract(SmithingTool tool)
     {
-      if (tool != this.anvil) {
+      if (tool != this.anvil)
+      {
         return;
       }
       Debug.Log("AfterInteract result");
       Debug.Log($"tool holding item: {tool.HoldingItem}");
       Debug.Log($"tool interaction count: {tool.RemainingInteractionCount}");
-      if (this.uiCanvas.enabled && tool.HoldingItem == null) {
+      if (this.uiCanvas.enabled && tool.HoldingItem == null)
+      {
         this.uiCanvas.enabled = false;
       }
-      else if (tool.HoldingItem != null) {
+      else if (tool.HoldingItem != null)
+      {
         this.SetItemUI(tool.HoldingItem);
-        if (tool.InteractionToTrigger == SmithingTool.InteractionType.Work) {
+        if (tool.InteractionToTrigger == SmithingTool.InteractionType.Work)
+        {
           this.highlighter.HighlightColor = this.interactColor;
         }
       }
@@ -76,9 +89,10 @@ namespace SHG
 
     void SetItemUI(Item item)
     {
-      this.itemImage.sprite = item.Data.Image;   
+      this.itemImage.sprite = item.Data.Image;
       this.itemNameLabel.text = item.Data.Name;
-      if (!this.uiCanvas.enabled) {
+      if (!this.uiCanvas.enabled)
+      {
         this.uiCanvas.enabled = true;
       }
       this.itemProgressLabel.text = $"Progress: {this.anvil.Progress * 100}%";
@@ -86,7 +100,7 @@ namespace SHG
 
     protected override void Awake()
     {
-      this.meshRenderer = this.GetComponent<MeshRenderer>();
+      this.meshRenderer = standRenderer;
       this.highlighter = new GameObjectHighlighter(
         new Material[] { this.meshRenderer.material, this.standRenderer.material });
       this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
@@ -107,7 +121,8 @@ namespace SHG
     void OnInteractionTriggered(SmithingTool.InteractionType interactionType)
     {
       this.highlighter.HighlightColor = this.normalColor;
-      if (interactionType == SmithingTool.InteractionType.Work) {
+      if (interactionType == SmithingTool.InteractionType.Work)
+      {
         this.effecter.TriggerWorkEffect();
       }
     }

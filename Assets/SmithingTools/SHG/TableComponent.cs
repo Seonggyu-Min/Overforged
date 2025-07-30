@@ -11,53 +11,69 @@ using Zenject;
 namespace SHG
 {
   [RequireComponent(typeof(MeshRenderer), typeof(Animator))]
-  public class TableComponent: SmithingToolComponent
+  public class TableComponent : SmithingToolComponent
   {
     [Inject]
     IAudioLibrary audioLibrary;
-    [SerializeField] [ReadOnly]
+    [SerializeField]
+    [ReadOnly]
     WoodTable woodTable;
     [SerializeField]
     SmithingToolData woodTableData;
-    [SerializeField] [ReadOnly]
+    [SerializeField]
+    [ReadOnly]
     CraftTable craftTable;
     [SerializeField]
     CraftTableData craftTableData;
-    [SerializeField] [Required()]
+    [SerializeField]
+    [Required()]
     Transform materialPosition;
 
-    [SerializeField] [VerticalGroup(10f, true, nameof(woodTableCanvas), nameof(woodTableItemImage), nameof(woodTableItemNameLabel), nameof(woodTableItemProgressLabel))]
+    [SerializeField]
+    [VerticalGroup(10f, true, nameof(woodTableCanvas), nameof(woodTableItemImage), nameof(woodTableItemNameLabel), nameof(woodTableItemProgressLabel))]
     Void woodTableGroup;
-    [SerializeField] [HideProperty]
+    [SerializeField]
+    [HideProperty]
     Canvas woodTableCanvas;
-    [SerializeField] [HideProperty]
+    [SerializeField]
+    [HideProperty]
     Image woodTableItemImage;
-    [SerializeField] [HideProperty]
+    [SerializeField]
+    [HideProperty]
     TMP_Text woodTableItemNameLabel;
-    [SerializeField] [HideProperty]
+    [SerializeField]
+    [HideProperty]
     TMP_Text woodTableItemProgressLabel;
 
-    [SerializeField] [VerticalGroup(10f, true, nameof(craftTableCanvas), nameof(craftProductImage), nameof(craftProductNameLabel), nameof(craftMaterialListLabel))]
+    [SerializeField]
+    [VerticalGroup(10f, true, nameof(craftTableCanvas), nameof(craftProductImage), nameof(craftProductNameLabel), nameof(craftMaterialListLabel))]
     Void craftTableGroup;
-    [SerializeField] [HideProperty]
+    [SerializeField]
+    [HideProperty]
     Canvas craftTableCanvas;
-    [SerializeField] [HideProperty]
+    [SerializeField]
+    [HideProperty]
     Image craftProductImage;
-    [SerializeField] [HideProperty]
+    [SerializeField]
+    [HideProperty]
     TMP_Text craftProductNameLabel;
-    [SerializeField] [HideProperty]
+    [SerializeField]
+    [HideProperty]
     TMP_Text craftMaterialListLabel;
-
+    [SerializeField] MeshRenderer Modeling;
     [SerializeField]
     Color normalColor;
     [SerializeField]
     Color interactColor;
 
-    [SerializeField] [VerticalGroup(10f, true, nameof(sawDustParticle), nameof(confettiParticle), nameof(animator))]
+    [SerializeField]
+    [VerticalGroup(10f, true, nameof(sawDustParticle), nameof(confettiParticle), nameof(animator))]
     Void effecterGroup;
-    [SerializeField] [Required(), HideProperty]
+    [SerializeField]
+    [Required(), HideProperty]
     ParticleSystem sawDustParticle;
-    [SerializeField] [Required(), HideProperty]
+    [SerializeField]
+    [Required(), HideProperty]
     ParticleSystem confettiParticle;
     Animator animator;
     TableEffecter tableEffecter;
@@ -67,7 +83,8 @@ namespace SHG
     IInteractableTool CurrentWorkingTool
     {
       get => this.currentWorkingTool;
-      set {
+      set
+      {
         this.currentWorkingTool = value;
       }
     }
@@ -82,20 +99,25 @@ namespace SHG
     public override bool CanTransferItem(ToolTransferArgs args)
     {
       if (args.ItemToGive != null &&
-        this.CurrentWorkingTool == this.woodTable) {
+        this.CurrentWorkingTool == this.woodTable)
+      {
         bool canWoodTableTransfer = this.woodTable.CanTransferItem(args);
-        if (canWoodTableTransfer) {
+        if (canWoodTableTransfer)
+        {
           return (true);
         }
-        else {
+        else
+        {
           bool isCraftTableTansfer = this.craftTable.CanTransferItem(args);
           return (isCraftTableTansfer);
         }
       }
-      else if (this.CurrentWorkingTool != null) {
+      else if (this.CurrentWorkingTool != null)
+      {
         return (this.CurrentWorkingTool.CanTransferItem(args));
       }
-      else {
+      else
+      {
         bool canWoodTableTransfer = this.woodTable.CanTransferItem(args);
         bool canCraftTableTransfer = this.craftTable.CanTransferItem(args);
         return (canWoodTableTransfer || canCraftTableTransfer);
@@ -104,36 +126,44 @@ namespace SHG
 
     public override ToolTransferResult Transfer(ToolTransferArgs args)
     {
-      if (args.ItemToGive != null) {
+      if (args.ItemToGive != null)
+      {
         args.ItemToGive.transform.SetParent(this.transform);
         args.ItemToGive.transform.localPosition = Vector3.up;
         if (this.CurrentWorkingTool == this.woodTable &&
           !this.woodTable.CanTransferItem(args) &&
           this.woodTable.HoldingItem != null &&
-          this.craftTable.CanTransferItem(args)) {
-          var result = this.MoveMaterialToCraftTable(args);      
+          this.craftTable.CanTransferItem(args))
+        {
+          var result = this.MoveMaterialToCraftTable(args);
           this.OnTransfered?.Invoke(this, args, result);
           return (result);
         }
       }
-      if (this.CurrentWorkingTool != null) {
+      if (this.CurrentWorkingTool != null)
+      {
         var result = this.CurrentWorkingTool.Transfer(args);
         Debug.Log($"{nameof(Transfer)} result: {result}");
-        if (result.IsDone) {
+        if (result.IsDone)
+        {
           this.CurrentWorkingTool = null;
         }
         if (this.CurrentWorkingTool == this.craftTable &&
-          this.craftTable.HoldingMaterials.Count == 0) {
+          this.craftTable.HoldingMaterials.Count == 0)
+        {
           this.CurrentWorkingTool = null;
         }
         this.OnTransfered?.Invoke(this, args, result);
         return (result);
       }
-      else {
-        if (this.woodTable.CanTransferItem(args)) {
+      else
+      {
+        if (this.woodTable.CanTransferItem(args))
+        {
           this.CurrentWorkingTool = this.woodTable;
         }
-        else if (this.craftTable.CanTransferItem(args)) {
+        else if (this.craftTable.CanTransferItem(args))
+        {
           this.CurrentWorkingTool = this.craftTable;
         }
         var result = this.CurrentWorkingTool.Transfer(args);
@@ -142,9 +172,9 @@ namespace SHG
         return (result);
 #if UNITY_EDITOR
         throw (new ApplicationException($"{nameof(TableComponent)} is not able Transfer"));
-        #else
+#else
         return ( new ToolTransferResult {} );
-        #endif
+#endif
       }
     }
 
@@ -153,10 +183,11 @@ namespace SHG
       MaterialItem ItemToGive = args.ItemToGive;
       args.ItemToGive = null;
       var result = this.woodTable.Transfer(args);
-      this.craftTable.Transfer(new ToolTransferArgs {
-          ItemToGive = result.ReceivedItem as MaterialItem,
-          PlayerNetworkId = args.PlayerNetworkId
-        });
+      this.craftTable.Transfer(new ToolTransferArgs
+      {
+        ItemToGive = result.ReceivedItem as MaterialItem,
+        PlayerNetworkId = args.PlayerNetworkId
+      });
       args.ItemToGive = ItemToGive;
       this.CurrentWorkingTool = this.craftTable;
       return (this.craftTable.Transfer(args));
@@ -164,7 +195,8 @@ namespace SHG
 
     public override bool CanWork()
     {
-      if (this.CurrentWorkingTool != null) {
+      if (this.CurrentWorkingTool != null)
+      {
         return (this.CurrentWorkingTool.CanWork());
       }
       return (false);
@@ -172,9 +204,11 @@ namespace SHG
 
     public override ToolWorkResult Work()
     {
-      if (this.CurrentWorkingTool != null) {
+      if (this.CurrentWorkingTool != null)
+      {
         var result = this.CurrentWorkingTool.Work();
-        if (this.CurrentWorkingTool == this.woodTable) {
+        if (this.CurrentWorkingTool == this.woodTable)
+        {
           this.tableEffecter.TriggerWorkEffect();
         }
         else if (this.CurrentWorkingTool == this.craftTable)
@@ -185,18 +219,20 @@ namespace SHG
         this.OnWorked?.Invoke(this, result);
         return (result);
       }
-      else {
-        #if UNITY_EDITOR
+      else
+      {
+#if UNITY_EDITOR
         throw new ApplicationException($"{nameof(TableComponent)} is not workable try ${nameof(CanWork)} first");
-        #else
+#else
         return (new ToolWorkResult {});
-        #endif
+#endif
       }
     }
 
     void BeforeWoodTableInteract(SmithingTool tool)
     {
-      if (tool != this.woodTable) {
+      if (tool != this.woodTable)
+      {
         return;
       }
       Debug.Log("BeforeInteract args");
@@ -206,20 +242,24 @@ namespace SHG
 
     void AfterWoodTableInteract(SmithingTool tool)
     {
-      if (tool != this.woodTable) {
+      if (tool != this.woodTable)
+      {
         return;
       }
       Debug.Log("AfterInteract");
       Debug.Log($"tool holding item: {tool.HoldingItem}");
       Debug.Log($"tool interaction count: {tool.RemainingInteractionCount}");
       Debug.Log($"currentWorkingTool: {this.currentWorkingTool}");
-      if (tool.HoldingItem != null) {
+      if (tool.HoldingItem != null)
+      {
         this.SetItemUI(tool.HoldingItem);
-        if (tool.InteractionToTrigger == SmithingTool.InteractionType.Work) {
-        this.highlighter.HighlightColor = this.interactColor;
+        if (tool.InteractionToTrigger == SmithingTool.InteractionType.Work)
+        {
+          this.highlighter.HighlightColor = this.interactColor;
         }
       }
-      else {
+      else
+      {
         this.woodTableCanvas.enabled = false;
       }
     }
@@ -231,10 +271,11 @@ namespace SHG
 
     void SetItemUI(Item item)
     {
-      this.woodTableItemImage.sprite = item.Data.Image;   
+      this.woodTableItemImage.sprite = item.Data.Image;
       this.woodTableItemNameLabel.text = item.Data.Name;
       this.woodTableItemProgressLabel.text = $"Progress: {this.woodTable.Progress * 100}%";
-      if (!this.woodTableCanvas.enabled) {
+      if (!this.woodTableCanvas.enabled)
+      {
         this.woodTableCanvas.enabled = true;
       }
 
@@ -242,7 +283,8 @@ namespace SHG
 
     void OnCraftMaterialAdded(MaterialItem newMaterial)
     {
-      if (!this.craftTableCanvas.enabled) {
+      if (!this.craftTableCanvas.enabled)
+      {
         this.craftTableCanvas.enabled = true;
       }
       this.materialNames.Add(newMaterial.Data.Name);
@@ -255,15 +297,16 @@ namespace SHG
     {
       this.materialNames.Remove(removedMaterial.Data.Name);
       this.UpdateMaterialLabel();
-      if (this.craftTable.HoldingMaterials.Count == 0 && 
-        this.craftTableCanvas.enabled) {
-        this.craftTableCanvas.enabled = false; 
+      if (this.craftTable.HoldingMaterials.Count == 0 &&
+        this.craftTableCanvas.enabled)
+      {
+        this.craftTableCanvas.enabled = false;
       }
     }
 
     void OnCraftProductCrafted(ProductItemData craftedProduct)
     {
-      this.craftProductNameLabel.text = craftedProduct.Name; 
+      this.craftProductNameLabel.text = craftedProduct.Name;
       this.craftProductImage.sprite = craftedProduct.Image;
       this.tableEffecter.TriggerWorkEffect();
       this.audioLibrary.PlayRandomSound(
@@ -280,10 +323,12 @@ namespace SHG
 
     void OnCraftableChanged()
     {
-      if (this.craftTable.CraftableProduct != null) {
+      if (this.craftTable.CraftableProduct != null)
+      {
         this.craftProductNameLabel.text = $"craftable: {this.craftTable.CraftableProduct.Name}";
       }
-      else {
+      else
+      {
         this.craftProductNameLabel.text = "";
       }
     }
@@ -291,8 +336,9 @@ namespace SHG
     void UpdateMaterialLabel()
     {
       var builder = new StringBuilder("Materials: ");
-      foreach (var name in this.materialNames) {
-         builder.Append($"{name}, "); 
+      foreach (var name in this.materialNames)
+      {
+        builder.Append($"{name}, ");
       }
       this.craftMaterialListLabel.text = builder.ToString();
     }
@@ -300,45 +346,55 @@ namespace SHG
     protected override void HandleNetworkTransfer(object[] args)
     {
       var dict = args[0] as Dictionary<string, object>;
-      int playerNetworkId =  (int)dict[ToolTransferArgs.PLAYER_NETWORK_ID_KEY];
+      int playerNetworkId = (int)dict[ToolTransferArgs.PLAYER_NETWORK_ID_KEY];
       if (dict.TryGetValue(
           ToolTransferArgs.ITEM_ID_KEY, out object itemId) &&
-        itemId != null) {
+        itemId != null)
+      {
         if (this.NetworkSynchronizer.TryFindComponentFromNetworkId(
             networId: (int)itemId,
             out MaterialItem foundItem
-            )) {
-          this.Transfer(new ToolTransferArgs {
+            ))
+        {
+          this.Transfer(new ToolTransferArgs
+          {
             ItemToGive = foundItem,
             PlayerNetworkId = playerNetworkId
-            });
+          });
         }
 #if UNITY_EDITOR
-        else {
+        else
+        {
           Debug.LogError($"item not found for {args[0]}");
         }
 #endif
       }
-      else{
+      else
+      {
         //FIXME: Return item to player
-        if (this.woodTable.HoldingItem != null) {
+        if (this.woodTable.HoldingItem != null)
+        {
           this.woodTable.HoldingItem.transform.SetParent(null);
         }
-        else if (this.craftTable.Product != null) {
+        else if (this.craftTable.Product != null)
+        {
           this.craftTable.Product.transform.SetParent(null);
         }
-        else if (this.craftTable.HoldingMaterials.Count > 0) {
+        else if (this.craftTable.HoldingMaterials.Count > 0)
+        {
           this.craftTable.HoldingMaterials[this.craftTable.HoldingMaterials.Count - 1].transform.SetParent(null);
         }
-        this.Transfer(new ToolTransferArgs {
+        this.Transfer(new ToolTransferArgs
+        {
           ItemToGive = null,
           PlayerNetworkId = playerNetworkId
-          });
+        });
       }
     }
 
     protected override void Awake()
     {
+      base.meshRenderer = Modeling;
       base.Awake();
       this.woodTable = new WoodTable(this.woodTableData);
       this.woodTable.BeforeInteract += this.BeforeWoodTableInteract;
@@ -371,12 +427,14 @@ namespace SHG
       // TODO: handle work result
       Debug.Log("HandleNetworkWork");
       var dict = args[0] as Dictionary<string, object>;
-      foreach (var (key, value) in dict) {
+      foreach (var (key, value) in dict)
+      {
         Debug.Log($"{key}: {value}");
       }
       this.Work();
       // TODO: handle work trigger
-      if (this.CurrentWorkingTool == this.woodTable) {
+      if (this.CurrentWorkingTool == this.woodTable)
+      {
       }
     }
   }

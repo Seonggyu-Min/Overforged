@@ -1001,7 +1001,7 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1701401004221242796, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+    - target: {fileID: 1322966210117557492, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 926751828}
@@ -1009,19 +1009,19 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 926751828}
-    - target: {fileID: 2420746534229527945, guid: 81544d4585369df43beca5a3781f4247, type: 3}
-      propertyPath: renderers.Array.data[0]
-      value: 
+    - target: {fileID: 4172096697678834342, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: playerId
+      value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 2420746534229527945, guid: 81544d4585369df43beca5a3781f4247, type: 3}
-      propertyPath: renderers.Array.data[1]
+    - target: {fileID: 4448131177044944380, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: Modeling
       value: 
+      objectReference: {fileID: 7159480626964017810}
+    - target: {fileID: 4448131177044944380, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: playerId
+      value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 3457589108838907905, guid: 81544d4585369df43beca5a3781f4247, type: 3}
-      propertyPath: standRenderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4444825679798955649, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+    - target: {fileID: 4454178132998297077, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 926751828}
@@ -1029,13 +1029,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Map
       objectReference: {fileID: 0}
-    - target: {fileID: 6179411459466619078, guid: 81544d4585369df43beca5a3781f4247, type: 3}
-      propertyPath: renderers.Array.data[0]
+    - target: {fileID: 4842754962718265032, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: Modeling
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6179411459466619078, guid: 81544d4585369df43beca5a3781f4247, type: 3}
-      propertyPath: renderers.Array.data[1]
-      value: 
+      objectReference: {fileID: 7159480626964017809}
+    - target: {fileID: 5586892288326212790, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: playerId
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6621727966731263198, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1077,11 +1077,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7122185454807525204, guid: 81544d4585369df43beca5a3781f4247, type: 3}
-      propertyPath: standRenderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7790715314036388778, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+    - target: {fileID: 6907470084368020022, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 926751828}
@@ -1089,6 +1085,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 926751828}
+    - target: {fileID: 8094794823509928918, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: playerId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8107594723367619028, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: m_Camera
       value: 
@@ -1098,6 +1098,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+--- !u!23 &7159480626964017809 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7811310101450312570, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+  m_PrefabInstance: {fileID: 7159480626964017808}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &7159480626964017810 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4787394341823802859, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+  m_PrefabInstance: {fileID: 7159480626964017808}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
