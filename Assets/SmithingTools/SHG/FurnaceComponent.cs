@@ -3,11 +3,14 @@ using EditorAttributes;
 using UnityEngine.UI;
 using TMPro;
 using Void = EditorAttributes.Void;
+using Zenject;
 
 namespace SHG
 {
   public class FurnaceComponent : SmithingToolComponent
   {
+    [Inject]
+    IAudioLibrary audioLibrary;
     [SerializeField] [Required()]
     SmithingToolData furnaceData;
     [SerializeField] 
@@ -50,12 +53,19 @@ namespace SHG
     ParticleSystem fireParticle;
     [SerializeField] [Required, HideInInspector]
     ParticleSystem sparkParticle;
+    SfxController burningSfx;
 
     [Button]
     void TurnOff()
     {
       if (this.furnace.IsIgnited) {
         this.furnace.TurnOff();
+      }
+      if (this.burningSfx != null) {
+        this.burningSfx
+          .Stop()
+          .gameObject.SetActive(false);
+        this.burningSfx = null;
       }
       //if (this.effecter.IsStateOn(ISmithingToolEffecter.State.Working)) {
       //  this.effecter.ToggleState(ISmithingToolEffecter.State.Working);
@@ -88,8 +98,20 @@ namespace SHG
           this.ignitedColor: this.normalColor;
         if (this.isIgnited != this.effecter.IsStateOn(ISmithingToolEffecter.State.Working)) {
           this.effecter.ToggleState(ISmithingToolEffecter.State.Working);
+          this.audioLibrary.PlayRandomSound(
+            soundName: "ignite",
+            position: this.transform.position);
+          this.Invoke(nameof(PlayBurningSound), 2f);
         }
       } 
+    }
+
+    void PlayBurningSound()
+    {
+      this.burningSfx = this.audioLibrary.PlayRandomSound(
+        soundName: "burning",
+        position: this.transform.position)
+        .SetLoop(true);
     }
 
     void SetItemUI(Item item)

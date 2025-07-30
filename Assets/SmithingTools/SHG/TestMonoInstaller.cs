@@ -14,6 +14,10 @@ namespace SHG
         .Bind<INetworkSynchronizer<SmithingToolComponent>>()
         .To<SmithingToolSynchronizer>()
         .AsSingle();
+      this.Container
+        .Bind<IAudioLibrary>()
+        .To<AudioLibrary>()
+        .AsSingle(); 
     }
   }
 }
