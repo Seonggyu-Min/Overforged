@@ -39,7 +39,7 @@ namespace SHG
     int id;
     [SerializeField]
     int playerId;
-    [SerializeField, ReadOnly]
+    [SerializeField]
     bool isOwner;
     public Action<SmithingToolComponent, ToolTransferArgs, ToolTransferResult> OnTransfered;
     public Action<SmithingToolComponent, ToolWorkResult> OnWorked;

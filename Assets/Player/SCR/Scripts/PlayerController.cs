@@ -310,7 +310,7 @@ namespace SCR
                     }
                     else if (ActionObj.CompareTag("InteractionObj"))
                     {
-                        // 뜨거운 쟤료 아이템의 경우
+                        // 뜨거운 재료 아이템의 경우
                         if (player.PlayerPhysical.CanTransfer)
                         {
                             var result = ActionObj.GetComponent<IInteractableTool>().Transfer(player.PlayerPhysical.TransferArgs);
