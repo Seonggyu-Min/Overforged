@@ -180,8 +180,7 @@ namespace SCR
 
         private void Tempering()
         {
-            player.HoldObject = null;
-            Holding(false);
+            LayDownObject(false, false);
             canMove = false;
             player.SendPlayAnimationEvent(photonView.ViewID, "Tempering", "Trigger");
             photonView.RPC("PlaySound", RpcTarget.All, transform.position, (int)Player.CharSFXType.Put);
@@ -266,11 +265,11 @@ namespace SCR
         /// <summary>
         /// 물건을 내려 놓을 때의 함수
         /// </summary>
-        private void LayDownObject(bool isThrow = false)
+        private void LayDownObject(bool isThrow = false, bool isPut = false)
         {
             if (player.HoldObject != null)
             {
-                photonView.RPC("LayDownObject", RpcTarget.All, isThrow);
+                photonView.RPC("LayDownObject", RpcTarget.All, isThrow, isPut);
                 Holding(false);
             }
         }

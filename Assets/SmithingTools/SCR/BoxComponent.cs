@@ -53,13 +53,21 @@ namespace SCR
         public GameObject CreateItem()
         {
             GameObject itemObj = PhotonNetwork.Instantiate("MatItem", transform.position, Quaternion.identity);
-            MaterialItem createItem = itemObj.GetComponent<MaterialItem>();
-            createItem.Data = boxItemData;
-            createItem.Ore = boxItemOre;
-            createItem.Wood = boxItemWood;
+            photonView.RPC("SetItemObject", RpcTarget.All, itemObj.GetComponent<PhotonView>().ViewID);
+
             return itemObj;
         }
 
+        [PunRPC]
+        private void SetItemObject(int itemId)
+        {
+            PhotonView photonView = PhotonView.Find(itemId);
+
+            MaterialItem createItem = photonView.gameObject.GetComponent<MaterialItem>();
+            createItem.Data = boxItemData;
+            createItem.Ore = boxItemOre;
+            createItem.Wood = boxItemWood;
+        }
 
     }
 
