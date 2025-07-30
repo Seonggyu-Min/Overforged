@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
@@ -50,7 +50,7 @@ public class ProductConvey : MonoBehaviour, IInteractableTool
     {
         if (args.ItemToGive != null)
         {
-
+            _scoreManager.AddScore(PhotonNetwork.LocalPlayer, 1);
             int id = args.ItemToGive.GetComponent<PhotonView>().ViewID;
             photon.RPC("SetItemRPC", RpcTarget.All, args.PlayerNetworkId, id);
         }
