@@ -53,7 +53,7 @@ namespace SHG
     [SerializeField]
     Color interactColor;
 
-    [SerializeField] [VerticalGroup(10f, true, nameof(sawDustParticle), nameof(confettiParticle), nameof(animator))]
+    [SerializeField] [VerticalGroup(10f, true, nameof(sawDustParticle), nameof(confettiParticle))]
     Void effecterGroup;
     [SerializeField] [Required(), HideProperty]
     ParticleSystem sawDustParticle;
