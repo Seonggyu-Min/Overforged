@@ -16,6 +16,7 @@ namespace SCR
         {
             base.OnConnected();
             Debug.Log("연결");
+
         }
 
         public override void OnConnectedToMaster()
