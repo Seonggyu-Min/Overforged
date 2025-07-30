@@ -69,8 +69,6 @@ namespace SCR
             {
                 if (IsHold)
                 {
-                    Debug.Log(player.HoldObject.GetComponent<MaterialItem>());
-                    Debug.Log(player.HoldObject.GetComponent<MaterialItem>().Variation);
                     transferArgs = new ToolTransferArgs
                     {
                         ItemToGive = player.HoldObject.GetComponent<MaterialItem>(),
