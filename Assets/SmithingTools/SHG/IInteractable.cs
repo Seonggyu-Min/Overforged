@@ -24,7 +24,7 @@ namespace SHG
   {
     public const string ITEM_ID_KEY = "ItemId";
     public const string PLAYER_NETWORK_ID_KEY = "PlayerNetworkId";
-    public MaterialItem ItemToGive;
+    public Item ItemToGive;
     public int PlayerNetworkId;
 
     public override string ToString()
@@ -83,7 +83,7 @@ namespace SHG
 
   public struct PlayerInteractArgs
   {
-    public MaterialItem CurrentHoldingItem;
+    public Item CurrentHoldingItem;
     public int PlayerNetworkId;
 
     public override string ToString()

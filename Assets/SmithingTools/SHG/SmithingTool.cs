@@ -55,10 +55,17 @@ namespace SHG
     public abstract bool CanTransferItem(ToolTransferArgs args);
     public virtual ToolTransferResult Transfer(ToolTransferArgs args) 
     {
+      if (!(args.ItemToGive is MaterialItem materialItem)) {
+        #if UNITY_EDITOR
+        throw new ArgumentException($"{nameof(args.ItemToGive)} is not {nameof(MaterialItem)}");
+        #else
+        return (new ToolTransferResult());
+        #endif
+      }
       this.BeforeInteract?.Invoke(this);
       if (args.ItemToGive != null) {
         return (this.ReturnWithEvent(
-            this.ReceiveMaterialItem(args.ItemToGive), args));
+            this.ReceiveMaterialItem(materialItem), args));
       } 
       return (this.ReturnWithEvent(
           this.ReturnItem(), args));    
