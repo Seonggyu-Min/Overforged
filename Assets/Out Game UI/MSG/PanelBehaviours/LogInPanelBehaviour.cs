@@ -34,15 +34,8 @@ namespace MIN
 
         #region Unity Methods
 
-        private void OnEnable()
-        {
-            if (_firebaseManager.Auth.CurrentUser != null)
-            {
-                _firebaseManager.Auth.SignOut();
-            }
+        private void OnEnable() => ClearText();
 
-            ClearText();
-        }
 
         #endregion
 
