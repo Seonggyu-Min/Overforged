@@ -1,81 +1,86 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using JJY;
 using SHG;
 using UnityEngine;
+using UnityEngine.Jobs;
 
-public class ProductConvey : MonoBehaviour
+public class ProductConvey : SmithingToolComponent
 {
+    [SerializeField] Transform ProductPoint;
     //씬에서 할당 필요
     [SerializeField] RecipeManager recipeManager;
 
-    //집게는 없으나 아이템은 가진 상황에서
-    //손에 든 아이템에 ProductItem 컴포넌트가 있다면 (완성품이라면)
-    //InteractionObj 태그로 출품대 오브젝트를 확인
-    //Getconponent로 ProductConvey를 가져온 후
-    //ProductItem을 넘겨주며 아래의 함수를 실행합니다.
+    Convey convey;
 
-    //아이템이 의뢰 품목에 있다면 true를 반환합니다.
-    //그때 아이템 제거를 진행하시면 될 것 같습니다.
-    public bool Check(ProductItem item)
+    private Item HoldingItem;
+    protected override SmithingTool tool => null;
+    protected override ISmithingToolEffecter effecter => null;
+
+    protected override Transform materialPoint => ProductPoint;
+
+
+
+
+    void Awake()
     {
-        bool result = recipeManager.FulfillRecipe(item.Data as ProductItemData, item.Ore, item.Wood);
-        //점수 올리는 기능이 필요
-        return result;
+        //UI.enabled = false;
+
     }
 
 
+    public override bool CanTransferItem(ToolTransferArgs args)
+    {
+        bool result = false;
+        if (HoldingItem == null && args.ItemToGive != null && args.ItemToGive is Item temp)
+        {
+            if (temp is ProductItem item)
+            {
+                result = recipeManager.Check(item.Data as ProductItemData, item.Ore, item.Wood);
+            }
+        }
+        return result;
+    }
 
+    public override ToolTransferResult Transfer(ToolTransferArgs args)
+    {
+        if (args.ItemToGive != null)
+        {
+            HoldingItem = args.ItemToGive;
+            args.ItemToGive.transform.SetParent(this.transform);
+            args.ItemToGive.transform.position = this.materialPoint.position;
+            args.ItemToGive.transform.up = this.materialPoint.up;
+            StartCoroutine(ItemRemoveRoutine());
+        }
+        return (new ToolTransferResult
+        {
+            ReceivedItem = null,
+            IsDone = false
+        });
+    }
 
-    //void Awake()
-    //{
-    //    //UI.enabled = false;
-//
-    //}
-//
-//
-    //public bool CanTransferItem(ToolTransferArgs args)
-    //{
-    //    return true;
-    //}
-//
-    //public ToolTransferResult Transfer(ToolTransferArgs args)
-    //{
-    //    UI.enabled = false;
-    //    return (new ToolTransferResult
-    //    {
-    //        ReceivedItem = null,
-    //        IsDone = true
-    //    });
-    //}
-//
-    //public bool CanWork()
-    //{
-    //    return true;
-    //}
-//
-    //public ToolWorkResult Work()
-    //{
-    //    if (UI.enabled)
-    //    {
-    //        UI.enabled = false;
-    //        return (new ToolWorkResult
-    //        {
-    //            Trigger = null,
-    //            DurationToStay = 0.1f
-    //        });
-//
-    //    }
-    //    else
-    //    {
-    //        UI.enabled = true;
-    //        return (new ToolWorkResult
-    //        {
-    //            Trigger = null,
-    //            DurationToStay = float.MaxValue
-    //        });
-    //    }
-    //}
+    public override bool CanWork()
+    {
+        return false;
+    }
+
+    public override ToolWorkResult Work()
+    {
+        return (new ToolWorkResult
+        {
+            Trigger = null,
+            DurationToStay = 0.1f
+        });
+    }
+
+    private IEnumerator ItemRemoveRoutine()
+    {
+        yield return new WaitForSeconds(3);
+        HoldingItem = null;
+        recipeManager.FulfillRecipe();
+
+    }
 
 }
