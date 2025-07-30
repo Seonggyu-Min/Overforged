@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8336906374888735153
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5865761596687405918}
+  - component: {fileID: 8456368987601021593}
+  m_Layer: 0
+  m_Name: ToolSoundSources
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5865761596687405918
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8336906374888735153}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8456368987601021593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8336906374888735153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b19b09ef719223a7c978a26594b2ca38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SoundSources:
+  - Name: success
+    SoundFiles:
+    - Clip: {fileID: 8300000, guid: 214180f9747e2e955b0d6a6a0b306e71, type: 3}
+      Volume: 1
+    - Clip: {fileID: 8300000, guid: 57bbdca54b4fae012ab9e798be3a2b25, type: 3}
+      Volume: 0.5
+  - Name: quench
+    SoundFiles:
+    - Clip: {fileID: 8300000, guid: 3171c35b24a02a052a0252314b8dfc69, type: 3}
+      Volume: 1
+    - Clip: {fileID: 8300000, guid: 3582d8e43b7dad7f7a28317c491cb0d6, type: 3}
+      Volume: 0.5
+  - Name: ignite
+    SoundFiles:
+    - Clip: {fileID: 8300000, guid: 362099639076ca6a2b3e1b0fd63a7cf4, type: 3}
+      Volume: 1
+  - Name: burning
+    SoundFiles:
+    - Clip: {fileID: 8300000, guid: ccd9c4ae1b1a06f4ba83ac8c8def1e4d, type: 3}
+      Volume: 0.2
