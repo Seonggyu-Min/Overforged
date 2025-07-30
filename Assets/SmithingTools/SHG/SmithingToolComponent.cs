@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
-using EditorAttributes;
 
 namespace SHG
 {
@@ -130,12 +129,7 @@ namespace SHG
     protected virtual void HandleNetworkWork(object[] args)
     {
       // TODO: handle work result
-      Debug.Log("HandleNetworkWork");
       var dict = args[0] as Dictionary<string, object>;
-      foreach (var (key, value) in dict)
-      {
-        Debug.Log($"{key}: {value}");
-      }
       this.Work();
       // TODO: handle work trigger
       this.tool.OnInteractionTriggered?.Invoke(this.tool.InteractionToTrigger);

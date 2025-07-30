@@ -7,6 +7,7 @@ using EditorAttributes;
 using TMPro;
 using Void = EditorAttributes.Void;
 using Zenject;
+using Photon.Pun;
 
 namespace SHG
 {
@@ -102,6 +103,7 @@ namespace SHG
 
     protected override Transform materialPoint => this.materialPosition;
 
+    [SerializeField] [ReadOnly]
     IInteractableTool currentWorkingTool;
 
     public override bool CanTransferItem(ToolTransferArgs args)
@@ -223,7 +225,7 @@ namespace SHG
         {
           this.animator.SetTrigger("Craft");
         }
-        Debug.Log($"{nameof(Work)} result: {result}");
+        Debug.Log($"{this.CurrentWorkingTool} {nameof(Work)} result: {result}");
         this.OnWorked?.Invoke(this, result);
         return (result);
       }
@@ -314,9 +316,6 @@ namespace SHG
 
     void OnCraftProductCrafted(ProductItemData craftedProduct)
     {
-      if (!this.IsOwner && this.craftTable.Product != null) {
-        this.craftTable.Product.Data = craftedProduct;
-      }
       this.craftProductNameLabel.text = craftedProduct.Name;
       this.craftProductImage.sprite = craftedProduct.Image;
       this.tableEffecter.TriggerWorkEffect();
@@ -414,7 +413,8 @@ namespace SHG
       this.woodTableCanvas.enabled = false;
       this.craftTable = new CraftTable(
         data: this.craftTableData,
-        productPoint: this.materialPoint);
+        productPoint: this.materialPoint,
+        createProduct: this.CreateProduct);
       this.craftTable.OnMaterialAdded += this.OnCraftMaterialAdded;
       this.craftTable.OnMaterialRemoved += this.OnCraftMaterialRemoved;
       this.craftTable.OnProductCrafted += this.OnCraftProductCrafted;
@@ -436,16 +436,56 @@ namespace SHG
     protected override void HandleNetworkWork(object[] args)
     {
       // TODO: handle work result
-      Debug.Log("HandleNetworkWork");
       var dict = args[0] as Dictionary<string, object>;
-      foreach (var (key, value) in dict)
-      {
-        Debug.Log($"{key}: {value}");
-      }
       this.Work();
-      // TODO: handle work trigger
-      if (this.CurrentWorkingTool == this.woodTable)
+      if (this.CurrentWorkingTool == this.woodTable) {
+        this.woodTable.OnInteractionTriggered?.Invoke(this.woodTable.InteractionToTrigger);
+      }
+    }
+
+    public override void OnRpc(string method, float latencyInSeconds, object[] args = null)
+    {
+      switch (method)
       {
+        case nameof(Transfer):
+          this.HandleNetworkTransfer(args);
+          break;
+        case nameof(Work):
+          this.HandleNetworkWork(args);
+          break;
+        case nameof(SetProductData):
+          this.SetProductData(args);
+          break;
+      }
+    }
+
+    ProductItem CreateProduct(ItemData itemData)
+    {
+      if (this.IsOwner) {
+        var gameObject = PhotonNetwork.Instantiate(
+          prefabName: "ProductItem", 
+          position: this.materialPoint.position,
+          rotation: Quaternion.identity
+          );
+        var productItem = gameObject.GetComponent<ProductItem>();
+        productItem.Data = itemData;
+        int itemId = gameObject.GetComponent<PhotonView>().ViewID;
+        this.NetworkSynchronizer.SendRpc(
+          sceneId: this.SceneId,
+          method: nameof(this.SetProductData),
+          args: new object[] { itemId }
+          );
+        return (productItem);
+      }
+      else {
+        return (null);
+      }
+    }
+
+    void SetProductData(object[] args)
+    {
+      if (this.NetworkSynchronizer.TryFindComponentFromNetworkId<ProductItem>(networId: (int)args[0], out ProductItem productItem)) {
+        productItem.Data = this.craftTable.CraftableProduct;
       }
     }
   }
