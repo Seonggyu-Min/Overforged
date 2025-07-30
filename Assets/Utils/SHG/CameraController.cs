@@ -25,6 +25,8 @@ namespace SHG
     Transform cameraLookObject;
     [SerializeField]
     Vector3 followOffset;
+    [SerializeField]
+    Vector3 cameraRotation;
     Rigidbody cameraFollow;
     Rigidbody cameraLook;
     Coroutine cameraRoutine;
@@ -46,6 +48,7 @@ namespace SHG
     Transform focusTarget;
 #endif
     Transform player;
+    Quaternion cameraQuaternion;
 
     public Transform Player 
     {
@@ -66,6 +69,11 @@ namespace SHG
       }
       instance = this;
       this.cameraCommandQueue = new ();
+      this.cameraQuaternion = Quaternion.Euler(
+        this.cameraRotation.x,
+        this.cameraRotation.y,
+        this.cameraRotation.z
+        );
       this.virtualCamera = this.GetComponent<CinemachineVirtualCamera>();
       this.depthHeightRatio = Math.Abs(this.followOffset.y / this.followOffset.z );
       if (this.cameraFollowObject == null) {
@@ -84,6 +92,7 @@ namespace SHG
         this.cameraLook = this.cameraLookObject.GetComponent<Rigidbody>();
       }
       this.cameraFollow.useGravity = false;
+      this.cameraFollow.rotation = this.cameraQuaternion;
       this.cameraLook.useGravity = false;
       this.virtualCamera.Follow = this.cameraFollowObject;
       this.virtualCamera.LookAt = this.cameraLookObject;
