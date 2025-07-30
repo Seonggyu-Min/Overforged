@@ -20,14 +20,16 @@ namespace SHG
     public Action<ProductItemData> OnProductCrafted;
     public Action<ProductItemData> OnProductRemoved;
     public Action OnCraftableChanged;
+    Transform transform;
 
-    public CraftTable(CraftTableData data): base(data)
+    public CraftTable(CraftTableData data, Transform productPoint): base(data)
     {
       this.craftList = new Craft[data.CraftList.Length];
       for (int i = 0; i < craftList.Length; i++) {
         this.craftList[i] = new Craft(data.CraftList[i]); 
       }
       this.HoldingMaterials = new List<MaterialItem>();
+      this.transform = productPoint;
     }
 
     public override bool CanTransferItem(ToolTransferArgs args)
@@ -102,7 +104,7 @@ namespace SHG
         return (new ToolWorkResult {});
         #endif
       }
-      this.Product = craft.CreateProduct();
+      this.Product = craft.CreateProduct(this.transform.position);
       foreach (var material in this.HoldingMaterials) {
         GameObject.Destroy(material.gameObject);
       }
