@@ -1096,11 +1096,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6217876595374056910, guid: 78120047324f9984b8363edecdea1d5d, type: 3}
+      propertyPath: photon
+      value: 
+      objectReference: {fileID: 4508151498656256739}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4040390503331558672, guid: 78120047324f9984b8363edecdea1d5d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4508151498656256739}
   m_SourcePrefab: {fileID: 100100000, guid: 78120047324f9984b8363edecdea1d5d, type: 3}
+--- !u!1 &4508151498656256738 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4040390503331558672, guid: 78120047324f9984b8363edecdea1d5d, type: 3}
+  m_PrefabInstance: {fileID: 4508151498656256737}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4508151498656256739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4508151498656256738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 2
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1001 &4797977519183298698
 PrefabInstance:
   m_ObjectHideFlags: 0

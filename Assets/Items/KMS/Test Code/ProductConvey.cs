@@ -33,7 +33,7 @@ public class ProductConvey : MonoBehaviour, IInteractableTool
     }
 
 
-    public bool CanTransferItem(ToolTransferArgs args)
+   public bool CanTransferItem(ToolTransferArgs args)
     {
         bool result = false;
         if (HoldingItem == null && args.ItemToGive != null && args.ItemToGive is Item temp)
@@ -50,9 +50,7 @@ public class ProductConvey : MonoBehaviour, IInteractableTool
     {
         if (args.ItemToGive != null)
         {
-            _scoreManager.AddScore(PhotonNetwork.LocalPlayer, 1);
-            int id = args.ItemToGive.GetComponent<PhotonView>().ViewID;
-            photon.RPC("SetItemRPC", RpcTarget.All, args.PlayerNetworkId, id);
+            StartCoroutine(ItemRemoveRoutine(args));
         }
         return (new ToolTransferResult
         {
@@ -77,23 +75,24 @@ public class ProductConvey : MonoBehaviour, IInteractableTool
 
 
     [PunRPC]
-    private void SetItemRPC(int playerId, int itemId)
+    private void SetItemRPC(int itemId)
     {
         HoldingItem = PhotonView.Find(itemId).GetComponent<Item>();
         HoldingItem.transform.SetParent(this.transform);
         HoldingItem.transform.position = ProductPoint.position;
         HoldingItem.transform.up = ProductPoint.up;
-        StartCoroutine(ItemRemoveRoutine(playerId));
     }
 
-    private IEnumerator ItemRemoveRoutine(int playerid)
+    private IEnumerator ItemRemoveRoutine(ToolTransferArgs args)
     {
+        int id = args.ItemToGive.GetComponent<PhotonView>().ViewID;
+        photon.RPC("SetItemRPC", RpcTarget.All, id);
         yield return new WaitForSeconds(3);
-        Destroy(HoldingItem);
+        PhotonNetwork.Destroy(HoldingItem.GetComponent<PhotonView>());
         HoldingItem = null;
         recipeManager.FulfillRecipe();
-        //_scoreManager.AddScore(, 1);
-        
+        _scoreManager.AddScore(PhotonNetwork.LocalPlayer, 1);
+
 
     }
 
