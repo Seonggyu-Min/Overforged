@@ -47,6 +47,8 @@ namespace MIN
 
         public void OnClickSignUpButton() => SignUp();
 
+        public void OnClickExitButton() => Exit();
+
         #endregion
 
 
@@ -207,12 +209,23 @@ namespace MIN
             }
         }
 
+        private void Exit()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
+
         private void ClearText()
         {
             _idInputField.text = string.Empty;
             _passwordInputField.text = string.Empty;
         }
 
-        #endregion
+
+
+#endregion
     }
 }

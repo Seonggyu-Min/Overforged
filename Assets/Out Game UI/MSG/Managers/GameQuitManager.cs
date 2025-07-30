@@ -40,5 +40,22 @@ namespace MIN
                 FirebaseAuth.DefaultInstance.SignOut();
             }
         }
+
+        // 아래 구조도 괜찮을 듯
+        //private void OnEnable()
+        //{
+        //    Application.wantsToQuit += OnWantsToQuit;
+        //}
+
+        //private void OnDisable()
+        //{
+        //    Application.wantsToQuit -= OnWantsToQuit;
+        //}
+
+        //private bool OnWantsToQuit()
+        //{
+        //    TrySignOut();
+        //    return true; // false면 앱 종료가 취소됨
+        //}
     }
 }

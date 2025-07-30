@@ -111,6 +111,11 @@ namespace MIN
             StartCoroutine(LogOutRoutine());
         }
 
+        public void OnClickLeaderBoardButton()
+        {
+            _outGameUIManager.Show("Leader Board Panel");
+        }
+
         #endregion
 
 
@@ -187,7 +192,6 @@ namespace MIN
                 _outGameUIManager.Show("Log In Panel");
             });
         }
-
 
         #endregion
     }
