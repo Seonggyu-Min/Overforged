@@ -150,7 +150,7 @@ namespace SHG
 
     ToolTransferResult MoveMaterialToCraftTable(ToolTransferArgs args)
     {
-      MaterialItem ItemToGive = args.ItemToGive;
+      MaterialItem ItemToGive = args.ItemToGive as MaterialItem;
       args.ItemToGive = null;
       var result = this.woodTable.Transfer(args);
       this.craftTable.Transfer(new ToolTransferArgs {

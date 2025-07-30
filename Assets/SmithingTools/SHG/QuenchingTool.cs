@@ -22,12 +22,17 @@ namespace SHG
     public override bool CanTransferItem(ToolTransferArgs args)
     {
       if (args.ItemToGive != null) {
-        if (this.HoldingItem != null) {
+        if (args.ItemToGive is MaterialItem materialItem) {
+          if (this.HoldingItem != null) {
+            return (false);
+          }
+          return (
+            Array.IndexOf(
+              this.AllowedMaterials, materialItem.Variation) != -1);
+        }
+        else {
           return (false);
         }
-        return (
-          Array.IndexOf(
-            this.AllowedMaterials, args.ItemToGive.Variation) != -1);
       }
       return (this.HoldingItem != null && this.IsFinished);
     }

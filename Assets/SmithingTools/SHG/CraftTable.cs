@@ -57,8 +57,15 @@ namespace SHG
           });
       }
       if (args.ItemToGive != null) {
-        this.HoldingMaterials.Add(args.ItemToGive); 
-        this.OnMaterialAdded?.Invoke(args.ItemToGive);
+        if (!(args.ItemToGive is MaterialItem materialItem)) {
+          #if UNITY_EDITOR
+          throw new ArgumentException($"{nameof(args.ItemToGive)} is not {nameof(MaterialItem)}");
+          #else
+          return (new ToolTransferResult());
+          #endif
+        }
+        this.HoldingMaterials.Add(materialItem); 
+        this.OnMaterialAdded?.Invoke(materialItem);
         this.SetCraftableProduct();
         return (new ToolTransferResult {
             ReceivedItem = null,
