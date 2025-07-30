@@ -342,6 +342,13 @@ namespace SCR
                         // 용광로일때, 담금질할때
                         if (player.PlayerPhysical.CanTransfer)
                         {
+                            ProductConvey pc = ActionObj.GetComponent<ProductConvey>();
+                            if (pc != null)
+                            {
+                                pc.Transfer(player.PlayerPhysical.TransferArgs);
+                                return;
+
+                            }
                             ActionObj.GetComponent<SmithingToolComponent>().Transfer(player.PlayerPhysical.TransferArgs);
                             Tempering();
                         }
