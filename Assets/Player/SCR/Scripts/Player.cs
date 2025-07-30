@@ -4,6 +4,7 @@ using ExitGames.Client.Photon;
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using UnityEngine.UI;
 
 namespace SCR
 {
@@ -47,6 +48,7 @@ namespace SCR
 
         [Header("팀 색상")]
         [SerializeField] private MeshRenderer _renderer;
+        [SerializeField] private Image image;
 
         [Header("캐릭터 설정")]
         private int characterNum;
@@ -55,6 +57,8 @@ namespace SCR
         [SerializeField] private List<MeshRenderer> _bodyrenderer;
         [SerializeField] private GameObject _normalhead;
         [SerializeField] private List<GameObject> _head;
+        [SerializeField] private GameObject isMineUI;
+
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
@@ -100,6 +104,7 @@ namespace SCR
                 {
                     SetTeam((int)team);
                 }
+                isMineUI.SetActive(true);
             }
 
         }
@@ -108,6 +113,7 @@ namespace SCR
         {
             this.team = team;
             _renderer.material.color = teamColor.Color[team];
+            image.color = teamColor.Color[team];
         }
 
         public void SetCharacter(int num)
