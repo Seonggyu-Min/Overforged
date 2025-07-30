@@ -283,7 +283,7 @@ namespace SCR
 
         public void StartTrigger()
         {
-            Trigger.Invoke();
+            Trigger?.Invoke();
         }
     }
 }
