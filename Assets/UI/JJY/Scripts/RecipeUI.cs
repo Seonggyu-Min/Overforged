@@ -31,7 +31,7 @@ namespace JJY
         // 외부에서 레시피 데이터 받아 UI 설정
         public void Setup(CraftData craftdata, WoodType wood, OreType ore, int id)
         {
-            RecipeData recipeData = null; // 컴파일 에러 제거용 코드
+            // RecipeData recipeData = null; // 컴파일 에러 제거용 코드
             //curRecipe = recipeData;
             curCraft = craftdata;
             curWood = wood;
