@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 5654440332643020255}
   m_Layer: 7
   m_Name: QuenchingTool
-  m_TagString: Untagged
+  m_TagString: InteractionObj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -776,7 +776,7 @@ MonoBehaviour:
   waveForceHeight: 0.02
   waveForceSpeed: 0.2
   autoAddFloat: 0
-  wave: 0
+  wave: 1
   waveScale: 0
 --- !u!1 &3330755362418347718
 GameObject:

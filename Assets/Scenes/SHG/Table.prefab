@@ -5646,6 +5646,7 @@ GameObject:
   - component: {fileID: 5549068515898811769}
   - component: {fileID: 1816970452203033942}
   - component: {fileID: 4444868604396321427}
+  - component: {fileID: 47735625022124773}
   m_Layer: 0
   m_Name: Table
   m_TagString: InteractionObj
@@ -5778,6 +5779,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.07483, y: 1.5, z: 1.0594422}
   m_Center: {x: -0.000019013882, y: 0.7, z: -0.00016194582}
+--- !u!95 &47735625022124773
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3535461838639889697}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 925531c4fd92a175abdff5388f134235, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3914417336895963132
 GameObject:
   m_ObjectHideFlags: 0
@@ -5805,7 +5827,7 @@ Transform:
   m_GameObject: {fileID: 3914417336895963132}
   serializedVersion: 2
   m_LocalRotation: {x: -0.50097305, y: -0.49973252, z: 0.49919894, w: 0.50009394}
-  m_LocalPosition: {x: -0.815, y: 0.785, z: 0.211}
+  m_LocalPosition: {x: -0.815, y: 0.773, z: 0.211}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16074,7 +16096,7 @@ ParticleSystem:
   serializedVersion: 8
   lengthInSec: 2
   simulationSpeed: 1
-  stopAction: 1
+  stopAction: 0
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}

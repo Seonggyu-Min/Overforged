@@ -3,9 +3,8 @@ using UnityEngine;
 
 namespace SHG
 {
-  using CraftData = TestCraftData;
 
-  public class TestCraft
+  public class Craft
   {
     public CraftData Data;
     public ProductItemData ProductItemData => this.Data.ProductItemData;
@@ -19,7 +18,7 @@ namespace SHG
       return (productItem);
     }
 
-    public TestCraft(CraftData data)
+    public Craft(CraftData data)
     {
       this.Data = data; 
       this.Materials = new HashSet<MaterialItemData>(this.Data.Materials);
