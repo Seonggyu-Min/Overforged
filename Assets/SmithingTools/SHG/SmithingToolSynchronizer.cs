@@ -164,6 +164,9 @@ namespace SHG
         found = foundView.GetComponent<U>();
         return (found != null);
       }
+      #if UNITY_EDITOR
+      Debug.LogError($"{nameof(TryFindComponentFromNetworkId)} fail to find {networId}");
+      #endif
       found = null;
       return (false);
     }
