@@ -315,7 +315,7 @@ namespace SCR
                         //PickUpObject(ActionObj/*후에 바꿔야 됨*/);
 
                         // 아이템 상자라면
-                        PickUpObject(ActionObj.GetComponent<TestBoxComponent>().CreateItem());
+                        PickUpObject(ActionObj.GetComponent<BoxComponent>().CreateItem());
                     }
                     else if (ActionObj.CompareTag("Item"))
                     {
@@ -342,7 +342,7 @@ namespace SCR
                         // 용광로일때, 담금질할때
                         if (player.PlayerPhysical.CanTransfer)
                         {
-                            ActionObj.GetComponent<SmithingToolComponent>().Transfer(player.PlayerPhysical.TransferArgs);
+                            ActionObj.GetComponent<IInteractableTool>().Transfer(player.PlayerPhysical.TransferArgs);
                             Tempering();
                         }
 
@@ -361,14 +361,14 @@ namespace SCR
                         // 상호 작용 오브젝트에 집게 없이 들 수 있는 아이템이 있다면 먹기
                         // 아이템 상자라면
 
-                        if (ActionObj.GetComponent<TestBoxComponent>() != null)
-                            PickUpObject(ActionObj.GetComponent<TestBoxComponent>().CreateItem());
+                        if (ActionObj.GetComponent<BoxComponent>() != null)
+                            PickUpObject(ActionObj.GetComponent<BoxComponent>().CreateItem());
 
                         else
                         {
                             if (player.PlayerPhysical.CanTransfer)
                             {
-                                var result = ActionObj.GetComponent<SmithingToolComponent>().Transfer(player.PlayerPhysical.TransferArgs);
+                                var result = ActionObj.GetComponent<IInteractableTool>().Transfer(player.PlayerPhysical.TransferArgs);
                                 if (result.ReceivedItem != null)
                                 {
                                     PickUpObject(result.ReceivedItem.gameObject, false);
@@ -410,15 +410,15 @@ namespace SCR
                 {
                     if (player.PlayerPhysical.CanTransfer)
                     {
-                        ActionObj.GetComponent<SmithingToolComponent>().Transfer(player.PlayerPhysical.TransferArgs);
+                        ActionObj.GetComponent<IInteractableTool>().Transfer(player.PlayerPhysical.TransferArgs);
                         Tempering();
                     }
                 }
                 else
                 {
-                    if (ActionObj.GetComponent<SmithingToolComponent>().CanWork())
+                    if (ActionObj.GetComponent<IInteractableTool>().CanWork())
                     {
-                        var result = ActionObj.GetComponent<SmithingToolComponent>().Work();
+                        var result = ActionObj.GetComponent<IInteractableTool>().Work();
 
                         Hammering(result.Trigger);
                     }
