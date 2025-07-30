@@ -345,7 +345,9 @@ namespace SHG
       this.woodTable.AfterInteract += this.AfterWoodTableInteract;
       this.woodTable.OnInteractionTriggered += this.OnWoodTableTriggered;
       this.woodTableCanvas.enabled = false;
-      this.craftTable = new CraftTable(this.craftTableData);
+      this.craftTable = new CraftTable(
+        data: this.craftTableData,
+        productPoint: this.materialPoint);
       this.craftTable.OnMaterialAdded += this.OnCraftMaterialAdded;
       this.craftTable.OnMaterialRemoved += this.OnCraftMaterialRemoved;
       this.craftTable.OnProductCrafted += this.OnCraftProductCrafted;
