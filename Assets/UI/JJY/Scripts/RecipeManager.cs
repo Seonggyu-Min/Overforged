@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Photon.Pun;
@@ -44,6 +44,8 @@ namespace JJY
 
         public void SpawnRandomRecipe() // 게임 시작시 호출
         {
+            if (!PhotonNetwork.IsMasterClient) return;
+
             //int index = Random.Range(0, allRecipes.Count);
             int p = UnityEngine.Random.Range(0, itemDataList.craftList.Count);
             int o = UnityEngine.Random.Range(1, materialData.ores.Count);
@@ -129,6 +131,7 @@ namespace JJY
             {
                 photonView.RPC(nameof(RPC_RemoveRecipe), RpcTarget.All, targetUI.uniqueID);
                 targetUI = null;
+                SpawnRandomRecipe();
             }
         }
 
@@ -148,7 +151,6 @@ namespace JJY
 
         void ReorderUI()
         {
-            SpawnRandomRecipe();
             for (int i = 0; i < curUIs.Count; i++)
             {
                 curUIs[i].transform.SetSiblingIndex(i);

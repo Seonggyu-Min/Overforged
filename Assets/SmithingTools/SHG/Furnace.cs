@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace SHG
@@ -69,7 +69,13 @@ namespace SHG
     {
       if (args.ItemToGive != null) {
         if (args.ItemToGive is MaterialItem materialItem) {
-          return (Array.IndexOf(
+
+                    Debug.Log($"{this.AllowedMaterials}");
+
+                    Debug.Log($"{materialItem.Variation} sdaasd");
+
+                    return (Array.IndexOf(
+
               this.AllowedMaterials, materialItem.Variation) != -1);
         }
         else {

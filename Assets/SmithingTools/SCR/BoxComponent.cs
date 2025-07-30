@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
@@ -14,6 +14,9 @@ namespace SCR
 
         [SerializeField] List<Material> itemMaterial;
         [SerializeField] MeshRenderer mesh;
+
+        private GameObject itemObj;
+        [SerializeField] PhotonView view;
 
         void Start()
         {

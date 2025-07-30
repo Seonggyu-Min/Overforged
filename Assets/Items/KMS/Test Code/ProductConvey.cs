@@ -79,7 +79,7 @@ public class ProductConvey : MonoBehaviour, IInteractableTool
     private void SetItemRPC(int itemId)
     {
         HoldingItem = PhotonView.Find(itemId).GetComponent<Item>();
-        HoldingItem.transform.SetParent(this.transform);
+        HoldingItem.transform.SetParent(ProductPoint);
         HoldingItem.transform.position = ProductPoint.position;
         HoldingItem.transform.up = ProductPoint.up;
     }
@@ -88,11 +88,11 @@ public class ProductConvey : MonoBehaviour, IInteractableTool
     {
         int id = args.ItemToGive.GetComponent<PhotonView>().ViewID;
         photon.RPC("SetItemRPC", RpcTarget.All, id);
+        _scoreManager.AddScore(PhotonNetwork.LocalPlayer, 1);
         yield return new WaitForSeconds(3);
         PhotonNetwork.Destroy(HoldingItem.GetComponent<PhotonView>());
         HoldingItem = null;
         recipeManager.FulfillRecipe();
-        _scoreManager.AddScore(PhotonNetwork.LocalPlayer, 1);
 
 
     }
