@@ -4,14 +4,19 @@ namespace SHG
 {
   public class LookCameraUI : MonoBehaviour
   {
-    [SerializeField]
     Transform cameraToLook;
-
+    [SerializeField] Canvas canvas;
     void Awake()
     {
-      if (this.cameraToLook == null) {
+
+      if (this.cameraToLook == null)
+      {
         this.cameraToLook = Camera.main.transform;
       }
+      if (canvas == null) canvas = GetComponent<Canvas>();
+      canvas.worldCamera = Camera.main.transform.Find("UICamera").gameObject.GetComponent<Camera>();
+
+
     }
 
     // Start is called before the first frame update
@@ -23,7 +28,8 @@ namespace SHG
     // Update is called once per frame
     void Update()
     {
-      this.transform.rotation = this.cameraToLook.rotation;
+      transform.LookAt(transform.position + cameraToLook.transform.rotation * Vector3.forward,
+                               cameraToLook.transform.rotation * Vector3.up);
     }
   }
 }
