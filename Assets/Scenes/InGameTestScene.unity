@@ -1822,6 +1822,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1499650940496184796, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.1
+      objectReference: {fileID: 0}
     - target: {fileID: 1751841106532219222, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
@@ -1920,7 +1924,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2598945302839556168, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.291
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2598945302839556168, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2598945302839556168, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2729161343510976772, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2058,6 +2070,10 @@ PrefabInstance:
       propertyPath: cameraToLook
       value: 
       objectReference: {fileID: 781238942}
+    - target: {fileID: 4890566583180167108, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.1
+      objectReference: {fileID: 0}
     - target: {fileID: 5416478179552059081, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
@@ -2096,7 +2112,15 @@ PrefabInstance:
       objectReference: {fileID: 781238942}
     - target: {fileID: 6052445205999457849, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.291
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6052445205999457849, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6052445205999457849, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6066697818642266784, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: id
