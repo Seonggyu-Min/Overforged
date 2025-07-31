@@ -39,7 +39,7 @@ namespace JJY
         {
             productSprites.Init(); // 딕셔너리 초기화작업.
 
-            if (!PhotonNetwork.IsMasterClient) return;
+            // if (!PhotonNetwork.IsMasterClient) return;
 
             for (int i = 0; i < 5; i++)
             {
@@ -49,6 +49,8 @@ namespace JJY
 
         public void SpawnRandomRecipe() // 게임 시작시 호출
         {
+            if (!PhotonNetwork.IsMasterClient) return;
+            
             //int index = Random.Range(0, allRecipes.Count);
             int p = UnityEngine.Random.Range(0, itemDataList.craftList.Count);
             int o = UnityEngine.Random.Range(1, materialData.ores.Count);
