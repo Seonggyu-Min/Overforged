@@ -25,7 +25,10 @@ namespace SHG
     ParticleSystem vaporParticle;
     [SerializeField] [Required()]
     MeshRenderer[] renderers;
-    [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(itemProgressLabel), nameof(tempLabel))]
+    [SerializeField] [Required]
+    GauageImageUI progressUI;
+
+    [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(tempLabel))]
     Void uiGroup;
     [SerializeField] [HideProperty]
     Canvas uiCanvas;
@@ -34,8 +37,6 @@ namespace SHG
     [SerializeField] [HideProperty]
     TMP_Text itemNameLabel;
     [SerializeField] [HideProperty]
-    TMP_Text itemProgressLabel;
-    [SerializeField] [HideProperty]
     TMP_Text tempLabel;
     [SerializeField]
     Color normalColor;
@@ -43,6 +44,7 @@ namespace SHG
     Color coolColor;
     [SerializeField]
     Color heatedColor;
+    ObservableValue<(float current, float total)> progress;
 
     protected override SmithingTool tool => this.quenchingTool;
     protected override ISmithingToolEffecter effecter => this.quenchingEffecter;
@@ -99,7 +101,7 @@ namespace SHG
       base.Update();
       if (this.uiCanvas.enabled) {
         this.tempLabel.text = $"temp: {this.quenchingTool.Temparature}";
-        this.itemProgressLabel.text = $"progress: {this.quenchingTool.Progress * 100}%";
+        this.progress.Value = (this.quenchingTool.Progress, 1f);
       }
     }
 
@@ -123,6 +125,8 @@ namespace SHG
         materialPoint: this.materialPoint
         );
       this.uiCanvas.enabled = false;
+      this.progress = new ((0f, 1f));
+      this.progressUI.WatchingFloatValue = this.progress;
     }
   }
 }

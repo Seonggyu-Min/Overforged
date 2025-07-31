@@ -15,41 +15,34 @@ namespace SHG
     SmithingToolData data;
     [SerializeField]
     MeshRenderer standRenderer;
-    [SerializeField]
-    [Required]
+    [SerializeField] [Required]
     Transform materialPosition;
+    [SerializeField] [Required]
+    GauageImageUI progressUI;
 
-    [SerializeField]
-    [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(itemProgressLabel))]
+    [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel))]
     Void uiGroup;
-    [SerializeField]
-    [HideProperty]
+    [SerializeField] [HideProperty]
     Canvas uiCanvas;
-    [SerializeField]
-    [HideProperty]
+    [SerializeField] [HideProperty]
     Image itemImage;
-    [SerializeField]
-    [HideProperty]
+    [SerializeField] [HideProperty]
     TMP_Text itemNameLabel;
-    [SerializeField]
-    [HideProperty]
-    TMP_Text itemProgressLabel;
     [SerializeField]
     Color normalColor;
     [SerializeField]
     Color interactColor;
 
-    [SerializeField]
-    [VerticalGroup(10f, true, nameof(sparkPrefab))]
+    [SerializeField] [VerticalGroup(10f, true, nameof(sparkPrefab))]
     Void effecterGroup;
-    [SerializeField]
-    [HideInInspector, Required]
+    [SerializeField] [HideInInspector, Required]
     GameObject sparkPrefab;
 
     protected override SmithingTool tool => this.anvil;
     protected override ISmithingToolEffecter effecter => this.anvilEffecter;
 
     protected override Transform materialPoint => this.materialPosition;
+    ObservableValue<(float current, float total)> progress;
 
     AnvilEffecter anvilEffecter;
 
@@ -95,7 +88,7 @@ namespace SHG
       {
         this.uiCanvas.enabled = true;
       }
-      this.itemProgressLabel.text = $"Progress: {this.anvil.Progress * 100}%";
+      this.progress.Value = (this.anvil.Progress, 1f);
     }
 
     protected override void Awake()
@@ -116,13 +109,14 @@ namespace SHG
         anvil: this.anvil,
         sparkPool: sparkPool);
       this.uiCanvas.enabled = false;
+      this.progress = new ((0f, 1f));
+      this.progressUI.WatchingFloatValue = this.progress;
     }
 
     void OnInteractionTriggered(SmithingTool.InteractionType interactionType)
     {
       this.highlighter.HighlightColor = this.normalColor;
-      if (interactionType == SmithingTool.InteractionType.Work)
-      {
+      if (interactionType == SmithingTool.InteractionType.Work) {
         this.effecter.TriggerWorkEffect();
       }
     }
