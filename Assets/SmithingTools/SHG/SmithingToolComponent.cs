@@ -14,7 +14,9 @@ namespace SHG
     public virtual Item HoldingItem => this.tool.HoldingItem;
     public bool IsOwner
     {
-      get => this.isOwner;
+      //FIXME: Owner not set properly
+      //get => this.isOwner;
+      get => true;
       set => this.isOwner = value;
     }
     public int PlayerNetworkId
