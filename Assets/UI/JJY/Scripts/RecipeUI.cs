@@ -61,7 +61,7 @@ namespace JJY
 
                     ingredientImages[i].sprite = curCraft.Materials[i].Image;
 
-                    Image guideImage = ingredientImages[i].GetComponentInChildren<Image>();
+                    Image guideImage = ingredientImages[i].GetComponentsInChildren<Image>()[1];
                     if (curCraft.Materials[i].guideImage == null)
                     {
                         guideImage.gameObject.SetActive(false);
