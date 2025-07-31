@@ -26,7 +26,7 @@ namespace MIN
         [SerializeField] private Button _cancelButton;
         [SerializeField] private Button _confirmButton;
 
-        [SerializeField] private TMP_Text _infoText;
+        [SerializeField] private PopupUIBehaviour _popup;
 
         [Header("안내 메시지 코루틴 설정")]
         [SerializeField] private float _infoTextDisplayTime = 3f;
@@ -58,8 +58,8 @@ namespace MIN
         {
             if (_passwordInputField.text != _passwordConfirmInputField.text)
             {
-                _infoText.text = "비밀번호가 일치하지 않습니다.";
-                StartInfoTextCoroutine();
+                _popup.ShowInfo("비밀번호가 일치하지 않습니다.");
+                //StartInfoTextCoroutine();
                 return;
             }
 
@@ -73,14 +73,14 @@ namespace MIN
                 {
                     if (task.IsCanceled)
                     {
-                        _infoText.text = "회원가입이 취소되었습니다.";
-                        StartInfoTextCoroutine();
+                        _popup.ShowError("회원가입이 취소되었습니다.");
+                        //StartInfoTextCoroutine();
                         return;
                     }
                     if (task.IsFaulted)
                     {
-                        _infoText.text = $"회원가입 중 오류가 발생했습니다.{task.Exception}";
-                        StartInfoTextCoroutine();
+                        _popup.ShowError($"회원가입 중 오류가 발생했습니다.{task.Exception}");
+                        //StartInfoTextCoroutine();
                         return;
                     }
 
@@ -102,8 +102,8 @@ namespace MIN
                         {
                             if (dbTask.IsCanceled || dbTask.IsFaulted)
                             {
-                                _infoText.text = "회원 정보 저장 중 오류가 발생했습니다.";
-                                StartInfoTextCoroutine();
+                                _popup.ShowError("회원 정보 저장 중 오류가 발생했습니다.");
+                                //StartInfoTextCoroutine();
                                 return;
                             }
 
@@ -112,23 +112,23 @@ namespace MIN
                 });
         }
 
-        private IEnumerator ShowInfoTextRoutine()
-        {
-            _infoText.gameObject.SetActive(true);
-            yield return new WaitForSeconds(_infoTextDisplayTime);
-            _infoText.gameObject.SetActive(false);
-        }
+        // private IEnumerator ShowInfoTextRoutine()
+        // {
+        //     _infoText.gameObject.SetActive(true);
+        //     yield return new WaitForSeconds(_infoTextDisplayTime);
+        //     _infoText.gameObject.SetActive(false);
+        // }
 
-        // TODO: 안내 메시지가 계속 사용된다면 static 클래스에서 구현하기
-        private void StartInfoTextCoroutine()
-        {
-            if (_infoTextCo != null)
-            {
-                StopCoroutine(_infoTextCo);
-            }
+        // // TODO: 안내 메시지가 계속 사용된다면 static 클래스에서 구현하기
+        // private void StartInfoTextCoroutine()
+        // {
+        //     if (_infoTextCo != null)
+        //     {
+        //         StopCoroutine(_infoTextCo);
+        //     }
 
-            _infoTextCo = StartCoroutine(ShowInfoTextRoutine());
-        }
+        //     _infoTextCo = StartCoroutine(ShowInfoTextRoutine());
+        // }
 
         private void ClearText()
         {

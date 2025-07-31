@@ -16,13 +16,14 @@ namespace MIN
     public class SetNicknamePanelBehaviour : MonoBehaviourPun
     {
         #region Fields And Properties
-        
+
         [Inject] private IFirebaseManager _firebaseManager;
         [Inject] private IOutGameUIManager _outGameUIManager;
 
         [SerializeField] private TMP_InputField _nicknameInputField;
-        [SerializeField] private TMP_Text _infoText;
+        [SerializeField] private PopupUIBehaviour _popup;
 
+        [SerializeField] private GameObject _checkUI;
         [SerializeField] private Button _checkButton;
         [SerializeField] private Button _cancelButton;
         [SerializeField] private Button _confirmButton;
@@ -53,7 +54,7 @@ namespace MIN
         private void Init()
         {
             _confirmButton.interactable = false;
-            _infoText.text = "닉네임을 입력하고 중복 확인을 해주세요.";
+            _popup.ShowInfo("닉네임을 입력하고 중복 확인을 해주세요.");
 
             ClearText();
         }
@@ -70,12 +71,12 @@ namespace MIN
                 {
                     if (task.IsCanceled)
                     {
-                        _infoText.text = "닉네임 업데이트가 취소되었습니다.";
+                        _popup.ShowError("닉네임 업데이트가 취소되었습니다.");
                         return;
                     }
                     if (task.IsFaulted)
                     {
-                        _infoText.text = $"닉네임 업데이트 중 오류 발생: {task.Exception}";
+                        _popup.ShowError($"닉네임 업데이트 중 오류 발생: {task.Exception}");
                         return;
                     }
 
@@ -103,11 +104,11 @@ namespace MIN
                     {
                         if (setTask.IsCanceled || setTask.IsFaulted)
                         {
-                            _infoText.text = "닉네임 저장 중 오류가 발생했습니다.";
+                            _popup.ShowError("닉네임 저장 중 오류가 발생했습니다.");
                             return;
                         }
 
-                        _infoText.text = "닉네임이 성공적으로 설정되었습니다.";
+                        _popup.ShowInfo("닉네임이 성공적으로 설정되었습니다.");
 
                         SetNickName();
 
@@ -134,18 +135,21 @@ namespace MIN
                 {
                     if (task.IsCanceled || task.IsFaulted)
                     {
-                        _infoText.text = "중복 확인 중 오류가 발생했습니다.";
+                        _popup.ShowError("중복 확인 중 오류가 발생했습니다.");
+                        _checkUI.SetActive(false);
                         return;
                     }
 
                     if (task.Result.Exists)
                     {
-                        _infoText.text = "이미 사용 중인 닉네임입니다.";
+                        _popup.ShowInfo("이미 사용 중인 닉네임입니다.");
+                        _checkUI.SetActive(false);
                     }
                     else
                     {
-                        _infoText.text = "사용 가능한 닉네임입니다.";
+                        _popup.ShowInfo("사용 가능한 닉네임입니다.");
                         _confirmButton.interactable = true;
+                        _checkUI.SetActive(true);
                     }
                 });
         }

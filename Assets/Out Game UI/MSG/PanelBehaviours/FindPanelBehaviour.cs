@@ -17,8 +17,8 @@ namespace MIN
         [Inject] private IOutGameUIManager _outGameUIManager;
 
         [SerializeField] private TMP_InputField _emailInput;
-        [SerializeField] private TMP_Text _infoText;
 
+        [SerializeField] private PopupUIBehaviour _popup;
         [SerializeField] private Button _sendButton;
         [SerializeField] private Button _backButton;
 
@@ -46,7 +46,7 @@ namespace MIN
         private void Init()
         {
             ClearText();
-            _infoText.text = "비밀번호를 재설정할 이메일을 입력하세요.";
+            _popup.ShowInfo("비밀번호를 재설정할 이메일을 입력하세요.");
         }
 
         private void Send()
@@ -55,7 +55,7 @@ namespace MIN
 
             if (string.IsNullOrEmpty(email))
             {
-                _infoText.text = "이메일을 입력해주세요.";
+                _popup.ShowError("이메일을 입력해주세요.");
                 return;
             }
 
@@ -64,16 +64,16 @@ namespace MIN
                 {
                     if (task.IsCanceled)
                     {
-                        _infoText.text = "인증 이메일 전송이 취소되었습니다. 다시 시도해주세요.";
+                        _popup.ShowError("인증 이메일 전송이 취소되었습니다. 다시 시도해주세요.");
                         return;
                     }
                     if (task.IsFaulted)
                     {
-                        _infoText.text = $"인증 이메일 전송 중 오류 발생: {task.Exception}";
+                        _popup.ShowError($"인증 이메일 전송 중 오류 발생: {task.Exception}");
                         return;
                     }
 
-                    _infoText.text = "비밀번호 재설정 이메일이 발송되었습니다.";
+                    _popup.ShowInfo("비밀번호 재설정 이메일이 발송되었습니다.");
                 });
         }
 
