@@ -19,6 +19,7 @@ namespace JJY
 
         [SerializeField] private ItemDataList itemDataList;
         [SerializeField] private MaterialData materialData;
+        [SerializeField] private ProductSprites productSprites; // 딕셔너리, 완성품 이미지들
 
         void Update()
         {
@@ -36,6 +37,8 @@ namespace JJY
         }
         void Start()
         {
+            productSprites.Init(); // 딕셔너리 초기화작업.
+
             if (!PhotonNetwork.IsMasterClient) return;
 
             for (int i = 0; i < 5; i++)

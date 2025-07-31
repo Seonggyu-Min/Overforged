@@ -17,6 +17,9 @@ namespace JJY
         // 재료 이미지들 (프리셋 이미지 슬롯들)
         [SerializeField] private List<Image> ingredientImages;
 
+        // 딕셔너리, 완성품 이미지들
+        [SerializeField] private ProductSprites productSprites;
+
         // 현재 이 UI가 표시하고 있는 레시피 데이터
         public RecipeData curRecipe { get; private set; }
         public int uniqueID;
@@ -31,19 +34,15 @@ namespace JJY
         // 외부에서 레시피 데이터 받아 UI 설정
         public void Setup(CraftData craftdata, WoodType wood, OreType ore, int id)
         {
-            // RecipeData recipeData = null; // 컴파일 에러 제거용 코드
-            //curRecipe = recipeData;
             curCraft = craftdata;
             curWood = wood;
             curOre = ore;
             uniqueID = id;
 
-            outputImage.sprite = curProduct.Image;
-
             recipeNameText.text = $"{matData.oreName[curOre]}{matData.woodName[curWood]}{curProduct.Name}";
 
-            // ingredientImages는 고정된 슬롯이고,
-            // 실제 레시피에 따라 일부만 활성화하거나 끔
+            outputImage.sprite = productSprites.Dict[recipeNameText.text];
+
             for (int i = 0; i < ingredientImages.Count; i++)
             {
                 // if (i < recipeData.ingredientImages.Count)
@@ -59,7 +58,22 @@ namespace JJY
                 if (i < curCraft.Materials.Length)
                 {
                     ingredientImages[i].gameObject.SetActive(true);
+
                     ingredientImages[i].sprite = curCraft.Materials[i].Image;
+
+                    Image guideImage = ingredientImages[i].GetComponentInChildren<Image>();
+                    if (curCraft.Materials[i].guideImage == null)
+                    {
+                        guideImage.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        guideImage.gameObject.SetActive(true);
+                        guideImage.sprite = curCraft.Materials[i].guideImage;
+
+                        TextMeshProUGUI guidetext = ingredientImages[i].GetComponentInChildren<TextMeshProUGUI>();
+                        guidetext.text = curCraft.Materials[i].guideMessage;
+                    }
 
                     switch (curCraft.Materials[i].materialType)
                     {
@@ -67,7 +81,6 @@ namespace JJY
                             ingredientImages[i].color = matData.oreColor[curOre];
                             // i번째 재료를 만드는 방법 표시
                             // 망치를 두드릴때마다 외형이 바뀜. 그 외형에 따라 망치 두들기는 횟수를 UI표시.
-                            // TextMeshProUGUI text = ingredientImages[i].GetComponentInChildren<TextMeshProUGUI>();
                             // text = 몇 번째 외형인지 표시
                             break;
                         case MaterialType.Wooden:
