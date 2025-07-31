@@ -2602,6 +2602,7 @@ MonoBehaviour:
   recipeUIPrefab: {fileID: 6270672565766776205, guid: 73072e87cb4d1704588acb80614fa195, type: 3}
   itemDataList: {fileID: 11400000, guid: 874ceed52f5c8e74ab16991e45239d6b, type: 2}
   materialData: {fileID: 11400000, guid: 693c33b29feef914cb892532fd31073c, type: 2}
+  productSprites: {fileID: 11400000, guid: 52c8c68e708106440b569877ec842027, type: 2}
 --- !u!114 &1569215829
 MonoBehaviour:
   m_ObjectHideFlags: 0
