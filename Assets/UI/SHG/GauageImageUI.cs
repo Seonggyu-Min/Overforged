@@ -6,31 +6,44 @@ namespace SHG
 {
   public class GauageImageUI : MonoBehaviour
   {
-    [SerializeField]
-    Image gauageImage;
-    public ObservableValue<(float, float)> WatchingFloatValue 
+    [SerializeField] Slider gauageImage;
+    [SerializeField] Sprite workSprite;
+    [SerializeField] Image workIcon;
+
+    public void SetWorkImage()
+    {
+      workIcon.sprite = workSprite;
+    }
+
+    public ObservableValue<(float, float)> WatchingFloatValue
     {
       get => this.watchingFloatValue;
-      set {
-        if (this.watchingFloatValue != null) {
+      set
+      {
+        if (this.watchingFloatValue != null)
+        {
           this.watchingFloatValue.OnChanged -= this.OnValueChanged;
         }
         this.watchingFloatValue = value;
-        if (value != null) {
+        if (value != null)
+        {
           value.OnChanged += this.OnValueChanged;
           this.OnValueChanged(value.Value);
         }
       }
     }
     public ObservableValue<(int, int)> WatchingIntValue
-    { 
+    {
       get => this.watchingIntValue;
-      set {
-        if (this.watchingIntValue != null) {
-          this.watchingIntValue.OnChanged -= this.OnValueChanged; 
+      set
+      {
+        if (this.watchingIntValue != null)
+        {
+          this.watchingIntValue.OnChanged -= this.OnValueChanged;
         }
         this.watchingIntValue = value;
-        if (value != null) {
+        if (value != null)
+        {
           value.OnChanged += this.OnValueChanged;
           this.OnValueChanged(value.Value);
         }
@@ -48,20 +61,25 @@ namespace SHG
     // Start is called before the first frame update
     void OnEnable()
     {
-      if (this.watchingFloatValue != null) {
+      SetWorkImage();
+      if (this.watchingFloatValue != null)
+      {
         this.watchingFloatValue.OnChanged += this.OnValueChanged;
       }
-      else if (this.watchingIntValue != null) {
-        this.watchingIntValue.OnChanged -= this.OnValueChanged; 
+      else if (this.watchingIntValue != null)
+      {
+        this.watchingIntValue.OnChanged -= this.OnValueChanged;
       }
     }
 
     void OnDisable()
     {
-      if (this.watchingFloatValue != null) {
+      if (this.watchingFloatValue != null)
+      {
         this.watchingFloatValue.OnChanged -= this.OnValueChanged;
       }
-      else if (this.watchingIntValue != null) {
+      else if (this.watchingIntValue != null)
+      {
         this.watchingIntValue.OnChanged -= this.OnValueChanged;
       }
     }
@@ -69,15 +87,18 @@ namespace SHG
     // Update is called once per frame
     void Update()
     {
-      if (this.isAnimating) {
-        if (Math.Abs(this.gauageImage.fillAmount - this.destValue)
-          < ANIMATE_LERP_THRESHOLD) {
-          this.gauageImage.fillAmount = this.destValue;
+      if (this.isAnimating)
+      {
+        if (Math.Abs(this.gauageImage.value - this.destValue)
+          < ANIMATE_LERP_THRESHOLD)
+        {
+          this.gauageImage.value = this.destValue;
           this.isAnimating = false;
         }
-        else {
-          this.gauageImage.fillAmount = Mathf.Lerp(
-            this.gauageImage.fillAmount,
+        else
+        {
+          this.gauageImage.value = Mathf.Lerp(
+            this.gauageImage.value,
             this.destValue,
             ANIMATE_LERP_STEP * Time.deltaTime
             );
@@ -85,16 +106,17 @@ namespace SHG
       }
     }
 
-    void OnValueChanged((int current, int max) value) 
+    void OnValueChanged((int current, int max) value)
     {
-      this.OnValueChanged(((float) value.current, (float) value.max));
+      this.OnValueChanged(((float)value.current, (float)value.max));
     }
 
     void OnValueChanged((float current, float max) value)
     {
-      if (this.gauageImage.fillAmount != this.destValue || 
-        value.current <= 0f) {
-        this.gauageImage.fillAmount = this.destValue;
+      if (this.gauageImage.value != this.destValue ||
+        value.current <= 0f)
+      {
+        this.gauageImage.value = this.destValue;
       }
       this.destValue = Math.Clamp(
         value.current / value.max, 0, 1);

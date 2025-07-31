@@ -30,23 +30,20 @@ namespace SCR
                 boxItemData = data.itemInfo[(int)ItemType.Ore].itemData;
                 boxItemOre = (OreType)((int)type + 1);
                 boxItemWood = WoodType.None;
-                mesh.material = itemMaterial[0];
-
             }
             else if ((int)type < 5)
             {
                 boxItemData = data.itemInfo[(int)ItemType.Wood].itemData;
                 boxItemOre = OreType.None;
                 boxItemWood = (WoodType)((int)type - 2);
-                mesh.material = itemMaterial[1];
             }
             else
             {
                 boxItemData = data.itemInfo[(int)ItemType.String].itemData;
                 boxItemOre = OreType.None;
                 boxItemWood = WoodType.None;
-                mesh.material = itemMaterial[2];
             }
+            mesh.material = itemMaterial[(int)type];
             Debug.Log(boxItemData);
             Debug.Log(boxItemOre);
             Debug.Log(boxItemWood);
