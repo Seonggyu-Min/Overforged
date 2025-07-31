@@ -2074,6 +2074,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -4.1
       objectReference: {fileID: 0}
+    - target: {fileID: 5103668545641155257, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: sceneViewId
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5416478179552059081, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
