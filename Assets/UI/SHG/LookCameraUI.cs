@@ -9,10 +9,12 @@ namespace SHG
     Transform cameraToLook;
     Canvas canvas;
     [SerializeField] List<Image> images;
+    private int index;
 
     void Awake()
     {
       gameObject.layer = LayerMask.NameToLayer("UI");
+      index = 0;
       if (this.cameraToLook == null)
       {
         this.cameraToLook = Camera.main.transform;
@@ -37,15 +39,27 @@ namespace SHG
                                cameraToLook.transform.rotation * Vector3.up);
     }
 
-    public void SetImage(Sprite image, int index = 0)
+    public void AddImage(Sprite image)
     {
+      if (index > 2) return;
       images[index].sprite = image;
       images[index].gameObject.SetActive(true);
+      index++;
     }
 
-    public void OffImage(int index = 0)
+    public void SubImage()
     {
+      index--;
       images[index].gameObject.SetActive(false);
+    }
+
+    public void SubAllImage()
+    {
+      foreach (Image image in images)
+      {
+        image.gameObject.SetActive(false);
+      }
+      index = 0;
     }
   }
 }
