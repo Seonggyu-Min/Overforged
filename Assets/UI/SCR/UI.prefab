@@ -629,7 +629,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dced4b2c4b50def29b730e7e2ba3cc08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
   images:
   - {fileID: 820396440263668285}
   - {fileID: 4792610238935602305}
@@ -669,7 +668,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1.6000001, y: -0.5}
+  m_AnchoredPosition: {x: 2.4, y: -0.5}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6910479415386276052
@@ -1079,6 +1078,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gauageImage: {fileID: 7337328526575123665}
+  workSprite: {fileID: 0}
   workIcon: {fileID: 3717713916666652271}
 --- !u!1 &6063092115409403295
 GameObject:

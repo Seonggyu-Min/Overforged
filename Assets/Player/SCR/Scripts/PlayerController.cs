@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using SHG;
 using System;
+using Unity.VisualScripting.ReorderableList.Element_Adder_Menu;
 
 namespace SCR
 {
@@ -208,7 +209,7 @@ namespace SCR
         {
             if (!workingMode)
             {
-                if (player.PlayerPhysical.IsHold && player.PlayerPhysical.UseTongs)
+                if (player.PlayerPhysical.IsHold || player.PlayerPhysical.UseTongs)
                 {
                     return false;
                 }
@@ -379,8 +380,10 @@ namespace SCR
                         if (ActionObj.GetComponent<BoxComponent>() != null)
                             PickUpObject(ActionObj.GetComponent<BoxComponent>().CreateItem());
 
+                        // 다른 상호작용 오브젝트라면
                         else
                         {
+                            // 가져갈 수 있는 아이템이 있다면
                             if (player.PlayerPhysical.CanTransfer)
                             {
                                 if (ActionObj.TryGetComponent<SmithingToolComponent>(out SmithingToolComponent STComponet) &&
@@ -394,6 +397,15 @@ namespace SCR
                                     PickUpObject(result.ReceivedItem.gameObject, false);
                                 }
 
+                            }
+                            // 사용할 수 있다면
+                            if (ActionObj.GetComponent<IInteractableTool>().CanWork())
+                            {
+                                workingMode = !workingMode;
+                                player.Hammer.SetActive(!workingMode);
+                                var result = ActionObj.GetComponent<IInteractableTool>().Work();
+
+                                Hammering(result.Trigger);
                             }
                         }
 
@@ -446,8 +458,49 @@ namespace SCR
 
                         Hammering(result.Trigger);
                     }
+                    else if (player.PlayerPhysical.CanTransfer)
+                    {
+                        workingMode = !workingMode;
+                        player.Hammer.SetActive(!workingMode);
+                        if (ActionObj.TryGetComponent<SmithingToolComponent>(out SmithingToolComponent STComponet) &&
+                            STComponet.HoldingItem != null && STComponet.HoldingItem.IsHot)
+                        {
+                            return;
+                        }
+                        var result = ActionObj.GetComponent<IInteractableTool>().Transfer(player.PlayerPhysical.TransferArgs);
+                        if (result.ReceivedItem != null)
+                        {
+                            PickUpObject(result.ReceivedItem.gameObject, false);
+                        }
+                    }
                 }
 
+            }
+            else if (ActionObj.CompareTag("Item"))
+            {
+                // 아이템 들고 있기
+
+                if (ActionObj.GetComponent<MaterialItem>() != null &&
+                !ActionObj.GetComponent<MaterialItem>().IsHot)
+                {
+
+                    PickUpObject(ActionObj);
+                }
+
+                if (ActionObj.GetComponent<ProductItem>() != null)
+                {
+                    workingMode = !workingMode;
+                    player.Hammer.SetActive(!workingMode);
+                    PickUpObject(ActionObj);
+                }
+
+            }
+            else if (ActionObj.CompareTag("Tongs"))
+            {
+                // 집게 들기
+                workingMode = !workingMode;
+                player.Hammer.SetActive(!workingMode);
+                UseTongs(true, ActionObj);
             }
         }
         #endregion
