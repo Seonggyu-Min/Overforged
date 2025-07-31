@@ -2461,7 +2461,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &257411661
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2556,42 +2556,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiGroups:
   - Targets:
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 1447441356}
     SlideDirection: 1
-    OriginOffset: -48
-    MoveInOffset: 952
-    MoveOutOffset: 952
+    OriginOffset: -50
+    MoveInOffset: 950
+    MoveOutOffset: 950
     MoveInDuration: 0.5
     FadeInDuration: 0.5
     MoveOutDuration: 0.5
     FadeOutDuration: 0.5
-    Interval: 0.05
+    Interval: 0.04
     MoveInEase: 21
     MoveOutEase: 21
   - Targets:
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 947677178}
     SlideDirection: 1
-    OriginOffset: -203
-    MoveInOffset: 797
-    MoveOutOffset: 797
-    MoveInDuration: 0.5
-    FadeInDuration: 0.5
-    MoveOutDuration: 0.5
-    FadeOutDuration: 0.5
-    Interval: 0.05
-    MoveInEase: 21
-    MoveOutEase: 21
-  - Targets:
-    - {fileID: 281973538}
-    - {fileID: 318010205}
-    - {fileID: 769716938}
-    - {fileID: 1299498277}
-    SlideDirection: 1
-    OriginOffset: -379
-    MoveInOffset: -1379
-    MoveOutOffset: -1379
+    OriginOffset: -161.73
+    MoveInOffset: -1161.73
+    MoveOutOffset: -1161.73
     MoveInDuration: 0.5
     FadeInDuration: 0.5
     MoveOutDuration: 0.5
@@ -5324,9 +5306,9 @@ RectTransform:
   - {fileID: 1524817674}
   m_Father: {fileID: 1520426396}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 305, y: -50}
   m_SizeDelta: {x: 610, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &373899982
@@ -7561,7 +7543,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 500332485}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 257411666}
+        m_TargetAssemblyTypeName: MIN.LogInPanelBehaviour, Assembly-CSharp
+        m_MethodName: OnClickFindButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &500332485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11232,10 +11226,10 @@ RectTransform:
   - {fileID: 53665124}
   m_Father: {fileID: 1063864113}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 56}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 27, y: -28}
+  m_SizeDelta: {x: 54, y: 56}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &710450952
 MonoBehaviour:
@@ -12191,6 +12185,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 257411661}
     m_Modifications:
+    - target: {fileID: 1540658904713320793, guid: fffcb3bd743054c85860e9394da42531, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1540658904713320793, guid: fffcb3bd743054c85860e9394da42531, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1540658904713320793, guid: fffcb3bd743054c85860e9394da42531, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 257411666}
+    - target: {fileID: 1540658904713320793, guid: fffcb3bd743054c85860e9394da42531, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1540658904713320793, guid: fffcb3bd743054c85860e9394da42531, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickExitButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 1540658904713320793, guid: fffcb3bd743054c85860e9394da42531, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MIN.LogInPanelBehaviour, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1540658904713320793, guid: fffcb3bd743054c85860e9394da42531, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1540658904713320795, guid: fffcb3bd743054c85860e9394da42531, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -16242,9 +16264,9 @@ RectTransform:
   - {fileID: 881497262}
   m_Father: {fileID: 1520426396}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 305, y: -165.78}
   m_SizeDelta: {x: 610, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &976030495
@@ -17897,7 +17919,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 103.49, y: -350}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 264.53998, y: 56}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1063864114
 MonoBehaviour:
@@ -25168,7 +25190,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 403.45, y: -200}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 610, y: 215.78}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1520426397
 MonoBehaviour:
@@ -32299,7 +32321,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1944897816}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 257411666}
+        m_TargetAssemblyTypeName: MIN.LogInPanelBehaviour, Assembly-CSharp
+        m_MethodName: OnClickLoginButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1944897816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33075,8 +33109,8 @@ MonoBehaviour:
   _lobbyPanelBehaviour: {fileID: 813839572}
   _createRoomPopUpPanelBehaviour: {fileID: 450828397}
   _roomNameText: {fileID: 697625050}
-  _emailField: {fileID: 0}
-  _passwordField: {fileID: 0}
+  _emailField: {fileID: 373899982}
+  _passwordField: {fileID: 976030495}
   _dropdown: {fileID: 654481397}
   _makeTestRoomButton: {fileID: 2121055868}
   _trueImage: {fileID: 21300000, guid: 56c811edaf54bb744b35a47ec15194e8, type: 3}
@@ -34962,7 +34996,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2082491461}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 257411666}
+        m_TargetAssemblyTypeName: MIN.LogInPanelBehaviour, Assembly-CSharp
+        m_MethodName: OnClickSignUpButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2082491461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35226,10 +35272,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1063864113}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 50}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 166.76999, y: -28}
+  m_SizeDelta: {x: 195.54, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2106514638
 MonoBehaviour:
