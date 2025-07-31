@@ -259,8 +259,15 @@ namespace SCR
         /// </summary>
         /// <param name="isThrow"></param>
         [PunRPC]
-        private void LayDownObject(bool isThrow = false)
+        private void LayDownObject(bool isThrow = false, bool isPut = false)
         {
+            PlayerPhysical.IsHold = false;
+            if (isPut)
+            {
+                HoldObject = null;
+                return;
+            }
+
             HoldObject.transform.SetParent(null);
             HoldObject.GetComponent<Collider>().isTrigger = false;
             HoldObject.GetComponent<Rigidbody>().useGravity = true;
@@ -272,12 +279,11 @@ namespace SCR
             }
 
             HoldObject = null;
-            PlayerPhysical.IsHold = false;
         }
 
         public void StartTrigger()
         {
-            Trigger.Invoke();
+            Trigger?.Invoke();
         }
     }
 }

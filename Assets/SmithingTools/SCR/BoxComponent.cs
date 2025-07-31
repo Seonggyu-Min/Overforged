@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
@@ -14,6 +14,9 @@ namespace SCR
 
         [SerializeField] List<Material> itemMaterial;
         [SerializeField] MeshRenderer mesh;
+
+        private GameObject itemObj;
+        [SerializeField] PhotonView view;
 
         void Start()
         {
@@ -52,14 +55,28 @@ namespace SCR
 
         public GameObject CreateItem()
         {
-            GameObject itemObj = PhotonNetwork.Instantiate("MatItem", transform.position, Quaternion.identity);
-            MaterialItem createItem = itemObj.GetComponent<MaterialItem>();
-            createItem.Data = boxItemData;
-            createItem.Ore = boxItemOre;
-            createItem.Wood = boxItemWood;
+            itemObj = PhotonNetwork.Instantiate("MatItem", transform.position, Quaternion.identity);
+            //MaterialItem createItem = itemObj.GetComponent<MaterialItem>();
+            //createItem.Data = boxItemData;
+            //createItem.Ore = boxItemOre;
+            //createItem.Wood = boxItemWood;
+
+            int viewID = itemObj.GetComponent<PhotonView>().ViewID;
+            view.RPC(nameof(RPC_SetItem), RpcTarget.AllBuffered, viewID);
+
             return itemObj;
         }
 
+        [PunRPC]
+        public void RPC_SetItem(int viewID)
+        {
+            PhotonView pv = PhotonView.Find(viewID);
+
+            MaterialItem createItem = pv.gameObject.GetComponent<MaterialItem>();
+            createItem.Data = boxItemData;
+            createItem.Ore = boxItemOre;
+            createItem.Wood = boxItemWood;
+        }
 
     }
 
