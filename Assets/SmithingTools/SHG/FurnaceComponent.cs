@@ -140,8 +140,9 @@ namespace SHG
 
     protected override void Awake()
     {
-      base.meshRenderer = modeling;
+      base.meshRenderer = this.modeling;
       base.Awake();
+      this.modeling.material = this.highlighter.HighlightedMaterials[0];
       this.furnace = new Furnace(this.furnaceData);
       this.furnace.BeforeInteract += this.BeforeInteract;
       this.furnace.AfterInteract += this.AfterInteract;
