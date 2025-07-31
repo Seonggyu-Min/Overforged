@@ -19,6 +19,7 @@ namespace JJY
 
         [SerializeField] private ItemDataList itemDataList;
         [SerializeField] private MaterialData materialData;
+        [SerializeField] private ProductSprites productSprites; // 딕셔너리, 완성품 이미지들
 
         void Update()
         {
@@ -36,6 +37,10 @@ namespace JJY
         }
         void Start()
         {
+            productSprites.Init(); // 딕셔너리 초기화작업.
+
+            if (!PhotonNetwork.IsMasterClient) return;
+
             for (int i = 0; i < 5; i++)
             {
                 SpawnRandomRecipe();
@@ -44,7 +49,7 @@ namespace JJY
 
         public void SpawnRandomRecipe() // 게임 시작시 호출
         {
-            if (!PhotonNetwork.IsMasterClient) return;
+            // if (!PhotonNetwork.IsMasterClient) return;
 
             //int index = Random.Range(0, allRecipes.Count);
             int p = UnityEngine.Random.Range(0, itemDataList.craftList.Count);
@@ -131,7 +136,8 @@ namespace JJY
             {
                 photonView.RPC(nameof(RPC_RemoveRecipe), RpcTarget.All, targetUI.uniqueID);
                 targetUI = null;
-                SpawnRandomRecipe();
+
+                SpawnRandomRecipe(); // TEST : 출고시 새로운 레시피 재생성
             }
         }
 

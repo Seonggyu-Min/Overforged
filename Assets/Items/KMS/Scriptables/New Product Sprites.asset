@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05cf8de8232903542ac6b31e4c997a1f, type: 3}
+  m_Name: New Product Sprites
+  m_EditorClassIdentifier: 
+  list:
+  - {fileID: 21300000, guid: 756566f4cd1604e43a9591386e3a35ec, type: 3}
+  - {fileID: 21300000, guid: 117d931adfd25a04eba7b840a5f2990f, type: 3}
+  - {fileID: 21300000, guid: 3355d14c506ee4844b4daa6d5aa9333e, type: 3}
+  - {fileID: 21300000, guid: 5cf670f9c2c744045bf6438e0eb4ea3f, type: 3}
+  - {fileID: 21300000, guid: aa5aa0ed48035a2489302721ac7d0c4c, type: 3}
+  - {fileID: 21300000, guid: a2245e05371cea948adbb67001e657a5, type: 3}
+  - {fileID: 21300000, guid: 8cc4d7e6f5392eb4780eb41238ffd340, type: 3}
+  - {fileID: 21300000, guid: d77d89e9ccc49904fa82efee48ab0621, type: 3}
+  - {fileID: 21300000, guid: 49e0bafabeb2f2f4191a6cd83a02e36d, type: 3}
+  - {fileID: 21300000, guid: 26132b581a6870f4283431dce6ff6c49, type: 3}
+  - {fileID: 21300000, guid: 49ab88796d57a7e44905459e8ed60aed, type: 3}
+  - {fileID: 21300000, guid: da95c657d70d0164f97ae327c9729d34, type: 3}
+  - {fileID: 21300000, guid: 442e1cd7532498c4cb325e19a5b65382, type: 3}
+  - {fileID: 21300000, guid: 769f9f359888d214287d635655227536, type: 3}
+  - {fileID: 21300000, guid: a2ad3006ae69bfd43bb4a3344e3cad47, type: 3}
+  - {fileID: 21300000, guid: a6cafafae9d29da409548fa847de47d8, type: 3}
+  - {fileID: 21300000, guid: 5053344a37af06a42a15dec934f5291e, type: 3}
+  - {fileID: 21300000, guid: c938662871b580c4598f7cbb03762da6, type: 3}
+  - {fileID: 21300000, guid: 8c3c06455474a9741acc4224bb080abb, type: 3}
+  - {fileID: 21300000, guid: 3f1c9a7fbd4f80e4980f040dce43d5f2, type: 3}
+  matData: {fileID: 11400000, guid: 693c33b29feef914cb892532fd31073c, type: 2}
+  itemList: {fileID: 11400000, guid: 874ceed52f5c8e74ab16991e45239d6b, type: 2}

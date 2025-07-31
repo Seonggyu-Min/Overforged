@@ -20,3 +20,5 @@ MonoBehaviour:
   materialVariation: 4
   materialType: 0
   nextMaterial: {fileID: 0}
+  guideImage: {fileID: 0}
+  guideMessage: 

@@ -20,3 +20,5 @@ MonoBehaviour:
   materialVariation: 0
   materialType: 3
   nextMaterial: {fileID: 11400000, guid: 6cb14106c0dd60b41aa2edec90ec8fb6, type: 2}
+  guideImage: {fileID: 21300000, guid: 8d44159a77d104ab08307d8ee207b755, type: 3}
+  guideMessage: X1
