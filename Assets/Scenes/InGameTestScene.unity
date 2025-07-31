@@ -789,6 +789,10 @@ PrefabInstance:
       propertyPath: type
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3174352737250779566, guid: ea86041c3f9b7a74797510a25134b59b, type: 3}
+      propertyPath: view
+      value: 
+      objectReference: {fileID: 414782088}
     - target: {fileID: 5036070726603639071, guid: ea86041c3f9b7a74797510a25134b59b, type: 3}
       propertyPath: sceneViewId
       value: 9
@@ -920,6 +924,10 @@ PrefabInstance:
       propertyPath: type
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 3174352737250779566, guid: ea86041c3f9b7a74797510a25134b59b, type: 3}
+      propertyPath: view
+      value: 
+      objectReference: {fileID: 732756129}
     - target: {fileID: 6780553492591656216, guid: ea86041c3f9b7a74797510a25134b59b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.947
@@ -1806,6 +1814,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 828000880247161388, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: view
+      value: 
+      objectReference: {fileID: 1507565465}
     - target: {fileID: 1010528124354643359, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: sceneViewId
       value: 4
@@ -1958,6 +1970,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2912190583750956048, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: view
+      value: 
+      objectReference: {fileID: 1507565467}
+    - target: {fileID: 2921012001286751994, guid: 81544d4585369df43beca5a3781f4247, type: 3}
+      propertyPath: view
+      value: 
+      objectReference: {fileID: 1507565466}
     - target: {fileID: 4014377864049445044, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.5
@@ -2930,6 +2950,10 @@ PrefabInstance:
       propertyPath: type
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3174352737250779566, guid: ea86041c3f9b7a74797510a25134b59b, type: 3}
+      propertyPath: view
+      value: 
+      objectReference: {fileID: 1841225325}
     - target: {fileID: 5036070726603639071, guid: ea86041c3f9b7a74797510a25134b59b, type: 3}
       propertyPath: sceneViewId
       value: 10
