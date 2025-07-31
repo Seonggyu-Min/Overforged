@@ -33,7 +33,7 @@ public class ProductConvey : MonoBehaviour, IInteractableTool
     }
 
 
-   public bool CanTransferItem(ToolTransferArgs args)
+    public bool CanTransferItem(ToolTransferArgs args)
     {
         bool result = false;
         if (HoldingItem == null && args.ItemToGive != null)
@@ -90,11 +90,21 @@ public class ProductConvey : MonoBehaviour, IInteractableTool
         photon.RPC("SetItemRPC", RpcTarget.All, id);
         _scoreManager.AddScore(PhotonNetwork.LocalPlayer, 1);
         yield return new WaitForSeconds(3);
-        PhotonNetwork.Destroy(HoldingItem.GetComponent<PhotonView>());
-        HoldingItem = null;
+        photon.RPC("DestroyRPC", RpcTarget.All);
         recipeManager.FulfillRecipe();
 
 
     }
+    [PunRPC]
+
+    private void DestroyRPC()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.Destroy(HoldingItem.GetComponent<PhotonView>());
+
+        }
+        HoldingItem = null;
+    } 
 
 }
