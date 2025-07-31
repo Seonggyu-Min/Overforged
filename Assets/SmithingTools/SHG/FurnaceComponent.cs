@@ -142,7 +142,6 @@ namespace SHG
     {
       base.meshRenderer = this.modeling;
       base.Awake();
-      this.modeling.material = this.highlighter.HighlightedMaterials[0];
       this.furnace = new Furnace(this.furnaceData);
       this.furnace.BeforeInteract += this.BeforeInteract;
       this.furnace.AfterInteract += this.AfterInteract;
@@ -161,6 +160,7 @@ namespace SHG
     {
       base.Update();
       this.tempLabel.text = $"Temp: {this.furnace.Temparature}";
+      this.progress.Value = (this.furnace.Progress, 1f);
     }
   }
 }

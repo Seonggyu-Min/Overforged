@@ -15,8 +15,7 @@ namespace SHG
     public bool IsOwner
     {
       //FIXME: Owner not set properly
-      //get => this.isOwner;
-      get => true;
+      get => this.isOwner;
       set => this.isOwner = value;
     }
     public int PlayerNetworkId
