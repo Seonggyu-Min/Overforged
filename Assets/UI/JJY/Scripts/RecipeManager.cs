@@ -36,6 +36,8 @@ namespace JJY
         }
         void Start()
         {
+            if (!PhotonNetwork.IsMasterClient) return;
+
             for (int i = 0; i < 5; i++)
             {
                 SpawnRandomRecipe();
@@ -44,8 +46,6 @@ namespace JJY
 
         public void SpawnRandomRecipe() // 게임 시작시 호출
         {
-            if (!PhotonNetwork.IsMasterClient) return;
-
             //int index = Random.Range(0, allRecipes.Count);
             int p = UnityEngine.Random.Range(0, itemDataList.craftList.Count);
             int o = UnityEngine.Random.Range(1, materialData.ores.Count);
@@ -131,7 +131,8 @@ namespace JJY
             {
                 photonView.RPC(nameof(RPC_RemoveRecipe), RpcTarget.All, targetUI.uniqueID);
                 targetUI = null;
-                SpawnRandomRecipe();
+
+                SpawnRandomRecipe(); // TEST : 출고시 새로운 레시피 재생성
             }
         }
 
