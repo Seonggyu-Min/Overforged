@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SHG
 {
@@ -9,16 +9,17 @@ namespace SHG
 
     void Awake()
     {
-      if (this.cameraToLook == null) {
-        this.cameraToLook = Camera.main.transform;
-      }
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
-
-    }
+            if (this.cameraToLook == null)
+            {
+                this.cameraToLook = Camera.main.transform;
+            }
+        }
 
     // Update is called once per frame
     void Update()
