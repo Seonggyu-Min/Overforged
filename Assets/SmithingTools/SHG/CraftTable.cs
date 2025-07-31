@@ -15,6 +15,7 @@ namespace SHG
     protected override bool isPlayerMovable => true;
     protected override bool isRemamingTimeElapse => false;
 
+    Func<ItemData, ProductItem> createProduct;
     public Action<MaterialItem> OnMaterialAdded;
     public Action<MaterialItem> OnMaterialRemoved;
     public Action<ProductItemData> OnProductCrafted;
@@ -22,7 +23,10 @@ namespace SHG
     public Action OnCraftableChanged;
     Transform transform;
 
-    public CraftTable(CraftTableData data, Transform productPoint): base(data)
+    public CraftTable(
+      CraftTableData data,
+      Transform productPoint,
+      Func<ItemData, ProductItem> createProduct): base(data)
     {
       this.craftList = new Craft[data.CraftList.Length];
       for (int i = 0; i < craftList.Length; i++) {
@@ -30,6 +34,7 @@ namespace SHG
       }
       this.HoldingMaterials = new List<MaterialItem>();
       this.transform = productPoint;
+      this.createProduct = createProduct;
     }
 
     public override bool CanTransferItem(ToolTransferArgs args)
@@ -46,6 +51,7 @@ namespace SHG
 
     public override ToolTransferResult Transfer(ToolTransferArgs args)
     {
+      this.CraftableProduct = null;
       this.BeforeInteract?.Invoke(this);
       if (this.Product != null) {
         ProductItem product = this.Product;
@@ -111,13 +117,12 @@ namespace SHG
         return (new ToolWorkResult {});
         #endif
       }
-      this.Product = craft.CreateProduct(this.transform.position);
+      this.Product = this.createProduct(this.CraftableProduct);
       foreach (var material in this.HoldingMaterials) {
         GameObject.Destroy(material.gameObject);
       }
       this.HoldingMaterials.Clear();
-      this.CraftableProduct = null;
-      this.OnCraftableChanged?.Invoke();
+      this.OnProductCrafted?.Invoke(this.CraftableProduct);
       return (new ToolWorkResult { 
           Trigger = this.OnTrigger,
           DurationToStay = 0.5f
