@@ -65,9 +65,15 @@ namespace JJY
                     {
                         case MaterialType.Metallic:
                             ingredientImages[i].color = matData.oreColor[curOre];
+                            // i번째 재료를 만드는 방법 표시
+                            // 망치를 두드릴때마다 외형이 바뀜. 그 외형에 따라 망치 두들기는 횟수를 UI표시.
+                            // TextMeshProUGUI text = ingredientImages[i].GetComponentInChildren<TextMeshProUGUI>();
+                            // text = 몇 번째 외형인지 표시
                             break;
                         case MaterialType.Wooden:
                             ingredientImages[i].color = matData.woodColor[curWood];
+                            // i번째 재료를 만드는 방법 표시
+                            // 망치를 두드릴때마다 외형이 바뀜. 그 외형에 따라 망치 두들기는 횟수를 UI표시.
                             break;
 
                     }
