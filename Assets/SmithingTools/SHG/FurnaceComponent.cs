@@ -11,65 +11,52 @@ namespace SHG
   {
     [Inject]
     IAudioLibrary audioLibrary;
-    [SerializeField]
-    [Required()]
+    [SerializeField] [Required()]
     SmithingToolData furnaceData;
     [SerializeField]
     Furnace furnace;
     [SerializeField]
     FurnaceEffecter furnaceEffecter;
-    [SerializeField]
-    [Required]
+    [SerializeField] [Required]
     Transform materialPosition;
-    protected override ISmithingToolEffecter effecter => this.furnaceEffecter;
+    [SerializeField] [Required]
+    GauageImageUI progressUI;
 
-    [SerializeField]
-    [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(itemProgressLabel), nameof(tempLabel))]
+    [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(tempLabel))]
     Void uiGroup;
-    [SerializeField]
-    [HideInInspector]
+    [SerializeField] [HideInInspector]
     Canvas uiCanvas;
-    [SerializeField]
-    [HideInInspector]
+    [SerializeField] [HideInInspector]
     Image itemImage;
-    [SerializeField]
-    [HideInInspector]
+    [SerializeField] [HideInInspector]
     TMP_Text itemNameLabel;
-    [SerializeField]
-    [HideInInspector]
-    TMP_Text itemProgressLabel;
-    [SerializeField]
-    [HideInInspector]
+    [SerializeField] [HideInInspector]
     TMP_Text tempLabel;
     bool isIgnited;
-    [SerializeField] MeshRenderer Modeling;
+    [SerializeField] MeshRenderer modeling;
 
-    [SerializeField]
-    [VerticalGroup(10f, true, nameof(HightlightColor), nameof(normalColor), nameof(ignitedColor))]
+    [SerializeField] [VerticalGroup(10f, true, nameof(HightlightColor), nameof(normalColor), nameof(ignitedColor))]
     Void colorGroup;
-    [SerializeField]
-    [HideInInspector]
+    [SerializeField] [HideInInspector]
     Color normalColor;
-    [SerializeField]
-    [HideInInspector]
+    [SerializeField] [HideInInspector]
     Color ignitedColor;
-    [SerializeField]
-    [HideInInspector]
+    [SerializeField] [HideInInspector]
     public Color HightlightColor;
     protected override SmithingTool tool => this.furnace;
 
     protected override Transform materialPoint => this.materialPosition;
+    protected override ISmithingToolEffecter effecter => this.furnaceEffecter;
 
     [SerializeField]
     [VerticalGroup(10f, true, nameof(fireParticle), nameof(sparkParticle))]
     Void effecterGroup;
-    [SerializeField]
-    [Required, HideInInspector]
+    [SerializeField] [Required, HideInInspector]
     ParticleSystem fireParticle;
-    [SerializeField]
-    [Required, HideInInspector]
+    [SerializeField] [Required, HideInInspector]
     ParticleSystem sparkParticle;
     SfxController burningSfx;
+    ObservableValue<(float current, float total)> progress;
 
     [Button]
     void TurnOff()
@@ -143,6 +130,7 @@ namespace SHG
       this.itemImage.sprite = item.Data.Image;
       this.itemNameLabel.text = item.Data.Name;
       this.uiCanvas.enabled = true;
+      this.progress.Value = (this.furnace.Progress, 1f);
     }
 
     void OnFinished()
@@ -152,7 +140,7 @@ namespace SHG
 
     protected override void Awake()
     {
-      base.meshRenderer = Modeling;
+      base.meshRenderer = modeling;
       base.Awake();
       this.furnace = new Furnace(this.furnaceData);
       this.furnace.BeforeInteract += this.BeforeInteract;
@@ -163,6 +151,8 @@ namespace SHG
         fireParticle: this.fireParticle,
         sparkParticle: this.sparkParticle);
       this.uiCanvas.enabled = false;
+      this.progress = new ((0f, 1f));
+      this.progressUI.WatchingFloatValue = this.progress;
     }
 
     // Update is called once per frame
@@ -170,7 +160,6 @@ namespace SHG
     {
       base.Update();
       this.tempLabel.text = $"Temp: {this.furnace.Temparature}";
-      this.itemProgressLabel.text = $"Progress: {this.furnace.Progress * 100}%";
     }
   }
 }
