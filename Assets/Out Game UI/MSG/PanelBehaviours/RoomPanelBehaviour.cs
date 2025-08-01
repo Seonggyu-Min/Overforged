@@ -10,11 +10,20 @@ namespace MIN
     public class RoomPanelBehaviour : MonoBehaviourPunCallbacks
     {
         [SerializeField] private TMP_Text _roomNameText;
-
+        [SerializeField] private GameObject _menuPanel;
+        [SerializeField] private GameObject _exitButton;
 
         public override void OnEnable()
         {
             StartCoroutine(RoomNameUpdateRoutine());
+            _exitButton.SetActive(true);
+            _menuPanel.SetActive(true);
+        }
+
+        public override void OnDisable()
+        {
+            _exitButton.SetActive(false);
+            _menuPanel.SetActive(false);
         }
 
         private IEnumerator RoomNameUpdateRoutine()

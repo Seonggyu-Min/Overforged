@@ -43,8 +43,13 @@ namespace SHG
         return (args.ItemToGive == null);
       }
       if (args.ItemToGive != null) {
-        return (this.IsCraftMaterial(
-            args.ItemToGive.Data as MaterialItemData));
+        if (args.ItemToGive is MaterialItem materialItem) {
+          return (!materialItem.IsHot && 
+            this.IsCraftMaterial(materialItem.Data as MaterialItemData));
+        }
+        else {
+          return (false);
+        }
       }
       return (this.HoldingMaterials.Count > 0);
     }
@@ -57,6 +62,7 @@ namespace SHG
         ProductItem product = this.Product;
         this.Product = null;
         this.OnProductRemoved?.Invoke(product.Data as ProductItemData);
+        Debug.Log($"Transfer product: {product}");
         return ( new ToolTransferResult { 
           ReceivedItem = product,
           IsDone = true
@@ -117,7 +123,9 @@ namespace SHG
         return (new ToolWorkResult {});
         #endif
       }
+      Debug.Log($"craftable: {this.CraftableProduct}"); 
       this.Product = this.createProduct(this.CraftableProduct);
+      Debug.Log($"create product: {this.Product}");
       foreach (var material in this.HoldingMaterials) {
         GameObject.Destroy(material.gameObject);
       }
@@ -147,7 +155,6 @@ namespace SHG
 
     void OnTrigger()
     {
-      this.OnProductCrafted?.Invoke(this.Product.Data as ProductItemData);
     }
 
     bool IsCraftMaterial(MaterialItemData materialData)
