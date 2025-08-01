@@ -2918,11 +2918,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiGroups:
   - Targets:
-    - {fileID: 161730174}
+    - {fileID: 233986459}
     SlideDirection: 1
-    OriginOffset: -335
-    MoveInOffset: -1335
-    MoveOutOffset: -1335
+    OriginOffset: 54
+    MoveInOffset: -946
+    MoveOutOffset: -946
     MoveInDuration: 0.5
     FadeInDuration: 0.5
     MoveOutDuration: 0.5
@@ -4828,7 +4828,7 @@ MonoBehaviour:
   m_text: New Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -5365197815800372689, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4891,7 +4891,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &289430476
@@ -6177,7 +6177,7 @@ MonoBehaviour:
   m_text: Cancel
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -5365197815800372689, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6240,7 +6240,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &361068657
@@ -8244,7 +8244,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475a6c8e2915ff249b55beb4fe141206, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiGroups: []
+  _uiGroups:
+  - Targets:
+    - {fileID: 450828396}
+    SlideDirection: 1
+    OriginOffset: 0
+    MoveInOffset: -1000
+    MoveOutOffset: -1000
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
 --- !u!114 &450828399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11300,7 +11313,7 @@ MonoBehaviour:
   m_text: Input Password
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -5365197815800372689, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -11363,7 +11376,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &610022467
@@ -16504,7 +16517,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475a6c8e2915ff249b55beb4fe141206, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiGroups: []
+  _uiGroups:
+  - Targets:
+    - {fileID: 694058801}
+    - {fileID: 694058801}
+    SlideDirection: 1
+    OriginOffset: 478
+    MoveInOffset: 1478
+    MoveOutOffset: 1478
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
+  - Targets:
+    - {fileID: 1013786980}
+    - {fileID: 510979321}
+    - {fileID: 396188872}
+    SlideDirection: 0
+    OriginOffset: 745
+    MoveInOffset: 1745
+    MoveOutOffset: 1745
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
+  - Targets:
+    - {fileID: 1058267013}
+    SlideDirection: 0
+    OriginOffset: 235.84
+    MoveInOffset: 1235.84
+    MoveOutOffset: 1235.84
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
+  - Targets:
+    - {fileID: 685182733}
+    SlideDirection: 0
+    OriginOffset: -671
+    MoveInOffset: 329
+    MoveOutOffset: 329
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
 --- !u!114 &813839572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17596,26 +17664,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiGroups:
   - Targets:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 853650085}
     SlideDirection: 1
-    OriginOffset: 100
-    MoveInOffset: -900
-    MoveOutOffset: -900
-    MoveInDuration: 0.5
-    FadeInDuration: 0.5
-    MoveOutDuration: 0.5
-    FadeOutDuration: 0.5
-    Interval: 0.05
-    MoveInEase: 21
-    MoveOutEase: 21
-  - Targets:
-    - {fileID: 0}
-    SlideDirection: 1
-    OriginOffset: -429
-    MoveInOffset: -1429
-    MoveOutOffset: -1429
+    OriginOffset: 0
+    MoveInOffset: -1000
+    MoveOutOffset: -1000
     MoveInDuration: 0.5
     FadeInDuration: 0.5
     MoveOutDuration: 0.5
@@ -17635,11 +17688,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf3bb2a038848a040a4479d3d961796f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
+  _animator: {fileID: 853650087}
   _isRootPanel: 0
   _hasToLogOutWhenClosed: 0
   _hasToLeaveRoomWhenClosed: 0
-  _isPopUp: 0
+  _isPopUp: 1
 --- !u!222 &853650089
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -23957,7 +24010,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
-  _isRootPanel: 1
+  _isRootPanel: 0
   _hasToLogOutWhenClosed: 0
   _hasToLeaveRoomWhenClosed: 0
   _isPopUp: 0
@@ -24110,7 +24163,7 @@ MonoBehaviour:
   m_text: "\u200B"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -5365197815800372689, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -24173,7 +24226,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1141245337
@@ -27487,7 +27540,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1314955696
@@ -29274,7 +29327,7 @@ MonoBehaviour:
   m_text: Confirm
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -5365197815800372689, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -29337,7 +29390,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1410217299
@@ -31243,7 +31296,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1524352182
@@ -32360,27 +32413,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiGroups:
   - Targets:
-    - {fileID: 993775173}
-    - {fileID: 1716524749}
-    - {fileID: 494915070}
+    - {fileID: 84219147}
     SlideDirection: 1
-    OriginOffset: 40
-    MoveInOffset: 1040
-    MoveOutOffset: 1040
-    MoveInDuration: 0.5
-    FadeInDuration: 0.5
-    MoveOutDuration: 0.5
-    FadeOutDuration: 0.5
-    Interval: 0.05
-    MoveInEase: 21
-    MoveOutEase: 21
-  - Targets:
-    - {fileID: 1612556086}
-    - {fileID: 1973726508}
-    SlideDirection: 1
-    OriginOffset: -400
-    MoveInOffset: -1400
-    MoveOutOffset: -1400
+    OriginOffset: 0
+    MoveInOffset: -1000
+    MoveOutOffset: -1000
     MoveInDuration: 0.5
     FadeInDuration: 0.5
     MoveOutDuration: 0.5
@@ -36552,54 +36589,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiGroups:
   - Targets:
-    - {fileID: 259413738}
-    - {fileID: 1878624755}
+    - {fileID: 1843829105}
     SlideDirection: 1
-    OriginOffset: 185
-    MoveInOffset: 1185
-    MoveOutOffset: 1185
-    MoveInDuration: 0.5
-    FadeInDuration: 0.5
-    MoveOutDuration: 0.5
-    FadeOutDuration: 0.5
-    Interval: 0.05
-    MoveInEase: 21
-    MoveOutEase: 21
-  - Targets:
-    - {fileID: 972471659}
-    - {fileID: 865237636}
-    SlideDirection: 1
-    OriginOffset: 0
-    MoveInOffset: 1000
-    MoveOutOffset: 1000
-    MoveInDuration: 0.5
-    FadeInDuration: 0.5
-    MoveOutDuration: 0.5
-    FadeOutDuration: 0.5
-    Interval: 0.05
-    MoveInEase: 21
-    MoveOutEase: 21
-  - Targets:
-    - {fileID: 814803756}
-    - {fileID: 172939861}
-    SlideDirection: 1
-    OriginOffset: -185
-    MoveInOffset: 815
-    MoveOutOffset: 815
-    MoveInDuration: 0.5
-    FadeInDuration: 0.5
-    MoveOutDuration: 0.5
-    FadeOutDuration: 0.5
-    Interval: 0.05
-    MoveInEase: 21
-    MoveOutEase: 21
-  - Targets:
-    - {fileID: 1885015763}
-    - {fileID: 1998590425}
-    SlideDirection: 1
-    OriginOffset: -442
-    MoveInOffset: -1142
-    MoveOutOffset: -1142
+    OriginOffset: -10
+    MoveInOffset: -1010
+    MoveOutOffset: -1010
     MoveInDuration: 0.5
     FadeInDuration: 0.5
     MoveOutDuration: 0.5
@@ -36762,7 +36756,7 @@ MonoBehaviour:
   m_text: Enter text...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -5365197815800372689, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -36825,7 +36819,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1775595968
@@ -39625,7 +39619,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475a6c8e2915ff249b55beb4fe141206, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiGroups: []
+  _uiGroups:
+  - Targets:
+    - {fileID: 1916720331}
+    SlideDirection: 1
+    OriginOffset: 0
+    MoveInOffset: -1000
+    MoveOutOffset: -1000
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
 --- !u!114 &1916720333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39936,7 +39943,7 @@ MonoBehaviour:
   m_text: Password Input
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -5365197815800372689, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -39999,7 +40006,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1923712372
@@ -40143,7 +40150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf3bb2a038848a040a4479d3d961796f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
+  _animator: {fileID: 1930549207}
   _isRootPanel: 0
   _hasToLogOutWhenClosed: 0
   _hasToLeaveRoomWhenClosed: 0
@@ -40200,26 +40207,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiGroups:
   - Targets:
-    - {fileID: 1079616580}
-    - {fileID: 1880627980}
-    - {fileID: 1504232008}
+    - {fileID: 151184356}
     SlideDirection: 1
-    OriginOffset: 100
-    MoveInOffset: -900
-    MoveOutOffset: -900
-    MoveInDuration: 0.5
-    FadeInDuration: 0.5
-    MoveOutDuration: 0.5
-    FadeOutDuration: 0.5
-    Interval: 0.05
-    MoveInEase: 21
-    MoveOutEase: 21
-  - Targets:
-    - {fileID: 1913963214}
-    SlideDirection: 1
-    OriginOffset: -429
-    MoveInOffset: -1429
-    MoveOutOffset: -1429
+    OriginOffset: 0
+    MoveInOffset: -1000
+    MoveOutOffset: -1000
     MoveInDuration: 0.5
     FadeInDuration: 0.5
     MoveOutDuration: 0.5
@@ -43675,7 +43667,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475a6c8e2915ff249b55beb4fe141206, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiGroups: []
+  _uiGroups:
+  - Targets:
+    - {fileID: 2060598013}
+    SlideDirection: 1
+    OriginOffset: 0
+    MoveInOffset: -1000
+    MoveOutOffset: -1000
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
 --- !u!114 &2060598015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43688,7 +43693,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf3bb2a038848a040a4479d3d961796f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
+  _animator: {fileID: 2060598014}
   _isRootPanel: 0
   _hasToLogOutWhenClosed: 0
   _hasToLeaveRoomWhenClosed: 0
