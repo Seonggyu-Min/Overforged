@@ -108,6 +108,8 @@ namespace MIN
             };
             PhotonNetwork.LocalPlayer.SetCustomProperties(props);
             UpdateButtonText();
+
+            // 마스터 클라이언트일 경우 시작 기능
             if (PhotonNetwork.IsMasterClient)
             {
                 // 마스터 클라이언트가 시작 버튼을 클릭한 경우
@@ -128,6 +130,23 @@ namespace MIN
                     }
                 }
 
+                // 팀이 최소 2개 이상인지 확인
+                HashSet<int> teamColors = new HashSet<int>();
+
+                foreach (var player in PhotonNetwork.PlayerList)
+                {
+                    if (player.CustomProperties.TryGetValue(CustomPropertyKeys.TeamColor, out object teamColorObj) && teamColorObj is int teamColorId)
+                    {
+                        teamColors.Add(teamColorId);
+                    }
+                }
+
+                if (teamColors.Count < 2)
+                {
+                    _infoText.text = "최소 2개의 팀이 필요합니다.";
+                    return;
+                }
+
 
                 PhotonNetwork.CurrentRoom.IsOpen = false;
                 PhotonNetwork.CurrentRoom.IsVisible = false;
@@ -136,9 +155,9 @@ namespace MIN
 
                 PhotonNetwork.LoadLevel(mapId + 1);
             }
+            // 일반 플레이어일 경우 준비 상태 토글
             else
             {
-                // 일반 플레이어가 준비 상태를 토글함
                 _isReady = !_isReady;
                 PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { CustomPropertyKeys.IsReady, _isReady } });
             }
