@@ -125,6 +125,11 @@ namespace MIN
             _outGameUIManager.Show("Leader Board Panel");
         }
 
+        public void OnClickExitButton()
+        {
+            Exit();
+        }
+
         #endregion
 
 
@@ -200,6 +205,15 @@ namespace MIN
             {
                 _outGameUIManager.Show("Log In Panel");
             });
+        }
+
+        private void Exit()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
 
         #endregion

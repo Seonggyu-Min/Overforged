@@ -10,6 +10,7 @@ namespace MIN
         // Custom Room Properties
         public const string IsSecret = "IsSecret";
         public const string Password = "Password";
+        public const string MapId = "MapId";
 
         // Custom Player Properties
         public const string IsReady = "IsReady";
