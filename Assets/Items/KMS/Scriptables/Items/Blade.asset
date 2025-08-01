@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 107
   Name: Blade
-  Image: {fileID: 21300000, guid: 82e527d201d49c44db82454631757420, type: 3}
+  Image: {fileID: 21300000, guid: 60cb8b2d670b3fddc8173bd327d59edd, type: 3}
   ItemPrefab: {fileID: -7334951474422550414, guid: f442190307bb3974a9bca57366eb782b, type: 3}
   Scale: {x: 1, y: 1, z: 1}
   materialVariation: 3
