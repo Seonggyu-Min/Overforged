@@ -5,10 +5,14 @@ using UnityEngine;
 using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.UI;
+using Zenject;
+using System;
+using MIN;
 
 
 public class GameReadyAndStopManager : MonoBehaviourPunCallbacks
 {
+    [Inject] IGameManager _gameManager;
 
     public static GameReadyAndStopManager Instance;
 
@@ -18,6 +22,10 @@ public class GameReadyAndStopManager : MonoBehaviourPunCallbacks
 
     [SerializeField] RawImage ready;
     [SerializeField] RawImage go;
+
+    [SerializeField] RawImage TimeUp;
+    public Action OnGameBegin;
+    public Action OnTimeOver;
 
 
 
@@ -42,6 +50,7 @@ public class GameReadyAndStopManager : MonoBehaviourPunCallbacks
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
         if (!PhotonNetwork.IsMasterClient) return;
+        if (changedProps[localSceneLoaded] == null) return;
         int count = 0;
         foreach (var player in PhotonNetwork.PlayerList)
         {
@@ -52,25 +61,40 @@ public class GameReadyAndStopManager : MonoBehaviourPunCallbacks
         }
         if (count == PhotonNetwork.CurrentRoom.PlayerCount)
         {
-            photonView.RPC("StartGame", RpcTarget.All);
+            photonView.RPC("StartReadyUI", RpcTarget.All);
         }
     }
 
+    public void TimesUp()
+    {
+        StartCoroutine(TimesUpRoutine());
+    }
+
     [PunRPC]
-    public void StartGame()
+    public void StartReadyUI()
     {
         StartCoroutine(ReadyGoRoutine());
     }
 
     private IEnumerator ReadyGoRoutine()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         ready.enabled = true;
         yield return new WaitForSeconds(3);
         ready.enabled = false;
         go.enabled = true;
         IsGameStopped = false;
-        yield return new WaitForSeconds(2);
+        OnGameBegin?.Invoke();
+        yield return new WaitForSeconds(1.5f);
         go.enabled = false;
+    }
+    private IEnumerator TimesUpRoutine()
+    {
+        IsGameStopped = true;
+        TimeUp.enabled = true;
+        yield return new WaitForSeconds(5);
+        TimeUp.enabled = false;
+        IsGameStopped = false;
+        _gameManager.SetGameEnd();
     }
 }
