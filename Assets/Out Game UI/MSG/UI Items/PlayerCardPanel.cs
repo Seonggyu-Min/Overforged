@@ -121,7 +121,10 @@ namespace MIN
 
                 PhotonNetwork.CurrentRoom.IsOpen = false;
                 PhotonNetwork.CurrentRoom.IsVisible = false;
-                PhotonNetwork.LoadLevel(1);
+
+                int mapId = PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(CustomPropertyKeys.MapId, out object mapIdObj) && mapIdObj is int id ? id : 0;
+
+                PhotonNetwork.LoadLevel(mapId + 1);
             }
             else
             {
