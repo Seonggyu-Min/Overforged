@@ -21,7 +21,7 @@ namespace MIN
 
         [SerializeField] private Button _leftArrowButton;
         [SerializeField] private Button _rightArrowButton;
-        [SerializeField] private TMP_Text _roomPageText;
+        //[SerializeField] private TMP_Text _roomPageText;
 
         private List<RoomInfo> _roomList = new();
         private int _currentPage = 0;
@@ -62,7 +62,7 @@ namespace MIN
 
             // 페이지 텍스트 업데이트
             int totalPages = Mathf.Max(1, Mathf.CeilToInt((float)_roomList.Count / RoomsPerPage)); // 방이 0개일 때도 1페이지는 존재하는 것 처럼 표기
-            _roomPageText.text = $"Page {_currentPage + 1} / {totalPages}";
+            //_roomPageText.text = $"Page {_currentPage + 1} / {totalPages}";
         }
 
 
