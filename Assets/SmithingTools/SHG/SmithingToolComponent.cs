@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
+using EditorAttributes;
 
 namespace SHG
 {
@@ -42,12 +43,14 @@ namespace SHG
     int playerId;
     [SerializeField]
     bool isOwner;
-    [SerializeField]
+    [SerializeField] [Required]
     GameObject uiPrefab;
-    [SerializeField]
+    [SerializeField] [Required]
     protected Transform uiPoint;
     protected GameObject uiObject;
     protected GauageImageUI progressUI;
+    [SerializeField] [Required]
+    protected Sprite gauageUIImage;
     public Action<SmithingToolComponent, ToolTransferArgs, ToolTransferResult> OnTransfered;
     public Action<SmithingToolComponent, ToolWorkResult> OnWorked;
     protected abstract ISmithingToolEffecter effecter { get; }
@@ -65,6 +68,7 @@ namespace SHG
         rotation: this.uiPoint.rotation);
       this.uiObject.transform.SetParent(this.transform);
       this.progressUI = Utils.RecursiveFindChild<GauageImageUI>(this.uiObject.transform);
+      this.progressUI.WorkSprite = this.gauageUIImage;
     }
 
     protected virtual void Start()
