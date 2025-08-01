@@ -23,6 +23,7 @@ namespace SHG
     public float Progress => this.CalcProgress();
     public InteractionType InteractionToTrigger { get; protected set; }
     public Action<InteractionType> OnInteractionTriggered;
+    public Action<ItemData> OnMaterialChanged;
 
     protected SmithingToolData Data;
     protected abstract bool isPlayerMovable { get; }
@@ -139,6 +140,7 @@ namespace SHG
     protected ToolWorkResult ChangeMaterial(float durationToStay)
     {
       this.HoldingItem.ChangeToNext();
+      this.OnMaterialChanged?.Invoke(this.HoldingItem.Data);
       this.InteractionToTrigger = InteractionType.Work;
       this.ResetInteraction();
       return (new ToolWorkResult {

@@ -1,3 +1,4 @@
+#define LOCAL_TEST
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -49,6 +50,7 @@ namespace SHG
     protected Transform uiPoint;
     protected GameObject uiObject;
     protected GauageImageUI progressUI;
+    protected LookCameraUI itemUI;
     [SerializeField] [Required]
     protected Sprite gauageUIImage;
     public Action<SmithingToolComponent, ToolTransferArgs, ToolTransferResult> OnTransfered;
@@ -68,11 +70,13 @@ namespace SHG
         rotation: this.uiPoint.rotation);
       this.uiObject.transform.SetParent(this.transform);
       this.progressUI = Utils.RecursiveFindChild<GauageImageUI>(this.uiObject.transform);
+      this.itemUI = Utils.RecursiveFindChild<LookCameraUI>(this.uiObject.transform);
       this.progressUI.WorkSprite = this.gauageUIImage;
     }
 
     protected virtual void Start()
     {
+      this.tool.OnMaterialChanged += this.OnMaterialChanged;
       #if !LOCAL_TEST
       this.NetworkSynchronizer?.RegisterSynchronizable(this);
       #endif
@@ -99,6 +103,7 @@ namespace SHG
       var result = this.tool.Transfer(args);
       Debug.Log($"{nameof(Transfer)} result: {result}");
       if (args.ItemToGive != null) {
+        this.itemUI.AddImage(args.ItemToGive.Data.Image);
         args.ItemToGive.transform.SetParent(this.transform);
         args.ItemToGive.transform.position = this.materialPoint.position;
         args.ItemToGive.transform.up = this.materialPoint.up;
@@ -107,7 +112,10 @@ namespace SHG
           rigidbody.isKinematic = true;
         }
       }
-      else  if (this.HoldingItem != null) {
+      else {
+        this.itemUI.SubAllImage();
+      }
+      if (this.HoldingItem != null) {
         var rigidbody = args.ItemToGive.gameObject.GetComponent<Rigidbody>();
         if (rigidbody != null) {
           rigidbody.isKinematic = false;
@@ -194,6 +202,12 @@ namespace SHG
           PlayerNetworkId = playerNetworkId
         });
       }
+    }
+
+    void OnMaterialChanged(ItemData itemData)
+    {
+      this.itemUI.SubImage();
+      this.itemUI.AddImage(itemData.Image);
     }
 
     public void HighlightInstantly(Color color)

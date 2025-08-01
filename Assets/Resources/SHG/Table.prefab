@@ -24884,6 +24884,7 @@ MonoBehaviour:
   isOwner: 0
   uiPrefab: {fileID: 3067690708589362235, guid: 94c1b4e71ec0307468b9d589da4d6c12, type: 3}
   uiPoint: {fileID: 8210169626413157547}
+  gauageUIImage: {fileID: 21300000, guid: cb3b31ebae0d94986a769b3d9c7730f0, type: 3}
   woodTableData: {fileID: 11400000, guid: a719b1e45263d10b7b3f075007c4e848, type: 2}
   craftTableData: {fileID: 11400000, guid: 8c1d5fe141b4381ec8024c9d999b8ee4, type: 2}
   materialPosition: {fileID: 7627591344773568123}

@@ -6,7 +6,10 @@ namespace SHG
   {
     public static T RecursiveFindChild<T>(Transform parent) where T: Component
     {
-      T found = null;
+      T found = parent.GetComponent<T>();
+      if (found != null) {
+        return (found);
+      }
       foreach (Transform child in parent) {
         found = child.GetComponent<T>();
         if(found != null) {

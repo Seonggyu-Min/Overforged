@@ -1,3 +1,4 @@
+#define LOCAL_TEST
 using System;
 using System.Text;
 using System.Collections.Generic;
@@ -120,7 +121,9 @@ namespace SHG
     {
       if (args.ItemToGive != null) {
         args.ItemToGive.transform.SetParent(this.transform);
+        //TODO: Item position
         args.ItemToGive.transform.localPosition = Vector3.up;
+        this.itemUI.AddImage(args.ItemToGive.Data.Image);
         if (this.CurrentWorkingTool == this.woodTable &&
           !this.woodTable.CanTransferItem(args) &&
           this.woodTable.HoldingItem != null &&
@@ -135,10 +138,15 @@ namespace SHG
         Debug.Log($"{nameof(Transfer)} result: {result}");
         if (result.IsDone) {
           this.CurrentWorkingTool = null;
+          this.itemUI.SubAllImage();
         }
-        if (this.CurrentWorkingTool == this.craftTable &&
+        else if (this.CurrentWorkingTool == this.craftTable &&
           this.craftTable.HoldingMaterials.Count == 0) {
           this.CurrentWorkingTool = null;
+          this.itemUI.SubAllImage();
+        }
+        else {
+          this.itemUI.SubImage();
         }
         this.OnTransfered?.Invoke(this, args, result);
         return (result);
