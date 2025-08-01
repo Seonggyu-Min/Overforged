@@ -62,21 +62,6 @@ namespace MIN
                 _panelStack.Clear();
                 ShowAsFirst("Log In Panel");
             }
-
-            // 디버그용
-            //foreach (var panel in _panels)
-            //{
-            //    Debug.Log($"등록된 패널: {panel.Key}");
-            //}
-
-            //UIPanel[] panelArray = _panelStack.ToArray();
-            //Array.Reverse(panelArray); 
-
-            //Debug.Log("현재 패널 스택 상태 (Top → Bottom):");
-            //foreach (var panel in panelArray)
-            //{
-            //    Debug.Log($"- {panel.name}");
-            //}
         }
 
         private void Update()
@@ -84,6 +69,10 @@ namespace MIN
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 CloseTopPanel();
+            }
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                DebugPanels(); // 디버그용 패널 상태 출력
             }
         }
 
@@ -115,8 +104,8 @@ namespace MIN
                     _panelStack.Clear(); // 루트 패널을 보여줄 때는 스택 비우기
                 }
 
+                _panelStack.Push(panel); // 스택에 추가
                 panel.gameObject.SetActive(true);
-                _panelStack.Push(panel);
             }
             else
             {
@@ -147,6 +136,7 @@ namespace MIN
             if (_panelStack.Count > 1)
             {
                 UIPanel topPanel = _panelStack.Peek();
+                Debug.Log($"현재 top 패널: {topPanel.name}");
 
                 if (topPanel.IsRootPanel)
                 {
@@ -207,5 +197,23 @@ namespace MIN
         }
 
         #endregion
+
+        private void DebugPanels()
+        {
+            //디버그용
+            foreach (var panel in _panels)
+            {
+                Debug.Log($"등록된 패널: {panel.Key}");
+            }
+
+            UIPanel[] panelArray = _panelStack.ToArray();
+            Array.Reverse(panelArray);
+
+            Debug.Log("현재 패널 스택 상태 (Top → Bottom):");
+            foreach (var panel in panelArray)
+            {
+                Debug.Log($"- {panel.name}");
+            }
+        }
     }
 }
