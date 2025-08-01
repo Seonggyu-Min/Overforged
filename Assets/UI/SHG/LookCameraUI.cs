@@ -15,8 +15,7 @@ namespace SHG
     {
       gameObject.layer = LayerMask.NameToLayer("UI");
       index = 0;
-      if (this.cameraToLook == null)
-      {
+      if (this.cameraToLook == null) {
         this.cameraToLook = Camera.main.transform;
       }
       if (canvas == null) canvas = GetComponent<Canvas>();

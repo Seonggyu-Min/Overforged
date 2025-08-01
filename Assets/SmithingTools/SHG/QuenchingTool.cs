@@ -24,9 +24,10 @@ namespace SHG
       if (args.ItemToGive != null) {
         if (args.ItemToGive is MaterialItem materialItem) {
           if (this.HoldingItem != null) {
-            return (materialItem.IsHot);
+            return (false);
           }
           return (
+            materialItem.IsHot &&
             Array.IndexOf(
               this.AllowedMaterials, materialItem.Variation) != -1);
         }

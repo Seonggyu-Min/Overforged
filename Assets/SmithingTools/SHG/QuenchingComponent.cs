@@ -25,19 +25,17 @@ namespace SHG
     ParticleSystem vaporParticle;
     [SerializeField] [Required()]
     MeshRenderer[] renderers;
-    [SerializeField] [Required]
-    GauageImageUI progressUI;
 
-    [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(tempLabel))]
-    Void uiGroup;
-    [SerializeField] [HideProperty]
-    Canvas uiCanvas;
-    [SerializeField] [HideProperty]
-    Image itemImage;
-    [SerializeField] [HideProperty]
-    TMP_Text itemNameLabel;
-    [SerializeField] [HideProperty]
-    TMP_Text tempLabel;
+//    [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(tempLabel))]
+//    Void uiGroup;
+//    [SerializeField] [HideProperty]
+//    Canvas uiCanvas;
+//    [SerializeField] [HideProperty]
+//    Image itemImage;
+//    [SerializeField] [HideProperty]
+//    TMP_Text itemNameLabel;
+//    [SerializeField] [HideProperty]
+//    TMP_Text tempLabel;
     [SerializeField]
     Color normalColor;
     [SerializeField]
@@ -65,10 +63,13 @@ namespace SHG
         return; 
       }
       Debug.Log($"After Interact");
-      if (this.uiCanvas.enabled && tool.HoldingItem == null) {
-        this.uiCanvas.enabled = false;
+//      if (this.uiCanvas.enabled && tool.HoldingItem == null) {
+//        this.uiCanvas.enabled = false;
+//      }
+      if (tool.HoldingItem == null) {
+        this.HideItemUI();
       }
-      if (tool.HoldingItem != null) {
+      else {
         this.SetItemUI(tool.HoldingItem);
       }
       if (tool.InteractionToTrigger == SmithingTool.InteractionType.ReceivedItem) {
@@ -81,13 +82,19 @@ namespace SHG
       }
     }
 
+    void HideItemUI()
+    {
+      this.HideProgressUI();
+    }
+
     void SetItemUI(Item item)
     {
-      this.itemImage.sprite = item.Data.Image;   
-      this.itemNameLabel.text = item.Data.Name;
-      if (!this.uiCanvas.enabled) {
-        this.uiCanvas.enabled = true;
-      }
+      this.ShowProgressUI();
+//      this.itemImage.sprite = item.Data.Image;   
+//      this.itemNameLabel.text = item.Data.Name;
+//      if (!this.uiCanvas.enabled) {
+//        this.uiCanvas.enabled = true;
+//      }
     }
 
     void OnFinished()
@@ -99,15 +106,15 @@ namespace SHG
     protected override void Update()
     {
       base.Update();
-      if (this.uiCanvas.enabled) {
-        this.tempLabel.text = $"temp: {this.quenchingTool.Temparature}";
-        this.progress.Value = (this.quenchingTool.Progress, 1f);
-      }
+      this.progress.Value = (this.quenchingTool.Progress, 1f);
+//      if (this.uiCanvas.enabled) {
+//        this.tempLabel.text = $"temp: {this.quenchingTool.Temparature}";
+//      }
     }
 
     protected override void Awake()
     {
-
+      base.Awake();
       this.highlighter = new GameObjectHighlighter(
         Array.ConvertAll<Renderer, Material>(
           this.renderers, renderer => renderer.material));
@@ -124,7 +131,7 @@ namespace SHG
         vaporParticle: this.vaporParticle,
         materialPoint: this.materialPoint
         );
-      this.uiCanvas.enabled = false;
+      //this.uiCanvas.enabled = false;
       this.progress = new ((0f, 1f));
       this.progressUI.WatchingFloatValue = this.progress;
     }
