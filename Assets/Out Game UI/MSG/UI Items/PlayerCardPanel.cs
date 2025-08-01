@@ -101,6 +101,13 @@ namespace MIN
 
         public void OnClickReadyOrStartButton()
         {
+            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+            {
+                { CustomPropertyKeys.CharacterId, characterToggle.SelectIndex },
+                { CustomPropertyKeys.TeamColor, teamToggle.SelectIndex }
+            };
+            PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+            UpdateButtonText();
             if (PhotonNetwork.IsMasterClient)
             {
                 // 마스터 클라이언트가 시작 버튼을 클릭한 경우
@@ -132,13 +139,7 @@ namespace MIN
                 _isReady = !_isReady;
                 PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { CustomPropertyKeys.IsReady, _isReady } });
             }
-            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
-            {
-                { CustomPropertyKeys.CharacterId, characterToggle.SelectIndex },
-                { CustomPropertyKeys.TeamColor, teamToggle.SelectIndex }
-            };
-            PhotonNetwork.LocalPlayer.SetCustomProperties(props);
-            UpdateButtonText();
+
         }
 
         public void OnClickExitButton()
