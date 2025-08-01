@@ -118,4 +118,26 @@ public class MaterialItem : Item
         }
 
     }
+    public static OreType GetOreType(List<MaterialItem> list)
+    {
+        foreach (var mat in list)
+        {
+            if (mat.matData.materialType == MaterialType.Metallic)
+            {
+                return mat.Ore;
+            }
+        }
+        return OreType.None;
+    }
+    public static WoodType GetWoodType(List<MaterialItem> list)
+    {
+        foreach (var mat in list)
+        {
+            if (mat.matData.materialType == MaterialType.Wooden)
+            {
+                return mat.Wood;
+            }
+        }
+        return WoodType.None;
+    }
 }
