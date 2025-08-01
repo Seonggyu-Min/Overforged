@@ -2,6 +2,7 @@ using Zenject;
 
 namespace SHG
 {
+  using IAudioManager = MIN.IAudioManager;
   public class TestMonoInstaller : MonoInstaller<TestMonoInstaller>
   {
     public override void InstallBindings()
@@ -17,7 +18,7 @@ namespace SHG
       this.Container
         .Bind<IAudioLibrary>()
         .To<AudioLibrary>()
-        .AsSingle(); 
+        .AsSingle();
     }
   }
 }

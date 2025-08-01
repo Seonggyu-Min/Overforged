@@ -19,6 +19,8 @@ namespace MIN
 
         [SerializeField] private RoomCardPanel _roomCardPanel;
         [SerializeField] private Button _createRoomButton;
+        [SerializeField] private GameObject _exitButton;
+        [SerializeField] private GameObject _menuPanel;
         [SerializeField] private TMP_Text _debugText;
 
         private List<RoomInfo> _roomList = new();
@@ -30,6 +32,8 @@ namespace MIN
 
         public override void OnEnable()
         {
+            _exitButton.SetActive(true);
+            _menuPanel.SetActive(true);
             PhotonNetwork.AddCallbackTarget(this);
 
             if (!PhotonNetwork.IsConnected)
@@ -44,7 +48,12 @@ namespace MIN
             }
         }
 
-        public override void OnDisable() => PhotonNetwork.RemoveCallbackTarget(this);
+        public override void OnDisable()
+        {
+            PhotonNetwork.RemoveCallbackTarget(this);
+            _exitButton.SetActive(false);
+            _menuPanel.SetActive(false);
+        }
 
         // 디버그용
         private void Update()

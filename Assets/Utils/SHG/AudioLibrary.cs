@@ -1,34 +1,67 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace SHG
 {
-  public interface IAudioLibrary
-  {
-    SoundFile GetRandomSoundFrom(SoundSource soundSource);
-    SfxController GetSfxController();
-    SfxController PlayRandomSound(in string soundName, Vector3? position = null, float? volume = null);
-    SfxController PlaySfx(AudioClip clip, Vector3? position = null, float? volume = null);
-    void Register(SoundSourceContainer audioSource);
-  }
 
   public class AudioLibrary : IAudioLibrary
   {
+    const float DEFAULT_MASTER_VOLUME = 0.5f;
+    const float DEFAULT_SFX_VOLUME = 1f;
+    const float DEFAULT_BGM_VOLUME = 1f;
+    public BgmController BgmController => this.bgmController;
+    private AudioMixer mainMixer;
     System.Random rand;
     const int DEFAULT_SFX_POOL_SIZE = 10;
     GameObject sfxControllerPrefab;
     ObjectPool<SfxController> sfxPool;
     Dictionary<string, SoundSource> soundSources;
+    List<BgmSource> bgmSources;
+    BgmController bgmController;
+    HashSet<SfxController> playingAllSfx;
+    float[] volumes;
+    int currentBgmIndex = -1;
 
     public AudioLibrary()
     {
+      this.mainMixer = Resources.Load<AudioMixer>("SHG/MainMixer");
+      var sfxOutput = this.mainMixer.FindMatchingGroups("Sfx")[0];
       this.rand = new();
-      this.soundSources = new();
+      this.soundSources = new ();
+      this.bgmSources = new ();
       this.sfxControllerPrefab = Resources.Load<GameObject>("SHG/SfxController");
       this.sfxPool = new MonoBehaviourPool<SfxController>(
         poolSize: DEFAULT_SFX_POOL_SIZE,
-        prefab: this.sfxControllerPrefab);
+        prefab: this.sfxControllerPrefab,
+        initPooledObject: (sfxController) =>  {
+        sfxController.OnDisabled += this.OnSfxDisabled;
+        sfxController.AudioSource.outputAudioMixerGroup = sfxOutput;
+        });
+      this.playingAllSfx = new ();
+      this.volumes = new float[Enum.GetValues(typeof(IAudioLibrary.VolumeType)).Length];
+      this.bgmController = GameObject.Instantiate(
+        Resources.Load<GameObject>("SHG/BgmController"))
+        .GetComponent<BgmController>();
+      this.BgmController.AudioSource.outputAudioMixerGroup = this.mainMixer.FindMatchingGroups("Bgm")[0];
+      this.SetVolume(IAudioLibrary.VolumeType.Master, DEFAULT_MASTER_VOLUME);
+      this.SetVolume(IAudioLibrary.VolumeType.Bgm, DEFAULT_BGM_VOLUME);
+      this.SetVolume(IAudioLibrary.VolumeType.Sfx, DEFAULT_SFX_VOLUME);
+    }
+
+    public void Register(BgmSourceContainer bgmSource)
+    {
+      foreach (var bgm in bgmSource.BgmSources) {
+        if (this.bgmSources.FindIndex(registeredBgm => registeredBgm.Name == bgm.Name) != -1) {
+        #if UNITY_EDITOR
+          throw (new ApplicationException($"{nameof(AudioLibrary)}: fail to {nameof(Register)} with duplicated Name {bgm.Name}"));
+        #endif
+        }
+        else {
+          this.bgmSources.Add(bgm);
+        }
+      }
     }
 
     public void Register(SoundSourceContainer audioSource)
@@ -37,24 +70,109 @@ namespace SHG
       {
         if (!this.soundSources.TryAdd(soundSource.Name, soundSource))
         {
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
           throw (new ApplicationException($"{nameof(AudioLibrary)}: fail to {nameof(Register)} with duplicated Name {soundSource.Name}"));
-#endif
+        #endif
         }
       }
     }
 
-    public SoundFile GetRandomSoundFrom(SoundSource soundSource)
+    public string GetCurrentBgm()
     {
-      if (soundSource.SoundFiles.Length > 1)
-      {
-        int index = this.rand.Next(0, soundSource.SoundFiles.Length);
-        return (soundSource.SoundFiles[index]);
+      if (this.currentBgmIndex > 0) {
+        return (this.bgmSources[this.currentBgmIndex].Name);
       }
-      else
-      {
-        return (soundSource.SoundFiles[0]);
+      return (string.Empty);
+    }
+
+    public float GetVolume(IAudioLibrary.VolumeType volumeType)
+    {
+      return (this.volumes[(int)volumeType]);
+    }
+
+    public void SetVolume(IAudioLibrary.VolumeType volumeType, float volume)
+    {
+      float clampedVolume = Mathf.Clamp(
+        volume, 
+        0.000001f, 1f);
+      float dbVolume = Mathf.Log10(clampedVolume) * 20f;
+      this.volumes[(int)volumeType] = clampedVolume;
+      switch (volumeType) {
+        case IAudioLibrary.VolumeType.Master:
+          this.mainMixer.SetFloat("MasterVolume", dbVolume);
+          break;
+        case IAudioLibrary.VolumeType.Bgm:
+          this.mainMixer.SetFloat("BgmVolume", dbVolume);
+          break;
+        case IAudioLibrary.VolumeType.Sfx:
+          this.mainMixer.SetFloat("SfxVolume", dbVolume);
+          break;
       }
+    }
+
+    public void Mute()
+    {
+      this.SetVolume(IAudioLibrary.VolumeType.Master, 0f);
+    }
+
+    public void PlayBgm(string bgmName)
+    {
+      int foundIndex = this.bgmSources.FindIndex(
+        bgmSource => bgmSource.Name == bgmName); 
+      if (foundIndex != -1) {
+        this.currentBgmIndex = foundIndex;
+        this.PlayBgm(this.bgmSources[foundIndex].SoundFile.Clip);
+      }
+    }
+
+    public void PlaySfx(AudioClip clip)
+    {
+      this
+        .GetSfxController()
+        .PlaySound(clip);
+    }
+
+    public void PauseBgm()
+    {
+      if (this.BgmController.IsPlaying) {
+        this.BgmController.Pause(); 
+      }
+    }
+
+    public void PauseAllSfx()
+    {
+      foreach (var sfxController in this.playingAllSfx) {
+        sfxController.Pause(); 
+      }
+    }
+
+    public void PlaybackBgm()
+    {
+      this.BgmController.PlayBack();
+    }
+
+    public void PlaybackAllSfx()
+    {
+      foreach (var sfxController in this.playingAllSfx) {
+        sfxController.PlayBack();
+      }
+    }
+
+    public void PlayNextBgm()
+    {
+      int index = this.currentBgmIndex < this.bgmSources.Count - 1 ?
+        this.currentBgmIndex + 1: 0;
+      this.currentBgmIndex = index;
+      this.PlayBgm(this.bgmSources[index].SoundFile.Clip);
+    }
+
+    public string[] GetBgmList()
+    {
+      string[] list = new string[this.bgmSources.Count];
+      for (int i = 0; i < list.Length; i++) {
+        list[i] = this.bgmSources[i].Name; 
+      }
+      return (list);
     }
 
     public SfxController GetSfxController()
@@ -62,29 +180,61 @@ namespace SHG
       return (this.sfxPool.Get());
     }
 
-    public SfxController PlayRandomSound(in string soundSourceName,
-      Nullable<Vector3> position = null, Nullable<float> volume = null)
+    public SfxController PlayRandomSfx(
+      in string soundSourceName,
+      Nullable<Vector3> position = null)
     {
       if (!this.soundSources.TryGetValue(
-          soundSourceName, out SoundSource soundSource))
-      {
-#if UNITY_EDITOR
+          soundSourceName, out SoundSource soundSource)) {
+        #if UNITY_EDITOR
         Debug.LogError($"{nameof(GetRandomSoundFrom)}: Fail to find {nameof(SoundSource)} for Name {soundSourceName}");
-#endif
+        #endif
         return (null);
       }
       SoundFile sound = this.GetRandomSoundFrom(soundSource);
-      float multiplyedVolume = (volume ?? 1.0f) * sound.Volume;
-      return (this.PlaySfx(sound.Clip, position, multiplyedVolume));
+      return (this.PlaySfx(sound.Clip, position, sound.Volume));
     }
 
-    public SfxController PlaySfx(AudioClip clip, Nullable<Vector3> position = null, Nullable<float> volume = null)
+    public SfxController PlaySfx(
+      AudioClip clip,
+      Nullable<Vector3> position = null, 
+      float volume = 1f)
     {
-     return (
-       this.GetSfxController()
+     var sfxController = this.GetSfxController()
        .SetPosition(position ?? Camera.main.transform.position)
-       .SetVolume(volume ?? 1.0f)
-       .PlaySound(clip));
+       .SetVolume(volume)
+       .PlaySound(clip);
+     this.playingAllSfx.Add(sfxController);
+     return (sfxController);
+    }
+
+    void OnSfxDisabled(IPooledObject pooledObject)
+    {
+      if (pooledObject is SfxController sfxController) {
+        this.playingAllSfx.Remove(sfxController);
+      }
+    }
+
+    void PlayBgm(AudioClip clip)
+    {
+      if (this.BgmController.IsPlaying) {
+        this.BgmController.CrossFadeBgm(clip);
+      }
+      else {
+        this.BgmController.PlaySound(clip);
+      }
+    }
+
+    SoundFile GetRandomSoundFrom(SoundSource soundSource)
+    {
+      if (soundSource.SoundFiles.Length > 1)
+      {
+        int index = this.rand.Next(0, soundSource.SoundFiles.Length);
+        return (soundSource.SoundFiles[index]);
+      }
+      else {
+        return (soundSource.SoundFiles[0]);
+      }
     }
   }
 }
