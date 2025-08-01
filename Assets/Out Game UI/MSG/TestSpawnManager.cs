@@ -20,10 +20,18 @@ namespace MIN
         public void SpwanPlayer()
         {
             int myNum = PhotonNetwork.LocalPlayer.ActorNumber - 1;
+            Vector3 spawnPos;
 
+            if (myNum < 0 || myNum >= mapData.SpawnPoints.Count)
+            {
+                Debug.LogWarning("Invalid player number or spawn points not set up correctly.");
+                spawnPos = new Vector3(0f, 1f, 0f);
+            }
+            else
+            {
+                spawnPos = mapData.SpawnPoints[myNum].position;
+            }
             
-
-            Vector3 spawnPos = mapData.SpawnPoints[myNum].position;
             GameObject playerobj = PhotonNetwork.Instantiate("Player", spawnPos, Quaternion.identity);
             Player player = playerobj.GetComponent<Player>();
 
