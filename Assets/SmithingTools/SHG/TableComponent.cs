@@ -309,7 +309,7 @@ namespace SHG
       this.craftProductNameLabel.text = craftedProduct.Name;
       this.craftProductImage.sprite = craftedProduct.Image;
       this.tableEffecter.TriggerWorkEffect();
-      this.audioLibrary.PlayRandomSound(
+      this.audioLibrary.PlayRandomSfx(
         soundName: "success",
         position: this.transform.position);
     }

@@ -74,7 +74,7 @@ namespace SHG
       if (tool.InteractionToTrigger == SmithingTool.InteractionType.ReceivedItem) {
         this.highlighter.HighlightColor = this.heatedColor;
         this.quenchingEffecter.TriggerWorkEffect();
-        this.audioLibrary.PlayRandomSound("quench");
+        this.audioLibrary.PlayRandomSfx("quench");
       } 
       else if (tool.InteractionToTrigger == SmithingTool.InteractionType.ReturnItem) {
         this.highlighter.HighlightColor = this.normalColor;

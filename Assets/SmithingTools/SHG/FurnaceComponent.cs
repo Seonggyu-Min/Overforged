@@ -109,7 +109,7 @@ namespace SHG
         if (this.isIgnited != this.effecter.IsStateOn(ISmithingToolEffecter.State.Working))
         {
           this.effecter.ToggleState(ISmithingToolEffecter.State.Working);
-          this.audioLibrary.PlayRandomSound(
+          this.audioLibrary.PlayRandomSfx(
             soundName: "ignite",
             position: this.transform.position);
           this.Invoke(nameof(PlayBurningSound), 2f);
@@ -119,7 +119,7 @@ namespace SHG
 
     void PlayBurningSound()
     {
-      this.burningSfx = this.audioLibrary.PlayRandomSound(
+      this.burningSfx = this.audioLibrary.PlayRandomSfx(
         soundName: "burning",
         position: this.transform.position)
         .SetLoop(true);
