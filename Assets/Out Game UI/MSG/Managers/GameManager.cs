@@ -17,11 +17,16 @@ namespace MIN
         Draw
     }
 
-    public class CalculatedPlayer
+    /// <summary>
+    /// 승리팀, 패배팀, 무승부팀을 저장하는 리스트. 
+    /// 승리, 패배, 무승부팀에도 여러 팀이 들어갈 수 있으므로 List<List<Player>> 형태로 저장
+    /// </summary>
+    public class CalculatedTeam
     {
-        public List<Player> WinPlayers = new();
-        public List<Player> LosePlayers = new();
-        public List<Player> DrawPlayers = new();
+
+        public List<List<Player>> WinTeams = new();
+        public List<List<Player>> LoseTeams = new();
+        public List<List<Player>> DrawTeams = new();
     }
 
     public class GameManager : MonoBehaviour, IGameManager
@@ -54,9 +59,9 @@ namespace MIN
         /// 게임이 승패 계산을 위해 호출하는 메서드.
         /// 모든 클라이언트가 해당 메서드를 호출해야합니다.
         /// </summary>
-        public CalculatedPlayer CalculateResult()
+        public CalculatedTeam CalculateResult()
         {
-            CalculatedPlayer calculatedPlayer = new();
+            CalculatedTeam calculatedTeam = new();
             var playerList = PhotonNetwork.PlayerList;
 
             if (playerList.Length == 0)
@@ -65,86 +70,64 @@ namespace MIN
                 return null;
             }
 
-            // 점수 딕셔너리 구성
-            Dictionary<Player, int> scores = new();
+            // 팀별 점수 계산
+            GetTeamScoreData(out var teamGroups, out var teamScores);
 
-            foreach (var player in playerList)
+            if (teamScores.Count == 0)
             {
-                int score = 0;
+                Debug.LogWarning("팀 점수가 없습니다.");
+                return null;
+            }
 
-                if (player.CustomProperties.TryGetValue(CustomPropertyKeys.Score, out var value))
+            // 최대 점수를 가진 팀을 찾기
+            int maxScore = teamScores.Values.Max();
+            // 최대 점수를 가진 팀의 키를 찾기
+            var topTeams = teamScores.Where(pair => pair.Value == maxScore).Select(pair => pair.Key).ToList();
+
+            // 팀별로 승패를 계산
+            foreach (var kvp in teamGroups)
+            {
+                var teamKey = kvp.Key;
+                var teamPlayers = kvp.Value;
+
+                // topTeams에 포함된 팀인지 확인
+                if (topTeams.Contains(teamKey))
                 {
-                    score = (int)value;
+                    // 만약 모든 팀이 동점이라면
+                    if (topTeams.Count == teamScores.Count)
+                    {
+                        // 무승부팀에 넣기
+                        calculatedTeam.DrawTeams.Add(teamPlayers);
+                    }
+                    // 만약 동점이 아니라면 승리 처리
+                    else
+                    {
+                        // 승리팀에 넣기
+                        calculatedTeam.WinTeams.Add(teamPlayers);
+                        foreach (var player in teamPlayers)
+                        {
+                            WinPlayer(player);
+                        }
+                    }
                 }
+                // 만약 topTeams에 포함되지 않은 팀이라면 패배 처리
                 else
                 {
-                    score = 0;
-                }
-
-                scores[player] = score;
-            }
-
-            int maxScore = scores.Values.Max();
-            var topScorers = scores.Where(pair => pair.Value == maxScore).Select(pair => pair.Key).ToList();
-
-            // 승자가 한 명일 경우
-            if (topScorers.Count == 1)
-            {
-                foreach (var pair in scores)
-                {
-                    if (pair.Key == topScorers[0])
-                    {
-                        WinPlayer(pair.Key);
-                        calculatedPlayer.WinPlayers.Add(pair.Key);
-                    }
-                    else
-                    {
-                        LosePlayer(pair.Key);
-                        calculatedPlayer.LosePlayers.Add(pair.Key);
-                    }
+                    // 패배팀에 넣기
+                    calculatedTeam.LoseTeams.Add(teamPlayers);
                 }
             }
-            // 승자가 여러 명이면서 전부가 아닐 경우
-            else if (topScorers.Count > 1 && topScorers.Count < playerList.Length)
-            {
-                foreach (var pair in scores)
-                {
-                    if (topScorers.Contains(pair.Key))
-                    {
-                        WinPlayer(pair.Key);
-                        calculatedPlayer.WinPlayers.Add(pair.Key);
-                    }
-                    else
-                    {
-                        LosePlayer(pair.Key);
-                        calculatedPlayer.LosePlayers.Add(pair.Key);
-                    }
-                }
-            }
-            // 승자가 전부일 경우
-            else if (topScorers.Count == playerList.Length)
-            {
-                foreach (var player in playerList)
-                {
-                    DrawPlayer(player);
-                    calculatedPlayer.DrawPlayers.Add(player);
-                }
-            }
-            else
-            {
-                Debug.LogWarning("예상치 못한 결과입니다.");
-            }
 
-            return calculatedPlayer;
+            return calculatedTeam;
         }
 
-        
+
         // TODO: 중복된 로직이 있어 리팩토링 필요
         /// <summary>
         /// 승패 저장을 위한 메서드
         /// 마스터 클라이언트만 호출해야 합니다.
         /// </summary>
-        public void SaveResult()
+        public void SaveTeamResult()
         {
             var playerList = PhotonNetwork.PlayerList;
 
@@ -154,69 +137,57 @@ namespace MIN
                 return;
             }
 
-            // 점수 딕셔너리 구성
-            Dictionary<Player, int> scores = new();
+            // 팀별 점수 계산
+            GetTeamScoreData(out var teamGroups, out var teamScores);
 
-            foreach (var player in playerList)
+            if (teamScores.Count == 0)
             {
-                int score = 0;
+                Debug.LogWarning("팀 점수가 없습니다.");
+                return;
+            }
 
-                if (player.CustomProperties.TryGetValue(CustomPropertyKeys.Score, out var value))
+            // 최대 점수를 가진 팀을 찾기
+            int maxScore = teamScores.Values.Max();
+            // 최대 점수를 가진 팀의 키를 찾기
+            var topTeams = teamScores.Where(pair => pair.Value == maxScore).Select(pair => pair.Key).ToList();
+
+            // 팀별로 승패를 계산
+            foreach (var kvp in teamGroups)
+            {
+                var teamKey = kvp.Key;
+                var teamPlayers = kvp.Value;
+
+                // topTeams에 포함된 팀인지 확인
+                if (topTeams.Contains(teamKey))
                 {
-                    score = (int)value;
+                    // 만약 모든 팀이 동점이라면
+                    if (topTeams.Count == teamScores.Count)
+                    {
+                        // 무승부 처리
+                        foreach (var player in teamPlayers)
+                        {
+                            DrawPlayer(player);
+                        }
+                    }
+                    // 만약 동점이 아니라면 승리 처리
+                    else
+                    {
+                        // 승리 처리
+                        foreach (var player in teamPlayers)
+                        {
+                            WinPlayer(player);
+                        }
+                    }
                 }
+                // 만약 topTeams에 포함되지 않은 팀이라면 패배 처리
                 else
                 {
-                    score = 0;
-                }
-
-                scores[player] = score;
-            }
-
-            int maxScore = scores.Values.Max();
-            var topScorers = scores.Where(pair => pair.Value == maxScore).Select(pair => pair.Key).ToList();
-
-            // 승자가 한 명일 경우
-            if (topScorers.Count == 1)
-            {
-                foreach (var pair in scores)
-                {
-                    if (pair.Key == topScorers[0])
+                    // 패배 처리
+                    foreach (var player in teamPlayers)
                     {
-                        WinPlayer(pair.Key);
-                    }
-                    else
-                    {
-                        LosePlayer(pair.Key);
+                        LosePlayer(player);
                     }
                 }
-            }
-            // 승자가 여러 명이면서 전부가 아닐 경우
-            else if (topScorers.Count > 1 && topScorers.Count < playerList.Length)
-            {
-                foreach (var pair in scores)
-                {
-                    if (topScorers.Contains(pair.Key))
-                    {
-                        WinPlayer(pair.Key);
-                    }
-                    else
-                    {
-                        LosePlayer(pair.Key);
-                    }
-                }
-            }
-            // 승자가 전부일 경우
-            else if (topScorers.Count == playerList.Length)
-            {
-                foreach (var player in playerList)
-                {
-                    DrawPlayer(player);
-                }
-            }
-            else
-            {
-                Debug.LogWarning("예상치 못한 결과입니다.");
             }
         }
 
@@ -227,16 +198,6 @@ namespace MIN
 
         private void WinPlayer(Player player)
         {
-            if (player.UserId == null)
-            {
-                Debug.Log("player.UserId 가 null");
-            }
-            else
-            {
-                Debug.Log($"player.UserId 가 {player.UserId}");
-            }
-
-
             var statRef = _firebaseManager.Database.RootReference.Child("users")
                 .Child(player.UserId)
                 .Child("stats")
@@ -259,16 +220,6 @@ namespace MIN
 
         private void LosePlayer(Player player)
         {
-            if (player.UserId == null)
-            {
-                Debug.Log("player.UserId 가 null");
-            }
-            else
-            {
-                Debug.Log($"player.UserId 가 {player.UserId}");
-            }
-
-
             var statRef = _firebaseManager.Database.RootReference.Child("users")
                 .Child(player.UserId)
                 .Child("stats")
@@ -311,7 +262,40 @@ namespace MIN
             });
         }
 
+        private void GetTeamScoreData(out Dictionary<object, List<Player>> teamGroups, out Dictionary<object, int> teamScores)
+        {
+            teamGroups = new(); // key: 팀 색상, value: 해당 팀의 플레이어 리스트
+            teamScores = new(); // key: 팀 색상, value: 해당 팀의 총 점수
 
+            foreach (var player in PhotonNetwork.PlayerList)
+            {
+                if (!player.CustomProperties.TryGetValue(CustomPropertyKeys.TeamColor, out var teamKey))
+                {
+                    Debug.LogWarning($"플레이어 {player.NickName}의 팀 색상이 설정되지 않았습니다.");
+                    continue;
+                }
+
+                // 팀 색상 키가 없으면 새로 생성
+                if (!teamGroups.ContainsKey(teamKey))
+                {
+                    teamGroups[teamKey] = new List<Player>();
+                    teamScores[teamKey] = 0;
+                }
+
+                // 팀 그룹에 플레이어 추가
+                teamGroups[teamKey].Add(player);
+
+                // 플레이어의 점수를 가져와서 해당 팀의 총 점수에 추가
+                int score = 0;
+                if (player.CustomProperties.TryGetValue(CustomPropertyKeys.Score, out var scoreValue))
+                {
+                    score = (int)scoreValue;
+                }
+
+                // 해당 팀의 총 점수에 플레이어의 점수를 추가
+                teamScores[teamKey] += score;
+            }
+        }
 
         #endregion
     }

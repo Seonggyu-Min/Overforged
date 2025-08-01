@@ -8,8 +8,8 @@ namespace MIN
     public interface IGameManager
     {
         public void SetGameEnd();
-        public CalculatedPlayer CalculateResult();
+        public CalculatedTeam CalculateResult();
 
-        public void SaveResult();
+        public void SaveTeamResult();
     }
 }
