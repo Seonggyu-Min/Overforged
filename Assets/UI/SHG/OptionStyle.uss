@@ -1,0 +1,141 @@
+VisualElement
+{
+  -unity-font-definition: url("project://database/Assets/Imports/Fonts/Maplestory Bold.ttf");
+}
+
+#option-window
+{
+  top: 15%;
+  left: 25%;
+  width: 50%;
+  height: 70%;
+}
+
+#option-panel
+{
+  width: 100%;
+  height: 100%;
+  background-image: url("project://database/Assets/Imports/GUI/ResourceData/Sprites/Component/Popup/Popup_Frame.png");
+  border-radius: 50px;
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
+#option-close-button
+{
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  width: 60px;
+  height: 60px;
+  align-items: center;
+  justify-content: center;
+}
+
+#option-close-button-icon
+{
+  background-image: url("project://database/Assets/Imports/GUI/ResourceData/Sprites/Demo/Demo_Icon/Icon_PictoIcon_Close.png");
+  background-color: transparent;
+  border-width: 0;
+  width: 40px;
+  height: 40px;
+}
+
+.gray-circle-button
+{
+  background-image: url("project://database/Assets/Imports/GUI/ResourceData/Sprites/Component/Button/Btn_Circle01_Gray.png");
+}
+
+.option-header
+{
+  align-self: center;
+  padding: 50px;
+  padding-left: 100px;
+  padding-right: 100px;
+  background-image: url("project://database/Assets/Imports/GUI/ResourceData/Sprites/Component/Popup/Popup_TitleFrame_00.png");
+}
+
+.option-row
+{
+  flex-direction: row;
+  width: 90%;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.option-row-label
+{
+  width: 200px;
+  margin-left: 15px;
+  margin-right: 50px;
+  font-size: 20px;
+}
+
+.option-row-slider
+{
+  width: 50%;
+}
+
+.option-row-label-icon
+{
+  width: 40px;
+  height: 40px;
+}
+
+#sound-icon
+{
+  background-image: url("project://database/Assets/Imports/GUI/ResourceData/Sprites/Demo/Demo_Icon/Icon_PictoIcon_Sound.png");
+}
+
+#bgm-icon
+{
+  background-image: url("project://database/Assets/Imports/GUI/ResourceData/Sprites/Demo/Demo_Icon/Icon_PictoIcon_Music.png");
+}
+
+.option-row-slider .appui-slider__progress-container
+{
+  border-radius: 10px;
+  height: 20px;
+}
+
+.option-row-slider .appui-slider__progress
+{
+  background-image: url("project://database/Assets/Imports/GUI/ResourceData/Sprites/Component/Slider/Slider03_Fill_Green.png");
+}
+
+.option-row-slider .appui-thumb__content
+{
+  border-radius: 0;
+  scale: 1.5 2.3;
+  border-width: 0;
+  background-color: transparent;
+  background-image: url("project://database/Assets/Imports/GUI/ResourceData/Sprites/Component/Slider/Slider02_Handle_On.png");
+}
+
+.option-row-slider .appui-slider__thumb-container
+{
+  background-image: url("project://database/Assets/Imports/GUI/ResourceData/Sprites/Component/Slider/Slider02_Handle_On.png");
+}
+
+#option-bgm-list-container
+{
+  width: 70%;
+  min-height: 200px;
+  align-self: center;
+}
+.option-bgm-list-row
+{
+  justify-content: center;
+}
+
+.option-bgm-list-label
+{
+  font-size: 22px;
+  padding-left: 20px;
+}
+
+#option-bgm-list-container .unity-collection-view__item--selected
+{
+  background-color: green;
+}
