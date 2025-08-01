@@ -20,6 +20,8 @@ namespace MIN
         [SerializeField] private GameObject _playerCardPrefab;
         [SerializeField] private Transform _playerContentParent;
 
+        [SerializeField] SCR.SelectToggle characterToggle;
+        [SerializeField] SCR.SelectToggle teamToggle;
         [SerializeField] private Button _readyButton;
         [SerializeField] private TMP_Text _readyButtonText;
         private bool _isReady = false;
@@ -119,6 +121,7 @@ namespace MIN
                     }
                 }
 
+
                 PhotonNetwork.CurrentRoom.IsOpen = false;
                 PhotonNetwork.CurrentRoom.IsVisible = false;
                 PhotonNetwork.LoadLevel(1);
@@ -129,7 +132,12 @@ namespace MIN
                 _isReady = !_isReady;
                 PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { CustomPropertyKeys.IsReady, _isReady } });
             }
-
+            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable
+            {
+                { CustomPropertyKeys.CharacterId, characterToggle.SelectIndex },
+                { CustomPropertyKeys.TeamColor, teamToggle.SelectIndex }
+            };
+            PhotonNetwork.LocalPlayer.SetCustomProperties(props);
             UpdateButtonText();
         }
 
