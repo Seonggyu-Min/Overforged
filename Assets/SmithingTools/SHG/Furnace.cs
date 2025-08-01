@@ -69,13 +69,7 @@ namespace SHG
     {
       if (args.ItemToGive != null) {
         if (args.ItemToGive is MaterialItem materialItem) {
-
-                    Debug.Log($"{this.AllowedMaterials}");
-
-                    Debug.Log($"{materialItem.Variation} sdaasd");
-
-                    return (Array.IndexOf(
-
+          return (Array.IndexOf(
               this.AllowedMaterials, materialItem.Variation) != -1);
         }
         else {
@@ -121,7 +115,7 @@ namespace SHG
           Trigger = this.OnTriggered,
           DurationToStay = this.InteractionTime
           }
-      ));
+          ));
     }
   }
 }

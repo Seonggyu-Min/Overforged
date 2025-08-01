@@ -19,21 +19,17 @@ namespace SHG
     FurnaceEffecter furnaceEffecter;
     [SerializeField] [Required]
     Transform materialPosition;
-    [SerializeField] [Required]
-    GauageImageUI progressUI;
 
-    [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(tempLabel))]
-    Void uiGroup;
-    [SerializeField] [HideInInspector]
-    Canvas uiCanvas;
-    [SerializeField] [HideInInspector]
-    Image itemImage;
-    [SerializeField] [HideInInspector]
-    TMP_Text itemNameLabel;
-    [SerializeField] [HideInInspector]
-    TMP_Text tempLabel;
+//    [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel))]
+//    Void uiGroup;
+//    [SerializeField] [HideInInspector]
+//    Canvas uiCanvas;
+//    [SerializeField] [HideInInspector]
+//    Image itemImage;
+//    [SerializeField] [HideInInspector]
+//    TMP_Text itemNameLabel;
     bool isIgnited;
-    [SerializeField] MeshRenderer modeling;
+    [SerializeField] MeshRenderer model;
 
     [SerializeField] [VerticalGroup(10f, true, nameof(HightlightColor), nameof(normalColor), nameof(ignitedColor))]
     Void colorGroup;
@@ -93,14 +89,20 @@ namespace SHG
         return;
       }
       Debug.Log($"After Interact");
-      if (this.uiCanvas.enabled && tool.HoldingItem == null)
-      {
-        this.uiCanvas.enabled = false;
-      }
-      else if (!this.uiCanvas.enabled && tool.HoldingItem != null)
-      {
+      if (tool.HoldingItem != null) {
         this.SetItemUI(tool.HoldingItem);
       }
+      else {
+        this.HideItemUI();
+      }
+//      if (this.uiCanvas.enabled && tool.HoldingItem == null)
+//      {
+//        this.uiCanvas.enabled = false;
+//      }
+//      else if (!this.uiCanvas.enabled && tool.HoldingItem != null)
+//      {
+//        this.SetItemUI(tool.HoldingItem);
+//      }
       if (this.isIgnited != this.furnace.IsIgnited)
       {
         this.isIgnited = this.furnace.IsIgnited;
@@ -125,22 +127,28 @@ namespace SHG
         .SetLoop(true);
     }
 
+    void HideItemUI()
+    {
+      this.HideProgressUI();
+    }
+
     void SetItemUI(Item item)
     {
-      this.itemImage.sprite = item.Data.Image;
-      this.itemNameLabel.text = item.Data.Name;
-      this.uiCanvas.enabled = true;
+//      this.itemImage.sprite = item.Data.Image;
+//      this.itemNameLabel.text = item.Data.Name;
+//      this.uiCanvas.enabled = true;
+      this.ShowProgressUI();
       this.progress.Value = (this.furnace.Progress, 1f);
     }
 
     void OnFinished()
     {
-      this.itemNameLabel.text += " (done)";
+      //this.itemNameLabel.text += " (done)";
     }
 
     protected override void Awake()
     {
-      base.meshRenderer = this.modeling;
+      base.meshRenderer = this.model;
       base.Awake();
       this.furnace = new Furnace(this.furnaceData);
       this.furnace.BeforeInteract += this.BeforeInteract;
@@ -150,7 +158,7 @@ namespace SHG
         furnace: this.furnace,
         fireParticle: this.fireParticle,
         sparkParticle: this.sparkParticle);
-      this.uiCanvas.enabled = false;
+      //this.uiCanvas.enabled = false;
       this.progress = new ((0f, 1f));
       this.progressUI.WatchingFloatValue = this.progress;
     }
@@ -159,7 +167,6 @@ namespace SHG
     protected override void Update()
     {
       base.Update();
-      this.tempLabel.text = $"Temp: {this.furnace.Temparature}";
       this.progress.Value = (this.furnace.Progress, 1f);
     }
   }
