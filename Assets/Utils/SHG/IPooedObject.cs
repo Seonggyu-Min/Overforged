@@ -1,9 +1,6 @@
 using System;
 
-namespace SHG
+public interface IPooledObject 
 {
-  public interface IPooledObject 
-  {
-    public Action<IPooledObject> OnDisabled { get; set; }
-  }
+  public Action<IPooledObject> OnDisabled { get; set; }
 }

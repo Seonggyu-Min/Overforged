@@ -13,7 +13,7 @@ namespace MIN
     public class PlayerCardItem : MonoBehaviourPunCallbacks
     {
         [SerializeField] private TMP_Text _nicknameText;
-        [SerializeField] private TMP_Text _masterOrReadyText;
+        [SerializeField] private GameObject _readyPanel;
         [SerializeField] private Image _crownImage;
         [SerializeField] private Image _characterImage;
         [SerializeField] private Image _teamColorImage;
@@ -59,11 +59,8 @@ namespace MIN
 
             _crownImage.gameObject.SetActive(player.IsMasterClient);
 
-            if (player.IsMasterClient)
-            {
-                _masterOrReadyText.text = "Master";
-            }
-            else
+
+            if (!player.IsMasterClient)
             {
                 bool isReady = false;
                 if (player.CustomProperties.TryGetValue(CustomPropertyKeys.IsReady, out object readyObj))
@@ -71,7 +68,7 @@ namespace MIN
                     isReady = (bool)readyObj;
                 }
 
-                _masterOrReadyText.text = isReady ? "Ready" : "Not Ready";
+                _readyPanel.SetActive(isReady);
             }
 
             UpdateCharacterImage(player);
