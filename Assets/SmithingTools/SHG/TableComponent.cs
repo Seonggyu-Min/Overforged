@@ -1,4 +1,4 @@
-#define LOCAL_TEST
+//#define LOCAL_TEST
 using System;
 using System.Text;
 using System.Collections.Generic;
@@ -6,6 +6,7 @@ using UnityEngine;
 using EditorAttributes;
 using Void = EditorAttributes.Void;
 using Zenject;
+using Photon.Pun;
 
 namespace SHG
 {

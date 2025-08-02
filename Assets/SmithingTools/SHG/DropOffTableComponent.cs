@@ -49,6 +49,5 @@ namespace SHG
       base.meshRenderer = this.model;
       base.Awake();
     }
-
   }
 }
