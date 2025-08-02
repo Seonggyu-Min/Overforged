@@ -17,8 +17,6 @@ namespace SHG
     [HideInInspector]
     public string Name => this.toolName;
     [HideInInspector]
-    public GameObject Prefab => this.prefab;
-    [HideInInspector]
     public MaterialVariation[] AllowedMaterials => this.allowdMaterialTypes;
     [HideInInspector]
     public float TimeRequiredInSeconds => this.timeRequiredInSeconds;
@@ -29,9 +27,7 @@ namespace SHG
 
     [SerializeField] [Validate("Name is empty", nameof(IsNameEmpty), MessageMode.Error)]
     string toolName;
-    [SerializeField] [AssetPreview(64f, 64f), Validate("No prefab", nameof(IsPrefabNone), MessageMode.Error, buildKiller: true)]
-    GameObject prefab;
-    [SerializeField] [ReadOnly, Validate("No material", nameof(NoMaterialType), MessageMode.Error, buildKiller: true)]
+    [SerializeField] [ReadOnly, Validate("No material", nameof(NoMaterialType), MessageMode.Warning)]
     Void noMaterialCheck;
     [SerializeField]
     MaterialVariation[] allowdMaterialTypes;
@@ -44,7 +40,6 @@ namespace SHG
 
     protected bool IsNameEmpty() => (
       this.Name == null || this.Name .Replace(" ", "").Length == 0);
-    protected bool IsPrefabNone() => (this.Prefab == null);
     protected virtual bool NoMaterialType() => (
       this.AllowedMaterials == null || this.AllowedMaterials.Length == 0);
     protected bool HasInValidTimeRequired => (

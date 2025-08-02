@@ -1,7 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
 using EditorAttributes;
-using TMPro;
 using Void = EditorAttributes.Void;
 
 namespace SHG
@@ -18,14 +16,6 @@ namespace SHG
     [SerializeField] [Required]
     Transform materialPosition;
 
-//    [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel))]
-//    Void uiGroup;
-//    [SerializeField] [HideProperty]
-//    Canvas uiCanvas;
-//    [SerializeField] [HideProperty]
-//    Image itemImage;
-//    [SerializeField] [HideProperty]
-//    TMP_Text itemNameLabel;
     [SerializeField]
     Color normalColor;
     [SerializeField]
@@ -51,7 +41,7 @@ namespace SHG
         return;
       }
       Debug.Log("BeforeInteract args");
-      Debug.Log($"tool holding item: {tool.HoldingItem}");
+      Debug.Log($"tool holding item: {tool.HoldingMaterial}");
       Debug.Log($"tool interaction count: {tool.RemainingInteractionCount}");
     }
 
@@ -61,17 +51,13 @@ namespace SHG
         return;
       }
       Debug.Log("AfterInteract result");
-      Debug.Log($"tool holding item: {tool.HoldingItem}");
+      Debug.Log($"tool holding item: {tool.HoldingMaterial}");
       Debug.Log($"tool interaction count: {tool.RemainingInteractionCount}");
-//      if (this.uiCanvas.enabled && tool.HoldingItem == null)
-//      {
-//        this.uiCanvas.enabled = false;
-//      }
-      if (tool.HoldingItem == null) {
+      if (tool.HoldingMaterial == null) {
         this.HideItemUI();
       }
       else {
-        this.SetItemUI(tool.HoldingItem);
+        this.SetItemUI(tool.HoldingMaterial);
         if (tool.InteractionToTrigger == SmithingTool.InteractionType.Work) {
           this.highlighter.HighlightColor = this.interactColor;
         }
@@ -87,12 +73,6 @@ namespace SHG
     void SetItemUI(Item item)
     {
       this.ShowProgressUI();
-     // this.itemImage.sprite = item.Data.Image;
-     // this.itemNameLabel.text = item.Data.Name;
-     // if (!this.uiCanvas.enabled)
-     // {
-     //   this.uiCanvas.enabled = true;
-     // }
       this.progress.Value = (this.anvil.Progress, 1f);
     }
 
@@ -110,7 +90,6 @@ namespace SHG
       this.anvilEffecter = new AnvilEffecter(
         anvil: this.anvil,
         sparkPool: sparkPool);
-      //this.uiCanvas.enabled = false;
       this.progress = new ((0f, 1f));
       this.progressUI.WatchingFloatValue = this.progress;
     }

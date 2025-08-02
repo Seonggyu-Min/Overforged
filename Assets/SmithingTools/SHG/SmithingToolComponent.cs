@@ -13,10 +13,9 @@ namespace SHG
     protected INetworkSynchronizer<SmithingToolComponent> NetworkSynchronizer { get; private set; }
 
     protected abstract SmithingTool tool { get; }
-    public virtual Item HoldingItem => this.tool.HoldingItem;
+    public virtual Item HoldingItem => this.tool.HoldingMaterial;
     public bool IsOwner
     {
-      //FIXME: Owner not set properly
       get => this.isOwner;
       set => this.isOwner = value;
     }
@@ -51,7 +50,8 @@ namespace SHG
     protected GameObject uiObject;
     protected GauageImageUI progressUI;
     protected LookCameraUI itemUI;
-    [SerializeField] [Required]
+    protected virtual bool isProgressUsed => true;
+    [SerializeField] 
     protected Sprite gauageUIImage;
     public Action<SmithingToolComponent, ToolTransferArgs, ToolTransferResult> OnTransfered;
     public Action<SmithingToolComponent, ToolWorkResult> OnWorked;
@@ -69,9 +69,11 @@ namespace SHG
         position: this.uiPoint.position,
         rotation: this.uiPoint.rotation);
       this.uiObject.transform.SetParent(this.transform);
-      this.progressUI = Utils.RecursiveFindChild<GauageImageUI>(this.uiObject.transform);
       this.itemUI = Utils.RecursiveFindChild<LookCameraUI>(this.uiObject.transform);
-      this.progressUI.WorkSprite = this.gauageUIImage;
+      if (this.isProgressUsed) {
+        this.progressUI = Utils.RecursiveFindChild<GauageImageUI>(this.uiObject.transform);
+        this.progressUI.WorkSprite = this.gauageUIImage;
+      }
     }
 
     protected virtual void Start()
@@ -86,7 +88,7 @@ namespace SHG
     {
       this.highlighter.OnUpdate(Time.deltaTime);
       this.tool.OnUpdate(Time.deltaTime);
-      this.effecter.OnUpdate(Time.deltaTime);
+      this.effecter?.OnUpdate(Time.deltaTime);
     }
 
     public virtual bool CanTransferItem(ToolTransferArgs args)
@@ -195,7 +197,7 @@ namespace SHG
       }
       else {
         //FIXME: Return item to player
-        this.tool.HoldingItem.transform.SetParent(null);
+        this.tool.HoldingMaterial.transform.SetParent(null);
         this.Transfer(new ToolTransferArgs
         {
           ItemToGive = null,

@@ -1,7 +1,6 @@
 using UnityEngine;
 using EditorAttributes;
 using UnityEngine.UI;
-using TMPro;
 using Void = EditorAttributes.Void;
 using Zenject;
 
@@ -77,8 +76,8 @@ namespace SHG
         return;
       }
       Debug.Log($"After Interact");
-      if (tool.HoldingItem != null) {
-        this.SetItemUI(tool.HoldingItem);
+      if (tool.HoldingMaterial != null) {
+        this.SetItemUI(tool.HoldingMaterial);
       }
       else {
         this.HideItemUI();

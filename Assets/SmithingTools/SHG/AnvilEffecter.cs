@@ -33,8 +33,8 @@ namespace SHG
     public void TriggerWorkEffect()
     {
       var spark = this.sparkPool.Get();
-      spark.transform.position = this.anvil.HoldingItem.transform.position;
-      spark.transform.up = this.anvil.HoldingItem.transform.up;
+      spark.transform.position = this.anvil.HoldingMaterial.transform.position;
+      spark.transform.up = this.anvil.HoldingMaterial.transform.up;
       spark.gameObject.SetActive(true);
     }
 

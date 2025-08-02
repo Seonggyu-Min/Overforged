@@ -1,9 +1,6 @@
 using System;
 using UnityEngine;
 using EditorAttributes;
-using UnityEngine.UI;
-using TMPro;
-using Void = EditorAttributes.Void;
 using Zenject;
 
 namespace SHG
@@ -26,16 +23,6 @@ namespace SHG
     [SerializeField] [Required()]
     MeshRenderer[] renderers;
 
-//    [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(tempLabel))]
-//    Void uiGroup;
-//    [SerializeField] [HideProperty]
-//    Canvas uiCanvas;
-//    [SerializeField] [HideProperty]
-//    Image itemImage;
-//    [SerializeField] [HideProperty]
-//    TMP_Text itemNameLabel;
-//    [SerializeField] [HideProperty]
-//    TMP_Text tempLabel;
     [SerializeField]
     Color normalColor;
     [SerializeField]
@@ -62,15 +49,11 @@ namespace SHG
       if (tool != this.quenchingTool) {
         return; 
       }
-      Debug.Log($"After Interact");
-//      if (this.uiCanvas.enabled && tool.HoldingItem == null) {
-//        this.uiCanvas.enabled = false;
-//      }
-      if (tool.HoldingItem == null) {
+      if (tool.HoldingMaterial == null) {
         this.HideItemUI();
       }
       else {
-        this.SetItemUI(tool.HoldingItem);
+        this.SetItemUI(tool.HoldingMaterial);
       }
       if (tool.InteractionToTrigger == SmithingTool.InteractionType.ReceivedItem) {
         this.highlighter.HighlightColor = this.heatedColor;
@@ -90,11 +73,6 @@ namespace SHG
     void SetItemUI(Item item)
     {
       this.ShowProgressUI();
-//      this.itemImage.sprite = item.Data.Image;   
-//      this.itemNameLabel.text = item.Data.Name;
-//      if (!this.uiCanvas.enabled) {
-//        this.uiCanvas.enabled = true;
-//      }
     }
 
     void OnFinished()
@@ -107,9 +85,6 @@ namespace SHG
     {
       base.Update();
       this.progress.Value = (this.quenchingTool.Progress, 1f);
-//      if (this.uiCanvas.enabled) {
-//        this.tempLabel.text = $"temp: {this.quenchingTool.Temparature}";
-//      }
     }
 
     protected override void Awake()
@@ -131,7 +106,6 @@ namespace SHG
         vaporParticle: this.vaporParticle,
         materialPoint: this.materialPoint
         );
-      //this.uiCanvas.enabled = false;
       this.progress = new ((0f, 1f));
       this.progressUI.WatchingFloatValue = this.progress;
     }
