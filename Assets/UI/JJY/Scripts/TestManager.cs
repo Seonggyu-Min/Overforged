@@ -31,8 +31,12 @@ namespace JJY
         //     PhotonNetwork.JoinOrCreateRoom("TestRoom", new RoomOptions(), TypedLobby.Default);
         //     PhotonNetwork.OfflineMode = true;
         // }
-
         void Start()
+        {
+            GameReadyAndStopManager.Instance.OnGameBegin += Starter;
+        }
+
+        void Starter()
         {
             if (PhotonNetwork.IsMasterClient)
             {
@@ -60,9 +64,10 @@ namespace JJY
                 timerText.text = "00:00";
                 Debug.Log("타이머 종료");
 
-                _gameManager.SetGameEnd();
+                //_gameManager.SetGameEnd();
 
                 // TODO : 타임 종료 UI 생성
+                GameReadyAndStopManager.Instance.TimesUp();
             }
         }
 

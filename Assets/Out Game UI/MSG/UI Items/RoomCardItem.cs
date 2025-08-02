@@ -16,7 +16,8 @@ namespace MIN
 
         [SerializeField] private TMP_Text _roomNameText;
         [SerializeField] private TMP_Text _roomPlayerCountText;
-        [SerializeField] private TMP_Text _statusText;
+        [SerializeField] private GameObject _statusPanel;
+        [SerializeField] private GameObject _lockImage;
 
         [SerializeField] private Image _mapImage;
 
@@ -29,8 +30,10 @@ namespace MIN
 
             _roomNameText.text = info.Name;
             _roomPlayerCountText.text = $"{info.PlayerCount} / {info.MaxPlayers}";
-            _statusText.text = info.IsOpen ? "Waiting" : "Playing";
-
+            _statusPanel.SetActive(!info.IsOpen);
+            if (_roomInfo.CustomProperties.TryGetValue(CustomPropertyKeys.Password, out object storedPasswordObj) &&
+                    storedPasswordObj is string)
+                _lockImage.SetActive(true);
             //_mapImage
         }
 
