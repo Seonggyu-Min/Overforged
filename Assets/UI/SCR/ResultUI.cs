@@ -21,7 +21,7 @@ namespace SCR
 
         [SerializeField] List<ScoreStatusUser> otherPlayers;
         [SerializeField] TeamColor color;
-        [SerializeField] Image teamColor;
+        [SerializeField] List<Image> teamColor;
 
         [SerializeField] float closeTime;
 
@@ -49,7 +49,8 @@ namespace SCR
 
         public void SetScore(int team, int score)
         {
-            teamColor.color = color.Color[team];
+            teamColor[0].color = color.Color[team];
+            teamColor[1].color = color.Color[team];
             scoreText.text = $"{score}";
             if (isWin)
             {
