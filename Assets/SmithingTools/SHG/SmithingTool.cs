@@ -66,10 +66,9 @@ namespace SHG
           #endif
         }
         return (this.ReturnWithEvent(
-            this.ReceiveMaterialItem(materialItem), args));
+            this.ReceiveMaterialItem(materialItem)));
       } 
-      return (this.ReturnWithEvent(
-          this.ReturnItem(), args));    
+      return (this.ReturnWithEvent(this.ReturnItem()));    
     }
 
     public abstract bool CanWork();
@@ -119,7 +118,7 @@ namespace SHG
         });
     }
 
-    protected ToolTransferResult ReturnWithEvent(in ToolTransferResult result, in ToolTransferArgs args)
+    protected ToolTransferResult ReturnWithEvent(in ToolTransferResult result)
     {
       this.AfterInteract?.Invoke(this);
       return (result);
