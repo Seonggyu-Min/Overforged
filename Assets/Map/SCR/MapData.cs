@@ -7,4 +7,6 @@ public class MapData : MonoBehaviour
     public Sprite Image;
     public List<Transform> SpawnPoints;
     public GameObject MapPrefabs;
+
+
 }
