@@ -43,7 +43,6 @@ namespace SHG
       else {
         this.codeBySenders[sender] = this.customCode;
         this.receiverByCodes[this.customCode] = sender;
-        Debug.Log($"register {sender} for {this.customCode}");
         this.customCode += 1;
       }
     }

@@ -5008,9 +5008,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4923001101855586054}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: QuenchingTool
-  m_TagString: InteractionObj
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5049,9 +5049,9 @@ GameObject:
   - component: {fileID: 5058518229965217885}
   - component: {fileID: 1957493516041442147}
   - component: {fileID: 3650434743922543148}
-  m_Layer: 0
-  m_Name: Body
-  m_TagString: Untagged
+  m_Layer: 7
+  m_Name: QuenchingTool
+  m_TagString: InteractionObj
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
