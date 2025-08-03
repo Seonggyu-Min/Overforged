@@ -410,6 +410,9 @@ namespace SHG
         return (productItem);
       }
       else {
+        #if UNITY_EDITOR
+        Debug.LogError($"{nameof(CreateProduct)}: {this} is not owned");
+        #endif
         return (null);
       }
       #endif

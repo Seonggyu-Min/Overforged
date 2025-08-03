@@ -68,7 +68,7 @@ namespace SHG
         this.uiPrefab, 
         position: this.uiPoint.position,
         rotation: this.uiPoint.rotation);
-      this.uiObject.transform.SetParent(this.transform);
+      //this.uiObject.transform.SetParent(this.transform);
       this.itemUI = Utils.RecursiveFindChild<LookCameraUI>(this.uiObject.transform);
       if (this.isProgressUsed) {
         this.progressUI = Utils.RecursiveFindChild<GauageImageUI>(this.uiObject.transform);
