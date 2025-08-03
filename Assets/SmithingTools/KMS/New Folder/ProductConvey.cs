@@ -43,7 +43,6 @@ public class ProductConvey : MonoBehaviour, IInteractableTool
                 result = recipeManager.Check(item.Data as ProductItemData, item.Ore, item.Wood);
             }
         }
-        Debug.Log(result);
         return result;
     }
 

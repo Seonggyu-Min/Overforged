@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using JJY;
 using SHG;
 using UnityEngine;
 using UnityEngine.TestTools;
+using Photon.Pun;
+using Zenject;
 
 public class NewProductConveyComponent : SmithingToolComponent
 {
@@ -15,11 +18,14 @@ public class NewProductConveyComponent : SmithingToolComponent
     [SerializeField]
     Transform productPosition;
 
-    [SerializeField]
-    Color normalColor;
-    [SerializeField]
-    Color interactColor;
+    [SerializeField] RecipeManager manager;
+    [SerializeField] PhotonView photon;
 
+    [SerializeField] GameObject good;
+
+    [SerializeField] Transform goodPos;
+
+    [Inject] MIN.IScoreManager _scoreManager;
 
     protected override SmithingTool tool => this.convey;
     protected override ISmithingToolEffecter effecter => null;
@@ -28,32 +34,40 @@ public class NewProductConveyComponent : SmithingToolComponent
 
     protected override void Update()
     {
-    }
-
-    void BeforeInteract(SmithingTool tool)
-    {
-        if (tool != this.convey)
-        {
-            return;
-        }
-    }
-
-    void AfterInteract(SmithingTool tool)
-    {
-        if (tool != this.convey)
-        {
-            return;
-        }
+        this.highlighter.OnUpdate(Time.deltaTime);
     }
 
     protected override void Awake()
     {
         this.meshRenderer = model;
-        base.Awake();
-        this.convey = new NewProductConvey(this.data);
-        this.convey.BeforeInteract += this.BeforeInteract;
-        this.convey.AfterInteract += this.AfterInteract;
-        //this.uiCanvas.enabled = false;
+        if (this.meshRenderer != null)
+        {
+            this.highlighter = new GameObjectHighlighter(
+              new Material[] { this.meshRenderer.material });
+            this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
+        }
+        this.convey = new NewProductConvey(this.data, manager);
+    }
+
+    protected override void Start()
+    {
+        this.IsOwner = true;
+    }
+
+    public override ToolTransferResult Transfer(ToolTransferArgs args)
+    {
+        var result = this.tool.Transfer(args);
+        if (args.ItemToGive is ProductItem item)
+        {
+            if (manager.Check(item.Data as ProductItemData, item.Ore, item.Wood))
+            {
+                _scoreManager.AddScore(PhotonNetwork.LocalPlayer, 1);
+                manager.FulfillRecipe();
+                Instantiate(good, goodPos.position, Quaternion.identity);
+            }
+        }
+        StartCoroutine(ItemRemoveRoutine(args));
+        return (result);
     }
 
     public override bool CanWork()
@@ -63,5 +77,35 @@ public class NewProductConveyComponent : SmithingToolComponent
     public override ToolWorkResult Work()
     {
         return new ToolWorkResult();
+    }
+
+    [PunRPC]
+    private void SetItemRPC(int itemId)
+    {
+        convey.HoldingProductItem = PhotonView.Find(itemId).GetComponent<ProductItem>();
+        convey.HoldingProductItem.transform.SetParent(productPosition);
+        convey.HoldingProductItem.transform.position = productPosition.position;
+        convey.HoldingProductItem.transform.up = productPosition.up;
+    }
+
+    private IEnumerator ItemRemoveRoutine(ToolTransferArgs args)
+    {
+        int id = args.ItemToGive.GetComponent<PhotonView>().ViewID;
+        photon.RPC("SetItemRPC", RpcTarget.All, id);
+        yield return new WaitForSeconds(3);
+        photon.RPC("DestroyRPC", RpcTarget.All);
+
+
+    }
+    [PunRPC]
+
+    private void DestroyRPC()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.Destroy(convey.HoldingProductItem.GetComponent<PhotonView>());
+
+        }
+        convey.HoldingProductItem = null;
     }
 }

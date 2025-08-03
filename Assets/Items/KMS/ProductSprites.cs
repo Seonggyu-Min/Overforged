@@ -32,7 +32,6 @@ public class ProductSprites : ScriptableObject
                         if (pi.Name == "Bow")
                         {
                             temp = $"{ore}{wood}{pi.Name}";
-                            Debug.Log(temp);
                             Dict.Add(temp, list[index]);
                             index++;
                         }
@@ -43,7 +42,6 @@ public class ProductSprites : ScriptableObject
                         if (pi.Name != "Bow")
                         {
                             temp = $"{ore}{wood}{pi.Name}";
-                            Debug.Log(temp);
                             Dict.Add(temp, list[index]);
                             index++;
                         }

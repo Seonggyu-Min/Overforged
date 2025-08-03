@@ -4,13 +4,19 @@ using SHG;
 using UnityEngine;
 using JJY;
 using System;
+using Photon.Pun;
+using Zenject;
+using System.Xml.XPath;
 
 public class NewProductConvey : SmithingTool
 {
 
-    [SerializeField] RecipeManager recipeManager;
+    RecipeManager recipeManager;
 
-    private ProductItem HoldingProductItem;
+    [Inject] MIN.IScoreManager _scoreManager;
+
+
+    public ProductItem HoldingProductItem;
     public override bool IsFinished => false;
 
     protected override bool isPlayerMovable => true;
@@ -18,8 +24,9 @@ public class NewProductConvey : SmithingTool
 
 
 
-    public NewProductConvey(SmithingToolData data) : base(data)
+    public NewProductConvey(SmithingToolData data, RecipeManager manager) : base(data)
     {
+        recipeManager = manager;
     }
 
     public override bool CanTransferItem(ToolTransferArgs args)
@@ -29,10 +36,10 @@ public class NewProductConvey : SmithingTool
         {
             if (args.ItemToGive is ProductItem item)
             {
-                result = recipeManager.Check(item.Data as ProductItemData, item.Ore, item.Wood);
+                result = true;
+                //result = recipeManager.Check(item.Data as ProductItemData, item.Ore, item.Wood);
             }
         }
-        Debug.Log(result);
         return result;
     }
 
@@ -47,13 +54,13 @@ public class NewProductConvey : SmithingTool
             }
             return (this.ReturnWithEvent(
                 this.ReceiveProductItem(productItem), args));
+                
         }
         return (new ToolTransferResult());
     }
 
     protected ToolTransferResult ReceiveProductItem(ProductItem productItem)
     {
-        this.HoldingProductItem = productItem;
         this.InteractionToTrigger = InteractionType.ReceivedItem;
         ToolTransferResult result = new ToolTransferResult
         {
