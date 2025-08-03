@@ -115,6 +115,39 @@ namespace MIN
             _outGameUIManager.Show("Create Room PopUp Panel");
         }
 
+        public void OnClickRandomJoinButton()
+        {
+            List<RoomInfo> joinableRooms = new();
+
+            foreach (RoomInfo room in _roomList)
+            {
+                if (room.IsOpen && room.IsVisible && room.PlayerCount < room.MaxPlayers)
+                {
+                    bool isSecret = room.CustomProperties.ContainsKey(CustomPropertyKeys.IsSecret) &&
+                                    (bool)room.CustomProperties[CustomPropertyKeys.IsSecret];
+
+                    if (!isSecret)
+                    {
+                        joinableRooms.Add(room);
+                    }
+                }
+            }
+
+            if (joinableRooms.Count == 0)
+            {
+                Debug.Log("참가 가능한 방이 없습니다.");
+                return;
+            }
+
+            RoomInfo selectedRoom = joinableRooms[Random.Range(0, joinableRooms.Count)];
+
+            _outGameUIManager.Hide("Lobby Panel", () =>
+            {
+                _outGameUIManager.Show("Room Panel");
+                PhotonNetwork.JoinRoom(selectedRoom.Name);
+            });
+        }
+
         public void OnClickLogOutButton()
         {
             StartCoroutine(LogOutRoutine());
