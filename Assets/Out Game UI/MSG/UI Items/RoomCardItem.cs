@@ -19,6 +19,7 @@ namespace MIN
         [SerializeField] private GameObject _statusPanel;
         [SerializeField] private GameObject _lockImage;
 
+        [SerializeField] private Sprite[] _mapSprites; // 맵 스프라이트들 등록  TODO: MapData SO를 공유하면 좋을 듯?
         [SerializeField] private Image _mapImage;
 
         private RoomInfo _roomInfo;
@@ -31,10 +32,26 @@ namespace MIN
             _roomNameText.text = info.Name;
             _roomPlayerCountText.text = $"{info.PlayerCount} / {info.MaxPlayers}";
             _statusPanel.SetActive(!info.IsOpen);
+            
             if (_roomInfo.CustomProperties.TryGetValue(CustomPropertyKeys.Password, out object storedPasswordObj) &&
                     storedPasswordObj is string)
                 _lockImage.SetActive(true);
-            //_mapImage
+
+            if (_roomInfo.CustomProperties.TryGetValue(CustomPropertyKeys.MapId, out object mapIdObj) && mapIdObj is int mapId)
+            {
+                if (mapId >= 0 && mapId < _mapSprites.Length)
+                {
+                    _mapImage.sprite = _mapSprites[mapId];
+                }
+                else
+                {
+                    Debug.LogWarning($"MapId {mapId}가 _mapSprites 범위를 벗어났습니다.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("MapId 커스텀 속성이 설정되지 않아 기본값 사용 또는 표시 생략");
+            }
         }
 
         public void OnClickThisButton()

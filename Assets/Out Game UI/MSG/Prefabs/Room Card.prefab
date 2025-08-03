@@ -1236,4 +1236,8 @@ MonoBehaviour:
   _roomPlayerCountText: {fileID: 3860592732965862022}
   _statusPanel: {fileID: 7633928385879957710}
   _lockImage: {fileID: 4435325477012908502}
+  _mapSprites:
+  - {fileID: 21300000, guid: 599082afea4945f439b41e77261d7e66, type: 3}
+  - {fileID: 21300000, guid: 98aa0f6088a4d3f4b860924126e5f006, type: 3}
+  - {fileID: 21300000, guid: e00bd7f7a3202a24e8ba78e14cc8b96a, type: 3}
   _mapImage: {fileID: 6708312263667695466}
