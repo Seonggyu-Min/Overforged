@@ -9,6 +9,13 @@ namespace SHG
     const float ANIMATE_LERP_STEP = 10f;
     const float ANIMATE_LERP_THRESHOLD = 0.01f;
 
+    public Sprite WorkSprite {
+      get => this.workSprite;
+      set {
+        this.workSprite = value;
+        this.SetWorkImage();
+      }
+    }
     [SerializeField] Slider gauageImage;
     [SerializeField] Sprite workSprite;
     [SerializeField] Image workIcon;

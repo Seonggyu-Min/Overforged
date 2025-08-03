@@ -1,10 +1,9 @@
+//#define LOCAL_TEST
 using System;
 using System.Text;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using EditorAttributes;
-using TMPro;
 using Void = EditorAttributes.Void;
 using Zenject;
 using Photon.Pun;
@@ -27,26 +26,6 @@ namespace SHG
     [SerializeField] [Required()]
     Transform materialPosition;
 
-//    [SerializeField]
-//    [VerticalGroup(10f, true, nameof(woodTableCanvas), nameof(woodTableItemImage), nameof(woodTableItemNameLabel)) ]
-//    Void woodTableGroup;
-//    [SerializeField] [HideProperty]
-//    Canvas woodTableCanvas;
-//    [SerializeField] [HideProperty]
-//    Image woodTableItemImage;
-//    [SerializeField] [HideProperty]
-//    TMP_Text woodTableItemNameLabel;
-//
-//    [SerializeField] [VerticalGroup(10f, true, nameof(craftTableCanvas), nameof(craftProductImage), nameof(craftProductNameLabel), nameof(craftMaterialListLabel))]
-//    Void craftTableGroup;
-//    [SerializeField] [HideProperty]
-//    Canvas craftTableCanvas;
-//    [SerializeField] [HideProperty]
-//    Image craftProductImage;
-//    [SerializeField] [HideProperty]
-//    TMP_Text craftProductNameLabel;
-//    [SerializeField] [HideProperty]
-//    TMP_Text craftMaterialListLabel;
     [SerializeField] 
     MeshRenderer model;
     [SerializeField]
@@ -70,10 +49,10 @@ namespace SHG
     List<string> materialNames;
     public override Item HoldingItem {
       get {
-        if (this.woodTable.HoldingItem != null) {
-          return (this.woodTable.HoldingItem);
+        if (this.woodTable.HoldingMaterial != null) {
+          return (this.woodTable.HoldingMaterial);
         }
-        return (this.craftTable.HoldingItem);
+        return (this.craftTable.HoldingMaterial);
       }
     }
 
@@ -120,10 +99,12 @@ namespace SHG
     {
       if (args.ItemToGive != null) {
         args.ItemToGive.transform.SetParent(this.transform);
+        //TODO: Item position
         args.ItemToGive.transform.localPosition = Vector3.up;
+        this.itemUI.AddImage(args.ItemToGive.Data.Image);
         if (this.CurrentWorkingTool == this.woodTable &&
           !this.woodTable.CanTransferItem(args) &&
-          this.woodTable.HoldingItem != null &&
+          this.woodTable.HoldingMaterial != null &&
           this.craftTable.CanTransferItem(args)) {
           var result = this.MoveMaterialToCraftTable(args);
           this.OnTransfered?.Invoke(this, args, result);
@@ -135,10 +116,15 @@ namespace SHG
         Debug.Log($"{nameof(Transfer)} result: {result}");
         if (result.IsDone) {
           this.CurrentWorkingTool = null;
+          this.itemUI.SubAllImage();
         }
-        if (this.CurrentWorkingTool == this.craftTable &&
+        else if (this.CurrentWorkingTool == this.craftTable &&
           this.craftTable.HoldingMaterials.Count == 0) {
           this.CurrentWorkingTool = null;
+          this.itemUI.SubAllImage();
+        }
+        else {
+          this.itemUI.SubImage();
         }
         this.OnTransfered?.Invoke(this, args, result);
         return (result);
@@ -214,7 +200,7 @@ namespace SHG
         return;
       }
       Debug.Log("BeforeInteract args");
-      Debug.Log($"tool holding item: {tool.HoldingItem}");
+      Debug.Log($"tool holding item: {tool.HoldingMaterial}");
       Debug.Log($"tool interaction count: {tool.RemainingInteractionCount}");
     }
 
@@ -224,18 +210,17 @@ namespace SHG
         return;
       }
       Debug.Log("AfterInteract");
-      Debug.Log($"tool holding item: {tool.HoldingItem}");
+      Debug.Log($"tool holding item: {tool.HoldingMaterial}");
       Debug.Log($"tool interaction count: {tool.RemainingInteractionCount}");
       Debug.Log($"currentWorkingTool: {this.currentWorkingTool}");
-      if (tool.HoldingItem != null) {
-        this.SetItemUI(tool.HoldingItem);
+      if (tool.HoldingMaterial != null) {
+        this.SetItemUI(tool.HoldingMaterial);
         if (tool.InteractionToTrigger == SmithingTool.InteractionType.Work) {
           this.highlighter.HighlightColor = this.interactColor;
         }
       }
       else {
         this.HideItemUI();
-        //this.woodTableCanvas.enabled = false;
       }
     }
 
@@ -251,24 +236,12 @@ namespace SHG
 
     void SetItemUI(Item item)
     {
-      Debug.Log($"progress: {this.woodTable.Progress}");
       this.progress.Value = (this.woodTable.Progress, 1f);
       this.ShowProgressUI();
-     // this.woodTableItemImage.sprite = item.Data.Image;
-     // this.woodTableItemNameLabel.text = item.Data.Name;
-     // if (!this.woodTableCanvas.enabled)
-     // {
-     //   this.woodTableCanvas.enabled = true;
-     // }
-
     }
 
     void OnCraftMaterialAdded(MaterialItem newMaterial)
     {
-     // if (!this.craftTableCanvas.enabled)
-     // {
-     //   this.craftTableCanvas.enabled = true;
-     // }
       this.materialNames.Add(newMaterial.Data.Name);
       newMaterial.transform.localPosition = new Vector3(
         0, this.craftTable.HoldingMaterials.Count * 0.5f, 0);
@@ -282,17 +255,10 @@ namespace SHG
       if (this.craftTable.HoldingMaterials.Count == 0) {
         this.HideItemUI();
       }
-     // if (this.craftTable.HoldingMaterials.Count == 0 &&
-     //   this.craftTableCanvas.enabled)
-     // {
-     //   this.craftTableCanvas.enabled = false;
-     // }
     }
 
     void OnCraftProductCrafted(ProductItemData craftedProduct)
     {
-      //this.craftProductNameLabel.text = craftedProduct.Name;
-      //this.craftProductImage.sprite = craftedProduct.Image;
       this.tableEffecter.TriggerWorkEffect();
       this.audioLibrary.PlayRandomSfx(
         soundName: "success",
@@ -301,19 +267,14 @@ namespace SHG
 
     void OnCraftProductRemoved(ProductItemData removedProduct)
     {
-      //this.craftProductNameLabel.text = "";
-      //this.craftProductImage.sprite = null;
-      //this.craftTableCanvas.enabled = false;
       this.HideItemUI();
     }
 
     void OnCraftableChanged()
     {
       if (this.craftTable.CraftableProduct != null) {
-        //this.craftProductNameLabel.text = $"craftable: {this.craftTable.CraftableProduct.Name}";
       }
       else {
-        //this.craftProductNameLabel.text = "";
       }
     }
 
@@ -324,7 +285,6 @@ namespace SHG
       {
         builder.Append($"{name}, ");
       }
-      //this.craftMaterialListLabel.text = builder.ToString();
     }
 
     protected override void HandleNetworkTransfer(object[] args)
@@ -350,9 +310,8 @@ namespace SHG
         #endif
       }
       else {
-        //FIXME: Return item to player
-        if (this.woodTable.HoldingItem != null) {
-          this.woodTable.HoldingItem.transform.SetParent(null);
+        if (this.woodTable.HoldingMaterial != null) {
+          this.woodTable.HoldingMaterial.transform.SetParent(null);
         }
         else if (this.craftTable.Product != null) {
           this.craftTable.Product.transform.SetParent(null);
@@ -375,7 +334,6 @@ namespace SHG
       this.woodTable.BeforeInteract += this.BeforeWoodTableInteract;
       this.woodTable.AfterInteract += this.AfterWoodTableInteract;
       this.woodTable.OnInteractionTriggered += this.OnWoodTableTriggered;
-      //this.woodTableCanvas.enabled = false;
       this.craftTable = new CraftTable(
         data: this.craftTableData,
         productPoint: this.materialPoint,
@@ -393,8 +351,6 @@ namespace SHG
         getCurrentTool: () => this.CurrentWorkingTool
         );
       this.materialNames = new();
-      //this.woodTableCanvas.enabled = false;
-      //this.craftTableCanvas.enabled = false;
       this.animator = this.GetComponent<Animator>();
       this.progress = new ((0f, 1f));
       this.progressUI.WatchingFloatValue = this.progress;

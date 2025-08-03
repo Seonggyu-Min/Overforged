@@ -37,7 +37,7 @@ namespace SHG
     public override void OnUpdate(float deltaTime)
     {
       bool wasFinished = this.IsFinished;
-      if (this.HoldingItem != null != this.IsFinished) {
+      if (this.HoldingMaterial != null != this.IsFinished) {
         this.RemainingTime -= deltaTime * this.NormalizedTemparature;
         if (this.RemainingTime < 0) {
           this.RemainingInteractionCount -= 1;
@@ -53,7 +53,7 @@ namespace SHG
         Furnace.MAX_TEMPARATURE,
         this.Temparature);
       if (!wasFinished && this.IsFinished) {
-        this.HoldingItem.ChangeToNext();
+        this.HoldingMaterial.ChangeToNext();
         this.OnFinished?.Invoke();
       }
     }
@@ -84,9 +84,9 @@ namespace SHG
     public override ToolTransferResult Transfer(ToolTransferArgs args)
     {
       ToolTransferResult result = base.Transfer(args);
-      if (this.HoldingItem != null && 
+      if (this.HoldingMaterial != null && 
         (this.IsIgnited || this.NormalizedTemparature > 0.5f)) {
-        this.HoldingItem.Heat();
+        this.HoldingMaterial.Heat();
       }
       return (result);
     }
@@ -102,8 +102,8 @@ namespace SHG
       this.BeforeInteract?.Invoke(this);
       if (!this.IsIgnited) {
         this.IsIgnited = true;
-        if (this.HoldingItem != null) {
-          this.HoldingItem.Heat();
+        if (this.HoldingMaterial != null) {
+          this.HoldingMaterial.Heat();
         }
       }
       else {

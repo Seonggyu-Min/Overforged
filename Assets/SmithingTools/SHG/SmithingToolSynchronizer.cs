@@ -11,6 +11,7 @@ namespace SHG
 
     const float MS_TO_SEC = 1f / 1000f;
     Dictionary<int, SmithingToolComponent> smithingTools;
+    GameObject playerObject;
 
     public SmithingToolSynchronizer(INetworkEventHandler networkEventHandler)
     {
@@ -25,22 +26,25 @@ namespace SHG
     public void RegisterSynchronizable(SmithingToolComponent smithingTool)
     {
       if (!this.smithingTools.TryAdd(
-          smithingTool.SceneId, smithingTool))
-      {
-#if UNITY_EDITOR
+          smithingTool.SceneId, smithingTool)) {
+      #if UNITY_EDITOR
         throw (new ApplicationException($"{nameof(RegisterSynchronizable)} synchronizable: {smithingTool}"));
-#endif
+      #endif
       }
       smithingTool.OnTransfered += this.OnTranfered;
       smithingTool.OnWorked += this.OnWork;
       int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
-      smithingTool.IsOwner = smithingTool.PlayerNetworkId == playerId;
+      if (smithingTool is DropOffTableComponent dropOffTable) {
+        smithingTool.IsOwner = PhotonNetwork.LocalPlayer.IsMasterClient;
+      }
+      else {
+        smithingTool.IsOwner = smithingTool.PlayerNetworkId == playerId;
+      }
     }
 
     void OnWork(SmithingToolComponent component, ToolWorkResult result)
     {
-      if (component.IsOwner)
-      {
+      if (component.IsOwner) {
         this.SendRpc(
           sceneId: component.SceneId,
           method: nameof(SmithingToolComponent.Work),
@@ -52,28 +56,43 @@ namespace SHG
 
     void OnTranfered(SmithingToolComponent component, ToolTransferArgs args, ToolTransferResult result)
     {
-      if (component.IsOwner)
-      {
+      if (component.IsOwner) {
         this.SendRpc(
           sceneId: component.SceneId,
           method: nameof(SmithingToolComponent.Transfer),
           args: new object[] {
             args.ConvertToNetworkArguments(),
             result.ConvertToNetworkArguments()
-          }
-          );
+          });
       }
     }
 
     public void SendRpc(int sceneId, in string method, object[] args)
+    {
+      this.SendEvent(
+        sceneId: sceneId,
+        method: method,
+        args: args,
+        receiver: INetworkEventHandler.EventReceiver.Others);
+    }
+
+    public void SendRpcToMaster(int sceneId, in string method, object[] args)
+    {
+      this.SendEvent(
+        sceneId: sceneId,
+        method: method,
+        args: args,
+        receiver: INetworkEventHandler.EventReceiver.Master);
+    }
+
+    void SendEvent(int sceneId, in string method, object[] args, INetworkEventHandler.EventReceiver receiver)
     {
       object[] data = new object[
         args == null ? 3 : args.Length + 3];
       data[0] = sceneId;
       data[1] = method;
       data[2] = PhotonNetwork.ServerTimestamp;
-      if (args != null)
-      {
+      if (args != null) {
         Array.Copy(
         sourceArray: args,
         sourceIndex: 0,
@@ -91,8 +110,7 @@ namespace SHG
       string method = (string)data[1];
       float latency = (float)(PhotonNetwork.ServerTimestamp - (int)data[2]) * MS_TO_SEC;
       object[] args = null;
-      if (data.Length > 3)
-      {
+      if (data.Length > 3) {
         args = new object[data.Length - 3];
         Array.Copy(
           sourceArray: data,
@@ -102,15 +120,13 @@ namespace SHG
           length: data.Length - 3);
       }
       if (this.smithingTools.TryGetValue(
-          sceneId, out SmithingToolComponent smithingTool))
-      {
+          sceneId, out SmithingToolComponent smithingTool)) {
         smithingTool.OnRpc(method, latency, args);
       }
-      else
-      {
-#if UNITY_EDITOR
+      else {
+      #if UNITY_EDITOR
         throw (new ApplicationException($"{nameof(ReceiveRpc)}: fail to find {nameof(INetworkSynchronizable)} in {this.smithingTools} for {sceneId}"));
-#endif
+      #endif
       }
     }
 
@@ -136,8 +152,7 @@ namespace SHG
       float latency = (float)(PhotonNetwork.ServerTimestamp - timestamp) * MS_TO_SEC;
       object[] args = data.Length > 3 ?
         new object[data.Length - 3] : null;
-      if (data.Length > 3)
-      {
+      if (data.Length > 3) {
         Array.Copy(
         sourceArray: data,
         sourceIndex: 3,
@@ -146,8 +161,7 @@ namespace SHG
         length: args.Length);
       }
       if (this.smithingTools.TryGetValue(
-          sceneId, out SmithingToolComponent smithingTool))
-      {
+          sceneId, out SmithingToolComponent smithingTool)) {
         smithingTool.OnRpc(
           method: method,
           latencyInSeconds: latency,
@@ -159,8 +173,7 @@ namespace SHG
     public bool TryFindComponentFromNetworkId<U>(int networId, out U found) where U : Component
     {
       PhotonView foundView = PhotonView.Find(networId);
-      if (foundView != null)
-      {
+      if (foundView != null) {
         found = foundView.GetComponent<U>();
         return (found != null);
       }
@@ -168,6 +181,48 @@ namespace SHG
       Debug.LogError($"{nameof(TryFindComponentFromNetworkId)} fail to find {networId}");
       #endif
       found = null;
+      return (false);
+    }
+
+    public GameObject GetPlayerObject()
+    {
+      if (this.playerObject != null) {
+        return (this.playerObject);
+      }
+      foreach (var gameObject in GameObject.FindGameObjectsWithTag("Player")) {
+        PhotonView photonView = gameObject.GetComponent<PhotonView>();
+        if (photonView != null && photonView.IsMine) {
+          this.playerObject = gameObject;
+          return (this.playerObject);
+        }
+      }
+      #if UNITY_EDITOR
+      Debug.LogError($"{nameof(GetPlayerObject)} Fail to find Player object by tags");
+      #endif
+      return (null);
+    }
+
+    public void SendRpcToGameObject(GameObject gameObject, in string method, object[] args)
+    {
+      PhotonView photonView = gameObject.GetComponent<PhotonView>();
+      if (photonView != null) {
+        photonView.RPC( methodName: method, target: RpcTarget.Others, parameters: args);
+      }
+      else {
+        #if UNITY_EDITOR
+        throw (new ApplicationException($"{nameof(SendRpcToGameObject)}: Fail to Get {nameof(PhotonView)} from {gameObject}"));
+        #endif
+      }
+    }
+
+    public bool TryGetGameObjectNetworkId(GameObject gameObject, out int id)
+    {
+      PhotonView photonView = gameObject.GetComponent<PhotonView>();
+      if (photonView != null) {
+        id = photonView.ViewID;
+        return (true); 
+      }
+      id = -1;
       return (false);
     }
   }

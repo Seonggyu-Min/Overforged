@@ -1,7 +1,9 @@
+//#define LOCAL_TEST
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
+using EditorAttributes;
 
 namespace SHG
 {
@@ -11,10 +13,9 @@ namespace SHG
     protected INetworkSynchronizer<SmithingToolComponent> NetworkSynchronizer { get; private set; }
 
     protected abstract SmithingTool tool { get; }
-    public virtual Item HoldingItem => this.tool.HoldingItem;
+    public virtual Item HoldingItem => this.tool.HoldingMaterial;
     public bool IsOwner
     {
-      //FIXME: Owner not set properly
       get => this.isOwner;
       set => this.isOwner = value;
     }
@@ -42,12 +43,16 @@ namespace SHG
     int playerId;
     [SerializeField]
     bool isOwner;
-    [SerializeField]
+    [SerializeField] [Required]
     GameObject uiPrefab;
-    [SerializeField]
+    [SerializeField] [Required]
     protected Transform uiPoint;
     protected GameObject uiObject;
     protected GauageImageUI progressUI;
+    protected LookCameraUI itemUI;
+    protected virtual bool isProgressUsed => true;
+    [SerializeField] 
+    protected Sprite gauageUIImage;
     public Action<SmithingToolComponent, ToolTransferArgs, ToolTransferResult> OnTransfered;
     public Action<SmithingToolComponent, ToolWorkResult> OnWorked;
     protected abstract ISmithingToolEffecter effecter { get; }
@@ -64,11 +69,16 @@ namespace SHG
         position: this.uiPoint.position,
         rotation: this.uiPoint.rotation);
       this.uiObject.transform.SetParent(this.transform);
-      this.progressUI = Utils.RecursiveFindChild<GauageImageUI>(this.uiObject.transform);
+      this.itemUI = Utils.RecursiveFindChild<LookCameraUI>(this.uiObject.transform);
+      if (this.isProgressUsed) {
+        this.progressUI = Utils.RecursiveFindChild<GauageImageUI>(this.uiObject.transform);
+        this.progressUI.WorkSprite = this.gauageUIImage;
+      }
     }
 
     protected virtual void Start()
     {
+      this.tool.OnMaterialChanged += this.OnMaterialChanged;
       #if !LOCAL_TEST
       this.NetworkSynchronizer?.RegisterSynchronizable(this);
       #endif
@@ -78,7 +88,7 @@ namespace SHG
     {
       this.highlighter.OnUpdate(Time.deltaTime);
       this.tool.OnUpdate(Time.deltaTime);
-      this.effecter.OnUpdate(Time.deltaTime);
+      this.effecter?.OnUpdate(Time.deltaTime);
     }
 
     public virtual bool CanTransferItem(ToolTransferArgs args)
@@ -95,6 +105,7 @@ namespace SHG
       var result = this.tool.Transfer(args);
       Debug.Log($"{nameof(Transfer)} result: {result}");
       if (args.ItemToGive != null) {
+        this.itemUI.AddImage(args.ItemToGive.Data.Image);
         args.ItemToGive.transform.SetParent(this.transform);
         args.ItemToGive.transform.position = this.materialPoint.position;
         args.ItemToGive.transform.up = this.materialPoint.up;
@@ -103,7 +114,10 @@ namespace SHG
           rigidbody.isKinematic = true;
         }
       }
-      else  if (this.HoldingItem != null) {
+      else {
+        this.itemUI.SubAllImage();
+      }
+      if (this.HoldingItem != null) {
         var rigidbody = args.ItemToGive.gameObject.GetComponent<Rigidbody>();
         if (rigidbody != null) {
           rigidbody.isKinematic = false;
@@ -183,13 +197,19 @@ namespace SHG
       }
       else {
         //FIXME: Return item to player
-        this.tool.HoldingItem.transform.SetParent(null);
+        this.tool.HoldingMaterial.transform.SetParent(null);
         this.Transfer(new ToolTransferArgs
         {
           ItemToGive = null,
           PlayerNetworkId = playerNetworkId
         });
       }
+    }
+
+    void OnMaterialChanged(ItemData itemData)
+    {
+      this.itemUI.SubImage();
+      this.itemUI.AddImage(itemData.Image);
     }
 
     public void HighlightInstantly(Color color)

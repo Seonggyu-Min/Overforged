@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 541767712711969142}
   - component: {fileID: 3670318580000350036}
   - component: {fileID: 5170122967543702602}
-  - component: {fileID: 224132458584653056}
+  - component: {fileID: 7296093545891497658}
   m_Layer: 7
   m_Name: Furnace
   m_TagString: InteractionObj
@@ -105,16 +105,17 @@ MonoBehaviour:
   isOwner: 0
   uiPrefab: {fileID: 3067690708589362235, guid: 94c1b4e71ec0307468b9d589da4d6c12, type: 3}
   uiPoint: {fileID: 2547794804134518483}
+  gauageUIImage: {fileID: 21300000, guid: 30519252e18e748fbb0670effaf9372f, type: 3}
   furnaceData: {fileID: 11400000, guid: f8ec7637fc63eccc6bfa35aedf0dea1e, type: 2}
   materialPosition: {fileID: 2307916089002566602}
-  model: {fileID: 0}
+  model: {fileID: 3670318580000350036}
   normalColor: {r: 0.46450287, g: 0.7434261, b: 1, a: 0}
   ignitedColor: {r: 1, g: 0.38102233, b: 0, a: 0}
   HightlightColor: {r: 1, g: 0.7394293, b: 0, a: 0}
   fireParticle: {fileID: 2027948646883749995}
   sparkParticle: {fileID: 564380236412714426}
---- !u!65 &224132458584653056
-BoxCollider:
+--- !u!64 &7296093545891497658
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -131,9 +132,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.8393061, y: 5.680649, z: 1.33832}
-  m_Center: {x: -0.005133778, y: 2.8314595, z: 0.00057926774}
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5685816728850260451, guid: 4dc46ddbfeb061d479e1ad7736cce258, type: 3}
 --- !u!1 &1431961156745066237
 GameObject:
   m_ObjectHideFlags: 0
@@ -5036,7 +5038,7 @@ Transform:
   m_GameObject: {fileID: 2219039198040345475}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 3, z: 0}
+  m_LocalPosition: {x: 0, y: 0.87, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

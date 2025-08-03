@@ -135,6 +135,7 @@ MonoBehaviour:
   isOwner: 0
   uiPrefab: {fileID: 3067690708589362235, guid: 94c1b4e71ec0307468b9d589da4d6c12, type: 3}
   uiPoint: {fileID: 7650164977014863832}
+  gauageUIImage: {fileID: 21300000, guid: cb3b31ebae0d94986a769b3d9c7730f0, type: 3}
   data: {fileID: 11400000, guid: c1316c9342abf7f62b47dce54e56a9dc, type: 2}
   model: {fileID: 2743067804112489886}
   materialPosition: {fileID: 1759918135397919385}
