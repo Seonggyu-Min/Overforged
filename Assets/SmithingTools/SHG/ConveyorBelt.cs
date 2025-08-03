@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using UnityEngine;
 namespace SHG
 {
   public class ConveyorBelt : SmithingTool
@@ -92,7 +92,7 @@ namespace SHG
         var result = new ToolTransferResult { IsDone = true };
         #if UNITY_EDITOR
         if (this.processingBox == null) {
-          throw (new ApplicationException($"{nameof(ConveyorBelt)} {nameof(Transfer)}: {nameof(processingBox)} is not null"));
+          throw (new ApplicationException($"{nameof(ConveyorBelt)} {nameof(Transfer)}: {nameof(processingBox)} is null"));
         #endif
         }
         if (this.TryGetBoxItem(this.processingBox, out Item item)) {

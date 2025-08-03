@@ -11,6 +11,7 @@ namespace SHG
     public ConveyorBeltEffecter Effecter { get; private set; }
     public SplineContainer SplineContainer => this.splineContainer;
     public float Speed { get; private set; }
+    public bool IsTurningPower { get; private set; }
     [SerializeField] [Required]
     SmithingToolData conveyorBeltData;
     [SerializeField] [Required]
@@ -22,7 +23,7 @@ namespace SHG
     [SerializeField] [Required]
     GameObject conveyorBoxPrefab;
     Material beltMaterial;
-    [SerializeField] [Range(0f, 1f)]
+    [SerializeField] [Range(0.5f, 5f)]
     float movingSpeed;
     [SerializeField] [Range(0f, 1f)]
     float speedDelta;
@@ -41,9 +42,16 @@ namespace SHG
 
     ConveyorBeltBox CreateBox()
     {
-      return (
+      var box = 
         Instantiate(this.conveyorBoxPrefab)
-        .GetComponent<ConveyorBeltBox>());
+        .GetComponent<ConveyorBeltBox>();
+      return (box);
+    }
+
+    public void ReturnBox(ConveyorBeltBox box)
+    {
+      Debug.Log("ReturnBox");
+      Destroy(box.gameObject);
     }
 
     // Start is called before the first frame update
@@ -72,25 +80,43 @@ namespace SHG
     }
 
     [Button]
-    void TurnOn()
+    public void TurnOn()
     {
       if (this.powerRoutine != null) {
         this.StopCoroutine(this.powerRoutine);
       }
-      this.powerRoutine = this.StartCoroutine(this.TurnOnRoutine());
+      if (this.ConveyorBelt.AllItemBox.Count > 0) {
+        this.Speed = this.movingSpeed;
+        foreach (var box in this.ConveyorBelt.AllItemBox.Keys) {
+          box.Play(); 
+          box.SetSpeed(this.Speed);
+        }
+      }
+      else {
+        this.powerRoutine = this.StartCoroutine(this.TurnOnRoutine());
+      }
     }
 
     [Button]
-    void TurnOff()
+    public void TurnOff()
     {
       if (this.powerRoutine != null) {
         this.StopCoroutine(this.powerRoutine);
       }
-      this.powerRoutine = this.StartCoroutine(this.TurnOffRoutine());
+      if (this.ConveyorBelt.AllItemBox.Count > 0) {
+        foreach (var box in this.ConveyorBelt.AllItemBox.Keys) {
+          box.Pause(); 
+        }
+        this.Speed = 0f;
+      }
+      else {
+        this.powerRoutine = this.StartCoroutine(this.TurnOffRoutine());
+      }
     }
 
     IEnumerator TurnOnRoutine()
     {
+      this.IsTurningPower = true;
       while (this.Speed < this.movingSpeed) {
         this.Speed += this.speedDelta * Time.deltaTime;
         foreach (var box in this.ConveyorBelt.AllItemBox.Keys) {
@@ -98,32 +124,26 @@ namespace SHG
         }
         yield return (this.powerDelay);
       }
+      this.IsTurningPower = false;
     }
 
     IEnumerator TurnOffRoutine()
     {
+      this.IsTurningPower = true;
       while (this.Speed >= 0) {
         this.Speed -= this.speedDelta * Time.deltaTime;
-        foreach (var box in this.ConveyorBelt.AllItemBox.Keys) {
-          box.SetSpeed(this.Speed); 
+        if (this.ConveyorBelt.AllItemBox.Count > 0) {
+          foreach (var box in this.ConveyorBelt.AllItemBox.Keys) {
+            box.Pause(); 
+          }
         }
         yield return (this.powerDelay);
       }
+      this.IsTurningPower = false;
     }
 
     void OnInteractionTriggered(SmithingTool.InteractionType interactionType)
     {
-      switch (interactionType)
-      {
-        case (SmithingTool.InteractionType.Work): 
-          if (this.ConveyorBelt.IsPowerOn) {
-            this.TurnOn();
-          }
-          else {
-            this.TurnOff();
-          }
-          break;
-      }
     }
   }
 }

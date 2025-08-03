@@ -8,6 +8,7 @@ namespace SHG
   [RequireComponent(typeof(SplineAnimate))]
   public class ConveyorBeltBox : MonoBehaviour
   {
+    public float OneLapDist;
     SplineAnimate animator;
 
     void Awake()
@@ -24,6 +25,17 @@ namespace SHG
     public void SetSpeed(float speed)
     {
       this.animator.MaxSpeed = speed;
+      this.animator.Update();
+    }
+
+    public void Play()
+    {
+      this.animator.Play();
+    }
+
+    public void Pause()
+    {
+      this.animator.Pause();
     }
 
     public void SetOffset(float offset) 

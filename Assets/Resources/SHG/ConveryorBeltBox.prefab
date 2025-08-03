@@ -51,7 +51,7 @@ MonoBehaviour:
   m_PlayOnAwake: 0
   m_LoopMode: 1
   m_Method: 1
-  m_Duration: 94.414024
+  m_Duration: 1
   m_MaxSpeed: 1
   m_EasingMode: 0
   m_AlignmentMode: 1
@@ -70,6 +70,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d35e860f850d46a682f96c98182a207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OneLapDist: 0
 --- !u!65 &4541318209464694708
 BoxCollider:
   m_ObjectHideFlags: 0
