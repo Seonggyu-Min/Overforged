@@ -151,8 +151,7 @@ namespace SHG
 
     public virtual void OnRpc(string method, float latencyInSeconds, object[] args = null)
     {
-      switch (method)
-      {
+      switch (method) {
         case nameof(Transfer):
           this.HandleNetworkTransfer(args);
           break;

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+
 namespace SHG
 {
   public class ConveyorBelt : SmithingTool
@@ -118,6 +118,11 @@ namespace SHG
             DurationToStay = 0f,
             Trigger = this.OnTriggered 
           }));
+    }
+
+    public void OnTriggeredWork()
+    {
+      this.OnInteractionTriggered?.Invoke(this.InteractionToTrigger);
     }
   }
 }

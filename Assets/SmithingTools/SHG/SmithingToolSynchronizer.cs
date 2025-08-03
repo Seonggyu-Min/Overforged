@@ -34,7 +34,8 @@ namespace SHG
       smithingTool.OnTransfered += this.OnTranfered;
       smithingTool.OnWorked += this.OnWork;
       int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
-      if (smithingTool is DropOffTableComponent dropOffTable) {
+      if (smithingTool is DropOffTableComponent dropOffTable ||
+        smithingTool is ConveyorBeltHopper conveyorBelt) {
         smithingTool.IsOwner = PhotonNetwork.LocalPlayer.IsMasterClient;
       }
       else {

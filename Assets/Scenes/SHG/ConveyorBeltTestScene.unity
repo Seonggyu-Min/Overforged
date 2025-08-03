@@ -511,7 +511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactRadius: 2
   interactRange: 5
-  movingSpeed: 3
+  movingSpeed: 3.71
   HoldingItem: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 0}
   interactColor: {r: 0.44276744, g: 0.5635926, b: 1, a: 0}
@@ -744,301 +744,82 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &1065038225
-GameObject:
+--- !u!1001 &893581380
+PrefabInstance:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1065038226}
-  - component: {fileID: 1065038227}
-  m_Layer: 0
-  m_Name: ConveyorBelt
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1065038226
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1065038225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1109553092}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1065038227
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3708180615230520728, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
+      propertyPath: m_Name
+      value: ConveyorBeltHopper (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4052617564247664418, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.92
+      objectReference: {fileID: 0}
+    - target: {fileID: 4052617564247664418, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4052617564247664418, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -13.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 4052617564247664418, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.58666474
+      objectReference: {fileID: 0}
+    - target: {fileID: 4052617564247664418, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4052617564247664418, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.80982995
+      objectReference: {fileID: 0}
+    - target: {fileID: 4052617564247664418, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4052617564247664418, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4052617564247664418, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -108.159
+      objectReference: {fileID: 0}
+    - target: {fileID: 4052617564247664418, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4816008971320978455, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
+      propertyPath: boxOffset
+      value: 0.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 4816008971320978455, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
+      propertyPath: beltController
+      value: 
+      objectReference: {fileID: 1065038227}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
+--- !u!114 &1065038227 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 3132164180402548893, guid: 25711b90d2ae38694801f2ef48aec435, type: 3}
+  m_PrefabInstance: {fileID: 8948811242418346122}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1065038225}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9ca5bd39c638ef73808211b6744cbb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conveyorBeltData: {fileID: 11400000, guid: 439dfcc359a48a99b976b676301051f6, type: 2}
-  splineContainer: {fileID: 1109553091}
-  splineInstantiate: {fileID: 1109553093}
-  conveyorBeltPrefab: {fileID: 8032488898728154156, guid: 1fae788415c0546b8af50cd00794420e, type: 3}
-  conveyorBoxPrefab: {fileID: 5180385787853932348, guid: 1f06e6d79d978ff6aae63fb78c83e80e, type: 3}
-  movingSpeed: 0.5
-  speedDelta: 0.2
---- !u!1 &1109553090
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1109553092}
-  - component: {fileID: 1109553091}
-  - component: {fileID: 1109553093}
-  m_Layer: 0
-  m_Name: Spline
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1109553091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1109553090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dab5c7d4c32e743048dfca98e2d5914f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Spline:
-    m_EditModeType: 1
-    m_Knots: []
-    m_MetaData: []
-    m_Closed: 0
-    m_IntData:
-      m_Data: []
-    m_FloatData:
-      m_Data: []
-    m_Float4Data:
-      m_Data: []
-    m_ObjectData:
-      m_Data: []
-  m_Splines:
-  - m_EditModeType: 1
-    m_Knots:
-    - Position:
-        x: 0
-        y: 0
-        z: 0
-      TangentIn:
-        x: -0
-        y: -0
-        z: -1.1960049
-      TangentOut:
-        x: 0
-        y: 0
-        z: 2.0506954
-      Rotation:
-        value:
-          x: 0.000000013433909
-          y: 0.74163216
-          z: -0.000000006520343
-          w: 0.67080677
-    - Position:
-        x: 7.905158
-        y: 0
-        z: -4.8461137
-      TangentIn:
-        x: -0
-        y: -0
-        z: -2.565189
-      TangentOut:
-        x: 0
-        y: 0
-        z: 2.86581
-      Rotation:
-        value:
-          x: 0.0000000018475637
-          y: 0.98428446
-          z: 3.314706e-10
-          w: 0.17659004
-    - Position:
-        x: 4.3662786
-        y: 0
-        z: -15.864752
-      TangentIn:
-        x: -0
-        y: -0
-        z: -2.6075377
-      TangentOut:
-        x: 0
-        y: 0
-        z: 2.1400208
-      Rotation:
-        value:
-          x: 0.000000002386329
-          y: 0.86934394
-          z: -0.0000000013565883
-          w: -0.4942076
-    - Position:
-        x: -3.294159
-        y: 0
-        z: -14.422216
-      TangentIn:
-        x: -0
-        y: -0
-        z: -2.1283689
-      TangentOut:
-        x: 0
-        y: 0
-        z: 2.0292706
-      Rotation:
-        value:
-          x: 0.000000001437164
-          y: -0.3938052
-          z: -0.0000000033545327
-          w: 0.9191939
-    - Position:
-        x: -4.94
-        y: 0
-        z: -7.529913
-      TangentIn:
-        x: -0
-        y: -0
-        z: -2.2524328
-      TangentOut:
-        x: 0
-        y: 0
-        z: 2.1941035
-      Rotation:
-        value:
-          x: -2.883308e-13
-          y: 0.013018383
-          z: -2.2146097e-11
-          w: 0.9999153
-    - Position:
-        x: -3.04
-        y: 0
-        z: -1.0801105
-      TangentIn:
-        x: -0
-        y: -0
-        z: -1.634242
-      TangentOut:
-        x: 0
-        y: 0
-        z: 1.1320149
-      Rotation:
-        value:
-          x: -0.000000015921808
-          y: 0.3699655
-          z: -0.000000039982332
-          w: 0.92904544
-    m_MetaData:
-    - Mode: 4
-      Tension: 0.5
-    - Mode: 0
-      Tension: 0.5
-    - Mode: 0
-      Tension: 0.5
-    - Mode: 0
-      Tension: 0.5
-    - Mode: 0
-      Tension: 0.5
-    - Mode: 0
-      Tension: 0.5
-    m_Closed: 1
-    m_IntData:
-      m_Data: []
-    m_FloatData:
-      m_Data: []
-    m_Float4Data:
-      m_Data: []
-    m_ObjectData:
-      m_Data: []
-  m_Knots:
-    m_KnotsLink: []
---- !u!4 &1109553092
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1109553090}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1065038226}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1109553093
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1109553090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b74686beb0670a4ea61325c0acf4411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Container: {fileID: 1109553091}
-  m_ItemsToInstantiate:
-  - prefab: {fileID: 0}
-    Prefab: {fileID: 8032488898728154156, guid: 1fae788415c0546b8af50cd00794420e, type: 3}
-    probability: 0
-    Probability: 0
-  m_Method: 1
-  m_Space: 0
-  m_Spacing: {x: 1.1, y: 1.1}
-  m_Up: 1
-  m_Forward: 2
-  m_PositionOffset:
-    setup: 0
-    min: {x: 0, y: 0, z: 0}
-    max: {x: 0, y: 0, z: 0}
-    randomX: 0
-    randomY: 0
-    randomZ: 0
-    space: 0
-  m_RotationOffset:
-    setup: 1
-    min: {x: 0, y: 90, z: 0}
-    max: {x: 0, y: 90, z: 0}
-    randomX: 0
-    randomY: 0
-    randomZ: 0
-    space: 0
-  m_ScaleOffset:
-    setup: 0
-    min: {x: 0, y: 0, z: 0}
-    max: {x: 0, y: 0, z: 0}
-    randomX: 0
-    randomY: 0
-    randomZ: 0
-    space: 0
-  m_DeprecatedInstances: []
-  m_AutoRefresh: 1
-  m_Seed: -36570
 --- !u!1 &1401806661
 GameObject:
   m_ObjectHideFlags: 0
@@ -1423,10 +1204,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 896517071634145779, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.503
-      objectReference: {fileID: 0}
     - target: {fileID: 3708180615230520728, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
       propertyPath: m_Name
       value: ConveyorBeltHopper
@@ -1470,10 +1247,6 @@ PrefabInstance:
     - target: {fileID: 4052617564247664418, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4816008971320978455, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
-      propertyPath: boxOffset
-      value: 0.85
       objectReference: {fileID: 0}
     - target: {fileID: 4816008971320978455, guid: 39fd8b6da042a474fb233f9f6101ad27, type: 3}
       propertyPath: beltController
@@ -1610,6 +1383,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0409596d6550df02cb19d80e09409c2e, type: 3}
+--- !u!1001 &8948811242418346122
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4840697165146052299, guid: 25711b90d2ae38694801f2ef48aec435, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840697165146052299, guid: 25711b90d2ae38694801f2ef48aec435, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840697165146052299, guid: 25711b90d2ae38694801f2ef48aec435, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840697165146052299, guid: 25711b90d2ae38694801f2ef48aec435, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840697165146052299, guid: 25711b90d2ae38694801f2ef48aec435, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840697165146052299, guid: 25711b90d2ae38694801f2ef48aec435, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840697165146052299, guid: 25711b90d2ae38694801f2ef48aec435, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840697165146052299, guid: 25711b90d2ae38694801f2ef48aec435, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840697165146052299, guid: 25711b90d2ae38694801f2ef48aec435, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4840697165146052299, guid: 25711b90d2ae38694801f2ef48aec435, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6582079092699881633, guid: 25711b90d2ae38694801f2ef48aec435, type: 3}
+      propertyPath: m_Name
+      value: ConveyorBelt
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 25711b90d2ae38694801f2ef48aec435, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1622,6 +1452,7 @@ SceneRoots:
   - {fileID: 1451546554}
   - {fileID: 646376222}
   - {fileID: 1401806663}
-  - {fileID: 1065038226}
+  - {fileID: 8948811242418346122}
   - {fileID: 2996641606984829790}
   - {fileID: 786593835}
+  - {fileID: 893581380}
