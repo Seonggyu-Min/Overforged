@@ -62,7 +62,6 @@ namespace SHG
         ProductItem product = this.Product;
         this.Product = null;
         this.OnProductRemoved?.Invoke(product.Data as ProductItemData);
-        Debug.Log($"Transfer product: {product}");
         return ( new ToolTransferResult { 
           ReceivedItem = product,
           IsDone = true
@@ -123,9 +122,10 @@ namespace SHG
         return (new ToolWorkResult {});
         #endif
       }
-      Debug.Log($"craftable: {this.CraftableProduct}"); 
       this.Product = this.createProduct(this.CraftableProduct);
-      Debug.Log($"create product: {this.Product}");
+      this.Product.Ore = MaterialItem.GetOreType(this.HoldingMaterials);
+      this.Product.Wood = MaterialItem.GetWoodType(this.HoldingMaterials);
+ 
       foreach (var material in this.HoldingMaterials) {
         GameObject.Destroy(material.gameObject);
       }

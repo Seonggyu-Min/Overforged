@@ -41,7 +41,7 @@ namespace SHG
     int id;
     [SerializeField]
     int playerId;
-    [SerializeField]
+    [SerializeField] [ReadOnly]
     bool isOwner;
     [SerializeField] [Required]
     GameObject uiPrefab;
@@ -80,7 +80,7 @@ namespace SHG
     {
       this.tool.OnMaterialChanged += this.OnMaterialChanged;
       #if !LOCAL_TEST
-      this.NetworkSynchronizer?.RegisterSynchronizable(this);
+      this.NetworkSynchronizer.RegisterSynchronizable(this);
       #endif
     }
 
