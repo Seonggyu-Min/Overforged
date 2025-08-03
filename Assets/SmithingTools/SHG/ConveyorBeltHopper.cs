@@ -26,6 +26,7 @@ namespace SHG
       base.Awake();
       this.nearBoxes = new ();
     }
+
     public override bool CanTransferItem(ToolTransferArgs args)
     {
       if (args.ItemToGive != null) {
@@ -49,8 +50,14 @@ namespace SHG
           box.SetSpeed(this.beltController.Speed);
           box.SetOffset(this.boxOffset);
           box.StartMoveAlong(this.beltController.SplineContainer);
+          this.NetworkSynchronizer.SendRpc(
+            sceneId: this.SceneId,
+            method: nameof(SmithingToolComponent.Transfer),
+            args: new object[] {
+            args.ConvertToNetworkArguments(),
+            result.ConvertToNetworkArguments()
+            });
         }
-        this.OnTransfered?.Invoke(this, args, result);
         return (result);
       }
       else {
@@ -60,9 +67,19 @@ namespace SHG
           if (result.ReceivedItem != null) {
             result.ReceivedItem.gameObject.SetActive(true);
           }
+          this.NetworkSynchronizer.SendRpc(
+            sceneId: this.SceneId,
+            method: nameof(SmithingToolComponent.Transfer),
+            args: new object[] {
+            args.ConvertToNetworkArguments(),
+            result.ConvertToNetworkArguments()
+            });
           this.nearBoxes.Remove(nearestBox);
+          this.NetworkSynchronizer.SendRpc(
+            sceneId: this.SceneId,
+            method: nameof(RemoveBox),
+            args: new object[] { nearestBox.Id });
           this.beltController.ReturnBox(nearestBox);          
-          this.OnTransfered?.Invoke(this, args, result);
           return (result);
         }
         #if UNITY_EDITOR
@@ -75,6 +92,15 @@ namespace SHG
     public override bool CanWork()
     {
       return (!this.beltController.IsTurningPower);
+    }
+
+    void RemoveBox(object[] args)
+    {
+      int boxId = (int)args[0];
+      this.nearBoxes.RemoveWhere(nearBox => nearBox.Id == boxId);
+      if (this.conveyorBelt.TryGetBox(boxId, out ConveyorBeltBox box)) {
+        this.beltController.ReturnBox(box);
+      }
     }
 
     public override ToolWorkResult Work()
@@ -112,6 +138,9 @@ namespace SHG
         case nameof(OnWorkedFromNetwork):
           this.OnWorkedFromNetwork(args);
           break;
+        case nameof(RemoveBox):
+          this.RemoveBox(args);
+          break;
       }
     }
 
@@ -132,6 +161,52 @@ namespace SHG
           else {
             this.beltController.TurnOff();
           }
+        }
+      }
+    }
+
+    protected override void HandleNetworkTransfer(object[] args)
+    {
+      var dict = args[0] as Dictionary<string, object>;
+      int playerNetworkId = (int)dict[ToolTransferArgs.PLAYER_NETWORK_ID_KEY];
+      if (dict.TryGetValue(
+          ToolTransferArgs.ITEM_ID_KEY, out object itemId) &&
+        itemId != null) {
+        if (this.NetworkSynchronizer != null &&
+          this.NetworkSynchronizer.TryFindComponentFromNetworkId(
+            networId: (int)itemId,
+            out MaterialItem foundItem)) {
+          foundItem.gameObject.SetActive(false); 
+          var result = this.tool.Transfer(new ToolTransferArgs{
+            ItemToGive = foundItem,
+            PlayerNetworkId = playerNetworkId
+            });
+          if (this.conveyorBelt.TryGetProcessingBox(
+              out ConveyorBeltBox box)) {
+            box.transform.position = this.boxPoint.position;
+            box.transform.rotation = this.boxPoint.rotation;
+            box.SetSpeed(this.beltController.Speed);
+            box.SetOffset(this.boxOffset);
+            box.StartMoveAlong(this.beltController.SplineContainer);
+          }
+        }
+        #if UNITY_EDITOR
+        else {
+          Debug.LogError($"item not found for {args[0]}");
+        }
+        #endif
+      }
+      else {
+        var result = args[1] as Dictionary<string, object>;
+        Debug.Log($"result: {result}");
+        Debug.Log(result[ToolTransferResult.RECEIVED_ITEM_KEY]);
+        if (result.TryGetValue(
+            ToolTransferResult.RECEIVED_ITEM_KEY, out object key) &&
+          this.NetworkSynchronizer.TryFindComponentFromNetworkId<Item>(
+            networId: (int)key,
+            out Item found)) {
+          found.gameObject.SetActive(true);
+          Debug.Log($"item: {found}");
         }
       }
     }

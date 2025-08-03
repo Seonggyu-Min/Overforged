@@ -24,7 +24,7 @@ namespace SHG
     public override bool CanTransferItem(ToolTransferArgs args)
     {
       if (args.ItemToGive != null) {
-        return (!args.ItemToGive.IsHot);
+        return (this.IsPowerOn && !args.ItemToGive.IsHot);
       }
       else {
         return (this.AllItemBox.Count > 0);
@@ -51,6 +51,21 @@ namespace SHG
         return (true);
       }
       return (false);
+    }
+
+    public bool TryGetBox(int id, out ConveyorBeltBox box)
+    {
+      box = null;
+      foreach (var (currentBox, _) in this.AllItemBox) {
+        if (currentBox.Id == id) {
+          box = currentBox;
+          break;
+        }
+      }
+      if (box != null) {
+        this.AllItemBox.Remove(box);
+      }
+      return (box != null);
     }
 
     bool TryGetBoxItem(ConveyorBeltBox box, out Item item)

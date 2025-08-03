@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
 
@@ -8,12 +6,19 @@ namespace SHG
   [RequireComponent(typeof(SplineAnimate))]
   public class ConveyorBeltBox : MonoBehaviour
   {
+    static int NEXT_ID = 0;
     public float OneLapDist;
+    public int Id;
     SplineAnimate animator;
 
     void Awake()
     {
       this.animator = this.GetComponent<SplineAnimate>();
+    }
+
+    void OnEnable()
+    {
+      this.Id = NEXT_ID++;
     }
 
     public void StartMoveAlong(SplineContainer splineContainer)
