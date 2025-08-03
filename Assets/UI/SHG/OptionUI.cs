@@ -218,9 +218,10 @@ namespace SHG
     void OnBgmSelected(IEnumerable indices)
     {
       var enumerator = indices.GetEnumerator();
-      enumerator.MoveNext();
-      int index = (int)enumerator.Current;
-      this.audioManger.PlayBgm(this.bgmList[index]);
+      if (enumerator.MoveNext()) {
+        int index = (int)enumerator.Current;
+        this.audioManger.PlayBgm(this.bgmList[index]);
+      }
     }
 
     void UpdateBgmRow(VisualElement row, int index)

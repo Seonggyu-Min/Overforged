@@ -4,7 +4,6 @@ using EditorAttributes;
 
 namespace SHG
 {
-  using Player = SCR.Player;
   public class DropOffTableComponent :SmithingToolComponent 
   {
 

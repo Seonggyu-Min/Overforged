@@ -328,14 +328,14 @@ namespace SHG
       this.rb = this.GetComponent<Rigidbody>();
       this.meshRenderer = this.GetComponent<MeshRenderer>();
       this.photonView = this.GetComponent<PhotonView>();
-      var cameraController = CameraController.Instance;;
-      Debug.Log($"cameraController : {cameraController}");
-      cameraController.Player = this.transform;
-      cameraController.gameObject.SetActive(true);
     }
 
     void Start()
     {
+      var cameraController = CameraController.Instance;;
+      Debug.Log($"cameraController : {cameraController}");
+      cameraController.Player = this.transform;
+      cameraController.gameObject.SetActive(true);
     }
     #endregion
   }

@@ -151,8 +151,7 @@ namespace SHG
 
     public virtual void OnRpc(string method, float latencyInSeconds, object[] args = null)
     {
-      switch (method)
-      {
+      switch (method) {
         case nameof(Transfer):
           this.HandleNetworkTransfer(args);
           break;
@@ -181,10 +180,8 @@ namespace SHG
         if (this.NetworkSynchronizer != null &&
           this.NetworkSynchronizer.TryFindComponentFromNetworkId(
             networId: (int)itemId,
-            out MaterialItem foundItem
-            )) {
-          this.Transfer(new ToolTransferArgs
-          {
+            out MaterialItem foundItem)) {
+          this.Transfer(new ToolTransferArgs {
             ItemToGive = foundItem,
             PlayerNetworkId = playerNetworkId
           });
@@ -198,8 +195,7 @@ namespace SHG
       else {
         //FIXME: Return item to player
         this.tool.HoldingMaterial.transform.SetParent(null);
-        this.Transfer(new ToolTransferArgs
-        {
+        this.Transfer(new ToolTransferArgs {
           ItemToGive = null,
           PlayerNetworkId = playerNetworkId
         });
