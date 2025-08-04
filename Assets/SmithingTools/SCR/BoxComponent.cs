@@ -18,7 +18,7 @@ namespace SCR
         private GameObject itemObj;
         [SerializeField] PhotonView view;
 
-        void Start()
+        void OnValidate()
         {
             SetItem();
         }

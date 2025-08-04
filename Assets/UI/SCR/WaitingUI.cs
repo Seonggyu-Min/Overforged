@@ -7,6 +7,7 @@ namespace SCR
 {
     public class WaitingUI : MonoBehaviour
     {
+        [SerializeField] InGameUIManager inGameUIManager;
         [SerializeField] List<LoadingPlayerUI> playerUIs;
         [SerializeField] GameObject popUp;
         [SerializeField] Animator waitingAnimator;
@@ -52,6 +53,7 @@ namespace SCR
             yield return new WaitForSeconds(0.5f);
 
             gameObject.SetActive(false);
+            inGameUIManager.StartGame();
         }
     }
 

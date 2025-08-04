@@ -359,6 +359,7 @@ MonoBehaviour:
   howToMakeImage: {fileID: 2090609110485637861}
   howToMakeObj: {fileID: 6849212119134141711}
   howToMakeNum: {fileID: 4626077306896032181}
+  imageList: {fileID: 11400000, guid: 2ff6c11440b106a418d5546e063aa7a9, type: 2}
 --- !u!114 &5795962464169147447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1405,6 +1406,7 @@ MonoBehaviour:
   howToMakeImage: {fileID: 3740568064616207575}
   howToMakeObj: {fileID: 756051760531067119}
   howToMakeNum: {fileID: 5084368924341053088}
+  imageList: {fileID: 11400000, guid: 2ff6c11440b106a418d5546e063aa7a9, type: 2}
 --- !u!114 &5428737891303605452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1580,7 +1582,6 @@ MonoBehaviour:
   - {fileID: 1300635390620162730}
   - {fileID: 4879709948210741934}
   productSprites: {fileID: 11400000, guid: 52c8c68e708106440b569877ec842027, type: 2}
-  uniqueID: 0
   curCraft: {fileID: 0}
   curWood: 0
   curOre: 0
@@ -2499,6 +2500,7 @@ MonoBehaviour:
   howToMakeImage: {fileID: 6633895684258205782}
   howToMakeObj: {fileID: 8832251336226608912}
   howToMakeNum: {fileID: 4475876735121110087}
+  imageList: {fileID: 11400000, guid: 2ff6c11440b106a418d5546e063aa7a9, type: 2}
 --- !u!114 &4897697916558417834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2671,6 +2673,7 @@ MonoBehaviour:
   howToMakeImage: {fileID: 1835044778224351691}
   howToMakeObj: {fileID: 5860433682907229172}
   howToMakeNum: {fileID: 5705075141878868813}
+  imageList: {fileID: 11400000, guid: 2ff6c11440b106a418d5546e063aa7a9, type: 2}
 --- !u!114 &7993419056705060200
 MonoBehaviour:
   m_ObjectHideFlags: 0

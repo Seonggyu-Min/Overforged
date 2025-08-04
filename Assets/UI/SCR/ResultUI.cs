@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using MIN;
 using TMPro;
 using Unity.AppUI.UI;
 using UnityEngine;
@@ -17,7 +18,6 @@ namespace SCR
     {
         [Inject] IGameManager gameManager;
         [Inject] IFirebaseManager firebaseManager;
-
         [SerializeField] List<Sprite> titleSprite;
         [SerializeField] List<Color> shadowColor;
         [SerializeField] List<GameObject> titleDeco;
@@ -34,7 +34,6 @@ namespace SCR
         [SerializeField] List<Image> teamColor;
 
         [SerializeField] float closeTime;
-
         bool isWin;
         private Coroutine closeCO;
 
@@ -67,7 +66,6 @@ namespace SCR
                 StopCoroutine(closeCO);
             }
         }
-
 
         private void Win()
         {
@@ -199,6 +197,8 @@ namespace SCR
         {
             yield return new WaitForSeconds(closeTime);
             gameObject.SetActive(false);
+            gameManager.SaveTeamResult();
+            gameManager.SetGameEnd();
         }
 
         // 로컬 플레이어의 승리 체크
