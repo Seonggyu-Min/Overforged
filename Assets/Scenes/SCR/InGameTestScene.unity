@@ -519,7 +519,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e02bc6dc66b4d84aab3669797ee3e17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Score: Score
   mapList:
   - {fileID: 2024428207}
   currentTimeUI: {fileID: 5734031808513517242}
@@ -528,6 +527,7 @@ MonoBehaviour:
   orderUI: {fileID: 2525262830532816931}
   resultUI: {fileID: 1700086933}
   IsWaiting: 0
+  IsLastChance: 0
   IsEnd: 0
 --- !u!1 &339353966
 GameObject:
@@ -2228,7 +2228,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4761429625394750882, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4842754962718265032, guid: 81544d4585369df43beca5a3781f4247, type: 3}
       propertyPath: id
