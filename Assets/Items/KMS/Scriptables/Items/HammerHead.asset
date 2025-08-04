@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 109
   Name: Hammer Head
-  Image: {fileID: 21300000, guid: d6d0d1a94413250439e95eb050fcf319, type: 3}
+  Image: {fileID: 21300000, guid: 52da87d420e08fb4cb4f085f2f1382b2, type: 3}
   ItemPrefab: {fileID: -259972160606440404, guid: a55ba290b477e1a47886b6f080d6e895, type: 3}
   Scale: {x: 1.4, y: 1.4, z: 1.4}
+  xOffset: 0
   materialVariation: 7
   materialType: 2
   nextMaterial: {fileID: 11400000, guid: 1b516dbf2a3b38c449e85c63bfd908b4, type: 2}
-  guideImage: {fileID: 21300000, guid: 248582e7af9a74a94b873333d58f79cd, type: 3}
-  guideMessage: X3
+  guideImage: {fileID: 21300000, guid: cb3b31ebae0d94986a769b3d9c7730f0, type: 3}
+  guideMessage: 3
