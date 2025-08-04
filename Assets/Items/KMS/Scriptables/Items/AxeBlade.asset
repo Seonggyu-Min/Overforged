@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 108
   Name: Axe Blade
-  Image: {fileID: 21300000, guid: 5098c9248dd260a708c27417114d1111, type: 3}
+  Image: {fileID: 21300000, guid: 52da87d420e08fb4cb4f085f2f1382b2, type: 3}
   ItemPrefab: {fileID: -7334951474422550414, guid: 2114decc6eccacc4591e5d8d403ea377, type: 3}
   Scale: {x: 1, y: 1, z: 1}
   materialVariation: 6

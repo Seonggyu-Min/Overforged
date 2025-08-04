@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 105
   Name: Stick
-  Image: {fileID: 21300000, guid: 6a3dd416d176d8f80badba540c97122c, type: 3}
+  Image: {fileID: 21300000, guid: 9590422118d4d794eba22740238ec8a2, type: 3}
   ItemPrefab: {fileID: 2766212503428324877, guid: a55ba290b477e1a47886b6f080d6e895, type: 3}
   Scale: {x: 1, y: 1, z: 1}
   materialVariation: 0

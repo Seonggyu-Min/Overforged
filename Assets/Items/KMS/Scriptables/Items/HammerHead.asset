@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 109
   Name: Hammer Head
-  Image: {fileID: 21300000, guid: da60aef29e8d2cd4389dae54fd8fd11a, type: 3}
+  Image: {fileID: 21300000, guid: 52da87d420e08fb4cb4f085f2f1382b2, type: 3}
   ItemPrefab: {fileID: -259972160606440404, guid: a55ba290b477e1a47886b6f080d6e895, type: 3}
   Scale: {x: 1, y: 1, z: 1}
   materialVariation: 7
