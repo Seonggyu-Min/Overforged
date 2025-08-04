@@ -1,9 +1,12 @@
-﻿using MIN;
+﻿using Firebase.Database;
+using Firebase.Extensions;
+using MIN;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.AppUI.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -13,6 +16,7 @@ namespace SCR
     public class ResultUI : MonoBehaviour
     {
         [Inject] IGameManager gameManager;
+        [Inject] IFirebaseManager firebaseManager;
 
         [SerializeField] List<Sprite> titleSprite;
         [SerializeField] List<Color> shadowColor;
@@ -36,6 +40,7 @@ namespace SCR
         private void OnEnable()
         {
             CheckLocalWin();
+            SetScore();
             AddOtherPlayer(); // 테스트용 호출
         }
 
@@ -45,7 +50,7 @@ namespace SCR
             shadow.color = shadowColor[0];
             titleDeco[0].SetActive(true);
             titleDeco[1].SetActive(false);
-            titleDeco[2].SetActive(false);
+            //titleDeco[2].SetActive(false);
             titleText.text = "WIN";
             isWin = true;
         }
@@ -56,7 +61,7 @@ namespace SCR
             shadow.color = shadowColor[1];
             titleDeco[0].SetActive(false);
             titleDeco[1].SetActive(true);
-            titleDeco[2].SetActive(false);
+            //titleDeco[2].SetActive(false);
             titleText.text = "LOSE";
             isWin = false;
         }
@@ -67,26 +72,32 @@ namespace SCR
             shadow.color = shadowColor[2];
             titleDeco[0].SetActive(false);
             titleDeco[1].SetActive(false);
-            titleDeco[2].SetActive(true);
+            //titleDeco[2].SetActive(true);
             titleText.text = "DRAW";
             isWin = false;
         }
 
-        public void SetScore(int team, int score)
+        public void SetScore()
         {
+            int team = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.TeamColor];
+            int score = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.Score];
+
             teamColor[0].color = color.Color[team];
             teamColor[1].color = color.Color[team];
+
             scoreText.text = $"{score}";
             if (isWin)
             {
-                goldText.text = $"{50 + score / 1000}";
-                expText.text = $"{5 + score / 2000}";
+                //goldText.text = $"{50 + score / 1000}";
+                expText.text = $"{score * 10}";
             }
             else
             {
-                goldText.text = $"{25 + score / 1000}";
-                expText.text = $"{2 + score / 2000}";
+                //goldText.text = $"{25 + score / 1000}";
+                expText.text = $"{score * 5}";
             }
+
+            SaveExpToFirebase(score);
         }
 
 
@@ -97,35 +108,24 @@ namespace SCR
         /// </summary>
         public void AddOtherPlayer(List<Photon.Realtime.Player> players)
         {
-            // 우선 테스트용으로 자기가 불러오기
-            // 원래는 중간에 나간 사람도 표기가 되어야하기 때문에 InGameUIManager에서 플레이어 리스트를 전달해야 됨
+            players.RemoveAll(p => p == PhotonNetwork.LocalPlayer);
 
-            players.Clear();
-            Photon.Realtime.Player[] playerArr = PhotonNetwork.PlayerListOthers;
-            for (int i = 0; i < playerArr.Length; i++)
-            {
-                players.Add(playerArr[i]);
-            }
+            int displayCount = Mathf.Min(players.Count, otherPlayers.Count);
 
-
-
-            // 자기 자신은 otherPlayers에 업데이트 되지 않도록 삭제
-            for (int i = 0; i < players.Count; i++)
-            {
-                if (players[i] == PhotonNetwork.LocalPlayer)
-                {
-                    players.Remove(players[i]);
-                }
-            }
-
-            // players의 수 만큼 표기
-            for (int i = 0; i < players.Count; i++)
+            for (int i = 0; i < displayCount; i++)
             {
                 otherPlayers[i].gameObject.SetActive(true);
-                otherPlayers[i].SetResult(players[i].NickName,
+                otherPlayers[i].SetResult(
+                    players[i].NickName,
                     (int)players[i].CustomProperties[CustomPropertyKeys.TeamColor],
                     (int)players[i].CustomProperties[CustomPropertyKeys.Score]
-                    );
+                );
+            }
+
+            // 남은 슬롯 비활성화
+            for (int i = displayCount; i < otherPlayers.Count; i++)
+            {
+                otherPlayers[i].gameObject.SetActive(false);
             }
 
             // 나머지 칸은 비활성화
@@ -140,12 +140,8 @@ namespace SCR
         // 원래는 중간에 나간 사람도 표기가 되어야하기 때문에 InGameUIManager에서 플레이어 리스트를 전달해야 됨
         public void AddOtherPlayer()
         {
-            List<Photon.Realtime.Player> players = new();
-            Photon.Realtime.Player[] playerArr = PhotonNetwork.PlayerListOthers;
-            for (int i = 0; i < playerArr.Length; i++)
-            {
-                players.Add(playerArr[i]);
-            }
+            List<Photon.Realtime.Player> players = new(PhotonNetwork.PlayerListOthers);
+            players.RemoveAll(p => p == PhotonNetwork.LocalPlayer);
 
             // 자기 자신은 otherPlayers에 업데이트 되지 않도록 삭제
             for (int i = 0; i < players.Count; i++)
@@ -156,18 +152,19 @@ namespace SCR
                 }
             }
 
-            // players의 수 만큼 표기
-            for (int i = 0; i < players.Count; i++)
+            int displayCount = Mathf.Min(players.Count, otherPlayers.Count);
+
+            for (int i = 0; i < displayCount; i++)
             {
                 otherPlayers[i].gameObject.SetActive(true);
-                otherPlayers[i].SetResult(players[i].NickName,
+                otherPlayers[i].SetResult(
+                    players[i].NickName,
                     (int)players[i].CustomProperties[CustomPropertyKeys.TeamColor],
                     (int)players[i].CustomProperties[CustomPropertyKeys.Score]
-                    );
+                );
             }
 
-            // 나머지 칸은 비활성화
-            for (int i = players.Count; i < otherPlayers.Count; i++)
+            for (int i = displayCount; i < otherPlayers.Count; i++)
             {
                 otherPlayers[i].gameObject.SetActive(false);
             }
@@ -216,6 +213,52 @@ namespace SCR
                     }
                 }
             }
+        }
+
+        // Firebase에 경험치 저장
+        private void SaveExpToFirebase(int exp)
+        {
+            string uid = firebaseManager.Auth.CurrentUser.UserId;
+            DatabaseReference userRef = firebaseManager.Database.GetReference("users").Child(uid);
+
+            userRef.Child("exp").GetValueAsync().ContinueWithOnMainThread(task =>
+            {
+                DataSnapshot snapshot = task.Result;
+
+                if (task.IsCompletedSuccessfully)
+                {
+                    if (task.IsCanceled)
+                    {
+                        Debug.LogWarning("경험치 접근이 취소됨");
+                        return;
+                    }
+                    if (task.IsFaulted)
+                    {
+                        Debug.LogWarning($"경험치 접근에 실패함. 이유 : {task.Exception}");
+                        return;
+                    }
+
+                    int currentExp = snapshot.Exists ? int.Parse(snapshot.Value.ToString()) : 0;
+                    int newExp = currentExp + exp;
+
+                    userRef.Child("exp").SetValueAsync(newExp).ContinueWithOnMainThread(
+                        setTask =>
+                        {
+                            if (setTask.IsCompletedSuccessfully)
+                            {
+                                Debug.Log($"경험치가 성공적으로 저장됨{newExp}");
+                            }
+                            else
+                            {
+                                Debug.LogWarning("경험치 저장에 실패함");
+                            }
+                        });
+                }
+                else
+                {
+                    Debug.LogWarning("현재 경험치 불러오기 실패");
+                }
+            });
         }
     }
 }
