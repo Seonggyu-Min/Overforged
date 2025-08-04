@@ -76,6 +76,7 @@ public abstract class Item : MonoBehaviourPun, ICarryable
 
     void Update()
     {
+        if (highlighter == null) return;
         highlighter.OnUpdate(Time.deltaTime);
     }
 
