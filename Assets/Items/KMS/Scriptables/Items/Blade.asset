@@ -15,9 +15,10 @@ MonoBehaviour:
   ID: 107
   Name: Blade
   Image: {fileID: 21300000, guid: 52da87d420e08fb4cb4f085f2f1382b2, type: 3}
-  ItemPrefab: {fileID: -7334951474422550414, guid: f442190307bb3974a9bca57366eb782b, type: 3}
-  Scale: {x: 4, y: 4, z: 4}
-  xOffset: 0
+  ItemPrefab: {fileID: -7334951474422550414, guid: b22d1fbfdd0aa3f44bd6bc8685e3995f, type: 3}
+  Offset: {x: 0, y: 0, z: -0.7}
+  Rotation: {x: 90, y: 0, z: 0}
+  Scale: {x: 0.5, y: 0.3, z: 0.3}
   materialVariation: 3
   materialType: 2
   nextMaterial: {fileID: 11400000, guid: 5ad36b537bb22564c9c06458ef1dd5d9, type: 2}
