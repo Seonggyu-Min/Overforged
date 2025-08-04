@@ -9,6 +9,9 @@ namespace SHG
   public class FurnaceComponent : SmithingToolComponent
   {
     static readonly Vector3 SCALE_IN_FURNACE = new Vector3(0.5f, 0.5f, 0.5f);
+
+    public bool IsIgnited => this.furnace.IsIgnited;
+    public bool IsFinished => this.furnace.IsFinished;
     [Inject]
     IAudioLibrary audioLibrary;
     [SerializeField] [Required()]
@@ -30,7 +33,6 @@ namespace SHG
     [SerializeField] [HideInInspector]
     public Color HightlightColor;
     protected override SmithingTool tool => this.furnace;
-
     protected override Transform materialPoint => this.materialPosition;
     protected override ISmithingToolEffecter effecter => this.furnaceEffecter;
 

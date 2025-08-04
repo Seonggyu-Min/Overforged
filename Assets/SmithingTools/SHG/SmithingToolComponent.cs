@@ -1,4 +1,4 @@
-//#define LOCAL_TEST
+#define LOCAL_TEST
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +9,7 @@ namespace SHG
 {
   public abstract class SmithingToolComponent : MonoBehaviour, IInteractableTool, INetworkSynchronizable, IHighlightable
   {
+
     [Inject]
     protected INetworkSynchronizer<SmithingToolComponent> NetworkSynchronizer { get; private set; }
 
@@ -24,10 +25,9 @@ namespace SHG
       get => this.playerId;
       set => this.playerId = value;
     }
+
     public int SceneId => this.id;
-
     public bool IsHighlighted => this.highlighter.IsHighlighted;
-
     public Color HighlightColor
     {
       get => this.highlighter.HighlightColor;

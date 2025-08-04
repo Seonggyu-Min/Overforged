@@ -14,16 +14,12 @@ namespace SHG
     const int MAX_REQUIRED_INTERACT_COUNT = 20;
     const float MAX_INTERACTION_TIME_IN_SECOND = 30;
 
-    [HideInInspector]
     public string Name => this.toolName;
-    [HideInInspector]
     public MaterialVariation[] AllowedMaterials => this.allowdMaterialTypes;
-    [HideInInspector]
     public float TimeRequiredInSeconds => this.timeRequiredInSeconds;
-    [HideInInspector]
     public int RequiredInteractCount => this.requiredInteractCount;
-    [HideInInspector]
     public float InteractionTime => this.interactionTime;
+    public SmithingTool.ToolType Type => this.toolType;
 
     [SerializeField] [Validate("Name is empty", nameof(IsNameEmpty), MessageMode.Error)]
     string toolName;
@@ -37,6 +33,8 @@ namespace SHG
     float interactionTime;
     [SerializeField] [Validate("Invalid required count", nameof(HasInValidCountRequired), MessageMode.Error, buildKiller: true)]
     int requiredInteractCount;
+    [SerializeField]
+    SmithingTool.ToolType toolType;
 
     protected bool IsNameEmpty() => (
       this.Name == null || this.Name .Replace(" ", "").Length == 0);

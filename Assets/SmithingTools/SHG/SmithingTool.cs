@@ -13,6 +13,16 @@ namespace SHG
       Work
     }
 
+    public enum ToolType
+    {
+      None,
+      Furnace,
+      Anvil,
+      QuenchingTool,
+      WoodTable,
+      CraftTable,
+    }
+
     public abstract bool IsFinished { get; }
     public MaterialItem HoldingMaterial { get; protected set; }
     public MaterialVariation[] AllowedMaterials => this.Data.AllowedMaterials;

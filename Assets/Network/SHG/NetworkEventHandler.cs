@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define LOCAL_TEST
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
@@ -8,7 +9,7 @@ using SendOptions = ExitGames.Client.Photon.SendOptions;
 
 namespace SHG
 {
-  public class NetworkEventHandler: INetworkEventHandler, IOnEventCallback
+  public class NetworkEventHandler: INetworkEventHandler, IOnEventCallback, IConnectionCallbacks
   {
     byte customCode = 101;
 
@@ -25,6 +26,14 @@ namespace SHG
       this.codeBySenders = new ();
       this.receiverByCodes = new ();
       PhotonNetwork.AddCallbackTarget(this);
+      #if LOCAL_TEST
+      PhotonNetwork.ConnectUsingSettings(); 
+      #endif
+    }
+
+    void CreateRoom()
+    {
+      PhotonNetwork.CreateRoom("SHGTest");
     }
 
     void INetworkEventHandler.Register<T>(T sender)
@@ -84,5 +93,33 @@ namespace SHG
       }
       networkEventReciever.ReceiveEvent((object[])photonEvent.CustomData);
     }
-  }
+
+    public void OnConnected()
+    {
+    }
+
+    public void OnConnectedToMaster()
+    {
+      #if LOCAL_TEST
+      this.CreateRoom();
+      Debug.LogWarning("CreateRoom");
+      #endif
+    }
+
+    public void OnDisconnected(DisconnectCause cause)
+    {
+    }
+
+    public void OnRegionListReceived(RegionHandler regionHandler)
+    {
+    }
+
+    public void OnCustomAuthenticationResponse(Dictionary<string, object> data)
+    {
+    }
+
+    public void OnCustomAuthenticationFailed(string debugMessage)
+    {
+    }
+    }
 }

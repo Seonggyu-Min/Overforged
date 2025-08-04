@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: WoodTableData
   m_EditorClassIdentifier: 
   toolName: wood table
-  prefab: {fileID: 9177546376438052479, guid: 0a00b6106ef4b3e8697aa98a3ffddc7d, type: 3}
   allowdMaterialTypes: 080000000900000005000000
   timeRequiredInSeconds: 0
   interactionTime: 0.5
   requiredInteractCount: 4
+  toolType: 4

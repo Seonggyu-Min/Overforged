@@ -65,18 +65,21 @@ namespace SHG
   public struct ToolWorkResult
   {
     public const string DURATION_TO_STAY_KEY = "DurationToStay";
+    public const string IS_DONE_KEY = "IsDone";
     public Action Trigger;
     public float DurationToStay;
+    public bool IsDone;
     
     public override string ToString()
     {
-      return ($"[{nameof(ToolWorkResult)}; {nameof(Trigger)}: {this.Trigger}; {nameof(DurationToStay)}: {this.DurationToStay};]");
+      return ($"[{nameof(ToolWorkResult)}; {nameof(Trigger)}: {this.Trigger}; {nameof(DurationToStay)}: {this.DurationToStay}; {nameof(IsDone)}: {this.IsDone};]");
     }
 
     public object ConvertToNetworkArguments()
     {
       Dictionary<string, object> args = new ();
       args[DURATION_TO_STAY_KEY] = this.DurationToStay;
+      args[IS_DONE_KEY] = this.IsDone;
       return (args);
     }
   }

@@ -28,10 +28,8 @@ namespace SHG
 
     protected override SmithingTool tool => this.anvil;
     protected override ISmithingToolEffecter effecter => this.anvilEffecter;
-
     protected override Transform materialPoint => this.materialPosition;
     ObservableValue<(float current, float total)> progress;
-
     AnvilEffecter anvilEffecter;
 
     void BeforeInteract(SmithingTool tool)
