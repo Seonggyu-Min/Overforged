@@ -16,5 +16,5 @@ MonoBehaviour:
   Name: Bow
   Image: {fileID: 0}
   ItemPrefab: {fileID: 1561835443239050545, guid: b6e83d5e2c75ca840a38544a212fb11d, type: 3}
-  Scale: {x: 1, y: 1, z: 1}
+  Scale: {x: 2, y: 2, z: 2}
   productType: 0

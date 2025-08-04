@@ -16,5 +16,5 @@ MonoBehaviour:
   Name: Axe
   Image: {fileID: 0}
   ItemPrefab: {fileID: 6420927614769115594, guid: e4497736585d20b4aa8aa9c6bf1f2245, type: 3}
-  Scale: {x: 1, y: 1, z: 1}
+  Scale: {x: 2, y: 2, z: 2}
   productType: 2
