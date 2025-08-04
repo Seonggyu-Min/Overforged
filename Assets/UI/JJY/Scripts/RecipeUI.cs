@@ -32,7 +32,7 @@ namespace JJY
         public ProductItemData curProduct => curCraft.ProductItemData;
 
         // 외부에서 레시피 데이터 받아 UI 설정
-        public void Setup(CraftData craftdata, WoodType wood, OreType ore, int id)
+        public void SetRup(CraftData craftdata, WoodType wood, OreType ore, int id)
         {
             curCraft = craftdata;
             curWood = wood;

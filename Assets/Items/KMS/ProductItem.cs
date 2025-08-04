@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MIN;
 using Unity.VisualScripting.Antlr3.Runtime;
+using UnityEditor;
 
 public class ProductItem : Item
 {
@@ -11,6 +12,9 @@ public class ProductItem : Item
     private MeshRenderer[] render;
 
     private OreType ore;
+
+    private bool isOreSet;
+    private bool isWoodSet;
     public OreType Ore
     {
         get
@@ -19,9 +23,13 @@ public class ProductItem : Item
         }
         set
         {
-            if (productData.productType == ProductType.Bow) return;
-            ore = value;
-            SetMetalicMaterial();
+            isOreSet = true;
+            if (productData.productType != ProductType.Bow)
+            {
+                ore = value;
+                SetMetalicMaterial();
+            }
+            InitHighlighter();
         }
     }
     private WoodType wood;
@@ -33,8 +41,10 @@ public class ProductItem : Item
         }
         set
         {
+            isWoodSet = true;
             wood = value;
             SetWoodenMaterial();
+            InitHighlighter();
         }
     }
     public override string Name
@@ -54,7 +64,6 @@ public class ProductItem : Item
         Instantiate(productData.ItemPrefab, model.transform);
         render = model.GetComponentsInChildren<MeshRenderer>();
     }
-
     private void SetMetalicMaterial()
     {
         switch (productData.productType)
@@ -88,6 +97,23 @@ public class ProductItem : Item
             case ProductType.Bow:
                 render[0].sharedMaterial = CurrentWoodMat;
                 break;
+        }
+    }
+
+    private void InitHighlighter()
+    {
+        if (isOreSet && isWoodSet)
+        {
+            List<Material> mat = new();
+            foreach (MeshRenderer ren in render)
+            {
+                mat.Add(ren.material);
+            }
+            highlighter = new SHG.GameObjectHighlighter(mat.ToArray());
+            for (int i = 0; i < render.Length; i++)
+            {
+                render[i].material = highlighter.HighlightedMaterials[i];
+            }
         }
     }
 }

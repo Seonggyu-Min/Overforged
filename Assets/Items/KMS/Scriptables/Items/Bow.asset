@@ -14,10 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 0
   Name: Bow
-  Image: {fileID: 21300000, guid: 6a3dd416d176d8f80badba540c97122c, type: 3}
+  Image: {fileID: 0}
   ItemPrefab: {fileID: 1561835443239050545, guid: b6e83d5e2c75ca840a38544a212fb11d, type: 3}
-  Scale: {x: 1, y: 1, z: 1}
+  Offset: {x: 0, y: 0, z: 0}
+  Rotation: {x: 90, y: 0, z: 0}
+  Scale: {x: 2, y: 2, z: 2}
   productType: 0
-  MaterialList:
-  - {fileID: 11400000, guid: 6cb14106c0dd60b41aa2edec90ec8fb6, type: 2}
-  - {fileID: 11400000, guid: 3c30c52143aa5b945a80d7d1497e9aa1, type: 2}
