@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -18,12 +19,18 @@ namespace MIN
             StartCoroutine(RoomNameUpdateRoutine());
             _exitButton.SetActive(true);
             _menuPanel.SetActive(true);
+            ResetLocalSceneLoadedProperty();
         }
 
         public override void OnDisable()
         {
             _exitButton.SetActive(false);
             _menuPanel.SetActive(false);
+        }
+
+        public override void OnJoinedRoom()
+        {
+            ResetLocalSceneLoadedProperty();
         }
 
         private IEnumerator RoomNameUpdateRoutine()
@@ -40,6 +47,22 @@ namespace MIN
             _roomNameText.text = PhotonNetwork.CurrentRoom != null
                 ? PhotonNetwork.CurrentRoom.Name
                 : "방 없음";
+        }
+
+        private void ResetLocalSceneLoadedProperty()
+        {
+            if (PhotonNetwork.InRoom)
+            {
+                ExitGames.Client.Photon.Hashtable hashtable = new();
+                hashtable[CustomPropertyKeys.localSceneLoaded] = false;
+                PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
+
+                Debug.Log("localSceneLoaded가 초기화 성공");
+            }
+            else
+            {
+                Debug.Log("방에 있지 않아 localSceneLoaded가 초기화되지 않았습니다.");
+            }
         }
     }
 }
