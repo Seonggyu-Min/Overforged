@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 0
   Name: Hammer
-  Image: {fileID: 21300000, guid: f5e464f30e233572e831218e62344a1e, type: 3}
+  Image: {fileID: 0}
   ItemPrefab: {fileID: 1459689668687645485, guid: 569c740ac9e6aa945b807094a597b155, type: 3}
   Scale: {x: 1.4, y: 1.4, z: 1.4}
   productType: 3

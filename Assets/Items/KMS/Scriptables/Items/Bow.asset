@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 0
   Name: Bow
-  Image: {fileID: 21300000, guid: 6a3dd416d176d8f80badba540c97122c, type: 3}
+  Image: {fileID: 0}
   ItemPrefab: {fileID: 1561835443239050545, guid: b6e83d5e2c75ca840a38544a212fb11d, type: 3}
   Scale: {x: 2, y: 2, z: 2}
   productType: 0

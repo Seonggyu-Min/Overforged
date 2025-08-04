@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 105
   Name: Stick
-  Image: {fileID: 21300000, guid: 373dd21e678ca814790543759832a934, type: 3}
+  Image: {fileID: 21300000, guid: 9590422118d4d794eba22740238ec8a2, type: 3}
   ItemPrefab: {fileID: 2766212503428324877, guid: a55ba290b477e1a47886b6f080d6e895, type: 3}
   Scale: {x: 2, y: 2, z: 2}
+  xOffset: 0
   materialVariation: 0
   materialType: 3
   nextMaterial: {fileID: 11400000, guid: 6cb14106c0dd60b41aa2edec90ec8fb6, type: 2}
-  guideImage: {fileID: 21300000, guid: 8d44159a77d104ab08307d8ee207b755, type: 3}
-  guideMessage: X1
+  guideImage: {fileID: 901578416, guid: f216483f8d9995dff8c06536c9cb12c7, type: 3}
+  guideMessage: 1
