@@ -53,7 +53,7 @@ public class NewProductConvey : SmithingTool
                 return (new ToolTransferResult());
             }
             return (this.ReturnWithEvent(
-                this.ReceiveProductItem(productItem), args));
+                this.ReceiveProductItem(productItem)));
                 
         }
         return (new ToolTransferResult());
