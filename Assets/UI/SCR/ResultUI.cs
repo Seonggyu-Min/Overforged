@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using MIN;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace SCR
 {
     public class ResultUI : MonoBehaviour
     {
+        [SerializeField] InGameUIManager inGameUIManager;
         [SerializeField] List<Sprite> titleSprite;
         [SerializeField] List<Color> shadowColor;
         [SerializeField] List<GameObject> titleDeco;
@@ -24,10 +27,14 @@ namespace SCR
         [SerializeField] List<Image> teamColor;
 
         [SerializeField] float closeTime;
-
         bool isWin;
 
-        public void Win()
+        public void OnResultUI(List<Photon.Realtime.Player> players)
+        {
+
+        }
+
+        private void Win()
         {
             title.sprite = titleSprite[0];
             shadow.color = shadowColor[0];
@@ -37,7 +44,7 @@ namespace SCR
             isWin = true;
         }
 
-        public void Lose()
+        private void Lose()
         {
             title.sprite = titleSprite[1];
             shadow.color = shadowColor[1];
@@ -47,7 +54,7 @@ namespace SCR
             isWin = false;
         }
 
-        public void SetScore(int team, int score)
+        private void SetScore(int team, int score)
         {
             teamColor[0].color = color.Color[team];
             teamColor[1].color = color.Color[team];
@@ -64,7 +71,7 @@ namespace SCR
             }
         }
 
-        public void AddOtherPlayer(string Nickname, int team, int Score)
+        private void AddOtherPlayer(string Nickname, int team, int Score)
         {
             foreach (ScoreStatusUser player in otherPlayers)
             {
@@ -77,10 +84,12 @@ namespace SCR
             }
         }
 
-        private IEnumerable CloseTab()
+        private IEnumerator CloseTab()
         {
             yield return new WaitForSeconds(closeTime);
             gameObject.SetActive(false);
+            inGameUIManager.GameManager.SaveTeamResult();
+            inGameUIManager.GameManager.SetGameEnd();
         }
 
     }
