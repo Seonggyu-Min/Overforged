@@ -54,7 +54,6 @@ namespace MIN
             }
         }
 
-        // TODO: 만약 1대1구조가 아니라면, 추후 승패 관련 로직을 수정해야 함.
         /// <summary>
         /// 게임이 승패 계산을 위해 호출하는 메서드.
         /// 모든 클라이언트가 해당 메서드를 호출해야합니다.
@@ -189,6 +188,35 @@ namespace MIN
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// TopTeams에 여러 팀이 있는지 확인하는 메서드.
+        /// True면 최고 점수 팀이 2개 이상입니다.
+        /// </summary>
+        public bool IsTieForWinTeam()
+        {
+            var playerList = PhotonNetwork.PlayerList;
+
+            if (playerList.Length == 0)
+            {
+                Debug.LogWarning("플레이어가 없습니다.");
+                return false;
+            }
+
+            // 팀 점수 계산
+            GetTeamScoreData(out _, out var teamScores);
+
+            if (teamScores.Count == 0)
+            {
+                Debug.LogWarning("팀 점수가 없습니다.");
+                return false;
+            }
+
+            int maxScore = teamScores.Values.Max();
+            int topTeamCount = teamScores.Values.Count(score => score == maxScore);
+
+            return topTeamCount > 1;
         }
 
         #endregion
