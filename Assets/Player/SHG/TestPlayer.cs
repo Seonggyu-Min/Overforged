@@ -39,6 +39,7 @@ namespace SHG
     string itemPrefabPath;
     float interactionDuration;
     PhotonView photonView;
+    Vector3 raycastOffset = new Vector3(0, 0.3f, 0);
 
     [Button] [PunRPC]
     void CreateItem()
@@ -102,6 +103,7 @@ namespace SHG
     {
       Debug.Log($"GrabItem {item}");
       this.HoldingItem = item;
+      this.HoldingItem.GetComponent<Rigidbody>().isKinematic = true;
       item.transform.SetParent(this.hand);
       item.transform.localPosition = Vector3.zero;
       #if !LOCAL_TEST
@@ -151,13 +153,13 @@ namespace SHG
     {
       #if UNITY_EDITOR
       Debug.DrawLine(
-        start: this.transform.position,
-        end: this.transform.position + this.transform.forward * this.interactRange,
+        start: this.transform.position + this.raycastOffset,
+        end: this.transform.position + this.raycastOffset + this.transform.forward * this.interactRange,
         color: Color.blue,
         duration: 0.5f);
       #endif
       bool isHit = Physics.SphereCast(
-        origin: this.transform.position,
+        origin: this.transform.position + this.raycastOffset,
         radius: this.interactRadius,
         direction: this.transform.forward,
         hitInfo: out RaycastHit hitInfo,
@@ -174,13 +176,13 @@ namespace SHG
     {
 #if UNITY_EDITOR
       Debug.DrawLine(
-        start: this.transform.position,
-        end: this.transform.position + this.transform.forward * this.interactRange,
+        start: this.transform.position + this.raycastOffset,
+        end: this.transform.position + this.raycastOffset + this.transform.forward * this.interactRange,
         color: Color.blue,
         duration: 0.5f);
 #endif
       bool isHit = Physics.SphereCast(
-        origin: this.transform.position,
+        origin: this.transform.position + this.raycastOffset,
         radius: this.interactRadius,
         direction: this.transform.forward,
         hitInfo: out RaycastHit hitInfo,
@@ -253,9 +255,13 @@ namespace SHG
 
     void TransferItem(IInteractableTool tool, in ToolTransferArgs args)
     {
+      if (this.HoldingItem != null) {
+        this.HoldingItem.GetComponent<Rigidbody>().isKinematic = false;
+      }
       ToolTransferResult result = tool.Transfer(args);
       this.LooseItem();
       if (result.ReceivedItem != null) {
+        Debug.Log($"ReceivedItem: {result.ReceivedItem}");
         this.GrabItem(result.ReceivedItem);
       }
     }

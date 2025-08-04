@@ -6,6 +6,16 @@ namespace SHG
 {
   public class GauageImageUI : MonoBehaviour
   {
+    const float ANIMATE_LERP_STEP = 10f;
+    const float ANIMATE_LERP_THRESHOLD = 0.01f;
+
+    public Sprite WorkSprite {
+      get => this.workSprite;
+      set {
+        this.workSprite = value;
+        this.SetWorkImage();
+      }
+    }
     [SerializeField] Slider gauageImage;
     [SerializeField] Sprite workSprite;
     [SerializeField] Image workIcon;
@@ -18,15 +28,12 @@ namespace SHG
     public ObservableValue<(float, float)> WatchingFloatValue
     {
       get => this.watchingFloatValue;
-      set
-      {
-        if (this.watchingFloatValue != null)
-        {
+      set {
+        if (this.watchingFloatValue != null) {
           this.watchingFloatValue.OnChanged -= this.OnValueChanged;
         }
         this.watchingFloatValue = value;
-        if (value != null)
-        {
+        if (value != null) {
           value.OnChanged += this.OnValueChanged;
           this.OnValueChanged(value.Value);
         }
@@ -35,15 +42,12 @@ namespace SHG
     public ObservableValue<(int, int)> WatchingIntValue
     {
       get => this.watchingIntValue;
-      set
-      {
-        if (this.watchingIntValue != null)
-        {
+      set {
+        if (this.watchingIntValue != null) {
           this.watchingIntValue.OnChanged -= this.OnValueChanged;
         }
         this.watchingIntValue = value;
-        if (value != null)
-        {
+        if (value != null) {
           value.OnChanged += this.OnValueChanged;
           this.OnValueChanged(value.Value);
         }
@@ -54,49 +58,33 @@ namespace SHG
     ObservableValue<(int, int)> watchingIntValue;
     bool isAnimating;
 
-    float destValue = 1f;
-    const float ANIMATE_LERP_STEP = 10f;
-    const float ANIMATE_LERP_THRESHOLD = 0.01f;
+    float destValue;
 
     // Start is called before the first frame update
     void OnEnable()
     {
       SetWorkImage();
-      if (this.watchingFloatValue != null)
-      {
-        this.watchingFloatValue.OnChanged += this.OnValueChanged;
+      if (this.watchingFloatValue != null) {
+        var (current, max) = this.watchingFloatValue.Value;
+        this.gauageImage.value = Math.Clamp(current /max, 0, 1);
       }
-      else if (this.watchingIntValue != null)
-      {
-        this.watchingIntValue.OnChanged -= this.OnValueChanged;
-      }
-    }
-
-    void OnDisable()
-    {
-      if (this.watchingFloatValue != null)
-      {
-        this.watchingFloatValue.OnChanged -= this.OnValueChanged;
-      }
-      else if (this.watchingIntValue != null)
-      {
-        this.watchingIntValue.OnChanged -= this.OnValueChanged;
+      else if (this.watchingIntValue != null) {
+        var (current, max) = this.watchingIntValue.Value;
+        this.gauageImage.value = Math.Clamp(current /max, 0, 1);
       }
     }
 
     // Update is called once per frame
     void Update()
     {
-      if (this.isAnimating)
-      {
+      if (this.isAnimating) {
         if (Math.Abs(this.gauageImage.value - this.destValue)
           < ANIMATE_LERP_THRESHOLD)
         {
           this.gauageImage.value = this.destValue;
           this.isAnimating = false;
         }
-        else
-        {
+        else {
           this.gauageImage.value = Mathf.Lerp(
             this.gauageImage.value,
             this.destValue,
@@ -114,12 +102,10 @@ namespace SHG
     void OnValueChanged((float current, float max) value)
     {
       if (this.gauageImage.value != this.destValue ||
-        value.current <= 0f)
-      {
+        value.current <= 0f) {
         this.gauageImage.value = this.destValue;
       }
-      this.destValue = Math.Clamp(
-        value.current / value.max, 0, 1);
+      this.destValue = Math.Clamp(value.current / value.max, 0, 1);
       this.isAnimating = true;
     }
   }

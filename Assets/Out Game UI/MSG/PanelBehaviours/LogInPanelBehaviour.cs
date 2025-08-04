@@ -29,12 +29,21 @@ namespace MIN
         [SerializeField] private Button _loginButton;
         [SerializeField] private Button _signUpButton;
         [SerializeField] private PopupUIBehaviour _popup;
+
+        [SerializeField] private Toggle _rememberMeToggle;
+        private const string RememberMeKey = "RememberMe";
+        private const string SavedEmailKey = "SavedEmail";
+        private const string SavedPasswordKey = "SavedPassword";
         #endregion
 
 
         #region Unity Methods
 
-        private void OnEnable() => ClearText();
+        private void OnEnable()
+        {
+            ClearText();
+            StartCoroutine(LoadRememberedCredentials());
+        }
 
 
         #endregion
@@ -130,6 +139,21 @@ namespace MIN
                                     PhotonNetwork.ConnectUsingSettings();
                                 }
 
+                                // 로그인 성공 후, Remember Me 기능 처리
+                                if (_rememberMeToggle.isOn)
+                                {
+                                    PlayerPrefs.SetInt(RememberMeKey, 1);
+                                    PlayerPrefs.SetString(SavedEmailKey, _idInputField.text);
+                                    PlayerPrefs.SetString(SavedPasswordKey, _passwordInputField.text);
+                                }
+                                else
+                                {
+                                    PlayerPrefs.SetInt(RememberMeKey, 0);
+                                    PlayerPrefs.DeleteKey(SavedEmailKey);
+                                    PlayerPrefs.DeleteKey(SavedPasswordKey);
+                                }
+                                PlayerPrefs.Save();
+
                                 _popup.ShowInfoOneSecond("로그인 성공, 로딩화면으로 이동합니다.");
                                 _outGameUIManager.Hide("Log In Panel", () =>
                                 {
@@ -224,6 +248,27 @@ namespace MIN
         {
             _idInputField.text = string.Empty;
             _passwordInputField.text = string.Empty;
+        }
+
+        // TODO: 평문 저장이 위험하니 암호화 저장으로 변경 필요
+        private IEnumerator LoadRememberedCredentials()
+        {
+            yield return null; // PlayerPrefs 로드가 완료될 때까지 잠시 대기
+
+            bool rememberMe = PlayerPrefs.GetInt(RememberMeKey, 0) == 1;
+            Debug.Log($"RememberMe: {rememberMe}");
+
+            _rememberMeToggle.isOn = rememberMe;
+
+            if (rememberMe)
+            {
+                string savedEmail = PlayerPrefs.GetString(SavedEmailKey, "");
+                string savedPassword = PlayerPrefs.GetString(SavedPasswordKey, "");
+                Debug.Log($"Loaded Email: {savedEmail}, Password: {savedPassword}");
+
+                _idInputField.text = savedEmail;
+                _passwordInputField.text = savedPassword;
+            }
         }
 
         #endregion

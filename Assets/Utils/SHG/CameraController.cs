@@ -83,6 +83,7 @@ namespace SHG
       else {
         this.cameraFollow = this.cameraFollowObject.GetComponent<Rigidbody>();
       }
+      this.cameraFollowObject.gameObject.layer = LayerMask.NameToLayer("UI");
       if (this.cameraLookObject == null) {
         this.cameraLookObject = new GameObject(nameof(cameraLookObject)).transform;
         this.cameraLook = this.cameraLookObject.gameObject.AddComponent<Rigidbody>();
@@ -91,6 +92,8 @@ namespace SHG
 
         this.cameraLook = this.cameraLookObject.GetComponent<Rigidbody>();
       }
+
+      this.cameraLook.gameObject.layer = LayerMask.NameToLayer("UI");
       this.cameraFollow.useGravity = false;
       this.cameraFollow.rotation = this.cameraQuaternion;
       this.cameraLook.useGravity = false;
@@ -114,6 +117,8 @@ namespace SHG
     {
       if (this.cameraRoutine == null) {
         if (!this.cameraCommandQueue.TryDequeue(out (IEnumerator routine, Action<CameraController> onEnded) command)) {
+//          this.cameraFollow.position = this.Player.position + this.followOffset;
+//          this.cameraLook.position = this.Player.position;
           this.cameraLook.velocity = (this.Player.position - this.cameraLook.position) * this.cameraFollowSpeed;
           this.cameraFollow.velocity = 
             (this.Player.position + this.followOffset - this.cameraFollow.position ) * this.cameraFollowSpeed;

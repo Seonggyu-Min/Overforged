@@ -14,7 +14,7 @@ namespace SHG
     }
 
     public abstract bool IsFinished { get; }
-    public MaterialItem HoldingItem { get; protected set; }
+    public MaterialItem HoldingMaterial { get; protected set; }
     public MaterialVariation[] AllowedMaterials => this.Data.AllowedMaterials;
     public Action<SmithingTool> BeforeInteract;
     public Action<SmithingTool> AfterInteract;
@@ -23,11 +23,12 @@ namespace SHG
     public float Progress => this.CalcProgress();
     public InteractionType InteractionToTrigger { get; protected set; }
     public Action<InteractionType> OnInteractionTriggered;
+    public Action<ItemData> OnMaterialChanged;
 
     protected SmithingToolData Data;
     protected abstract bool isPlayerMovable { get; }
     protected abstract bool isRemamingTimeElapse { get; }
-    protected virtual Item ItemToReturn => this.HoldingItem;
+    protected virtual Item ItemToReturn => this.HoldingMaterial;
     protected float DefaultRequiredTime => this.Data.TimeRequiredInSeconds;
     protected float InteractionTime => this.Data.InteractionTime;
     protected int DefaultRequiredInteractCount => this.Data.RequiredInteractCount;
@@ -42,7 +43,7 @@ namespace SHG
     public virtual void OnUpdate(float deltaTime)
     {
       if (!this.isRemamingTimeElapse ||
-      this.HoldingItem == null || this.IsFinished) {
+      this.HoldingMaterial == null || this.IsFinished) {
         return;
       }
       this.RemainingTime -= deltaTime;
@@ -65,10 +66,9 @@ namespace SHG
           #endif
         }
         return (this.ReturnWithEvent(
-            this.ReceiveMaterialItem(materialItem), args));
+            this.ReceiveMaterialItem(materialItem)));
       } 
-      return (this.ReturnWithEvent(
-          this.ReturnItem(), args));    
+      return (this.ReturnWithEvent(this.ReturnItem()));    
     }
 
     public abstract bool CanWork();
@@ -97,7 +97,7 @@ namespace SHG
 
     protected ToolTransferResult ReceiveMaterialItem(MaterialItem materialItem)
     {
-      this.HoldingItem = materialItem;
+      this.HoldingMaterial = materialItem;
       this.InteractionToTrigger = InteractionType.ReceivedItem;
       ToolTransferResult result = new ToolTransferResult {
         ReceivedItem = null,
@@ -110,7 +110,7 @@ namespace SHG
     {
       this.InteractionToTrigger = InteractionType.ReturnItem;
       var item = this.ItemToReturn;
-      this.HoldingItem = null;
+      this.HoldingMaterial = null;
       this.ResetInteraction();
       return (new ToolTransferResult { 
         ReceivedItem = item,
@@ -118,7 +118,7 @@ namespace SHG
         });
     }
 
-    protected ToolTransferResult ReturnWithEvent(in ToolTransferResult result, in ToolTransferArgs args)
+    protected ToolTransferResult ReturnWithEvent(in ToolTransferResult result)
     {
       this.AfterInteract?.Invoke(this);
       return (result);
@@ -138,7 +138,8 @@ namespace SHG
 
     protected ToolWorkResult ChangeMaterial(float durationToStay)
     {
-      this.HoldingItem.ChangeToNext();
+      this.HoldingMaterial.ChangeToNext();
+      this.OnMaterialChanged?.Invoke(this.HoldingMaterial.Data);
       this.InteractionToTrigger = InteractionType.Work;
       this.ResetInteraction();
       return (new ToolWorkResult {

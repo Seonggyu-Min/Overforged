@@ -43,25 +43,30 @@ namespace SHG
       else {
         this.codeBySenders[sender] = this.customCode;
         this.receiverByCodes[this.customCode] = sender;
-        Debug.Log($"register {sender} for {this.customCode}");
         this.customCode += 1;
       }
     }
 
-    void INetworkEventHandler.SendEvent<T>(T sender, object[] data)
+    void INetworkEventHandler.SendEvent<T>(T sender, object[] data, INetworkEventHandler.EventReceiver receiver)
     {
       if (!this.codeBySenders.TryGetValue(sender, out byte eventCode)) {
         #if UNITY_EDITOR
         throw (new ApplicationException($"{sender} is not registered"));
         #endif
       }
-      RaiseEventOptions raiseEventOptions = new RaiseEventOptions
-      {
-        Receivers = ReceiverGroup.Others,
+      RaiseEventOptions raiseEventOptions = new RaiseEventOptions {
+        Receivers = receiver switch {
+          INetworkEventHandler.EventReceiver.Master => 
+            Photon.Realtime.ReceiverGroup.MasterClient,
+          INetworkEventHandler.EventReceiver.All => 
+           Photon.Realtime.ReceiverGroup.All,
+          INetworkEventHandler.EventReceiver.Others => 
+           Photon.Realtime.ReceiverGroup.Others,
+          _ => throw (new ArgumentException($"{nameof(INetworkEventHandler.SendEvent)}: invalid {nameof(receiver)}: {receiver}"))
+        },
         CachingOption = EventCaching.AddToRoomCache
       };
-      SendOptions sendOptions = new SendOptions
-      {
+      SendOptions sendOptions = new SendOptions {
         Reliability = true
       };
       PhotonNetwork.RaiseEvent(

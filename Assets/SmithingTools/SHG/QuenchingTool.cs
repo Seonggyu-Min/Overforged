@@ -23,10 +23,11 @@ namespace SHG
     {
       if (args.ItemToGive != null) {
         if (args.ItemToGive is MaterialItem materialItem) {
-          if (this.HoldingItem != null) {
-            return (materialItem.IsHot);
+          if (this.HoldingMaterial != null) {
+            return (false);
           }
           return (
+            materialItem.IsHot &&
             Array.IndexOf(
               this.AllowedMaterials, materialItem.Variation) != -1);
         }
@@ -34,7 +35,7 @@ namespace SHG
           return (false);
         }
       }
-      return (this.HoldingItem != null && this.IsFinished);
+      return (this.HoldingMaterial != null && this.IsFinished);
     }
 
     public override ToolTransferResult Transfer(ToolTransferArgs args)
@@ -68,9 +69,9 @@ namespace SHG
         this.Temparature = Math.Max(
           this.Temparature * TEMP_DECRESE_MULTIPLYER, MIN_TEMPARATURE);
       }
-      if (this.HoldingItem != null && 
+      if (this.HoldingMaterial != null && 
         !wasFinished && this.IsFinished) {
-        this.HoldingItem.Cool();
+        this.HoldingMaterial.Cool();
         this.OnFinished?.Invoke();
       }
     }

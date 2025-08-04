@@ -20,7 +20,8 @@ namespace SHG
     {
       if (args.ItemToGive != null) {
         if (args.ItemToGive is MaterialItem materialItem) {
-          return (Array.IndexOf(
+          return ( materialItem.IsHot &&
+            Array.IndexOf(
               this.AllowedMaterials, materialItem.Variation) != -1);
         }
         else {
@@ -32,7 +33,7 @@ namespace SHG
 
     public override bool CanWork()
     {
-      if (this.HoldingItem == null) {
+      if (this.HoldingMaterial == null) {
         return (false);
       }
       // 로테이션 방식으로 계속 변경

@@ -23,6 +23,7 @@ namespace MIN
             if (PhotonNetwork.LocalPlayer == PhotonNetwork.MasterClient)
             {
                 _gameManager.SetGameEnd();
+                _gameManager.SaveTeamResult();
             }
             else
             {
@@ -32,36 +33,42 @@ namespace MIN
 
         public void OnClickCalculateWinLoseButton()
         {
-            CalculatedPlayer calculatedPlayer = _gameManager.CalculateResult();
+            CalculatedTeam calculatedTeams = _gameManager.CalculateResult();
 
-            foreach (var p in calculatedPlayer.WinPlayers)
+            foreach (var p in calculatedTeams.WinTeams)
             {
-                if (p == PhotonNetwork.LocalPlayer)
+                foreach (var player in p)
                 {
-                    // 승리 UI
+                    if (player == PhotonNetwork.LocalPlayer)
+                    {
+                        // 승리 UI
+                        Debug.Log($"승리한 플레이어: {player.NickName}");
+                    }
                 }
-
-                Debug.Log($"승리한 플레이어: {p.NickName}");
             }
 
-            foreach (var p in calculatedPlayer.LosePlayers)
+            foreach (var p in calculatedTeams.LoseTeams)
             {
-                if (p == PhotonNetwork.LocalPlayer)
+                foreach (var player in p)
                 {
-                    // 패배 UI
+                    if (player == PhotonNetwork.LocalPlayer)
+                    {
+                        // 패배 UI
+                        Debug.Log($"패배한 플레이어: {player.NickName}");
+                    }
                 }
-
-                Debug.Log($"패배한 플레이어: {p.NickName}");
             }
 
-            foreach (var p in calculatedPlayer.DrawPlayers)
+            foreach (var p in calculatedTeams.DrawTeams)
             {
-                if (p == PhotonNetwork.LocalPlayer)
+                foreach (var player in p)
                 {
-                    // 무승부 UI
+                    if (player == PhotonNetwork.LocalPlayer)
+                    {
+                        // 무승부 UI
+                        Debug.Log($"무승부 플레이어: {player.NickName}");
+                    }
                 }
-
-                Debug.Log($"무승부 플레이어: {p.NickName}");
             }
             Debug.Log("승패 계산 요청을 보냈습니다.");
         }

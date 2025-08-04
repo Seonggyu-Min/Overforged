@@ -1,7 +1,6 @@
 using UnityEngine;
 using EditorAttributes;
 using UnityEngine.UI;
-using TMPro;
 using Void = EditorAttributes.Void;
 using Zenject;
 
@@ -9,6 +8,7 @@ namespace SHG
 {
   public class FurnaceComponent : SmithingToolComponent
   {
+    static readonly Vector3 SCALE_IN_FURNACE = new Vector3(0.5f, 0.5f, 0.5f);
     [Inject]
     IAudioLibrary audioLibrary;
     [SerializeField] [Required()]
@@ -19,22 +19,8 @@ namespace SHG
     FurnaceEffecter furnaceEffecter;
     [SerializeField] [Required]
     Transform materialPosition;
-    [SerializeField] [Required]
-    GauageImageUI progressUI;
-
-    [SerializeField] [VerticalGroup(10f, true, nameof(uiCanvas), nameof(itemImage), nameof(itemNameLabel), nameof(tempLabel))]
-    Void uiGroup;
-    [SerializeField] [HideInInspector]
-    Canvas uiCanvas;
-    [SerializeField] [HideInInspector]
-    Image itemImage;
-    [SerializeField] [HideInInspector]
-    TMP_Text itemNameLabel;
-    [SerializeField] [HideInInspector]
-    TMP_Text tempLabel;
     bool isIgnited;
-    [SerializeField] MeshRenderer modeling;
-
+    [SerializeField] MeshRenderer model;
     [SerializeField] [VerticalGroup(10f, true, nameof(HightlightColor), nameof(normalColor), nameof(ignitedColor))]
     Void colorGroup;
     [SerializeField] [HideInInspector]
@@ -72,9 +58,6 @@ namespace SHG
           .gameObject.SetActive(false);
         this.burningSfx = null;
       }
-      //if (this.effecter.IsStateOn(ISmithingToolEffecter.State.Working)) {
-      //  this.effecter.ToggleState(ISmithingToolEffecter.State.Working);
-      //}
     }
 
     void BeforeInteract(SmithingTool tool)
@@ -93,13 +76,11 @@ namespace SHG
         return;
       }
       Debug.Log($"After Interact");
-      if (this.uiCanvas.enabled && tool.HoldingItem == null)
-      {
-        this.uiCanvas.enabled = false;
+      if (tool.HoldingMaterial != null) {
+        this.SetItemUI(tool.HoldingMaterial);
       }
-      else if (!this.uiCanvas.enabled && tool.HoldingItem != null)
-      {
-        this.SetItemUI(tool.HoldingItem);
+      else {
+        this.HideItemUI();
       }
       if (this.isIgnited != this.furnace.IsIgnited)
       {
@@ -117,6 +98,18 @@ namespace SHG
       }
     }
 
+    public override ToolTransferResult Transfer(ToolTransferArgs args)
+    {
+      if (args.ItemToGive != null) {
+        args.ItemToGive.transform.localScale = SCALE_IN_FURNACE;
+      }
+      var result = base.Transfer(args);
+      if (result.ReceivedItem != null) {
+        result.ReceivedItem.transform.localScale = Vector3.one;
+      }
+      return (result);
+    }
+
     void PlayBurningSound()
     {
       this.burningSfx = this.audioLibrary.PlayRandomSfx(
@@ -125,22 +118,24 @@ namespace SHG
         .SetLoop(true);
     }
 
+    void HideItemUI()
+    {
+      this.HideProgressUI();
+    }
+
     void SetItemUI(Item item)
     {
-      this.itemImage.sprite = item.Data.Image;
-      this.itemNameLabel.text = item.Data.Name;
-      this.uiCanvas.enabled = true;
+      this.ShowProgressUI();
       this.progress.Value = (this.furnace.Progress, 1f);
     }
 
     void OnFinished()
     {
-      this.itemNameLabel.text += " (done)";
     }
 
     protected override void Awake()
     {
-      base.meshRenderer = this.modeling;
+      base.meshRenderer = this.model;
       base.Awake();
       this.furnace = new Furnace(this.furnaceData);
       this.furnace.BeforeInteract += this.BeforeInteract;
@@ -150,7 +145,6 @@ namespace SHG
         furnace: this.furnace,
         fireParticle: this.fireParticle,
         sparkParticle: this.sparkParticle);
-      this.uiCanvas.enabled = false;
       this.progress = new ((0f, 1f));
       this.progressUI.WatchingFloatValue = this.progress;
     }
@@ -159,7 +153,6 @@ namespace SHG
     protected override void Update()
     {
       base.Update();
-      this.tempLabel.text = $"Temp: {this.furnace.Temparature}";
       this.progress.Value = (this.furnace.Progress, 1f);
     }
   }

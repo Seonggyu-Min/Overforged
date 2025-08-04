@@ -32,7 +32,7 @@ namespace SHG
 
     public override bool CanWork()
     {
-      if (this.HoldingItem == null) {
+      if (this.HoldingMaterial == null) {
         return (false);
       }
       if (this.IsFinished) {
