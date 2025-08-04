@@ -37,12 +37,13 @@ namespace MIN
         private void UpdateLastSeen()
         {
             string uid = _firebaseManager.Auth.CurrentUser.UserId;
-            DatabaseReference statusRef = _firebaseManager.Database.GetReference("lobbyStatus").Child(uid);
+            DatabaseReference statusRef = _firebaseManager.Database.GetReference("onlineStatus").Child(uid);
 
             Dictionary<string, object> updateData = new()
             {
                 ["lastSeen"] = ServerValue.Timestamp,
-                ["isGaming"] = true
+                ["isGaming"] = true,
+                ["nickname"] = _firebaseManager.Auth.CurrentUser.DisplayName
             };
 
             statusRef.UpdateChildrenAsync(updateData);
