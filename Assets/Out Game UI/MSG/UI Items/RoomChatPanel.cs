@@ -16,6 +16,10 @@ namespace MIN
         [SerializeField] private Transform _chatContentParent;
         [SerializeField] private PhotonView _photonView;
 
+        private void OnEnable()
+        {
+            ClearChatBox();
+        }
 
         public void OnClickSendButton()
         {
@@ -41,6 +45,14 @@ namespace MIN
             GameObject chatBoxObject = Instantiate(_chatBoxPrefab, _chatContentParent);
             ChatBoxItem chatBoxItem = chatBoxObject.GetComponent<ChatBoxItem>();
             chatBoxItem.Init(sender, message);
+        }
+
+        private void ClearChatBox()
+        {
+            foreach (Transform child in _chatContentParent)
+            {
+                Destroy(child.gameObject);
+            }
         }
     }
 }
