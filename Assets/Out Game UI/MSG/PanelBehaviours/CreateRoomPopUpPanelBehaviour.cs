@@ -127,11 +127,21 @@ namespace MIN
             }
             else
             {
+                Hashtable normalProperties = new Hashtable
+                {
+                    { CustomPropertyKeys.MapId, 0 }
+                };
+
                 // 일반 공개방은 프로퍼티 생략
                 roomOptions = new RoomOptions
                 {
                     MaxPlayers = (byte)_maxPlayerCount,
                     PublishUserId = true,
+                    CustomRoomProperties = normalProperties,
+                    CustomRoomPropertiesForLobby = new string[]
+                    {
+                        CustomPropertyKeys.MapId
+                    }
                 };
             }
 
