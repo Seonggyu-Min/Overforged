@@ -16,5 +16,7 @@ MonoBehaviour:
   Name: Sword
   Image: {fileID: 21300000, guid: e6d425bfd89ca8beb9e52643096906e4, type: 3}
   ItemPrefab: {fileID: 727144303207958803, guid: 141351361084ffb429b43216fa442c39, type: 3}
-  Scale: {x: 1.5, y: 1.5, z: 1.5}
+  Offset: {x: 0, y: 0, z: -0.5}
+  Rotation: {x: 90, y: 0, z: 0}
+  Scale: {x: 2.3, y: 2.3, z: 2.3}
   productType: 1

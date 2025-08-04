@@ -36,7 +36,8 @@ public abstract class Item : MonoBehaviourPun, ICarryable
         {
             data = value;
             model.transform.localScale = data.Scale;
-            model.transform.localPosition = new Vector3(data.xOffset, 0, 0);
+            model.transform.localPosition = data.Offset;
+            model.transform.localRotation = Quaternion.Euler(data.Rotation);
             InitItemData(data);
         }
     }
