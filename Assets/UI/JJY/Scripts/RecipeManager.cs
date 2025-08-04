@@ -15,7 +15,7 @@ namespace JJY
         [SerializeField] private GameObject recipeUIPrefab;
         private int recipeUICounter = 0; // 유니크 ID용 카운터
 
-        private List<RecipeUI> curUIs = new();
+        private List<SCR.RecipeUI> curUIs = new();
 
         [SerializeField] private ItemDataList itemDataList;
         [SerializeField] private MaterialData materialData;
@@ -73,7 +73,7 @@ namespace JJY
             }
             //RecipeData recipe = allRecipes[index];
             GameObject go = Instantiate(recipeUIPrefab, recipeUIParent);
-            RecipeUI ui = go.GetComponent<RecipeUI>();
+            SCR.RecipeUI ui = go.GetComponent<SCR.RecipeUI>();
 
             //ui.Setup(recipe, uiId);
             ui.Setup(prod, wood, ore, uiId);
@@ -109,13 +109,13 @@ namespace JJY
         public void FulfillRecipe(RecipeData targetRecipe) // 출고시 호출
         {
             // 중복된 레시피중 하나만 제거하기 위함.
-            RecipeUI targetUI = curUIs.FirstOrDefault(ui => ui.curRecipe == targetRecipe);
+            SCR.RecipeUI targetUI = curUIs.FirstOrDefault(ui => ui.curRecipe == targetRecipe);
             if (targetUI != null)
             {
                 photonView.RPC(nameof(RPC_RemoveRecipe), RpcTarget.All, targetUI.uniqueID);
             }
         }
-        RecipeUI targetUI = null;
+        SCR.RecipeUI targetUI = null;
         public bool Check(ProductItemData data, OreType ore, WoodType wood) // 출고시 호출
         {
             // 중복된 레시피중 하나만 제거하기 위함.
