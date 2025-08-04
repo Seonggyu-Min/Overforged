@@ -28,5 +28,7 @@ public class ItemData : ScriptableObject
 
     public Vector3 Scale = new Vector3(1, 1, 1);
 
+    public float xOffset;
+
 }
 
