@@ -83,6 +83,9 @@ namespace MIN
                 return;
             }
 
+            RoomOptions roomOptions;
+
+            // 비밀방일 때 커스텀 프로퍼티 설정
             if (_secretRoomToggle.isOn)
             {
                 if (string.IsNullOrEmpty(_passWordInputField.text))
@@ -100,40 +103,39 @@ namespace MIN
                     _popup.ShowInfo("비밀 방의 비밀번호는 16자리 이하이어야 합니다.");
                     return;
                 }
-            }
 
-            Hashtable customProperties = new Hashtable
-            {
-                { CustomPropertyKeys.IsSecret, _secretRoomToggle.isOn },
-                { CustomPropertyKeys.Password, _secretRoomToggle.isOn ? _passWordInputField.text : string.Empty }
-            };
+                // 비밀방용 커스텀 프로퍼티
+                Hashtable secretProperties = new Hashtable
+                {
+                    { CustomPropertyKeys.IsSecret, true },
+                    { CustomPropertyKeys.Password, _passWordInputField.text },
+                    { CustomPropertyKeys.MapId, 0 }
+                };
 
-            if (_secretRoomToggle.isOn)
-            {
-                RoomOptions roomOptions = new RoomOptions
+                roomOptions = new RoomOptions
                 {
                     MaxPlayers = (byte)_maxPlayerCount,
                     PublishUserId = true,
-                    //IsOpen = true,
-                    //IsVisible = true,
-                    CustomRoomProperties = customProperties,
-                    CustomRoomPropertiesForLobby = new string[] { CustomPropertyKeys.IsSecret, CustomPropertyKeys.Password },
+                    CustomRoomProperties = secretProperties,
+                    CustomRoomPropertiesForLobby = new string[]
+                    {
+                        CustomPropertyKeys.IsSecret,
+                        CustomPropertyKeys.Password,
+                        CustomPropertyKeys.MapId
+                    }
                 };
-
-                PhotonNetwork.CreateRoom(_roomNameInputField.text, roomOptions);
             }
             else
             {
-                RoomOptions roomOptions = new RoomOptions
+                // 일반 공개방은 프로퍼티 생략
+                roomOptions = new RoomOptions
                 {
                     MaxPlayers = (byte)_maxPlayerCount,
-                    //IsOpen = true,
-                    //IsVisible = true,
-                    PublishUserId = true
+                    PublishUserId = true,
                 };
-
-                PhotonNetwork.CreateRoom(_roomNameInputField.text, roomOptions);
             }
+
+            PhotonNetwork.CreateRoom(_roomNameInputField.text, roomOptions);
 
             _outGameUIManager.CloseTopPanel();
             _outGameUIManager.Hide("Lobby Panel", () =>
