@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using SHG;
 
 
 
 
-public class Item : MonoBehaviourPun, ICarryable
+public abstract class Item : MonoBehaviourPun, ICarryable
 {
 
     [SerializeField] protected MaterialData matCatalog;
@@ -15,6 +16,8 @@ public class Item : MonoBehaviourPun, ICarryable
     protected ItemData data;
 
     public virtual string Name { get; }
+
+    protected GameObjectHighlighter highlighter;
 
     private BoxCollider collider;
     private Rigidbody rigid;
@@ -33,11 +36,15 @@ public class Item : MonoBehaviourPun, ICarryable
         {
             data = value;
             model.transform.localScale = data.Scale;
+            model.transform.localPosition = new Vector3(data.xOffset, 0, 0);
             InitItemData(data);
         }
     }
-    protected virtual void InitItemData(ItemData itemdata)
+    protected abstract void InitItemData(ItemData itemdata);
+
+    public virtual void Hightlight(Color color)
     {
+        highlighter.HighlightInstantly(color);
     }
 
     protected virtual void Awake()
@@ -65,6 +72,11 @@ public class Item : MonoBehaviourPun, ICarryable
         collider.isTrigger = false;
         rigid.useGravity = true;
         rigid.isKinematic = false;
+    }
+
+    void Update()
+    {
+        highlighter.OnUpdate(Time.deltaTime);
     }
 
 
