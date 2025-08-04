@@ -36,15 +36,40 @@ namespace SCR
         [SerializeField] float closeTime;
 
         bool isWin;
+        private Coroutine closeCO;
 
-        private void OnEnable()
+        //private void OnEnable()
+        //{
+        //    CheckLocalWin();
+        //    SetScore();
+        //    AddOtherPlayer(); // 테스트용 호출
+        //    StartCoroutine(CloseTab());
+        //}
+
+
+        public void OnResultUI(List<Photon.Realtime.Player> players)
         {
             CheckLocalWin();
             SetScore();
-            AddOtherPlayer(); // 테스트용 호출
+            AddOtherPlayer(players);
+
+            if (closeCO != null)
+            {
+                StopCoroutine(closeCO);
+            }
+            closeCO = StartCoroutine(CloseTab());
         }
 
-        public void Win()
+        private void OnDisable()
+        {
+            if (closeCO != null)
+            {
+                StopCoroutine(closeCO);
+            }
+        }
+
+
+        private void Win()
         {
             title.sprite = titleSprite[0];
             shadow.color = shadowColor[0];
@@ -55,7 +80,7 @@ namespace SCR
             isWin = true;
         }
 
-        public void Lose()
+        private void Lose()
         {
             title.sprite = titleSprite[1];
             shadow.color = shadowColor[1];
@@ -77,7 +102,7 @@ namespace SCR
             isWin = false;
         }
 
-        public void SetScore()
+        private void SetScore()
         {
             int team = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.TeamColor];
             int score = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.Score];
@@ -106,7 +131,7 @@ namespace SCR
         /// 다른 플레이어의 닉네임, 팀 컬러, 점수 표기.
         /// InGameUIManager에서 호출해야되는 메서드입니다.
         /// </summary>
-        public void AddOtherPlayer(List<Photon.Realtime.Player> players)
+        private void AddOtherPlayer(List<Photon.Realtime.Player> players)
         {
             players.RemoveAll(p => p == PhotonNetwork.LocalPlayer);
 
@@ -138,7 +163,7 @@ namespace SCR
         // 테스트용 메서드
         // 우선 테스트용으로 자기가 불러오기
         // 원래는 중간에 나간 사람도 표기가 되어야하기 때문에 InGameUIManager에서 플레이어 리스트를 전달해야 됨
-        public void AddOtherPlayer()
+        private void AddOtherPlayer()
         {
             List<Photon.Realtime.Player> players = new(PhotonNetwork.PlayerListOthers);
             players.RemoveAll(p => p == PhotonNetwork.LocalPlayer);
@@ -170,7 +195,7 @@ namespace SCR
             }
         }
 
-        private IEnumerable CloseTab()
+        private IEnumerator CloseTab()
         {
             yield return new WaitForSeconds(closeTime);
             gameObject.SetActive(false);

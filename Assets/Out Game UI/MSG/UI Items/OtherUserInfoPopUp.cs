@@ -9,9 +9,9 @@ using Zenject;
 
 namespace MIN
 {
-    public class UserInfoPopUp : MonoBehaviour
+    public class OtherUserInfoPopUp : MonoBehaviour
     {
-        [Inject] IFirebaseManager _firebaseManager;
+        private IFirebaseManager _firebaseManager;
 
         [SerializeField] private TMP_Text _nickNameText;
         [SerializeField] private TMP_Text _levelText;
@@ -21,14 +21,10 @@ namespace MIN
         [SerializeField] private TMP_Text _winRateText;
 
 
-        private void OnEnable()
+        public void SetText(string uid, IFirebaseManager firebaseManager)
         {
-            SetText();
-        }
+            _firebaseManager = firebaseManager;
 
-        private void SetText()
-        {
-            string uid = _firebaseManager.Auth.CurrentUser.UserId;
             DatabaseReference userRef = _firebaseManager.Database.GetReference("users").Child(uid);
 
             userRef.GetValueAsync().ContinueWithOnMainThread(task =>
@@ -72,6 +68,12 @@ namespace MIN
                     Debug.LogWarning("사용자 정보 불러오기 실패");
                 }
             });
+        }
+
+        // TODO: 생성 및 Destroy하는 구조 변경
+        public void OnClickCloseButton()
+        {
+            Destroy(gameObject);
         }
     }
 }
