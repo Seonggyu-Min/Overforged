@@ -66,11 +66,4 @@ public class RailCube : MonoBehaviour
             snappingTargets.Remove(targetTransform);
         }
     }
-
-    // 무빙 워커의 이동 방향을 에디터에서 시각화하기 위함
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, transform.TransformDirection(moveDirection) * 1f);
-    }
 }

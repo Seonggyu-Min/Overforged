@@ -17,10 +17,10 @@ namespace SCR
         private string localSceneLoaded = "LocalSceneLoaded";
         private string Score = "Score";
 
-        [SerializeField] List<MapData> mapList;
         [SerializeField] CurrentTimeUI currentTimeUI;
         [SerializeField] ScoreStatusUI scoreStatusUI;
         [SerializeField] WaitingUI waitingUI;
+        public OrderUI OrderUI { get => orderUI; }
         [SerializeField] OrderUI orderUI;
         [SerializeField] ResultUI resultUI;
         [Inject] public IGameManager GameManager;
@@ -41,19 +41,6 @@ namespace SCR
             IsWaiting = true;
             IsEnd = false;
             IsLastChance = false;
-        }
-
-        private void Start()
-        {
-            // 지정된 맵 생성
-            Hashtable roomProps = PhotonNetwork.CurrentRoom.CustomProperties;
-            if (roomProps.ContainsKey("MapId"))
-            {
-                mapList[(int)roomProps["MapId"]].gameObject.SetActive(true);
-            }
-
-            // 접속했다는 신호를 보냄
-            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { localSceneLoaded, true } });
         }
 
         public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, Hashtable changedProps)
