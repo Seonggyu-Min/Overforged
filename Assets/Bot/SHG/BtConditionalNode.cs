@@ -10,6 +10,7 @@ namespace SHG
     Func<bool> condition;
     BtNode trueNode;
     BtNode falseNode;
+    BtNode runningNode;
 
     public BtConditionalNode(
       Func<bool> condition,
@@ -25,13 +26,26 @@ namespace SHG
       this.children.Add(falseNode); 
     }
 
-
     public override NodeState Evaluate() 
     {
+      if (this.runningNode != null) {
+        return (this.ReturnState(this.runningNode.Evaluate()));
+      }
       if (this.condition()) {
-        return (this.ReturnState(this.trueNode.Evaluate()));
+        var state = this.trueNode.Evaluate();
+        if (state == NodeState.Running) {
+          this.runningNode = this.trueNode;
+        }
+        return (this.ReturnState(state));
       }  
-      return (this.ReturnState(this.falseNode.Evaluate()));
+      if (this.falseNode != null) {
+        var state = this.falseNode.Evaluate();
+        if (state == NodeState.Running) {
+          this.runningNode = this.falseNode;
+        }
+        return (this.ReturnState(state));
+      }
+      return (this.ReturnState(NodeState.Success));
     }
   }
 }

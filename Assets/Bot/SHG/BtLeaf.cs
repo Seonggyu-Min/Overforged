@@ -6,6 +6,16 @@ namespace SHG
 {
   public abstract class BtLeaf : BtNode
   {
+    public enum Type {
+      MoveLeaf,
+      GetMaterial,
+      GiveItem,
+      GetItem,
+      Work,
+      PickUpTong,
+      PutDownTong,
+      RepeatWork
+    }
 
     public BtLeaf(
       BtNode parent = null): base(parent, null)
@@ -17,5 +27,10 @@ namespace SHG
 
     public override void Reset()
     {}
+
+    public override BtNode GetLastNode()
+    {
+      return (this);
+    }
   }
 }

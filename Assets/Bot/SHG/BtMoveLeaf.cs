@@ -22,12 +22,13 @@ namespace SHG
       this.Init(target, dist);
     }
 
-    public void Init(Vector3 dest, Nullable<float> distThreshold = null)
+    public BtMoveLeaf Init(Vector3 dest, Nullable<float> distThreshold = null)
     {
       this.dest = dest;
       if (distThreshold != null) {
         this.distThreshold = distThreshold.Value;
       }
+      return (this);
     }
 
     public override NodeState Evaluate()

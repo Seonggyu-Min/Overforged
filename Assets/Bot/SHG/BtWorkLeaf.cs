@@ -25,12 +25,13 @@ namespace SHG
       }
     }
 
-    public void Init(IInteractableTool tool, Transform transform)
+    public BtWorkLeaf Init(IInteractableTool tool, Transform transform)
     {
       this.tool = tool;
       bool hasFront = tool is FurnaceComponent;
       this.dest = transform.position +
         (hasFront ? transform.forward * 0.5f: Vector3.zero);
+      return (this);
     }
 
     public override NodeState Evaluate()

@@ -18,12 +18,13 @@ namespace SHG
       this.Init();
     }
 
-    public void Init()
+    public BtPickUpTongLeaf Init()
     {
       this.tongs = this.bot.GetTongs();
       if (this.tongs.Length != 0) {
         this.TryGetClosestTong(out this.targetTong);
       }
+      return (this);
     }
 
     bool TryGetClosestTong(out Transform tong)

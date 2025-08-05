@@ -61,11 +61,13 @@ namespace SHG
     public Nullable<RawMaterial> TryGetRawMaterial()
     {
       switch (this.Variation) {
+        case (Variation.Ore):
         case (Variation.Bar):
         case (Variation.Blade):
         case (Variation.HammerHead):
         case (Variation.AxeBlade):
           return (new RawMaterial(MaterialType.Mineral, this.OreType));
+        case (Variation.Wood):
         case (Variation.Handle):
         case (Variation.BowBase):
           return (new RawMaterial(MaterialType.Wooden, this.WoodType));
@@ -73,7 +75,7 @@ namespace SHG
           return (RawMaterial.String);
       }
       #if UNITY_EDITOR
-      Debug.LogError($"{nameof(Part)}: Fail to {nameof(TryGetRawMaterial)}");
+      Debug.LogError($"{nameof(Part)}: Fail to {nameof(TryGetRawMaterial)} {this.Variation} {this.OreType} {this.WoodType}" );
       #endif
       return (null);
     }
@@ -117,5 +119,14 @@ namespace SHG
       }
       return (false);
     }
+
+    public override string ToString()
+    {
+      if (this.Equals(Part.String)) {
+        return ($"[{nameof(Part)} {nameof(String)}]");
+      }
+      return ($"[{nameof(Part)} {nameof(Variation)}: {this.Variation}; {nameof(OreType)}: {this.OreType}; {nameof(WoodType)}: {this.WoodType};]");
+    }
+
   }
 }

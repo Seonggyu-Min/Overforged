@@ -25,9 +25,10 @@ namespace SHG
       this.box = box; 
     }
 
-    public void Init(ItemBox box)
+    public BtBringMaterialLeaf Init(ItemBox box)
     {
       this.box = box;
+      return (this);
     }
 
     public override NodeState Evaluate()

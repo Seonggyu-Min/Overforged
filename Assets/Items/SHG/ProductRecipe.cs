@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -7,6 +7,7 @@ namespace SHG
 {
   using Variation = MaterialVariation;
 
+  [Serializable]
   public struct ProductRecipe
   {
     public Part[] Parts;

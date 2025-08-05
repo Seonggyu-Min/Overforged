@@ -12,18 +12,11 @@ namespace SHG
   [RequireComponent(typeof(NavMeshAgent))]
   public class EnemyBotController : MonoBehaviour, IBot
   {
-    public enum Leaf {
-      MoveLeaf,
-      GetMaterial,
-      GiveItem,
-      GetItem,
-      Work,
-      PickUpTong,
-      RepeatWork
-    }
 
     [SerializeField]
     Part partToCreate;
+    [SerializeField]
+    ProductRecipe productToCreate;
 
     public Item HoldingItem { 
       get => this.holdingItem;
@@ -48,7 +41,6 @@ namespace SHG
     RawMaterialBox[] materialBoxes;
     [SerializeField]
     EnemyBotBt behaviourTree;
-    [SerializeField] [ReadOnly]
     BtNode.NodeState currentState;
     [SerializeField] [ReadOnly]
     Item holdingItem;
@@ -131,31 +123,32 @@ namespace SHG
 
     void CreateLeaves()
     {
-      this.allLeaves = new BtLeaf[System.Enum.GetValues(typeof(Leaf)).Length];
-      this.allLeaves[(int)Leaf.MoveLeaf] = new BtMoveLeaf(
+      this.allLeaves = new BtLeaf[System.Enum.GetValues(
+        typeof(BtLeaf.Type)).Length];
+      this.allLeaves[(int)BtLeaf.Type.MoveLeaf] = new BtMoveLeaf(
         target: Vector3.zero,
         bot: this,
         dist: 1f);
-      this.allLeaves[(int)Leaf.GetMaterial] = new BtBringMaterialLeaf(
+      this.allLeaves[(int)BtLeaf.Type.GetMaterial] = new BtBringMaterialLeaf(
         box: null,
         bot: this);
-      this.allLeaves[(int)Leaf.GiveItem] = new BtTransferItemLeaf(
+      this.allLeaves[(int)BtLeaf.Type.GiveItem] = new BtTransferItemLeaf(
         toGive: true,
         tool: null,
         transform: null,
         bot: this
         );
-      this.allLeaves[(int)Leaf.GetItem] = new BtTransferItemLeaf(
+      this.allLeaves[(int)BtLeaf.Type.GetItem] = new BtTransferItemLeaf(
         toGive: false,
         tool: null,
         transform: null,
         bot: this
         );
-      this.allLeaves[(int)Leaf.Work] = new BtWorkLeaf(
+      this.allLeaves[(int)BtLeaf.Type.Work] = new BtWorkLeaf(
         tool: null,
         transform: null,
         bot: this);
-      this.allLeaves[(int)Leaf.PickUpTong] = new BtPickUpTongLeaf(bot: this
+      this.allLeaves[(int)BtLeaf.Type.PickUpTong] = new BtPickUpTongLeaf(bot: this
       );
     }
 
@@ -230,7 +223,7 @@ namespace SHG
       this.HoldingItem = null;
     }
 
-    T GetLeaf<T>(Leaf leafType) where T: BtLeaf
+    public T GetLeaf<T>(BtLeaf.Type leafType) where T: BtLeaf
     {
       return (this.allLeaves[(int)leafType] as T);
     }
@@ -240,7 +233,7 @@ namespace SHG
       this.allTongs = Array.ConvertAll(
         GameObject.FindGameObjectsWithTag("Tongs"),
         gameObject => gameObject.transform);
-      var pickTong = this.GetLeaf<BtPickUpTongLeaf>(Leaf.PickUpTong);
+      var pickTong = this.GetLeaf<BtPickUpTongLeaf>(BtLeaf.Type.PickUpTong);
       pickTong.Init();
     }
 
@@ -248,11 +241,35 @@ namespace SHG
     void CreatePart()
     {
       this.behaviourTree = new EnemyBotBt(
-        children: new BtNode[] { new BtCreatePartNode(
+        children: new BtNode[] { 
+        new BtCreatePartNode(
           part: this.partToCreate,
-          bot: this
-          ) }
-        );
+          bot: this),
+        new BtConditionalNode(
+          condition: () => this.IsHoldingHotMaterial(),
+          trueNode: new BtQuenchingNode(bot: this),
+          falseNode: null)
+        });
+    }
+
+    [Button]
+    void CreateProduct()
+    {
+      this.behaviourTree = new EnemyBotBt(
+        children: new BtNode[] {
+          new BtCreateProductNode(
+            recipe: this.productToCreate,
+            bot: this)
+        });
+    }
+
+    public bool IsHoldingHotMaterial()
+    {
+      if (this.HoldingItem != null &&
+        this.HoldingItem is MaterialItem materialItem) {
+        return (materialItem.IsHot);
+      }
+      return (false);
     }
 
     // Update is called once per frame
@@ -284,6 +301,11 @@ namespace SHG
         tool = this.table;
         break;
       }
+      #if UNITY_EDITOR
+      if (tool == null) {
+        Debug.LogError($"{nameof(TryFindTool)}: Fail to Find {toolType}");
+      }
+      #endif
       return (tool != null);
     }
 

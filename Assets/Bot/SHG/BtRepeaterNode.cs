@@ -21,7 +21,7 @@ namespace SHG
       this.Init(target, condition, count);
     }
 
-    public void Init(BtNode target, Func<bool> condition = null, int count = -1)
+    public BtRepeaterNode Init(BtNode target, Func<bool> condition = null, int count = -1)
     {
       if (condition == null && count == -1) {
         throw (new ArgumentException($"{nameof(count)} must be greater than 0 or {nameof(condition)} must be not null"));
@@ -29,6 +29,7 @@ namespace SHG
       this.target = target;
       this.condition = condition;
       this.count = count;
+      return (this);
     }
 
     public override NodeState Evaluate() 

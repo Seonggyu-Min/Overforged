@@ -3063,7 +3063,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1362413653
 Transform:
   m_ObjectHideFlags: 0
@@ -3142,9 +3142,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   partToCreate:
-    Variation: 6
+    Variation: 3
     OreType: 2
     WoodType: 0
+  productToCreate:
+    Parts:
+    - Variation: 9
+      OreType: 0
+      WoodType: 1
+    - Variation: 6
+      OreType: 3
+      WoodType: 0
   hands: {fileID: 1315303359}
   box: {fileID: 1351568653}
   furnace: {fileID: 1171547371}
@@ -3189,7 +3197,7 @@ MonoBehaviour:
     Box: {fileID: 1507565470}
   behaviourTree:
     State: 0
-  currentState: 0
+    currentNodeName: 
   holdingItem: {fileID: 0}
   networkId: 0
 --- !u!136 &1362413657

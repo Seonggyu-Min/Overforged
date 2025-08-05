@@ -18,12 +18,13 @@ namespace SHG
       this.Init(condition, falseState);
     }
 
-    public void Init(
+    public BtConditionLeaf Init(
       Func<bool> condition,
       NodeState falseSTate = NodeState.Failure)
     {
       this.condition = condition;      
       this.falseState = falseState;
+      return (this);
     }
 
     public override NodeState Evaluate()

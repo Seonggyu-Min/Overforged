@@ -17,14 +17,15 @@ namespace SHG
     public BtCreatePartNode(
       Part part,
       IBot bot,
+      bool takePart = true,
       BtNode parent = null
       ): base(parent, null)
     {
       this.bot = bot;
-      this.Init(part);
+      this.Init(part, takePart);
     }
     
-    public void Init(Part part)
+    public BtCreatePartNode Init(Part part, bool takePart = true)
     {
       this.children.Clear();
       this.part = part;
@@ -39,26 +40,25 @@ namespace SHG
           this.rawMaterial = rawMaterial.Value;
         }
         else {
-          return ;
+          return (this);
         }
         if (!this.bot.TryFindBox(this.rawMaterial, out ItemBox box)) {
-          return ;
+          return (this);
         }
         this.AddChild(new BtBringMaterialLeaf(
             box: box,
             bot: this.bot));
         if (this.part.Equals(Part.String)) {
-          return ;
+          return (this);
         }
       }
       var toolType = this.part.GetToolType(); 
       if (toolType == null) {
-        return ; 
+        return (this); 
       }
       this.toolType = toolType.Value;
       if (this.bot.TryFindTool(this.toolType, out this.tool) ) {
-        this.AddChild(
-          new BtTransferItemLeaf(
+        this.AddChild(new BtTransferItemLeaf(
             toGive: true,
             tool: this.tool,
             transform: this.tool.transform,
@@ -74,11 +74,18 @@ namespace SHG
                 transform: this.tool.transform,
                 bot: this.bot));
           }
-          this.AddChild(new BtPickUpTongLeaf(bot: this.bot));
+          this.AddChild(this.bot.GetLeaf<BtPickUpTongLeaf>(
+              BtLeaf.Type.PickUpTong));
+          this.AddChild(
+              new BtMoveLeaf(
+                target: furnace.transform.position + 
+                furnace.transform.forward * 0.5f,
+                bot: this.bot,
+                dist: IBot.ITEM_TRANSFER_DIST)
+            );
           this.AddChild(new BtConditionLeaf(
               condition: () => furnace.IsFinished,
-              falseState: NodeState.Running
-              ));
+              falseState: NodeState.Running));
         }
         else {
           var work = new BtWorkLeaf(
@@ -92,19 +99,22 @@ namespace SHG
         if (this.toolType == SmithingTool.ToolType.Anvil) {
           this.AddChild(new BtPickUpTongLeaf(bot: this.bot));
         }
-        this.AddChild(
-          new BtTransferItemLeaf(
-            toGive: false,
-            tool: this.tool,
-            transform: this.tool.transform,
-            bot: this.bot)
-          );
+        if (takePart) {
+          this.AddChild(
+            new BtTransferItemLeaf(
+              toGive: false,
+              tool: this.tool,
+              transform: this.tool.transform,
+              bot: this.bot)
+            );
+        }
       }
       #if UNITY_EDITOR
       else {
         Debug.LogError($"{nameof(BtCreatePartNode)}: fail to find box");  
       }
       #endif
+      return (this);
     }
   }
 }

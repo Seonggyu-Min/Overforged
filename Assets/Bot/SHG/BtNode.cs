@@ -49,7 +49,7 @@ namespace SHG
     {
       this.currentChildIndex = 0;
       foreach (var child in this.children) {
-        child.Reset(); 
+        child?.Reset(); 
       }
     }
 
@@ -91,6 +91,14 @@ namespace SHG
     {
       this.State = state;
       return (state);
+    }
+
+    public virtual BtNode GetLastNode()
+    {
+      if (this.currentChildIndex < this.children.Count) {
+        return (this.children[this.currentChildIndex].GetLastNode());
+      }
+      return (this);
     }
   }
 }

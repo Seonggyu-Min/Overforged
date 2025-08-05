@@ -28,7 +28,7 @@ namespace SHG
       }
     }
 
-    public void Init(IInteractableTool tool, Transform transform, Nullable<bool> toGive = null)
+    public BtTransferItemLeaf Init(IInteractableTool tool, Transform transform, Nullable<bool> toGive = null)
     {
       this.tool = tool;
       bool hasFront = tool is FurnaceComponent;
@@ -37,6 +37,7 @@ namespace SHG
       if (toGive != null) {
         this.toGive = toGive.Value;
       }
+      return (this);
     }
 
     public override NodeState Evaluate()

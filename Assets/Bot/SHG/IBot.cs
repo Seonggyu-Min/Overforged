@@ -7,7 +7,8 @@ namespace SHG
 
   public interface IBot
   {
-    const float ITEM_TRANSFER_DIST = 2.0f;
+
+    const float ITEM_TRANSFER_DIST = 2.5f;
     const float ITEM_TRANSFER_DELAY = 1.0f;
     const float WORK_DIST = 1.5f;
     const float WORK_DELAY = 1f;
@@ -26,6 +27,8 @@ namespace SHG
     public bool TryFindTool(SmithingTool.ToolType toolType, out SmithingToolComponent tool);
     public bool TryFindBox(RawMaterial rawMaterial, out ItemBox box);
     public Transform[] GetTongs();
+    public T GetLeaf<T>(BtLeaf.Type leafType) where T: BtLeaf;
+    public bool IsHoldingHotMaterial();
 
     public bool IsStopped => (!this.NavMeshAgent.pathPending &&
       (this.NavMeshAgent.remainingDistance <= this.NavMeshAgent.stoppingDistance || !this.NavMeshAgent.hasPath));
