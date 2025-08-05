@@ -7,6 +7,7 @@ namespace SHG
   public abstract class BtLeaf : BtNode
   {
     public enum Type {
+      Idle,
       MoveLeaf,
       GetMaterial,
       GiveItem,
@@ -17,8 +18,7 @@ namespace SHG
       RepeatWork
     }
 
-    public BtLeaf(
-      BtNode parent = null): base(parent, null)
+    public BtLeaf(BtNode parent = null): base(parent, null)
     {
 
     }

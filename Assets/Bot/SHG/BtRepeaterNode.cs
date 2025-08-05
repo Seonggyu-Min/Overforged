@@ -10,6 +10,7 @@ namespace SHG
     int count;
     BtNode target;
     int currentCount;
+    BtNode runningNode;
 
     public BtRepeaterNode(
       BtNode target,
@@ -34,13 +35,17 @@ namespace SHG
 
     public override NodeState Evaluate() 
     {
-      NodeState state = this.target.Evaluate();
+      NodeState state = this.runningNode != null ?
+        this.runningNode.Evaluate() :this.target.Evaluate();
       switch (state) {
         case (NodeState.Failure):
+          this.runningNode = null;
           return (this.ReturnState(NodeState.Failure));
         case (NodeState.Running):
+          this.runningNode = target;
           return (this.ReturnState(NodeState.Running));
         default:
+          this.runningNode = null;
           if (this.condition == null) {
             this.currentCount += 1;
             if (this.currentCount >= this.count) {

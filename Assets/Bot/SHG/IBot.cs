@@ -4,6 +4,7 @@ using UnityEngine.AI;
 namespace SHG
 {
   using ItemBox = SCR.BoxComponent;
+  using ConveyComponent = NewProductConveyComponent;
 
   public interface IBot
   {
@@ -23,9 +24,11 @@ namespace SHG
     public void WaitForSeconds(float second);
     public bool IsHoldingTong { get; }
     public void PutDownTong();
+    public void PutDownItem();
     public void PickUpTong(Transform tong);
     public bool TryFindTool(SmithingTool.ToolType toolType, out SmithingToolComponent tool);
     public bool TryFindBox(RawMaterial rawMaterial, out ItemBox box);
+    public bool TryGetSubmitPlace(out ConveyComponent submitPlace);
     public Transform[] GetTongs();
     public T GetLeaf<T>(BtLeaf.Type leafType) where T: BtLeaf;
     public bool IsHoldingHotMaterial();

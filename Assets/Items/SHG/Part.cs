@@ -94,7 +94,7 @@ namespace SHG
           return (SmithingTool.ToolType.WoodTable);
       }
       #if UNITY_EDITOR
-      Debug.LogError($"{nameof(GetToolType)}: Fail to get Tool Type for {this.Variation}");
+      Debug.Log($"{nameof(GetToolType)}: Fail to get Tool Type for {this.Variation}");
       #endif
       return (null);
     }

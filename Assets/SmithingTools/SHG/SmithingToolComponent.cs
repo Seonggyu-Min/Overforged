@@ -1,4 +1,4 @@
-//#define LOCAL_TEST
+#define LOCAL_TEST
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -79,9 +79,7 @@ namespace SHG
     protected virtual void Start()
     {
       this.tool.OnMaterialChanged += this.OnMaterialChanged;
-      #if !LOCAL_TEST
       this.NetworkSynchronizer.RegisterSynchronizable(this);
-      #endif
     }
 
     protected virtual void Update()

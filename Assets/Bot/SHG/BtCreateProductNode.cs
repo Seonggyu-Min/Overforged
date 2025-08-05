@@ -6,25 +6,22 @@ namespace SHG
 {
   public class BtCreateProductNode: BtSequenceNode
   {
-    ProductRecipe recipe;
+    Nullable<ProductRecipe> recipe;
     IBot bot;
     TableComponent table;
 
     public BtCreateProductNode(
-      Nullable<ProductRecipe> recipe,
       IBot bot,
       BtNode parent = null,
       IList<BtNode> children = null
       ): base(parent, children)
     {
       this.bot = bot;
-      if (recipe != null) {
-        this.Init(recipe.Value);
-      }
     }
 
     public BtCreateProductNode Init(ProductRecipe recipe)
     {
+      this.children.Clear();
       if (this.table == null) {
         if (this.bot.TryFindTool(SmithingTool.ToolType.WoodTable,
             out SmithingToolComponent found)) {
@@ -36,24 +33,24 @@ namespace SHG
       }
       this.recipe = recipe;
       int woodTablePartIndex = Array.FindIndex(
-        this.recipe.Parts, this.IsWoodTablePart);
+        recipe.Parts, this.IsWoodTablePart);
       if (woodTablePartIndex != -1) {
         this.AddChild(
           new BtCreatePartNode(
             bot: this.bot,
-            part: this.recipe.Parts[woodTablePartIndex],
+            part: recipe.Parts[woodTablePartIndex],
             takePart: false
             )
           );
       }
-      for (int i = 0; i < this.recipe.Parts.Length; i++) {
+      for (int i = 0; i < recipe.Parts.Length; i++) {
         if (i == woodTablePartIndex) {
           continue;
         } 
         this.AddChild(
           new BtCreatePartNode(
             bot: this.bot,
-            part: this.recipe.Parts[i],
+            part: recipe.Parts[i],
             takePart: true));
         this.AddChild(
           new BtConditionalNode(
@@ -89,6 +86,24 @@ namespace SHG
         return (false);
       }
       return (partToolType.Value == SmithingTool.ToolType.WoodTable);
+    }
+
+    public override NodeState Evaluate()
+    {
+      if (this.recipe == null) {
+        if (this.TryFindData(
+            EnemyBotBt.CURRENT_RECIPE_KEY, out object found) &&
+          found is ProductRecipe recipe) {
+          this.Init(recipe);
+        }
+      }
+      return (base.Evaluate());
+    }
+
+    public override void Reset()
+    {
+      this.recipe = null;
+      this.ClearData(EnemyBotBt.CURRENT_RECIPE_KEY);
     }
   }
 }

@@ -7,6 +7,7 @@ namespace SHG
   [Serializable]
   public abstract class BtNode 
   {
+
     public enum NodeState
     {
       Running,      
@@ -42,7 +43,8 @@ namespace SHG
 
     public virtual NodeState Evaluate() 
     {
-      return (this.children[this.currentChildIndex].Evaluate());
+      return (this.ReturnState(
+          this.children[this.currentChildIndex].Evaluate()));
     }
 
     public virtual void Reset()

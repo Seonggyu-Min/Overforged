@@ -1,4 +1,4 @@
-//#define LOCAL_TEST
+#define LOCAL_TEST
 using System;
 using System.Text;
 using System.Collections.Generic;
@@ -33,8 +33,7 @@ namespace SHG
     [SerializeField]
     Color interactColor;
 
-    [SerializeField]
-    [VerticalGroup(10f, true, nameof(sawDustParticle), nameof(confettiParticle))]
+    [SerializeField] [VerticalGroup(10f, true, nameof(sawDustParticle), nameof(confettiParticle))]
     Void effecterGroup;
     [SerializeField]
     [Required(), HideProperty]

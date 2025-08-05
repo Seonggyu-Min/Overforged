@@ -8,6 +8,7 @@ using EditorAttributes;
 namespace SHG
 {
   using ItemBox = SCR.BoxComponent;
+  using ConveyComponent = NewProductConveyComponent;
 
   [RequireComponent(typeof(NavMeshAgent))]
   public class EnemyBotController : MonoBehaviour, IBot
@@ -110,44 +111,6 @@ namespace SHG
         ));
     }
 
-    void Awake()
-    {
-      this.NavMeshAgent = this.GetComponent<NavMeshAgent>();
-      this.CreateLeaves();
-      this.behaviourTree = new EnemyBotBt(this);
-    }
-
-    void CreateLeaves()
-    {
-      this.allLeaves = new BtLeaf[System.Enum.GetValues(
-        typeof(BtLeaf.Type)).Length];
-      this.allLeaves[(int)BtLeaf.Type.MoveLeaf] = new BtMoveLeaf(
-        target: Vector3.zero,
-        bot: this,
-        dist: 1f);
-      this.allLeaves[(int)BtLeaf.Type.GetMaterial] = new BtBringMaterialLeaf(
-        box: null,
-        bot: this);
-      this.allLeaves[(int)BtLeaf.Type.GiveItem] = new BtTransferItemLeaf(
-        toGive: true,
-        tool: null,
-        transform: null,
-        bot: this
-        );
-      this.allLeaves[(int)BtLeaf.Type.GetItem] = new BtTransferItemLeaf(
-        toGive: false,
-        tool: null,
-        transform: null,
-        bot: this
-        );
-      this.allLeaves[(int)BtLeaf.Type.Work] = new BtWorkLeaf(
-        tool: null,
-        transform: null,
-        bot: this);
-      this.allLeaves[(int)BtLeaf.Type.PickUpTong] = new BtPickUpTongLeaf(bot: this
-      );
-    }
-
     public bool TryTransferItem(IInteractableTool tool)
     {
       var args = new ToolTransferArgs {
@@ -159,7 +122,7 @@ namespace SHG
           PlayerNetworkId = this.NetworkId
         })) {
         if (args.ItemToGive != null) {
-          this.LooseItem();
+          this.PutDownItem();
         }
         var result = tool.Transfer(args);
         if (result.ReceivedItem != null) {
@@ -208,70 +171,9 @@ namespace SHG
       }
     }
 
-    void TriggerWork()
-    {
-      this.workTrigger?.Invoke();
-    }
-
-    void LooseItem()
-    {
-      Debug.Log($"loose item : {this.HoldingItem}");
-      this.HoldingItem = null;
-    }
-
     public T GetLeaf<T>(BtLeaf.Type leafType) where T: BtLeaf
     {
       return (this.allLeaves[(int)leafType] as T);
-    }
-
-    void Start()
-    {
-      this.allTongs = Array.ConvertAll(
-        GameObject.FindGameObjectsWithTag("Tongs"),
-        gameObject => gameObject.transform);
-      var pickTong = this.GetLeaf<BtPickUpTongLeaf>(BtLeaf.Type.PickUpTong);
-      pickTong.Init();
-      this.GetContext();
-    }
-
-    void GetContext()
-    {
-      this.anvil = BotContext.Instance.GetComponent<AnvilComponent>(
-        this.networkId, SmithingTool.ToolType.Anvil);
-      this.furnace = BotContext.Instance.GetComponent<FurnaceComponent>(
-        this.networkId, SmithingTool.ToolType.Furnace);
-      this.quenchingTool = BotContext.Instance.GetComponent<QuenchingComponent>(
-        this.networkId, SmithingTool.ToolType.QuenchingTool);
-      this.table = BotContext.Instance.GetComponent<TableComponent>(
-        this.networkId, SmithingTool.ToolType.WoodTable);
-    }
-
-    [Button]
-    void CreatePart()
-    {
-      this.behaviourTree = new EnemyBotBt(
-        bot: this,
-        children: new BtNode[] { 
-        new BtCreatePartNode(
-          part: this.partToCreate,
-          bot: this),
-        new BtConditionalNode(
-          condition: () => this.IsHoldingHotMaterial(),
-          trueNode: new BtQuenchingNode(bot: this),
-          falseNode: null)
-        });
-    }
-
-    [Button]
-    void CreateProduct()
-    {
-      this.behaviourTree = new EnemyBotBt(
-        bot: this,
-        children: new BtNode[] {
-          new BtCreateProductNode(
-            recipe: this.productToCreate,
-            bot: this)
-        });
     }
 
     public bool IsHoldingHotMaterial()
@@ -281,17 +183,6 @@ namespace SHG
         return (materialItem.IsHot);
       }
       return (false);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-      if (this.remainingDelay < 0) {
-        this.currentState = this.behaviourTree.Evaluate();
-      }
-      else {
-        this.remainingDelay -= Time.deltaTime;
-      }
     }
 
     public bool TryFindTool(SmithingTool.ToolType toolType, out SmithingToolComponent tool)
@@ -335,5 +226,121 @@ namespace SHG
       box = null;
       return (false);
     }
+
+    public bool TryGetSubmitPlace(out ConveyComponent submitPlace)
+    {
+      return (BotContext.Instance.TryGetClosestSubmitPlace(
+          this.transform.position, out submitPlace));
+    }
+
+    void Awake()
+    {
+      this.NavMeshAgent = this.GetComponent<NavMeshAgent>();
+      this.CreateLeaves();
+      this.behaviourTree = new EnemyBotBt(this);
+    }
+
+    void Start()
+    {
+      this.allTongs = Array.ConvertAll(
+        GameObject.FindGameObjectsWithTag("Tongs"),
+        gameObject => gameObject.transform);
+      var pickTong = this.GetLeaf<BtPickUpTongLeaf>(BtLeaf.Type.PickUpTong);
+      pickTong.Init();
+      this.GetContext();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+      if (this.remainingDelay < 0) {
+        this.currentState = this.behaviourTree.Evaluate();
+      }
+      else {
+        this.remainingDelay -= Time.deltaTime;
+      }
+    }
+
+
+    void TriggerWork()
+    {
+      this.workTrigger?.Invoke();
+    }
+
+    public void PutDownItem()
+    {
+      Debug.Log($"loose item : {this.HoldingItem}");
+      if (this.HoldingItem != null) {
+        this.HoldingItem.transform.SetParent(null);
+        this.HoldingItem = null;
+      }
+    }
+
+    void GetContext()
+    {
+      this.anvil = BotContext.Instance.GetComponent<AnvilComponent>(
+        this.networkId, SmithingTool.ToolType.Anvil);
+      this.furnace = BotContext.Instance.GetComponent<FurnaceComponent>(
+        this.networkId, SmithingTool.ToolType.Furnace);
+      this.quenchingTool = BotContext.Instance.GetComponent<QuenchingComponent>(
+        this.networkId, SmithingTool.ToolType.QuenchingTool);
+      this.table = BotContext.Instance.GetComponent<TableComponent>(
+        this.networkId, SmithingTool.ToolType.WoodTable);
+    }
+
+    [Button]
+    void CreatePart()
+    {
+      this.behaviourTree = new EnemyBotBt(
+        bot: this,
+        children: new BtNode[] { 
+        new BtCreatePartNode(
+          part: this.partToCreate,
+          bot: this),
+        new BtConditionalNode(
+          condition: () => this.IsHoldingHotMaterial(),
+          trueNode: new BtQuenchingNode(bot: this),
+          falseNode: null)
+        });
+    }
+
+    [Button]
+    void CreateProductTest()
+    {
+      this.behaviourTree = EnemyBotBt.KeepCraftingProductBt(this);
+    }
+
+    void CreateLeaves()
+    {
+      this.allLeaves = new BtLeaf[System.Enum.GetValues(
+        typeof(BtLeaf.Type)).Length];
+      this.allLeaves[(int)BtLeaf.Type.MoveLeaf] = new BtMoveLeaf(
+        target: Vector3.zero,
+        bot: this,
+        dist: 1f);
+      this.allLeaves[(int)BtLeaf.Type.GetMaterial] = new BtBringMaterialLeaf(
+        box: null,
+        bot: this);
+      this.allLeaves[(int)BtLeaf.Type.GiveItem] = new BtTransferItemLeaf(
+        toGive: true,
+        tool: null,
+        transform: null,
+        bot: this
+        );
+      this.allLeaves[(int)BtLeaf.Type.GetItem] = new BtTransferItemLeaf(
+        toGive: false,
+        tool: null,
+        transform: null,
+        bot: this
+        );
+      this.allLeaves[(int)BtLeaf.Type.Work] = new BtWorkLeaf(
+        tool: null,
+        transform: null,
+        bot: this);
+      this.allLeaves[(int)BtLeaf.Type.PickUpTong] = new BtPickUpTongLeaf(bot: this
+
+      );
+    }
+
   }
 }
