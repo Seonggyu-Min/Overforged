@@ -31,7 +31,7 @@ namespace MIN
             {
                 spawnPos = mapData.SpawnPoints[myNum].position;
             }
-            
+
             GameObject playerobj = PhotonNetwork.Instantiate("Player", spawnPos, Quaternion.identity);
             Player player = playerobj.GetComponent<Player>();
 

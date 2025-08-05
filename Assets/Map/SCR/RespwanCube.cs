@@ -39,6 +39,10 @@ public class RespwanCube : MonoBehaviour
                 StartCoroutine(TongsRespawn(other.transform));
             }
         }
+        else
+        {
+            Destroy(other.gameObject);
+        }
     }
 
     // 리스폰 코루틴

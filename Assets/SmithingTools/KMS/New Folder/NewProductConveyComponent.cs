@@ -40,6 +40,7 @@ public class NewProductConveyComponent : SmithingToolComponent
 
     protected override void Awake()
     {
+        manager = GameObject.Find("InGameManager").GetComponent<InGameManager>().InGameUIManager.OrderUI;
         this.meshRenderer = model;
         if (this.meshRenderer != null)
         {
