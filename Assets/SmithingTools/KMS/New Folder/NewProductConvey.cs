@@ -11,7 +11,6 @@ using System.Xml.XPath;
 public class NewProductConvey : SmithingTool
 {
 
-    RecipeManager recipeManager;
 
     [Inject] MIN.IScoreManager _scoreManager;
 
@@ -24,9 +23,8 @@ public class NewProductConvey : SmithingTool
 
 
 
-    public NewProductConvey(SmithingToolData data, RecipeManager manager) : base(data)
+    public NewProductConvey(SmithingToolData data) : base(data)
     {
-        recipeManager = manager;
     }
 
     public override bool CanTransferItem(ToolTransferArgs args)

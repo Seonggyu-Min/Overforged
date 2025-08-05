@@ -19,8 +19,6 @@ public class ProductConvey : MonoBehaviour, IInteractableTool
 
     [Inject] MIN.IScoreManager _scoreManager;
 
-    Convey convey;
-
     private Item HoldingItem;
 
 
@@ -43,7 +41,6 @@ public class ProductConvey : MonoBehaviour, IInteractableTool
                 result = recipeManager.Check(item.Data as ProductItemData, item.Ore, item.Wood);
             }
         }
-        Debug.Log(result);
         return result;
     }
 
