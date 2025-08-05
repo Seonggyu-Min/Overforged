@@ -7,8 +7,9 @@ namespace SHG
   public class BtIdleLeaf : BtLeaf
   {
     public BtIdleLeaf(
-      IBot bot
-      ): base(bot)
+      IBot bot,
+      BtNode parent
+      ): base(parent)
     {
 
     }
