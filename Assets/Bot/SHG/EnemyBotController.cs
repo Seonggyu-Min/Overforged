@@ -27,18 +27,14 @@ namespace SHG
     public Transform Transform => this.transform;
     [SerializeField] [Required]
     Transform hands;
-    [SerializeField] [Required]
-    ItemBox box;
-    [SerializeField] [Required]
+    [SerializeField] [ReadOnly]
     FurnaceComponent furnace;
-    [SerializeField] [Required]
+    [SerializeField] [ReadOnly]
     AnvilComponent anvil;
-    [SerializeField] [Required]
+    [SerializeField] [ReadOnly]
     TableComponent table;
-    [SerializeField] [Required]
+    [SerializeField] [ReadOnly]
     QuenchingComponent quenchingTool;
-    [SerializeField]
-    RawMaterialBox[] materialBoxes;
     [SerializeField]
     EnemyBotBt behaviourTree;
     BtNode.NodeState currentState;
@@ -118,7 +114,7 @@ namespace SHG
     {
       this.NavMeshAgent = this.GetComponent<NavMeshAgent>();
       this.CreateLeaves();
-      this.behaviourTree = new EnemyBotBt();
+      this.behaviourTree = new EnemyBotBt(this);
     }
 
     void CreateLeaves()
@@ -235,12 +231,22 @@ namespace SHG
         gameObject => gameObject.transform);
       var pickTong = this.GetLeaf<BtPickUpTongLeaf>(BtLeaf.Type.PickUpTong);
       pickTong.Init();
+      this.GetContext();
+    }
+
+    void GetContext()
+    {
+      this.anvil = BotContext.Instance.GetComponent<Anvil>(
+        this.networkId, SmithingTool.ToolType.Anvil);
+      this.furnace = BotContext.Instance.GetComponent<FurnaceComponent>(
+        this.networkId, SmithingTool.ToolType.Furnace);
     }
 
     [Button]
     void CreatePart()
     {
       this.behaviourTree = new EnemyBotBt(
+        bot: this,
         children: new BtNode[] { 
         new BtCreatePartNode(
           part: this.partToCreate,
@@ -256,6 +262,7 @@ namespace SHG
     void CreateProduct()
     {
       this.behaviourTree = new EnemyBotBt(
+        bot: this,
         children: new BtNode[] {
           new BtCreateProductNode(
             recipe: this.productToCreate,
@@ -312,10 +319,10 @@ namespace SHG
     public bool TryFindBox(RawMaterial rawMaterial, out ItemBox box)
     {
       int found = Array.FindIndex(
-        this.materialBoxes,
+        BotContext.Instance.MaterialBoxes,
         (materialBox) => rawMaterial.Equals(materialBox.Material));
       if (found != -1) {
-        box = this.materialBoxes[found].Box;
+        box = BotContext.Instance.MaterialBoxes[found].Box;
         return (true);
       }      
       #if UNITY_EDITOR
