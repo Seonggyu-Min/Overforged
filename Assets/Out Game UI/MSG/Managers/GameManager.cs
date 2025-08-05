@@ -60,6 +60,23 @@ namespace MIN
         /// </summary>
         public CalculatedTeam CalculateResult()
         {
+            // 혼자 봇과 1대1
+            if (PhotonNetwork.PlayerList.Length == 1)
+            {
+                // 봇의 점수를 알아야 됨 -> 어떻게?
+
+                // 내 점수 - 봇 점수 > 봇 점수 => WinPlayer(PhotonNetwork.LocalPlayer)
+            }
+
+            // 봇과 2대1
+            else if (PhotonNetwork.PlayerList.Length == 3)
+            {
+                // 이건 그냥 계산해도 될 듯
+                // 근데 내 점수 - 봇 점수를 내 커스텀 플레이어 프로퍼티에 덮어씌워줘야 원래 점수가 나올 듯
+
+                // 확장성 있게 하려면 ( PhotonNetwork.PlayerList.Length % 2 != 0 )일 때 팀원과 팀을 저장해서 누구에게 봇이있는지 확인해야될 듯 
+            }
+
             CalculatedTeam calculatedTeam = new();
             var playerList = PhotonNetwork.PlayerList;
 
@@ -135,6 +152,9 @@ namespace MIN
                 Debug.LogWarning("플레이어가 없습니다.");
                 return;
             }
+
+            // 여기도 봇 관련 승패 저장 로직 필요
+
 
             // 팀별 점수 계산
             GetTeamScoreData(out var teamGroups, out var teamScores);
