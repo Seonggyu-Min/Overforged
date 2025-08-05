@@ -113,11 +113,11 @@ namespace MIN
             if (PhotonNetwork.IsMasterClient)
             {
                 // 마스터 클라이언트가 시작 버튼을 클릭한 경우
-                if (PhotonNetwork.CurrentRoom.PlayerCount < 2)
-                {
-                    _infoText.text = "최소 2명 이상이 필요합니다.";
-                    return;
-                }
+                //if (PhotonNetwork.CurrentRoom.PlayerCount < 2)
+                //{
+                //    _infoText.text = "최소 2명 이상이 필요합니다.";
+                //    return;
+                //}
 
                 // 모든 플레이어가 준비 상태인지 확인
                 foreach (var player in PhotonNetwork.PlayerList)

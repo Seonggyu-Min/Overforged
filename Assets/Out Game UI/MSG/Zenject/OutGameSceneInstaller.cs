@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using SHG;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -27,6 +28,10 @@ namespace MIN
                 .FromComponentInNewPrefab(_networkManagerPrefab)
                 .AsSingle()
                 .NonLazy();
+
+            Container.Bind<IAudioLibrary>()
+              .To<AudioLibrary>()
+              .AsSingle();
         }
     }
 }

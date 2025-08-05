@@ -26,7 +26,7 @@ namespace MIN
         [SerializeField] private Button _maxPlayerPlusButton;
         [SerializeField] private Button _maxPlayerMinusButton;
         private int _maxPlayerCount = 2;
-        private const int MAX_PLAYER_COUNT = 8;
+        private const int MAX_PLAYER_COUNT = 4;
         private const int MIN_PLAYER_COUNT = 2;
 
         [Header("비밀 방 관련")]

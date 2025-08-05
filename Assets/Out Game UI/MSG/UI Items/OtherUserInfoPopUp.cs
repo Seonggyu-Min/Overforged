@@ -11,7 +11,7 @@ namespace MIN
 {
     public class OtherUserInfoPopUp : MonoBehaviour
     {
-        private IFirebaseManager _firebaseManager;
+        [Inject] private IFirebaseManager _firebaseManager;
 
         [SerializeField] private TMP_Text _nickNameText;
         [SerializeField] private TMP_Text _levelText;
@@ -19,11 +19,24 @@ namespace MIN
         [SerializeField] private TMP_Text _winCountText;
         [SerializeField] private TMP_Text _loseCountText;
         [SerializeField] private TMP_Text _winRateText;
+        [SerializeField] private GameObject _addFriendButton;
+        [SerializeField] private GameObject _addFriendPopUp;
+        private string _uid;
+
+        public string NickName => _nickNameText.text;
+        public IFirebaseManager FirebaseManager => _firebaseManager;
+        public string UID => _uid;
 
 
-        public void SetText(string uid, IFirebaseManager firebaseManager)
+        private void OnEnable()
         {
-            _firebaseManager = firebaseManager;
+            _addFriendButton.SetActive(false);
+        }
+
+
+        public void SetText(string uid)
+        {
+            _uid = uid;
 
             DatabaseReference userRef = _firebaseManager.Database.GetReference("users").Child(uid);
 
@@ -68,6 +81,17 @@ namespace MIN
                     Debug.LogWarning("사용자 정보 불러오기 실패");
                 }
             });
+
+            // 해당 패널이 자기 자신을 보여주는게 아니라면 친구 추가 버튼 활성화
+            if (_uid != _firebaseManager.Auth.CurrentUser.UserId)
+            {
+                _addFriendButton.SetActive(true);
+            }
+        }
+
+        public void OnClickAddFriendButton()
+        {
+            _addFriendPopUp.SetActive(true);
         }
 
         // TODO: 생성 및 Destroy하는 구조 변경
