@@ -28,6 +28,8 @@ public class GameReadyAndStopManager : MonoBehaviourPunCallbacks
     public Action OnGameBegin;
     public Action OnTimeOver;
 
+    public bool Skip { get; set; }
+
     [SerializeField] private ResultUI resultUI;
 
     // 플레이어가 게임에 들어온 직후, 내가 게임에 들어왔다는 커스텀 프로퍼티를 설정한다.
@@ -74,6 +76,11 @@ public class GameReadyAndStopManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void StartReadyUI()
     {
+        if (Skip)
+        {
+            IsGameStopped = false;
+            return;
+        }
         StartCoroutine(ReadyGoRoutine());
     }
 
