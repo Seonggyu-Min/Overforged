@@ -117,7 +117,10 @@ namespace SCR
         {
             this.team = team;
             _renderer.material.color = teamColor.Color[team];
-            image.color = teamColor.Color[team];
+
+            Color newColor = teamColor.Color[team];
+            newColor.a = image.color.a;
+            image.color = newColor;
         }
 
         public void SetCharacter(int num)
