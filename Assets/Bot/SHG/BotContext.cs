@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace SHG
 {
   public class BotContext : MonoBehaviour
   {
-    public static BotContext Instance;
+    public static BotContext Instance => instance;
     static BotContext instance;
     [SerializeField]
     RawMaterialBox[] materialBoxes;
@@ -25,6 +26,14 @@ namespace SHG
       OreType oreType)
     {
 
+    }
+
+    public void AddTool(SmithingToolComponent tool)
+    {
+      if (!this.tools.ContainsKey(tool.PlayerNetworkId)) {
+        this.tools.Add(tool.PlayerNetworkId, new List<SmithingToolComponent>()); 
+      }
+      this.tools[tool.PlayerNetworkId].Add(tool);
     }
     
     void Awake()

@@ -33,6 +33,7 @@ namespace SHG
       }
       smithingTool.OnTransfered += this.OnTranfered;
       smithingTool.OnWorked += this.OnWork;
+      BotContext.Instance.AddTool(smithingTool);
       int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
       if (smithingTool is DropOffTableComponent dropOffTable ||
         smithingTool is ConveyorBeltHopper conveyorBelt) {

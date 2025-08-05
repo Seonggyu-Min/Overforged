@@ -75,7 +75,7 @@ namespace SHG
           return (RawMaterial.String);
       }
       #if UNITY_EDITOR
-      Debug.LogError($"{nameof(Part)}: Fail to {nameof(TryGetRawMaterial)} {this.Variation} {this.OreType} {this.WoodType}" );
+      Debug.Log($"{nameof(Part)}: Fail to {nameof(TryGetRawMaterial)} {this.Variation} {this.OreType} {this.WoodType}" );
       #endif
       return (null);
     }

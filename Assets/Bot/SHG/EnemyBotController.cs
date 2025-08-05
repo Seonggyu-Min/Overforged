@@ -236,10 +236,14 @@ namespace SHG
 
     void GetContext()
     {
-      this.anvil = BotContext.Instance.GetComponent<Anvil>(
+      this.anvil = BotContext.Instance.GetComponent<AnvilComponent>(
         this.networkId, SmithingTool.ToolType.Anvil);
       this.furnace = BotContext.Instance.GetComponent<FurnaceComponent>(
         this.networkId, SmithingTool.ToolType.Furnace);
+      this.quenchingTool = BotContext.Instance.GetComponent<QuenchingComponent>(
+        this.networkId, SmithingTool.ToolType.QuenchingTool);
+      this.table = BotContext.Instance.GetComponent<TableComponent>(
+        this.networkId, SmithingTool.ToolType.WoodTable);
     }
 
     [Button]
