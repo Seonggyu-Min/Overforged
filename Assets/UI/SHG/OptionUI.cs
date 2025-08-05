@@ -26,20 +26,21 @@ namespace SHG
     ListView bgmListView;
     List<string> bgmList;
     int[] selectedBgmIndex = new int[1];
+    VisualElement container;
 
     public void Show()
     {
-      this.root.style.display = DisplayStyle.Flex;
-      this.root.BringToFront();
+      this.container.style.display = DisplayStyle.Flex;
+      this.container.contentContainer.BringToFront();
       this.IsShowing = true;
       this.UpdateUI();
     }
 
     public void Hide()
     {
-      this.root.style.display = DisplayStyle.None;
       this.IsShowing = false;
-      this.root.SendToBack();
+      this.container.style.display = DisplayStyle.None;
+      this.container.SendToBack();
     }
 
     public void SetKey(KeyCode keyCode) {
@@ -99,12 +100,16 @@ namespace SHG
     {
       this.document = this.GetComponent<UIDocument>();
       this.root = this.document.rootVisualElement;
-      this.root.name = "option-window";
+      this.root.AddToClassList("window");
       this.panel = new AppUIElement.Panel {
         theme = "dark"
       };
-      this.panel.contentContainer.name = "option-panel";
+      this.panel.AddToClassList("window");
       this.root.Add(this.panel);
+      this.container = new VisualElement {
+        name = "option-window"
+      };
+      this.panel.Add(this.container);
       this.bgmList = new();
       this.CreateUI();
       this.UpdateUI();
@@ -137,7 +142,7 @@ namespace SHG
              size = AppUIElement.HeadingSize.XL
       }; 
       optionHeader.AddToClassList(Constants.OPTION_HEADER);
-      this.panel.Add(optionHeader);
+      this.container.Add(optionHeader);
       var closeButtonContainer = new VisualElement {
          name = Constants.CLOSE_BUTTON 
       };
@@ -151,8 +156,8 @@ namespace SHG
         }
       };
       closeButtonContainer.Add(closeButton);
-      this.panel.Add(closeButtonContainer);
-      this.panel.Add(
+      this.container.Add(closeButtonContainer);
+      this.container.Add(
         new AppUIElement.Spacer {
         spacing = AppUIElement.SpacerSpacing.S
         });
@@ -160,14 +165,14 @@ namespace SHG
         text = "Sound",
         size = AppUIElement.HeadingSize.M
       };
-      this.panel.Add(soundHeader);
+      this.container.Add(soundHeader);
 
       var masterVolumeRow = this.CreateRowSlider(
         labelText: "Master",
         slider: out this.masterVolumeSlider,
         labelIconName: "sound-icon"
         );
-      this.panel.Add(masterVolumeRow);
+      this.container.Add(masterVolumeRow);
 
       this.masterVolumeSlider.RegisterValueChangedCallback<float>(
         evt => this.OnVolumeSliderChanged(IAudioLibrary.VolumeType.Master, evt.newValue));
@@ -177,7 +182,7 @@ namespace SHG
         slider: out this.bgmVolumeSlider,
         labelIconName: "bgm-icon"
         );
-      this.panel.Add(bgmVolumeRow); 
+      this.container.Add(bgmVolumeRow); 
       this.bgmVolumeSlider.RegisterValueChangedCallback<float>(
         evt => this.OnVolumeSliderChanged(IAudioLibrary.VolumeType.Bgm, 
           evt.newValue));
@@ -189,8 +194,8 @@ namespace SHG
       this.sfxVolumeSlider.RegisterValueChangedCallback<float>(
         evt => this.OnVolumeSliderChanged(IAudioLibrary.VolumeType.Sfx, 
           evt.newValue));
-      this.panel.Add(sfxVolumeRow);
-      this.panel.Add(
+      this.container.Add(sfxVolumeRow);
+      this.container.Add(
         new AppUIElement.Spacer {
         spacing = AppUIElement.SpacerSpacing.M
         });
@@ -198,7 +203,7 @@ namespace SHG
         text = "Bgm",
         size = AppUIElement.HeadingSize.M
       };
-      this.panel.Add(bgmLabel);
+      this.container.Add(bgmLabel);
       this.bgmListView = new ListView {
         name = Constants.BGM_LIST_CONTAINER,
         itemsSource = this.bgmList,
@@ -207,12 +212,12 @@ namespace SHG
         selectionType = SelectionType.Single,
         fixedItemHeight = 60
       };
-      this.panel.Add(
+      this.container.Add(
         new AppUIElement.Spacer {
         spacing = AppUIElement.SpacerSpacing.S
         });
       this.bgmListView.selectedIndicesChanged += this.OnBgmSelected; 
-      this.panel.Add(this.bgmListView);
+      this.container.Add(this.bgmListView);
     }
 
     void OnBgmSelected(IEnumerable indices)
