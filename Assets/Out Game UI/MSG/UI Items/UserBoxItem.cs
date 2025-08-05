@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.AppUI.UI;
 using UnityEngine;
+using UnityEngine.Splines;
 using UnityEngine.UI;
 using Zenject;
 
@@ -10,7 +12,8 @@ namespace MIN
 {
     public class UserBoxItem : MonoBehaviour
     {
-        private IFirebaseManager _firebaseManager;
+        [Inject] private IFirebaseManager _firebaseManager;
+        [Inject] private DiContainer _diContainer;
 
         [SerializeField] private Image _statusImage;
         [SerializeField] private TMP_Text _nickNameText;
@@ -19,14 +22,22 @@ namespace MIN
         private string _uid;
         private GameObject _popUp;
 
-        public void Init(string nickname, bool isGaming, string uid, IFirebaseManager firebaseManager, Transform parent)
+        public void Init(string nickname, bool isGaming, string uid, Transform parent, bool isOnline = true)
         {
-            _firebaseManager = firebaseManager;
             _popUpParent = parent;
 
             _nickNameText.text = nickname;
             // 게임 중이면 노랑, 로비나 방에 있으면 초록으로 표기
-            _statusImage.color = isGaming ? Color.yellow : Color.green;
+            
+            if (!isOnline)
+            {
+                _statusImage.color = Color.gray;
+            }
+            else
+            {
+                _statusImage.color = isGaming ? Color.yellow : Color.green;
+            }
+
 
             _uid = uid;
         }
@@ -36,8 +47,9 @@ namespace MIN
         public void OnClickThis()
         {
             _popUp = Instantiate(_otherUserInfoPopPrefab, _popUpParent);
+            _diContainer.InjectGameObject(_popUp);
             OtherUserInfoPopUp info = _popUp.GetComponent<OtherUserInfoPopUp>();
-            info.SetText(_uid, _firebaseManager);
+            info.SetText(_uid);
         }
 
         public void OnClickCloseButton()
