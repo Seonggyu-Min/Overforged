@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using EditorAttributes;
@@ -9,8 +10,6 @@ namespace SHG
     [SerializeField] [Required]
     Transform boxPoint;
     [SerializeField] [Required]
-    MeshRenderer model;
-    [SerializeField] [Required]
     ConveyorBeltController beltController;
     [SerializeField] [Range(0f, 1f)]
     float boxOffset;
@@ -18,12 +17,20 @@ namespace SHG
     protected override SmithingTool tool => this.beltController.ConveyorBelt;
     protected override Transform materialPoint => this.boxPoint;
     protected override ISmithingToolEffecter effecter => this.beltController.Effecter;
+    protected override bool isProgressUsed => false;
     HashSet<ConveyorBeltBox> nearBoxes;
+    [SerializeField] [Required()]
+    MeshRenderer[] renderers;
 
     protected override void Awake()
     {
-      base.meshRenderer = this.model;
       base.Awake();
+      this.highlighter = new GameObjectHighlighter(
+        Array.ConvertAll<Renderer, Material>(
+          this.renderers, renderer => renderer.material));
+      for (int i = 0; i < this.renderers.Length; i++) {
+        this.renderers[i].material = this.highlighter.HighlightedMaterials[i]; 
+      }
       this.nearBoxes = new ();
     }
 

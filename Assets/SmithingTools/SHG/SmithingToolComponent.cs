@@ -43,9 +43,9 @@ namespace SHG
     int playerId;
     [SerializeField] [ReadOnly]
     bool isOwner;
-    [SerializeField] [Required]
+    [SerializeField] 
     GameObject uiPrefab;
-    [SerializeField] [Required]
+    [SerializeField]
     protected Transform uiPoint;
     protected GameObject uiObject;
     protected GauageImageUI progressUI;
@@ -64,12 +64,13 @@ namespace SHG
           new Material[] { this.meshRenderer.material });
         this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
       }
-      this.uiObject = GameObject.Instantiate(
-        this.uiPrefab, 
-        position: this.uiPoint.position,
-        rotation: this.uiPoint.rotation);
-      //this.uiObject.transform.SetParent(this.transform);
-      this.itemUI = Utils.RecursiveFindChild<LookCameraUI>(this.uiObject.transform);
+      if (this.uiPrefab != null && this.uiPoint != null) {
+        this.uiObject = GameObject.Instantiate(
+          this.uiPrefab, 
+          position: this.uiPoint.position,
+          rotation: this.uiPoint.rotation);
+        this.itemUI = Utils.RecursiveFindChild<LookCameraUI>(this.uiObject.transform);
+      }
       if (this.isProgressUsed) {
         this.progressUI = Utils.RecursiveFindChild<GauageImageUI>(this.uiObject.transform);
         this.progressUI.WorkSprite = this.gauageUIImage;

@@ -43,6 +43,9 @@ namespace SHG
       else {
         smithingTool.IsOwner = smithingTool.PlayerNetworkId == playerId;
       }
+      #if LOCAL_TEST
+      smithingTool.IsOwner = true;
+      #endif
     }
 
     void OnWork(SmithingToolComponent component, ToolWorkResult result)
