@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6c82873ebaeeed19d23b124b548e13, type: 3}
   m_Name: AnvilData
   m_EditorClassIdentifier: 
-  toolName: TestAnvil
-  prefab: {fileID: 5175050888353610647, guid: efe94da8899def46eaf49243d9354d14, type: 3}
+  toolName: Anvil
   allowdMaterialTypes: 02000000030000000600000007000000
   timeRequiredInSeconds: 0
   interactionTime: 0.5
   requiredInteractCount: 5
+  toolType: 2

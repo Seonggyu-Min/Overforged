@@ -6,6 +6,7 @@ using UnityEngine;
 using Zenject;
 using UnityEngine.SocialPlatforms;
 using MIN;
+using SHG;
 
 namespace SCR
 {
@@ -72,7 +73,8 @@ namespace SCR
             //RecipeData recipe = allRecipes[index];
             RecipeUI ui = GetFirstUI();
 
-            //ui.Setup(recipe, uiId);
+            BotContext.Instance.AddRecipe(prod.ProductItemData, wood, ore); // AI에게 현재 레시피 정보 추가.
+
             ui.Setup(prod, wood, ore);
         }
 

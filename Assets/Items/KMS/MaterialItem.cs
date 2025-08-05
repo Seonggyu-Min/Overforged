@@ -4,6 +4,7 @@ using UnityEngine;
 using MIN;
 using Photon.Pun;
 using Photon.Pun.Demo.Cockpit;
+using System;
 
 public class MaterialItem : Item
 {
@@ -97,11 +98,14 @@ public class MaterialItem : Item
         highlighter = new SHG.GameObjectHighlighter(render.materials);
         this.render.materials = this.highlighter.HighlightedMaterials;
     }
+
+    public Action onCool;
     [PunRPC]
     public void Cool()
     {
         isHot = false;
         SetMaterial();
+        onCool?.Invoke();
     }
     [PunRPC]
     public void ChangeToNext()

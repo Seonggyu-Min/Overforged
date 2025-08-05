@@ -6,36 +6,39 @@ using UnityEngine;
 public class CharacterIndicator : MonoBehaviourPun
 {
     [SerializeField] private GameObject indicatorPrefab; // UI 프리팹
-    private GameObject currentIndicator;
-
-    [SerializeField]
-    private Vector3 offset = new Vector3(0, 0, 0); // 캐릭터 발 밑 위치
 
     void Start()
+    {
+        ShowIndicator();
+    }
+    void ShowIndicator()
     {
         if (photonView.IsMine)
         {
             if (indicatorPrefab != null)
             {
-                currentIndicator = Instantiate(indicatorPrefab, transform);
+                indicatorPrefab.SetActive(true);
             }
         }
     }
 
-    void LateUpdate()
-    {
-        if (photonView.IsMine && currentIndicator != null)
-        {
-            currentIndicator.transform.position = transform.position + offset;
-        }
-    }
+    // void LateUpdate()
+    // {
+    //     if (photonView.IsMine && currentIndicator != null)
+    //     {
+    //         currentIndicator.transform.position = transform.position + offset;
+    //     }
+    // }
 
     // 삭제 타이밍 언제?
-    void OnDestroy()
+    void HideIndicator()
     {
-        if (photonView.IsMine && currentIndicator != null) // UI가 생성된 경우에만
+        if (photonView.IsMine)
         {
-            Destroy(currentIndicator);
+            if (indicatorPrefab != null)
+            {
+                indicatorPrefab.SetActive(false);
+            }
         }
     }
 }

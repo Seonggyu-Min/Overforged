@@ -113,47 +113,52 @@ namespace MIN
             if (PhotonNetwork.IsMasterClient)
             {
                 // 마스터 클라이언트가 시작 버튼을 클릭한 경우
-                if (PhotonNetwork.CurrentRoom.PlayerCount < 2)
-                {
-                    _infoText.text = "최소 2명 이상이 필요합니다.";
-                    return;
-                }
+                //if (PhotonNetwork.CurrentRoom.PlayerCount < 2)
+                //{
+                //    _infoText.text = "최소 2명 이상이 필요합니다.";
+                //    return;
+                //}
 
                 // 모든 플레이어가 준비 상태인지 확인
-                foreach (var player in PhotonNetwork.PlayerList)
+                if (PhotonNetwork.PlayerList.Length != 1)
                 {
-                    if (player.IsMasterClient) continue; // 마스터 클라이언트는 제외
-                    if (!player.CustomProperties.TryGetValue(CustomPropertyKeys.IsReady, out object isReadyObj) || !(bool)isReadyObj)
+                    foreach (var player in PhotonNetwork.PlayerList)
                     {
-                        _infoText.text = "모든 플레이어가 준비 상태여야 합니다.";
-                        return;
+                        if (player.IsMasterClient) continue; // 마스터 클라이언트는 제외
+                        if (!player.CustomProperties.TryGetValue(CustomPropertyKeys.IsReady, out object isReadyObj) || !(bool)isReadyObj)
+                        {
+                            _infoText.text = "모든 플레이어가 준비 상태여야 합니다.";
+                            return;
+                        }
                     }
                 }
 
                 // 팀이 최소 2개 이상인지 확인
-                HashSet<int> teamColors = new HashSet<int>();
-
-                foreach (var player in PhotonNetwork.PlayerList)
+                if (PhotonNetwork.PlayerList.Length != 1)
                 {
-                    if (player.CustomProperties.TryGetValue(CustomPropertyKeys.TeamColor, out object teamColorObj) && teamColorObj is int teamColorId)
+                    HashSet<int> teamColors = new HashSet<int>();
+
+                    foreach (var player in PhotonNetwork.PlayerList)
                     {
-                        teamColors.Add(teamColorId);
+                        if (player.CustomProperties.TryGetValue(CustomPropertyKeys.TeamColor, out object teamColorObj) && teamColorObj is int teamColorId)
+                        {
+                            teamColors.Add(teamColorId);
+                        }
+                    }
+
+                    if (teamColors.Count < 2)
+                    {
+                        _infoText.text = "최소 2개의 팀이 필요합니다.";
+                        return;
                     }
                 }
-
-                if (teamColors.Count < 2)
-                {
-                    _infoText.text = "최소 2개의 팀이 필요합니다.";
-                    return;
-                }
-
 
                 PhotonNetwork.CurrentRoom.IsOpen = false;
                 PhotonNetwork.CurrentRoom.IsVisible = false;
 
                 int mapId = PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(CustomPropertyKeys.MapId, out object mapIdObj) && mapIdObj is int id ? id : 0;
 
-                PhotonNetwork.LoadLevel(mapId + 1);
+                PhotonNetwork.LoadLevel(1);
             }
             // 일반 플레이어일 경우 준비 상태 토글
             else

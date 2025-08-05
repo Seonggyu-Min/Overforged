@@ -9,6 +9,7 @@ namespace SHG
 {
   public abstract class SmithingToolComponent : MonoBehaviour, IInteractableTool, INetworkSynchronizable, IHighlightable
   {
+
     [Inject]
     protected INetworkSynchronizer<SmithingToolComponent> NetworkSynchronizer { get; private set; }
 
@@ -24,10 +25,9 @@ namespace SHG
       get => this.playerId;
       set => this.playerId = value;
     }
+
     public int SceneId => this.id;
-
     public bool IsHighlighted => this.highlighter.IsHighlighted;
-
     public Color HighlightColor
     {
       get => this.highlighter.HighlightColor;
@@ -43,9 +43,9 @@ namespace SHG
     int playerId;
     [SerializeField] [ReadOnly]
     bool isOwner;
-    [SerializeField] [Required]
+    [SerializeField] 
     GameObject uiPrefab;
-    [SerializeField] [Required]
+    [SerializeField]
     protected Transform uiPoint;
     protected GameObject uiObject;
     protected GauageImageUI progressUI;
@@ -64,12 +64,13 @@ namespace SHG
           new Material[] { this.meshRenderer.material });
         this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
       }
-      this.uiObject = GameObject.Instantiate(
-        this.uiPrefab, 
-        position: this.uiPoint.position,
-        rotation: this.uiPoint.rotation);
-      this.uiObject.transform.SetParent(this.transform);
-      this.itemUI = Utils.RecursiveFindChild<LookCameraUI>(this.uiObject.transform);
+      if (this.uiPrefab != null && this.uiPoint != null) {
+        this.uiObject = GameObject.Instantiate(
+          this.uiPrefab, 
+          position: this.uiPoint.position,
+          rotation: this.uiPoint.rotation);
+        this.itemUI = Utils.RecursiveFindChild<LookCameraUI>(this.uiObject.transform);
+      }
       if (this.isProgressUsed) {
         this.progressUI = Utils.RecursiveFindChild<GauageImageUI>(this.uiObject.transform);
         this.progressUI.WorkSprite = this.gauageUIImage;
@@ -79,9 +80,7 @@ namespace SHG
     protected virtual void Start()
     {
       this.tool.OnMaterialChanged += this.OnMaterialChanged;
-      #if !LOCAL_TEST
       this.NetworkSynchronizer.RegisterSynchronizable(this);
-      #endif
     }
 
     protected virtual void Update()

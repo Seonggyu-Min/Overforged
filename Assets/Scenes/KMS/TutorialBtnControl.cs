@@ -17,6 +17,12 @@ public class TutorialBtnControl : MonoBehaviourPunCallbacks
 
     public void OnclickTutorial()
     {
+        Hashtable props = new Hashtable
+        {
+            { CustomPropertyKeys.CharacterId, 1 },
+            { CustomPropertyKeys.TeamColor, 1 }
+        };
+        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
         FirebaseAuth auth = FirebaseAuth.DefaultInstance;
         FirebaseUser user = auth.CurrentUser;
         if (user == null) return;
@@ -61,11 +67,21 @@ public class TutorialBtnControl : MonoBehaviourPunCallbacks
         if (PhotonNetwork.CurrentRoom.Name != uid) return;
 
         //방 입장 부분
+        string mapId = PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(
+CustomPropertyKeys.MapId, out object mapIdObj) && mapIdObj is string id ? id : "";
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
-        string mapId = PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(
-            CustomPropertyKeys.MapId, out object mapIdObj) && mapIdObj is string id ? id : "";
+        PhotonNetwork.LoadLevel(mapId);
 
+    }
+
+    private IEnumerator LoadLevelRoutine()
+    {
+        yield return null;
+        string mapId = PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(
+    CustomPropertyKeys.MapId, out object mapIdObj) && mapIdObj is string id ? id : "";
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+        PhotonNetwork.CurrentRoom.IsVisible = false;
         PhotonNetwork.LoadLevel(mapId);
 
     }

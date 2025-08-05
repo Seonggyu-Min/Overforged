@@ -7,7 +7,7 @@ namespace SHG
 {
   public class QuenchingComponent : SmithingToolComponent
   {
-
+    public bool IsFinished => this.quenchingTool.IsFinished;
     [Inject]
     IAudioLibrary audioLibrary;
     [SerializeField] [Required()]
