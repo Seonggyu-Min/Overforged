@@ -86,7 +86,12 @@ namespace SCR
                     };
                 }
                 IInteractableTool interactable = hitInteractable.collider.gameObject.GetComponent<IInteractableTool>();
-                if (interactable == null) return;
+                if (interactable == null)
+                {
+                    Item item = hitInteractable.collider.gameObject.GetComponent<Item>();
+                    if (item != null) item.Hightlight(Color.green);
+                    return;
+                }
                 canTransfer = interactable.CanTransferItem(transferArgs);
                 if (interactable is SmithingToolComponent smithingTool)
                 {

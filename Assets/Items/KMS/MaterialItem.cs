@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using MIN;
 using Photon.Pun;
+using Photon.Pun.Demo.Cockpit;
+using System;
 
 public class MaterialItem : Item
 {
@@ -16,7 +18,10 @@ public class MaterialItem : Item
         }
         set
         {
-            ore = value;
+            if (matData.materialType == MaterialType.Metallic || matData.materialType == MaterialType.Mineral)
+            {
+                ore = value;   
+            }
             SetMaterial();
         }
     }
@@ -29,7 +34,10 @@ public class MaterialItem : Item
         }
         set
         {
-            wood = value;
+            if (matData.materialType == MaterialType.Wooden)
+            {
+                wood = value;
+            }
             SetMaterial();
         }
     }
@@ -86,12 +94,18 @@ public class MaterialItem : Item
         {
             render.sharedMaterials = new Material[] { matCatalog.HotMetal, matCatalog.HotMetal };
         }
+        highlighter = null;
+        highlighter = new SHG.GameObjectHighlighter(render.materials);
+        this.render.materials = this.highlighter.HighlightedMaterials;
     }
+
+    public Action onCool;
     [PunRPC]
     public void Cool()
     {
         isHot = false;
         SetMaterial();
+        onCool?.Invoke();
     }
     [PunRPC]
     public void ChangeToNext()
@@ -116,6 +130,12 @@ public class MaterialItem : Item
         {
             render.sharedMaterials = new Material[] { matCatalog.Stone, CurrentOreMat };
         }
+        else
+        {
+            render.sharedMaterial = matCatalog.OreDict[OreType.None];
+        }
+        highlighter = new SHG.GameObjectHighlighter(render.materials);
+        this.render.materials = this.highlighter.HighlightedMaterials;
 
     }
     public static OreType GetOreType(List<MaterialItem> list)

@@ -19,8 +19,6 @@ public class ProductConvey : MonoBehaviour, IInteractableTool
 
     [Inject] MIN.IScoreManager _scoreManager;
 
-    Convey convey;
-
     private Item HoldingItem;
 
 

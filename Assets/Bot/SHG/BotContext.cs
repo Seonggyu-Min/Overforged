@@ -21,12 +21,12 @@ namespace SHG
     public List<ConveyComponent> submitPlaces;
 
     public void AddRecipe(
-      CraftData data,
+      ProductItemData data,
       WoodType woodType,
       OreType oreType)
     {
       var recipe = new ProductRecipe(
-          productType: data.ProductItemData.productType,
+          productType: data.productType,
           oreType: oreType,
           woodType: woodType,
           timeStamp: Time.time);
@@ -35,13 +35,13 @@ namespace SHG
     }
 
     public void RemoveRecipe(
-      CraftData data,
+      ProductItemData data,
       WoodType woodType,
       OreType oreType)
     {
       int index = this.recipes.FindIndex(
         recipe => recipe.IsEqualTo(
-          productType: data.ProductItemData.productType,
+          productType: data.productType,
           oreType: oreType,
           woodType: woodType));
       if (index != -1) {
@@ -166,7 +166,7 @@ namespace SHG
     [SerializeField] [VerticalGroup(10f, true, nameof(craftData), nameof(woodType), nameof(oreType))]
     EditorAttributes.Void testGroup;
     [SerializeField] [HideInInspector]
-    CraftData craftData;
+    ProductItemData craftData;
     [SerializeField] [HideInInspector]
     WoodType woodType;
     [SerializeField] [HideInInspector]

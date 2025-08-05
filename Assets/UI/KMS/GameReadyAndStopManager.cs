@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using Zenject;
 using System;
 using MIN;
+using SCR;
 
 
 public class GameReadyAndStopManager : MonoBehaviourPunCallbacks
@@ -27,7 +28,9 @@ public class GameReadyAndStopManager : MonoBehaviourPunCallbacks
     public Action OnGameBegin;
     public Action OnTimeOver;
 
+    public bool Skip { get; set; }
 
+    [SerializeField] private ResultUI resultUI;
 
     // 플레이어가 게임에 들어온 직후, 내가 게임에 들어왔다는 커스텀 프로퍼티를 설정한다.
     // 씬 진입 직후에 로컬 플레이어의 커스텀 프로퍼티를 true로 설정?
@@ -47,7 +50,7 @@ public class GameReadyAndStopManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { localSceneLoaded, true } });
     }
 
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, Hashtable changedProps)
     {
         if (!PhotonNetwork.IsMasterClient) return;
         if (changedProps[localSceneLoaded] == null) return;
@@ -73,6 +76,11 @@ public class GameReadyAndStopManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void StartReadyUI()
     {
+        if (Skip)
+        {
+            IsGameStopped = false;
+            return;
+        }
         StartCoroutine(ReadyGoRoutine());
     }
 
@@ -92,6 +100,7 @@ public class GameReadyAndStopManager : MonoBehaviourPunCallbacks
     {
         IsGameStopped = true;
         TimeUp.enabled = true;
+        resultUI.gameObject.SetActive(true);
         yield return new WaitForSeconds(5);
         TimeUp.enabled = false;
         IsGameStopped = false;

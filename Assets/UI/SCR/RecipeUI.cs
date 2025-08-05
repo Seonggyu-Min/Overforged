@@ -19,8 +19,12 @@ namespace SCR
 
         // 현재 이 UI가 표시하고 있는 레시피 데이터
         public JJY.RecipeData curRecipe { get; private set; }
-        public int uniqueID;
+
         private string recipeNameText;
+        private float fullTime;
+        private int fullScore;
+        private int currentScore;
+        private Coroutine startTime;
         public CraftData curCraft;
         public WoodType curWood;
         public OreType curOre;
@@ -29,13 +33,13 @@ namespace SCR
         public ProductItemData curProduct => curCraft.ProductItemData;
 
         // 외부에서 레시피 데이터 받아 UI 설정
-        public void Setup(CraftData craftdata, WoodType wood, OreType ore, int id)
+        public void Setup(CraftData craftdata, WoodType wood, OreType ore)
         {
             curCraft = craftdata;
             curWood = wood;
             curOre = ore;
-            uniqueID = id;
-
+            fullTime = curCraft.Materials.Length * 15f;
+            fullScore = curCraft.Materials.Length * 50;
             recipeNameText = $"{matData.oreName[curOre]}{matData.woodName[curWood]}{curProduct.Name}";
 
             outputImage.sprite = productSprites.Dict[recipeNameText];
@@ -46,7 +50,7 @@ namespace SCR
                 if (i < curCraft.Materials.Length)
                 {
                     ingredientObjects[i].gameObject.SetActive(true);
-                    ingredientObjects[i].SetIngredientObject(curCraft.Materials[i].Image,
+                    ingredientObjects[i].SetIngredientObject(wood, ore,
                     curCraft.Materials[i].guideImage, curCraft.Materials[i].guideMessage);
                 }
                 else
@@ -54,11 +58,54 @@ namespace SCR
                     ingredientObjects[i].gameObject.SetActive(false);
                 }
             }
+
+            startTime = StartCoroutine(StartTime());
         }
 
-        public void LeftTime(float Values)
+        public bool CheckRecipe(ProductItemData data, OreType ore, WoodType wood)
+        {
+            if (curProduct == data && curOre == ore && curWood == wood)
+                return true;
+            else
+                return false;
+        }
+
+        private IEnumerator StartTime()
+        {
+            gameObject.SetActive(true);
+            float leftTime = fullTime;
+            while (leftTime > 0)
+            {
+                LeftTime(leftTime / fullTime);
+                SetScore(leftTime);
+                yield return new WaitForFixedUpdate();
+                leftTime -= Time.deltaTime;
+            }
+            StopCoroutine(startTime);
+            gameObject.SetActive(false);
+        }
+
+        private void SetScore(float time)
+        {
+            if (time < fullTime / 3) currentScore = fullScore / 3;
+            else if (time < 2 * fullTime / 3) currentScore = 2 * fullScore / 3;
+            else currentScore = fullScore;
+        }
+
+        private void LeftTime(float Values)
         {
             leftTime.value = Values;
+        }
+
+        public void Fulfill()
+        {
+            StopCoroutine(startTime);
+            gameObject.SetActive(false);
+        }
+
+        public int GetScore()
+        {
+            return currentScore;
         }
     }
 }

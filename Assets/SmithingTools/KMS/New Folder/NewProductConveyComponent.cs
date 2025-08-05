@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Photon.Pun;
 using Zenject;
+using SCR;
 
 public class NewProductConveyComponent : SmithingToolComponent
 {
@@ -18,7 +19,7 @@ public class NewProductConveyComponent : SmithingToolComponent
     [SerializeField]
     Transform productPosition;
 
-    [SerializeField] RecipeManager manager;
+    [SerializeField] OrderUI manager;
     [SerializeField] PhotonView photon;
 
     [SerializeField] GameObject good;
@@ -46,7 +47,7 @@ public class NewProductConveyComponent : SmithingToolComponent
               new Material[] { this.meshRenderer.material });
             this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
         }
-        this.convey = new NewProductConvey(this.data, manager);
+        this.convey = new NewProductConvey(this.data);
     }
 
     protected override void Start()
@@ -61,8 +62,8 @@ public class NewProductConveyComponent : SmithingToolComponent
         {
             if (manager.Check(item.Data as ProductItemData, item.Ore, item.Wood))
             {
-                _scoreManager.AddScore(PhotonNetwork.LocalPlayer, 1);
                 manager.FulfillRecipe();
+                BotContext.Instance.RemoveRecipe(item.Data as ProductItemData, item.Wood, item.Ore); // AI에 등록된 레시피 정보 삭제.
                 Instantiate(good, goodPos.position, Quaternion.identity);
             }
         }

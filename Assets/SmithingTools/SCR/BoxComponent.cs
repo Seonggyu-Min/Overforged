@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using System;
 
 namespace SCR
 {
@@ -18,7 +19,9 @@ namespace SCR
         private GameObject itemObj;
         [SerializeField] PhotonView view;
 
-        void Start()
+        public Action OnGetItem;
+
+        void OnValidate()
         {
             SetItem();
         }
@@ -44,10 +47,6 @@ namespace SCR
                 boxItemWood = WoodType.None;
             }
             mesh.material = itemMaterial[(int)type];
-            Debug.Log(boxItemData);
-            Debug.Log(boxItemOre);
-            Debug.Log(boxItemWood);
-            Debug.Log(mesh.material);
         }
 
         public GameObject CreateItem()
@@ -60,6 +59,7 @@ namespace SCR
 
             int viewID = itemObj.GetComponent<PhotonView>().ViewID;
             view.RPC(nameof(RPC_SetItem), RpcTarget.AllBuffered, viewID);
+            OnGetItem?.Invoke();
 
             return itemObj;
         }

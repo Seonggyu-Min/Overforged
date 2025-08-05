@@ -26,7 +26,7 @@ namespace MIN
         [SerializeField] private Button _maxPlayerPlusButton;
         [SerializeField] private Button _maxPlayerMinusButton;
         private int _maxPlayerCount = 2;
-        private const int MAX_PLAYER_COUNT = 8;
+        private const int MAX_PLAYER_COUNT = 4;
         private const int MIN_PLAYER_COUNT = 2;
 
         [Header("비밀 방 관련")]
@@ -127,11 +127,21 @@ namespace MIN
             }
             else
             {
+                Hashtable normalProperties = new Hashtable
+                {
+                    { CustomPropertyKeys.MapId, 0 }
+                };
+
                 // 일반 공개방은 프로퍼티 생략
                 roomOptions = new RoomOptions
                 {
                     MaxPlayers = (byte)_maxPlayerCount,
                     PublishUserId = true,
+                    CustomRoomProperties = normalProperties,
+                    CustomRoomPropertiesForLobby = new string[]
+                    {
+                        CustomPropertyKeys.MapId
+                    }
                 };
             }
 
