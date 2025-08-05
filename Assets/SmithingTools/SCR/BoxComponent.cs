@@ -44,10 +44,6 @@ namespace SCR
                 boxItemWood = WoodType.None;
             }
             mesh.material = itemMaterial[(int)type];
-            Debug.Log(boxItemData);
-            Debug.Log(boxItemOre);
-            Debug.Log(boxItemWood);
-            Debug.Log(mesh.material);
         }
 
         public GameObject CreateItem()
