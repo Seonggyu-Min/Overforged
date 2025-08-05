@@ -23851,6 +23851,7 @@ GameObject:
   - component: {fileID: 883639771}
   - component: {fileID: 883639770}
   - component: {fileID: 883639769}
+  - component: {fileID: 883639772}
   m_Layer: 5
   m_Name: Ready or Start Button
   m_TagString: Untagged
@@ -23972,6 +23973,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 883639767}
   m_CullTransparentMesh: 1
+--- !u!114 &883639772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 883639767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0db35a72ba41fa5469b9c07d3af78fa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hoverSound: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
+  _clickSound: {fileID: 8300000, guid: cf6c0e7fbef9449c98a0cdb5ea0c4d9f, type: 3}
 --- !u!1 &897436289
 GameObject:
   m_ObjectHideFlags: 0
@@ -33736,7 +33751,6 @@ GameObject:
   - component: {fileID: 1210322400}
   - component: {fileID: 1210322402}
   - component: {fileID: 1210322401}
-  - component: {fileID: 1210322403}
   m_Layer: 5
   m_Name: Ready or Start Button Text
   m_TagString: Untagged
@@ -33860,20 +33874,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1210322399}
   m_CullTransparentMesh: 1
---- !u!114 &1210322403
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1210322399}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0db35a72ba41fa5469b9c07d3af78fa0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hoverSound: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
-  _clickSound: {fileID: 8300000, guid: cf6c0e7fbef9449c98a0cdb5ea0c4d9f, type: 3}
 --- !u!1 &1218581290
 GameObject:
   m_ObjectHideFlags: 0
