@@ -1,4 +1,4 @@
-//#define LOCAL_TEST
+#define LOCAL_TEST
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +9,7 @@ namespace SHG
 {
   public abstract class SmithingToolComponent : MonoBehaviour, IInteractableTool, INetworkSynchronizable, IHighlightable
   {
+
     [Inject]
     protected INetworkSynchronizer<SmithingToolComponent> NetworkSynchronizer { get; private set; }
 
@@ -24,10 +25,9 @@ namespace SHG
       get => this.playerId;
       set => this.playerId = value;
     }
+
     public int SceneId => this.id;
-
     public bool IsHighlighted => this.highlighter.IsHighlighted;
-
     public Color HighlightColor
     {
       get => this.highlighter.HighlightColor;
@@ -68,7 +68,7 @@ namespace SHG
         this.uiPrefab, 
         position: this.uiPoint.position,
         rotation: this.uiPoint.rotation);
-      this.uiObject.transform.SetParent(this.transform);
+      //this.uiObject.transform.SetParent(this.transform);
       this.itemUI = Utils.RecursiveFindChild<LookCameraUI>(this.uiObject.transform);
       if (this.isProgressUsed) {
         this.progressUI = Utils.RecursiveFindChild<GauageImageUI>(this.uiObject.transform);
@@ -79,9 +79,7 @@ namespace SHG
     protected virtual void Start()
     {
       this.tool.OnMaterialChanged += this.OnMaterialChanged;
-      #if !LOCAL_TEST
       this.NetworkSynchronizer.RegisterSynchronizable(this);
-      #endif
     }
 
     protected virtual void Update()

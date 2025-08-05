@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: QuenchingToolData
   m_EditorClassIdentifier: 
   toolName: Quenching Tool
-  prefab: {fileID: 8435155501038125320, guid: 10267e685848295e0a7f460f0f548e7e, type: 3}
   allowdMaterialTypes: 030000000600000007000000
   timeRequiredInSeconds: 3
   interactionTime: 1
   requiredInteractCount: 1
+  toolType: 3

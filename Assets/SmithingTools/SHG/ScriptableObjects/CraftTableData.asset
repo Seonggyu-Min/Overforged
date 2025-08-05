@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: CraftTableData
   m_EditorClassIdentifier: 
   toolName: Craft Table
-  prefab: {fileID: 9177546376438052479, guid: 0a00b6106ef4b3e8697aa98a3ffddc7d, type: 3}
   allowdMaterialTypes: 
   timeRequiredInSeconds: 0
   interactionTime: 0.5
   requiredInteractCount: 1
+  toolType: 5
   craftList:
   - {fileID: 11400000, guid: b95af1da3c773704084b200d561828d4, type: 2}
   - {fileID: 11400000, guid: 246b6dac82b167b4ea437176195d70ae, type: 2}

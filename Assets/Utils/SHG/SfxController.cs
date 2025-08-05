@@ -4,6 +4,8 @@ using UnityEngine;
 public class SfxController : MonoBehaviour, IPooledObject
 {
   static readonly System.Random VOLUME_RAND = new ();
+  const float MIN_DISTANCE = 1f;
+  const float MAX_DISTANCE = 500f;
   public Action<IPooledObject> OnDisabled { get; set; }
   public AudioSource AudioSource { get; private set; }
   public bool IsPlaying => this.AudioSource.clip != null && this.AudioSource.isPlaying;
@@ -82,6 +84,20 @@ public class SfxController : MonoBehaviour, IPooledObject
     return (this);
   }
 
+  public SfxController SetDistance(float min = MIN_DISTANCE, float max = MAX_DISTANCE)
+  {
+    this.AudioSource.minDistance = min;
+    this.AudioSource.maxDistance = max;
+    return (this);
+  }
+
+  public SfxController Set3dBlend(float proportion)
+  {
+    float _proportion = Math.Clamp(proportion, 0f, 1f);
+    this.AudioSource.spatialBlend = _proportion;
+    return (this);
+  }
+  
   void Awake()
   {
     this.AudioSource = this.GetComponent<AudioSource>();
@@ -100,6 +116,8 @@ public class SfxController : MonoBehaviour, IPooledObject
       this.AudioSource.clip = null;
       this.transform.position = Vector3.zero;
       this.gameObject.SetActive(false);
+      this.SetDistance();
+      this.Set3dBlend(0f);
     }
   }
 

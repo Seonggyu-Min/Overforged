@@ -19,6 +19,7 @@ namespace SHG
       Right
     }
 
+    public Vector3 CameraLookPos => this.cameraLookObject.position;
     [SerializeField]
     Transform cameraFollowObject;
     [SerializeField]

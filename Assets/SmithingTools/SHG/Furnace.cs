@@ -113,9 +113,9 @@ namespace SHG
         this.ReturnWithEvent(
           new ToolWorkResult {
           Trigger = this.OnTriggered,
-          DurationToStay = this.InteractionTime
-          }
-          ));
+          DurationToStay = this.InteractionTime,
+          IsDone = true
+          }));
     }
   }
 }
