@@ -15,6 +15,7 @@ public class ProductItem : Item
 
     private bool isOreSet;
     private bool isWoodSet;
+    public ProductType Variation => productData.productType;
     public OreType Ore
     {
         get
