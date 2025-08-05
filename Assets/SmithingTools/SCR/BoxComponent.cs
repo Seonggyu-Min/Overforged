@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using System;
 
 namespace SCR
 {
@@ -17,6 +18,8 @@ namespace SCR
 
         private GameObject itemObj;
         [SerializeField] PhotonView view;
+
+        public Action OnGetItem;
 
         void OnValidate()
         {
@@ -56,6 +59,7 @@ namespace SCR
 
             int viewID = itemObj.GetComponent<PhotonView>().ViewID;
             view.RPC(nameof(RPC_SetItem), RpcTarget.AllBuffered, viewID);
+            OnGetItem?.Invoke();
 
             return itemObj;
         }
