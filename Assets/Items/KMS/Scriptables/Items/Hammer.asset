@@ -16,5 +16,7 @@ MonoBehaviour:
   Name: Hammer
   Image: {fileID: 0}
   ItemPrefab: {fileID: 1459689668687645485, guid: 569c740ac9e6aa945b807094a597b155, type: 3}
-  Scale: {x: 1.4, y: 1.4, z: 1.4}
+  Offset: {x: 0, y: 0, z: -0.5}
+  Rotation: {x: 90, y: 0, z: 0}
+  Scale: {x: 2, y: 2, z: 2}
   productType: 3

@@ -16,5 +16,7 @@ MonoBehaviour:
   Name: Axe
   Image: {fileID: 0}
   ItemPrefab: {fileID: 6420927614769115594, guid: e4497736585d20b4aa8aa9c6bf1f2245, type: 3}
-  Scale: {x: 2, y: 2, z: 2}
+  Offset: {x: 0, y: 0, z: 0}
+  Rotation: {x: 90, y: 0, z: 0}
+  Scale: {x: 2.5, y: 2.5, z: 2.5}
   productType: 2

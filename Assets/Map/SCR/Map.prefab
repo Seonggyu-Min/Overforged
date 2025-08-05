@@ -358,6 +358,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: ProtoType Map
+  mapTheme: 0
   Image: {fileID: 21300000, guid: 7f84ecfd700b11941bc6ecf53877fa20, type: 3}
   SpawnPoints:
   - {fileID: 7352857707916316997}
@@ -514,6 +515,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ItemBox
       objectReference: {fileID: 0}
+    - target: {fileID: 7842978716543658555, guid: ea86041c3f9b7a74797510a25134b59b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6b213a636cd70c3489a847e476df5969, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -711,7 +716,7 @@ PrefabInstance:
     - target: {fileID: 5126131336628612230, guid: f26967dd5c61636c7ab53804caf49275, type: 3}
       propertyPath: canvas
       value: 
-      objectReference: {fileID: 7841359056498948032}
+      objectReference: {fileID: 0}
     - target: {fileID: 6927776581169295661, guid: f26967dd5c61636c7ab53804caf49275, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -756,11 +761,6 @@ PrefabInstance:
 --- !u!4 &4822735752658914255 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5072970815610118477, guid: f26967dd5c61636c7ab53804caf49275, type: 3}
-  m_PrefabInstance: {fileID: 327386773901732482}
-  m_PrefabAsset: {fileID: 0}
---- !u!223 &7841359056498948032 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 7519047707730353474, guid: f26967dd5c61636c7ab53804caf49275, type: 3}
   m_PrefabInstance: {fileID: 327386773901732482}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2433920763580219527
@@ -881,6 +881,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ItemBox
       objectReference: {fileID: 0}
+    - target: {fileID: 7842978716543658555, guid: ea86041c3f9b7a74797510a25134b59b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9fc89324a6edc1240ad7b9cddf775492, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1140,7 +1144,7 @@ PrefabInstance:
     - target: {fileID: 5126131336628612230, guid: f26967dd5c61636c7ab53804caf49275, type: 3}
       propertyPath: canvas
       value: 
-      objectReference: {fileID: 7841359056498948032}
+      objectReference: {fileID: 0}
     - target: {fileID: 6927776581169295661, guid: f26967dd5c61636c7ab53804caf49275, type: 3}
       propertyPath: m_Layer
       value: 7

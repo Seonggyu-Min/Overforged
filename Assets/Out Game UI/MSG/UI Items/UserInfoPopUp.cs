@@ -3,10 +3,8 @@ using Firebase.Extensions;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.AppUI.UI;
 using UnityEngine;
 using Zenject;
-using static UnityEngine.Rendering.DebugUI;
 
 
 namespace MIN

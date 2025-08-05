@@ -106,6 +106,10 @@ namespace SCR
                 }
                 isMineUI.SetActive(true);
             }
+            else
+            {
+                isMineUI.SetActive(false);
+            }
 
         }
 

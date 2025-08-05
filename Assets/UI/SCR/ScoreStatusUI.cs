@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,18 +8,20 @@ namespace SCR
 {
     public class ScoreStatusUI : MonoBehaviour
     {
+        [SerializeField] InGameUIManager inGameUIManager;
         [SerializeField] GameObject popupUI;
         [SerializeField] List<ScoreStatusUser> playerUIs;
 
-        public void setPlayer(int playerNum)
+        public void setPlayer(List<Photon.Realtime.Player> players)
         {
             for (int i = 0; i < playerUIs.Count; i++)
             {
-                if (i < playerNum)
+                if (i < players.Count)
                 {
                     playerUIs[i].gameObject.SetActive(true);
+                    playerUIs[i].SetPlayer(null, players[i].NickName,
+                    int.Parse((string)players[i].CustomProperties["TeamColor"]));
                 }
-
             }
         }
 
