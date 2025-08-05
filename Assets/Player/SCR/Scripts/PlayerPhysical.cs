@@ -14,6 +14,8 @@ namespace SCR
         private float workSpeed;
         private float rayLength;
         private LayerMask HoldingObjLayer;
+        public Vector3 RespawnPoint;
+        public bool IsRespawning;
         public bool IsDash;
         public bool IsHold;
         public bool UseTongs;
@@ -32,6 +34,7 @@ namespace SCR
             IsDash = false;
             IsHold = false;
             UseTongs = false;
+            IsRespawning = false;
         }
 
         void Update()
