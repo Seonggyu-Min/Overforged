@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 namespace SCR
 {
@@ -23,6 +24,7 @@ namespace SCR
         private PlayerPhysical playerPhysical;
         [SerializeField] private PlayerSFX sfx;
         [SerializeField] private AudioSource walkSfx;
+        [SerializeField] PlayerInput playerInput;
         public AudioSource WalkSfx { get => walkSfx; }
         public PlayerController PlayerController { get => playerController; }
         public PlayerPhysical PlayerPhysical { get => playerPhysical; }
@@ -89,6 +91,7 @@ namespace SCR
             walkSfx.loop = true;
             walkSfx.Stop();
             SetSound();
+            playerInput.enabled = false;
         }
 
         private void Start()
@@ -111,6 +114,11 @@ namespace SCR
                 isMineUI.SetActive(false);
             }
 
+        }
+
+        public void OnPlayerInput()
+        {
+            playerInput.enabled = true;
         }
 
         public void SetTeam(int team)

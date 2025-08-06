@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7813ac53cb8827a4082a97d399eb464a, type: 3}
+  m_Name: MedalTextColor
+  m_EditorClassIdentifier: 
+  Color:
+  - {r: 0.5294118, g: 0.09411765, b: 0.101960786, a: 1}
+  - {r: 0.17254902, g: 0.2784314, b: 0.38039216, a: 1}
+  - {r: 0.41568628, g: 0.21960784, b: 0.16470589, a: 1}
+  - {r: 0.23529412, g: 0.21568628, b: 0.16470589, a: 1}
+  - {r: 0.5882353, g: 0.45490196, b: 0.31764707, a: 1}
