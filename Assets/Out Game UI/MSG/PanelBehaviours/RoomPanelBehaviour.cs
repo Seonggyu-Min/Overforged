@@ -19,7 +19,9 @@ namespace MIN
             StartCoroutine(RoomNameUpdateRoutine());
             _exitButton.SetActive(true);
             _menuPanel.SetActive(true);
+            Debug.Log("OnEnable에서 호출");
             ResetLocalSceneLoadedProperty();
+            StartCoroutine(ResetRoutine());
         }
 
         public override void OnDisable()
@@ -30,6 +32,7 @@ namespace MIN
 
         public override void OnJoinedRoom()
         {
+            Debug.Log("OnJoinedRoom에서 호출");
             ResetLocalSceneLoadedProperty();
         }
 
@@ -62,6 +65,30 @@ namespace MIN
             else
             {
                 Debug.Log("방에 있지 않아 localSceneLoaded가 초기화되지 않았습니다.");
+            }
+        }
+
+        private IEnumerator ResetRoutine()
+        {
+            yield return new WaitForSeconds(3f);
+
+            ExitGames.Client.Photon.Hashtable hashtable = new();
+            hashtable[CustomPropertyKeys.localSceneLoaded] = false;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
+
+            Debug.Log("localSceneLoaded가 초기화 시도함");
+        }
+
+        [ContextMenu("localSceneLoaded?")]
+        private void Test()
+        {
+            if ((bool)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.localSceneLoaded] == true)
+            {
+                Debug.Log("localSceneLoaded가 true");
+            }
+            else
+            {
+                Debug.Log("localSceneLoaded가 false");
             }
         }
     }
