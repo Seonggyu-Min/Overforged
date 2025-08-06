@@ -219,16 +219,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02183286b6cd1334d949bfe0cbfcbdb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characters: {fileID: 11400000, guid: a4be0cfa214185643ad6e9acb6181290, type: 2}
-  TeamColor:
-  - {r: 0.9843138, g: 0, b: 0, a: 0}
-  - {r: 0.9725491, g: 0.5647059, b: 0, a: 0}
-  - {r: 1, g: 0.75294125, b: 0.0627451, a: 0}
-  - {r: 0.4431373, g: 0.7411765, b: 0.027450982, a: 0}
-  - {r: 0, g: 0.7607844, b: 0.7960785, a: 0}
-  - {r: 0, g: 0.42352945, b: 0.9333334, a: 0}
-  - {r: 0.46274513, g: 0.10980393, b: 0.8941177, a: 0}
-  - {r: 0.9294118, g: 0, b: 0.57254905, a: 0}
+  mapManager: {fileID: 0}
+  inGameUIManager: {fileID: 0}
 --- !u!4 &518695360
 Transform:
   m_ObjectHideFlags: 0
