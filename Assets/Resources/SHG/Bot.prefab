@@ -145,6 +145,7 @@ MonoBehaviour:
     - Variation: 6
       OreType: 3
       WoodType: 0
+  IsOwner: 0
   rightHand: {fileID: 7801044084249583295}
   leftHand: {fileID: 3298209235724772263}
   furnace: {fileID: 0}
@@ -275,13 +276,13 @@ MonoBehaviour:
     SynchronizeType: 2
     Name: IsMoving
   - Type: 9
-    SynchronizeType: 1
+    SynchronizeType: 2
     Name: Working
   - Type: 9
-    SynchronizeType: 1
+    SynchronizeType: 2
     Name: Rooting
   - Type: 9
-    SynchronizeType: 1
+    SynchronizeType: 2
     Name: Hammering
   m_SynchronizeLayers:
   - SynchronizeType: 1

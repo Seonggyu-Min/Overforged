@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -44,6 +45,7 @@ namespace SHG
       this.bgmController = GameObject.Instantiate(
         Resources.Load<GameObject>("SHG/BgmController"))
         .GetComponent<BgmController>();
+      GameObject.DontDestroyOnLoad(this.bgmController.gameObject);
       this.BgmController.AudioSource.outputAudioMixerGroup = this.mainMixer.FindMatchingGroups("Bgm")[0];
       this.SetVolume(IAudioLibrary.VolumeType.Master, DEFAULT_MASTER_VOLUME);
       this.SetVolume(IAudioLibrary.VolumeType.Bgm, DEFAULT_BGM_VOLUME);
@@ -62,18 +64,42 @@ namespace SHG
           this.bgmSources.Add(bgm);
         }
       }
+      if (this.currentBgmIndex == -1 && this.bgmSources.Count > 0) {
+        this.currentBgmIndex = 0;
+        this.PlayBgm(this.bgmSources[this.currentBgmIndex].Name);
+      }
     }
 
     public void Register(SoundSourceContainer audioSource)
     {
-      foreach (var soundSource in audioSource.SoundSources)
-      {
-        if (!this.soundSources.TryAdd(soundSource.Name, soundSource))
-        {
+      foreach (var soundSource in audioSource.SoundSources) {
+        if (!this.soundSources.TryAdd(soundSource.Name, soundSource)) {
         #if UNITY_EDITOR
           throw (new ApplicationException($"{nameof(AudioLibrary)}: fail to {nameof(Register)} with duplicated Name {soundSource.Name}"));
         #endif
         }
+      }
+      if (this.currentBgmIndex == -1 && this.bgmSources.Count > 0) {
+        this.PlayBgm(this.currentBgmIndex);
+      }
+    }
+
+    public void UnRegister(BgmSourceContainer bgmSource)
+    {
+      bool isPlaying = this.currentBgmIndex != -1 &&
+        bgmSource.BgmSources.Contains(this.bgmSources[this.currentBgmIndex]);
+      this.bgmSources = this.bgmSources.Where(
+        bgm => !bgmSource.BgmSources.Contains(bgm)).ToList();
+      if (!isPlaying) {
+        return ;
+      }
+      if (this.bgmSources.Count > 0) {
+        this.currentBgmIndex = 0;
+        this.PlayBgm(this.currentBgmIndex);
+      }
+      else {
+        this.currentBgmIndex = -1;
+        this.BgmController.StopFadeOut();
       }
     }
 
@@ -213,6 +239,11 @@ namespace SHG
       if (pooledObject is SfxController sfxController) {
         this.playingAllSfx.Remove(sfxController);
       }
+    }
+
+    void PlayBgm(int index) 
+    {
+      this.PlayBgm(this.bgmSources[index].SoundFile.Clip);
     }
 
     void PlayBgm(AudioClip clip)
