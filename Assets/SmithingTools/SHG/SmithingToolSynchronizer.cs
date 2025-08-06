@@ -1,4 +1,3 @@
-#define LOCAL_TEST
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +8,7 @@ namespace SHG
   public class SmithingToolSynchronizer : INetworkSynchronizer<SmithingToolComponent>, INetworkEventReciever
   {
     INetworkEventHandler networkEventHandler;
+    public bool IsLocal { get; private set; }
 
     const float MS_TO_SEC = 1f / 1000f;
     Dictionary<int, SmithingToolComponent> smithingTools;
@@ -22,6 +22,7 @@ namespace SHG
       this.networkEventHandler.Register<SmithingToolSynchronizer>(this);
       this.smithingTools = new();
       var photonObject = new GameObject($"{nameof(SmithingToolSynchronizer)} photonObject");
+      this.IsLocal = PhotonNetwork.CurrentRoom.PlayerCount == 1;
     }
 
     public void RegisterSynchronizable(SmithingToolComponent smithingTool)
@@ -36,16 +37,19 @@ namespace SHG
       smithingTool.OnWorked += this.OnWork;
       BotContext.Instance.AddTool(smithingTool);
       int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
-      if (smithingTool is DropOffTableComponent dropOffTable ||
+      if (this.IsLocal) {
+        smithingTool.IsOwner = true;
+        if (smithingTool is TableComponent table) {
+          table.IsLocal = true;
+        }
+      }
+      else if (smithingTool is DropOffTableComponent dropOffTable ||
         smithingTool is ConveyorBeltHopper conveyorBelt) {
         smithingTool.IsOwner = PhotonNetwork.LocalPlayer.IsMasterClient;
       }
       else {
         smithingTool.IsOwner = smithingTool.PlayerNetworkId == playerId;
       }
-      #if LOCAL_TEST
-      smithingTool.IsOwner = true;
-      #endif
     }
 
     void OnWork(SmithingToolComponent component, ToolWorkResult result)

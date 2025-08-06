@@ -1,4 +1,3 @@
-//#define LOCAL_TEST
 using System;
 using System.Text;
 using System.Collections.Generic;
@@ -25,6 +24,7 @@ namespace SHG
     CraftTableData craftTableData;
     [SerializeField] [Required()]
     Transform materialPosition;
+    public bool IsLocal;
 
     [SerializeField] 
     MeshRenderer model;
@@ -383,15 +383,15 @@ namespace SHG
 
     ProductItem CreateProduct(ItemData itemData)
     {
-      #if LOCAL_TEST
-      var gameObject = Instantiate(
+      if (this.IsLocal) {
+        var gameObject = Instantiate(
           Resources.Load<GameObject>("ProductItem"),
           position: this.materialPoint.position,
           rotation: Quaternion.identity);
         var productItem = gameObject.GetComponent<ProductItem>();
         productItem.Data = itemData;
         return (productItem);
-      #else
+      }
       if (this.IsOwner) {
         var gameObject = PhotonNetwork.Instantiate(
           prefabName: "ProductItem", 
@@ -414,7 +414,6 @@ namespace SHG
         #endif
         return (null);
       }
-      #endif
     }
 
     void SetProductData(object[] args)

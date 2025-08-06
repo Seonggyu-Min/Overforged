@@ -23,7 +23,10 @@ namespace SHG
       get => this.holdingItem;
       private set => this.holdingItem = value;
     }
-    public int NetworkId => this.networkId;
+    public int NetworkId {
+      get => this.networkId;
+      set => this.networkId = value;
+    }
     public NavMeshAgent NavMeshAgent { get; private set; }
     public Transform Transform => this.transform;
     public bool IsHoldingTong => this.tong != null;
@@ -142,6 +145,7 @@ namespace SHG
         if (result.ReceivedItem != null) {
           this.GrabItem(result.ReceivedItem);
         }
+        Debug.LogWarning($"Transfer: {tool}");
         return (true);
       }
       else {
@@ -154,6 +158,7 @@ namespace SHG
     
     public ToolWorkResult Work(IInteractableTool tool)
     {
+      Debug.LogWarning($"work: {tool}");
       var result = tool.Work();
       Debug.Log($"work {tool} result: {result}");
       this.workTrigger = result.Trigger;

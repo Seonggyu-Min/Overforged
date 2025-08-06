@@ -92,6 +92,7 @@ namespace SHG
       if (botController != null && isOwner) {
         botController.IsOwner = isOwner;
         botController.StartCreateProduct();
+        botController.NetworkId = PhotonNetwork.LocalPlayer.ActorNumber;
       }
     }
 

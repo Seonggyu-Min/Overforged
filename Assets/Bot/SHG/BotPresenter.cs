@@ -81,6 +81,10 @@ namespace SHG
     void PlaySfx()
     {
       if (this.sfxToPlay != null) {
+        Debug.Log($"audioLibrary null: {this.audioLibrary == null}");
+        if (this.audioLibrary == null) {
+          return; 
+        }
         this.audioLibrary.PlayRandomSfx(this.sfxToPlay)
           .SetDistance(max: 5f)
           .Set3dBlend(0.5f);
