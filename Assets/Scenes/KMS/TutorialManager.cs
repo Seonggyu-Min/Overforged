@@ -17,6 +17,8 @@ public class TutorialManager : MonoBehaviour
 
     public bool IsTutorial { get; private set; }
 
+    public bool IsTutorialEnd { get; private set; }
+
     [SerializeField] TMP_Text guideMessage;
 
 
@@ -33,6 +35,9 @@ public class TutorialManager : MonoBehaviour
 
     [SerializeField] GameObject targetingArrow;
 
+    [SerializeField] GameObject UI;
+    [SerializeField] TMP_Text UIText;
+
     private MaterialItem material;
 
     private Dictionary<string, GameObject> interactables;
@@ -45,9 +50,16 @@ public class TutorialManager : MonoBehaviour
     [TextArea(3, 7)][SerializeField] string string_table;
     [TextArea(3, 7)][SerializeField] string string_convey;
 
+    [TextArea(3, 7)][SerializeField] string string_end;
+
+    [TextArea(3, 7)][SerializeField] string string_escapeUI;
+
+    [TextArea(3, 7)][SerializeField] string string_endUI;
+
     private Player player;
     private Transform targetTrs;
     private Transform playerTrs => player.transform;
+
 
 
     void Awake()
@@ -90,6 +102,9 @@ public class TutorialManager : MonoBehaviour
     void Start()
     {
         SetNextTarget(nameof(oreBox));
+
+        UIText.text = string_escapeUI;
+        UI.SetActive(false);
     }
 
     void Update()
@@ -110,6 +125,26 @@ public class TutorialManager : MonoBehaviour
         targetingArrow.transform.position = middlePos;
         targetingArrow.transform.localScale = scale;
 
+        TryToggleUI();
+
+    }
+
+    private void TryToggleUI()
+    {
+        if (IsTutorialEnd) return;
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (UI.activeSelf)
+            {
+                UI.SetActive(false);
+
+            }
+            else
+            {
+                UI.SetActive(true);
+            }
+
+        }
     }
 
     void OnFurnaceGet(SmithingToolComponent comp, ToolTransferArgs args, ToolTransferResult result)
@@ -144,6 +179,11 @@ public class TutorialManager : MonoBehaviour
     void OnConvey(SmithingToolComponent comp, ToolTransferArgs args, ToolTransferResult result)
     {
         trm.Fulfill();
+        SetNextTarget("");
+        guideMessage.text = string_end;
+        IsTutorialEnd = true;
+        UI.SetActive(true);
+        UIText.text = string_endUI;
     }
 
     private void OnOreGet()

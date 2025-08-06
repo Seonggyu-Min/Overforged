@@ -135,7 +135,6 @@ namespace SCR
                             index = recipeUIs[i].gameObject.transform.GetSiblingIndex();
                             targetIndex = i;
                         }
-
                     }
                 }
             }

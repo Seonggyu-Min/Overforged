@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8179898973100818818}
   - component: {fileID: 8760183267473856631}
   - component: {fileID: 6543812051551003624}
+  - component: {fileID: -8239754813520439233}
   m_Layer: 6
   m_Name: Tong
   m_TagString: Tongs
@@ -175,6 +176,20 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &-8239754813520439233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2542871240928999413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71e6bc21c87cf0947a55708f78775d61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RespawnPoint: {x: 0, y: 0, z: 0}
+  IsRespawning: 0
 --- !u!1001 &5993053645409014609
 PrefabInstance:
   m_ObjectHideFlags: 0

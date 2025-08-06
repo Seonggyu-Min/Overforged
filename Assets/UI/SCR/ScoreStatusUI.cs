@@ -20,7 +20,7 @@ namespace SCR
                 {
                     playerUIs[i].gameObject.SetActive(true);
                     playerUIs[i].SetPlayer(null, players[i].NickName,
-                    int.Parse((string)players[i].CustomProperties["TeamColor"]));
+                    int.Parse(players[i].CustomProperties["TeamColor"].ToString()));
                 }
             }
         }

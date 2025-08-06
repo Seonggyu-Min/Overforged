@@ -713,6 +713,7 @@ MonoBehaviour:
   audioSource: {fileID: -3835608723126755917}
   sfx: {fileID: 11400000, guid: e0f1f39b909528a40ae0852389790a43, type: 2}
   walkSfx: {fileID: 7477093986221282848}
+  playerInput: {fileID: 8033400261773403968}
   HoldObject: {fileID: 0}
   Hammer: {fileID: 5368727328927806125}
   Tongs: {fileID: 0}

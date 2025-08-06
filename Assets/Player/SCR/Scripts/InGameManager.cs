@@ -1,50 +1,70 @@
 using Photon.Pun;
-using System.Collections.Generic;
 using UnityEngine;
-
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+using SHG;
 
 namespace SCR
 {
-
-
-    public class InGameManager : MonoBehaviourPunCallbacks
+    public class InGameManager : MonoBehaviour
     {
-        [SerializeField] private CharacterInfo characters;
-        [SerializeField] private List<Color> TeamColor;
+        [SerializeField] private MapManager mapManager;
+        public InGameUIManager InGameUIManager { get => inGameUIManager; }
+        [SerializeField] private InGameUIManager inGameUIManager;
+        private string localSceneLoaded = "LocalSceneLoaded";
+        private MapData map;
 
-        void Start()
+        private void Awake()
         {
-            PhotonNetwork.JoinRandomOrCreateRoom();
-
-        }
-
-        public override void OnCreatedRoom()
-        {
-
-        }
-        public override void OnJoinedRoom()
-        {
-            Debug.Log("입장 완료");
-            PhotonNetwork.LocalPlayer.NickName = $"Player_{PhotonNetwork.LocalPlayer.ActorNumber}";
+            SetMap();
             SpwanPlayer();
         }
 
-        public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)
+        private void Start()
         {
-
+            SendJoinMessage();
         }
 
+        // 맵 생성
+        private void SetMap()
+        {
+            Hashtable roomProps = PhotonNetwork.CurrentRoom.CustomProperties;
+            if (roomProps.ContainsKey("MapId"))
+            {
+                map = mapManager.getMap((int)roomProps["MapId"]);
+                map.gameObject.SetActive(true);
+            }
+        }
 
+        // 플레이어 생성
+        [ContextMenu("SpawnPlayer")]
         public void SpwanPlayer()
         {
-            Vector3 spawnPos = new Vector3(0, 0, 0);
+            int myNum = PhotonNetwork.LocalPlayer.ActorNumber - 1;
+            Vector3 spawnPos;
+            if (myNum < 0 || myNum >= map.SpawnPoints.Count)
+            {
+                Debug.LogWarning("Invalid player number or spawn points not set up correctly.");
+                spawnPos = new Vector3(0f, 1f, 0f);
+            }
+            else
+            {
+                spawnPos = map.SpawnPoints[myNum].position;
+            }
+
             GameObject playerobj = PhotonNetwork.Instantiate("Player", spawnPos, Quaternion.identity);
-            Player player = playerobj.GetComponent<Player>();
+            PlayerPhysical player = playerobj.GetComponent<PlayerPhysical>();
+            player.RespawnPoint = spawnPos;
+
+            var cameraController = CameraController.Instance; ;
+            Debug.Log($"cameraController : {cameraController}");
+            cameraController.Player = player.gameObject.transform;
+            cameraController.gameObject.SetActive(true);
         }
 
-        public override void OnPlayerEnteredRoom(Photon.Realtime.Player player)
+        private void SendJoinMessage()
         {
-            Debug.Log($"{player.NickName} 입장 완료");
+            // 접속했다는 신호를 보냄
+            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { localSceneLoaded, true } });
         }
 
     }
