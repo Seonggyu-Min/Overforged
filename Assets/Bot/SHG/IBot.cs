@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,9 +12,12 @@ namespace SHG
 
     const float ITEM_TRANSFER_DIST = 2.5f;
     const float ITEM_TRANSFER_DELAY = 1.0f;
-    const float WORK_DIST = 1.5f;
+    const float WORK_DIST = 2.5f;
     const float WORK_DELAY = 1f;
 
+    public Action<IInteractableTool> OnWork { get; set; }
+    public Action OnFinishWork { get; set; }
+    public Action<Item> OnRoot { get; set; }
     public int NetworkId { get; }
     public Item HoldingItem { get; }
     public NavMeshAgent NavMeshAgent { get; }
@@ -32,7 +36,6 @@ namespace SHG
     public Transform[] GetTongs();
     public T GetLeaf<T>(BtLeaf.Type leafType) where T: BtLeaf;
     public bool IsHoldingHotMaterial();
-
     public bool IsStopped => (!this.NavMeshAgent.pathPending &&
       (this.NavMeshAgent.remainingDistance <= this.NavMeshAgent.stoppingDistance || !this.NavMeshAgent.hasPath));
   }

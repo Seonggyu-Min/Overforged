@@ -30,9 +30,11 @@ namespace SHG
       this.children.Clear();
       this.part = part;
       if (this.part.TryGetPreviousPart(out Part prevPart)) {
+        bool isSameTool = this.part.GetToolType() == prevPart.GetToolType() && this.part.GetToolType() != null;
         this.AddChild(new BtCreatePartNode(
             part: prevPart,
-            bot: this.bot));
+            bot: this.bot, 
+            takePart: !isSameTool));
       }
       else {
         var rawMaterial = this.part.TryGetRawMaterial();

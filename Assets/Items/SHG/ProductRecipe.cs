@@ -52,7 +52,7 @@ namespace SHG
           new Part(Variation.Handle, this.woodType)
         };
         break;
-        defaut: 
+        default: 
         #if UNITY_EDITOR
           Debug.LogError($"{nameof(ProductRecipe)} Unable to Get {nameof(Part)}");
         #endif

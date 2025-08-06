@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using EditorAttributes;
+using Photon.Pun;
 
 namespace SHG
 {
@@ -77,6 +78,21 @@ namespace SHG
         this.tools.Add(tool.PlayerNetworkId, new List<SmithingToolComponent>()); 
       }
       this.tools[tool.PlayerNetworkId].Add(tool);
+    }
+
+    [Button]
+    public void SpawnBot(Vector3 position, int playerNetworkId)
+    {
+      var botObject = PhotonNetwork.Instantiate(
+        "SHG/Bot",
+        position: position,
+        rotation: Quaternion.identity);
+      var botController = botObject.GetComponent<EnemyBotController>();
+      bool isOwner = PhotonNetwork.LocalPlayer.IsMasterClient;
+      if (botController != null && isOwner) {
+        botController.IsOwner = isOwner;
+        botController.StartCreateProduct();
+      }
     }
 
     public bool TryGetClosestSubmitPlace(Vector3 position, out ConveyComponent submitPlace)

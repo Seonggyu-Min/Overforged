@@ -49,7 +49,7 @@ namespace SHG
       return (this.ReturnState(NodeState.Running));
     }
 
-    public void Reset() 
+    public override void Reset() 
     {
       this.submitPlace = null;
     }
