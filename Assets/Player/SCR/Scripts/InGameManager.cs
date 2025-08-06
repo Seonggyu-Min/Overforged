@@ -10,7 +10,6 @@ namespace SCR
         [SerializeField] private MapManager mapManager;
         public InGameUIManager InGameUIManager { get => inGameUIManager; }
         [SerializeField] private InGameUIManager inGameUIManager;
-        private string localSceneLoaded = "LocalSceneLoaded";
         private MapData map;
 
         private void Awake()
@@ -19,10 +18,6 @@ namespace SCR
             SpwanPlayer();
         }
 
-        private void Start()
-        {
-            SendJoinMessage();
-        }
 
         // 맵 생성
         private void SetMap()
@@ -61,11 +56,7 @@ namespace SCR
             cameraController.gameObject.SetActive(true);
         }
 
-        private void SendJoinMessage()
-        {
-            // 접속했다는 신호를 보냄
-            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { localSceneLoaded, true } });
-        }
+
 
     }
 }
