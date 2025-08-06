@@ -11,5 +11,6 @@ namespace MIN
         public CalculatedTeam CalculateResult();
 
         public void SaveTeamResult();
+        public bool IsTieForWinTeam();
     }
 }

@@ -1,4 +1,4 @@
-using SHG;
+﻿using SHG;
 using UnityEngine;
 using Photon.Pun;
 namespace SCR
@@ -40,7 +40,7 @@ namespace SCR
         void Update()
         {
             centralPos = transform.position;
-            centralPos.y = 0.2f;
+            centralPos.y = 0.7f;
             CheckInteractable();
         }
 
