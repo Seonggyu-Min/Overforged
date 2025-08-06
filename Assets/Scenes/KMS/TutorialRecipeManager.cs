@@ -12,6 +12,8 @@ public class TutorialRecipeManager : MonoBehaviour
     [SerializeField] ItemDataList itemDataList;
     //[SerializeField] MaterialData materialData;
 
+    public bool IsFulFilled;
+
     [SerializeField] private ProductSprites productSprites; // 딕셔너리, 완성품 이미지들
     void Start()
     {
@@ -20,7 +22,11 @@ public class TutorialRecipeManager : MonoBehaviour
     }
     void Update()
     {
-        if (!rui.gameObject.activeSelf)
+        if (IsFulFilled)
+        {
+            rui.gameObject.SetActive(false);
+        }
+        else if (!rui.gameObject.activeSelf && !IsFulFilled)
         {
             rui.gameObject.SetActive(true);
         }
@@ -28,6 +34,7 @@ public class TutorialRecipeManager : MonoBehaviour
 
     public void Fulfill()
     {
+        IsFulFilled = true;
         rui.Fulfill();
     }
 
