@@ -35,10 +35,10 @@ namespace MIN
             GameObject playerobj = PhotonNetwork.Instantiate("Player", spawnPos, Quaternion.identity);
             Player player = playerobj.GetComponent<Player>();
 
-            var cameraController = CameraController.Instance; ;
-            Debug.Log($"cameraController : {cameraController}");
-            cameraController.Player = player.transform;
-            cameraController.gameObject.SetActive(true);
+            //var cameraController = CameraController.Instance; ;
+            //Debug.Log($"cameraController : {cameraController}");
+            //cameraController.Player = player.transform;
+            //cameraController.gameObject.SetActive(true);
         }
     }
 }

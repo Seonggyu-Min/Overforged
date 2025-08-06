@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using JJY;
 using SHG;
@@ -40,6 +40,20 @@ public class NewProductConveyComponent : SmithingToolComponent
 
     protected override void Awake()
     {
+        //manager = GameObject.Find("InGameManager").GetComponent<InGameManager>().InGameUIManager.OrderUI;
+        //this.meshRenderer = model;
+        //if (this.meshRenderer != null)
+        //{
+        //    this.highlighter = new GameObjectHighlighter(
+        //      new Material[] { this.meshRenderer.material });
+        //    this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
+        //}
+        //this.convey = new NewProductConvey(this.data);
+    }
+
+    protected override void Start()
+    {
+        manager = GameObject.Find("InGameManager").GetComponent<InGameManager>().InGameUIManager.OrderUI;
         this.meshRenderer = model;
         if (this.meshRenderer != null)
         {
@@ -48,12 +62,9 @@ public class NewProductConveyComponent : SmithingToolComponent
             this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
         }
         this.convey = new NewProductConvey(this.data);
-    }
 
-    protected override void Start()
-    {
         this.IsOwner = true;
-        if (!TutorialManager.Instance.IsTutorial)
+        if (TutorialManager.Instance == null)
         {
             manager = GameObject.Find("InGameManager").GetComponent<InGameManager>().InGameUIManager.OrderUI;
         }
@@ -64,7 +75,7 @@ public class NewProductConveyComponent : SmithingToolComponent
         var result = this.tool.Transfer(args);
         if (args.ItemToGive is ProductItem item)
         {
-            if (TutorialManager.Instance.IsTutorial)
+            if (TutorialManager.Instance != null)
             {
                 Instantiate(good, goodPos.position, Quaternion.identity);
             }

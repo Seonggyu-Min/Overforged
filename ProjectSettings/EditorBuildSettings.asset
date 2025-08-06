@@ -9,14 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/MSG/OutGameScene.unity
     guid: 69071a1b65375ea40aeabfbc82d344a7
   - enabled: 1
-    path: Assets/Scenes/SHG/BotTestScene.unity
-    guid: b73012cc2a5eaeb91a8a1de3290f3790
+    path: Assets/Scenes/MSG/InGameTestScene.unity
+    guid: a437b7c1bcc8f9d4e89b63bdfbb5a0ca
   - enabled: 1
-    path: Assets/Scenes/InGameTestScene.unity
-    guid: a147f5cd17ab03e4794c42b1221af2ee
-  - enabled: 1
-    path: Assets/Scenes/SHG/InGameTestScene.unity
-    guid: cc07acb44989ea7a7a23b31ffabb8378
+    path: Assets/Scenes/KMS/Tutorial.unity
+    guid: 433ed6b6d85a7754888b1bd0da8c59cd
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 1219044531b981c46a173e5111c01549, type: 2}
     com.unity.dt.app-ui: {fileID: 11400000, guid: ff1e4bdf9b88b3722b2ba0ed27f2c556, type: 2}

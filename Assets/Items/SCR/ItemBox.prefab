@@ -223,6 +223,7 @@ GameObject:
   - component: {fileID: 1936044857053988276}
   - component: {fileID: 846079380643677427}
   - component: {fileID: 3174352737250779566}
+  - component: {fileID: 8305394457429757235}
   m_Layer: 7
   m_Name: ItemBox
   m_TagString: InteractionObj
@@ -341,7 +342,29 @@ MonoBehaviour:
   - {fileID: 2100000, guid: c8f3f8e12619223459842d946275d3c8, type: 2}
   - {fileID: 2100000, guid: 9fc89324a6edc1240ad7b9cddf775492, type: 2}
   mesh: {fileID: 7842978716543658555}
-  view: {fileID: 0}
+  view: {fileID: 8305394457429757235}
+--- !u!114 &8305394457429757235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7806521747849460081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1001 &6271100731536151029
 PrefabInstance:
   m_ObjectHideFlags: 0

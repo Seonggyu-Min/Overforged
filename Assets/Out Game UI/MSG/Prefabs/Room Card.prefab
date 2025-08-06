@@ -1237,7 +1237,14 @@ MonoBehaviour:
   _statusPanel: {fileID: 7633928385879957710}
   _lockImage: {fileID: 4435325477012908502}
   _mapSprites:
-  - {fileID: 21300000, guid: 599082afea4945f439b41e77261d7e66, type: 3}
-  - {fileID: 21300000, guid: 98aa0f6088a4d3f4b860924126e5f006, type: 3}
-  - {fileID: 21300000, guid: e00bd7f7a3202a24e8ba78e14cc8b96a, type: 3}
+  - {fileID: 21300000, guid: 958760f3dc4126246ad1dae334eaf427, type: 3}
+  - {fileID: 21300000, guid: f95dbec2bdf3872418625a83302fe2b6, type: 3}
+  - {fileID: 21300000, guid: 881bed29f5d6c644cb9a358c88f1bd50, type: 3}
+  - {fileID: 21300000, guid: 7056517185fce4c4cae6f8ad6f742434, type: 3}
+  - {fileID: 21300000, guid: 311eb2b37075fdd4eba041b426eb4b55, type: 3}
+  - {fileID: 21300000, guid: 8fead46e3d4b577459d9db891eaa6564, type: 3}
+  - {fileID: 21300000, guid: 135dfea5a9f34964d8e768c21779333d, type: 3}
+  - {fileID: 21300000, guid: 8e6c69f12aefc9d4a81bc4bc183caf73, type: 3}
+  - {fileID: 21300000, guid: 5b3e3c806fe3ff1489acc67b790cb6de, type: 3}
+  - {fileID: 21300000, guid: acf37355219cdd64d92917e035903700, type: 3}
   _mapImage: {fileID: 6708312263667695466}

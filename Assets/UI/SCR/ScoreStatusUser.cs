@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +15,9 @@ namespace SCR
         public void SetPlayer(Sprite profile, string Nickname, int team)
         {
             if (profile != null)
+            {
                 playerImage.sprite = profile;
+            }
             playerNickname.text = Nickname;
             teamColor.color = color.Color[team];
             SetScore(0);

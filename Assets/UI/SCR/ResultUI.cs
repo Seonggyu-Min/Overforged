@@ -196,9 +196,9 @@ namespace SCR
         private IEnumerator CloseTab()
         {
             yield return new WaitForSeconds(closeTime);
-            gameObject.SetActive(false);
             gameManager.SaveTeamResult();
             gameManager.SetGameEnd();
+            gameObject.SetActive(false);
         }
 
         // 로컬 플레이어의 승리 체크

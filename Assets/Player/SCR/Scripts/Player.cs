@@ -108,6 +108,9 @@ namespace SCR
                     SetTeam((int)team);
                 }
                 isMineUI.SetActive(true);
+
+                MIN.CameraController controller = Camera.main.GetComponent<MIN.CameraController>();
+                controller.SetPlayer(transform);
             }
             else
             {

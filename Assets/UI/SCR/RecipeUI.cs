@@ -1,3 +1,4 @@
+﻿using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 namespace SCR
 {
-    public class RecipeUI : MonoBehaviour
+    public class RecipeUI : MonoBehaviourPun
     {
         // 완성품 이미지
         [SerializeField] private Image outputImage;
@@ -38,7 +39,7 @@ namespace SCR
             curCraft = craftdata;
             curWood = wood;
             curOre = ore;
-            fullTime = curCraft.Materials.Length * 15f;
+            fullTime = curCraft.Materials.Length * 20f;
             fullScore = curCraft.Materials.Length * 50;
             recipeNameText = $"{matData.oreName[curOre]}{matData.woodName[curWood]}{curProduct.Name}";
 
@@ -50,8 +51,8 @@ namespace SCR
                 if (i < curCraft.Materials.Length)
                 {
                     ingredientObjects[i].gameObject.SetActive(true);
-                    ingredientObjects[i].SetIngredientObject(wood, ore,
-                    curCraft.Materials[i].guideImage, curCraft.Materials[i].guideMessage);
+                    ingredientObjects[i].SetIngredientObject(curCraft.Materials[i].materialType, wood, ore,
+                                        curCraft.Materials[i].guideImage, curCraft.Materials[i].guideMessage);
                 }
                 else
                 {
@@ -59,7 +60,10 @@ namespace SCR
                 }
             }
 
-            startTime = StartCoroutine(StartTime());
+            if (PhotonNetwork.IsMasterClient)
+            {
+                startTime = StartCoroutine(StartTime());
+            }
         }
 
         public bool CheckRecipe(ProductItemData data, OreType ore, WoodType wood)
@@ -76,12 +80,24 @@ namespace SCR
             float leftTime = fullTime;
             while (leftTime > 0)
             {
-                LeftTime(leftTime / fullTime);
-                SetScore(leftTime);
+                photonView.RPC("RecipeTime", RpcTarget.All, leftTime, fullTime);
                 yield return new WaitForFixedUpdate();
                 leftTime -= Time.deltaTime;
             }
             StopCoroutine(startTime);
+            photonView.RPC("SyncFalse", RpcTarget.All);
+        }
+
+        [PunRPC]
+        public void RecipeTime(float leftTime, float fullTime)
+        {
+            LeftTime(leftTime / fullTime);
+            SetScore(leftTime);
+        }
+
+        [PunRPC]
+        public void SyncFalse()
+        {
             gameObject.SetActive(false);
         }
 
@@ -99,7 +115,11 @@ namespace SCR
 
         public void Fulfill()
         {
-            StopCoroutine(startTime);
+            if (startTime != null)
+            {
+                StopCoroutine(startTime);
+                startTime = null;
+            }
             gameObject.SetActive(false);
         }
 
