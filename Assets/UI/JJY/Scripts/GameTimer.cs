@@ -119,7 +119,16 @@ namespace JJY
             {
                 startTime = (double)startTimeObj;
                 isRunning = true;
-                timerCoroutine = StartCoroutine(TimerCoroutine());
+                if (timerCoroutine == null)
+                {
+                    timerCoroutine = StartCoroutine(TimerCoroutine());
+                }
+                else
+                {
+                    timerCoroutine = null;
+                    timerCoroutine = StartCoroutine(TimerCoroutine());
+                    Debug.LogWarning("timerCoroutine이 null이 아니었음.");
+                }
             }
         }
 
