@@ -4,6 +4,7 @@ using System.Data;
 using SCR;
 using SHG;
 using TMPro;
+using Unity.AppUI.UI;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -29,6 +30,8 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] NewProductConveyComponent convey;
     [SerializeField] BoxComponent oreBox;
     [SerializeField] BoxComponent woodBox;
+
+    [SerializeField] TutorialTong tong;
 
     [SerializeField] TutorialRecipeManager trm;
 
@@ -56,6 +59,17 @@ public class TutorialManager : MonoBehaviour
 
     [TextArea(3, 7)][SerializeField] string string_endUI;
 
+
+    [Header("Plus Messages")]
+
+    [TextArea(3, 7)][SerializeField] string string_onPutOre;
+
+    [TextArea(3, 7)][SerializeField] string string_onWorkFurnace;
+
+    [TextArea(3, 7)][SerializeField] string string_Tong;
+
+
+
     private Player player;
     private Transform targetTrs;
     private Transform playerTrs => player.transform;
@@ -69,7 +83,7 @@ public class TutorialManager : MonoBehaviour
         IsTutorial = true;
         interactables = new();
         messages = new();
-        GameReadyAndStopManager.Instance.Skip = true;
+        //GameReadyAndStopManager.Instance.Skip = true;
         interactables.Add(nameof(anvil), anvil.gameObject);
         interactables.Add(nameof(table), table.gameObject);
         interactables.Add(nameof(quenching), quenching.gameObject);
@@ -96,6 +110,8 @@ public class TutorialManager : MonoBehaviour
         anvil.OnTransfered += OnAnvilGet;
         table.OnTransfered += OnTableGet;
         convey.OnTransfered += OnConvey;
+
+        anvil.OnWorked += OnFurnaceWork;
 
     }
 
@@ -146,7 +162,7 @@ public class TutorialManager : MonoBehaviour
 
         }
     }
-
+    private bool isFurnaceOn;
     void OnFurnaceGet(SmithingToolComponent comp, ToolTransferArgs args, ToolTransferResult result)
     {
         if (result.ReceivedItem is MaterialItem item && item.Variation == MaterialVariation.Bar)
@@ -155,6 +171,28 @@ public class TutorialManager : MonoBehaviour
             material = item;
             material.onCool += OnItemCool;
         }
+        else if (result.ReceivedItem == null)
+        {
+            guideMessage.text = string_onPutOre;
+            Debug.Log(123);
+        }
+        if (isFurnaceOn)
+        {
+            guideMessage.text = string_Tong;
+            targetTrs = tong.gameObject.transform;
+        }
+    }
+    void OnFurnaceWork(SmithingToolComponent comp, ToolWorkResult result)
+    {
+        isFurnaceOn = true;
+        if (comp.HoldingItem != null)
+        {
+            guideMessage.text = string_Tong;
+            targetTrs = tong.gameObject.transform;
+        }
+
+
+
     }
     void OnAnvilGet(SmithingToolComponent comp, ToolTransferArgs args, ToolTransferResult result)
     {
