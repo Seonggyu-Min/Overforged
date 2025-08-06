@@ -32,6 +32,9 @@ namespace SHG
     {
       this.container.style.display = DisplayStyle.Flex;
       this.container.contentContainer.BringToFront();
+      this.container.BringToFront();
+      this.root.BringToFront();
+      this.root.style.display = DisplayStyle.Flex;
       this.IsShowing = true;
       this.UpdateUI();
     }
@@ -41,6 +44,8 @@ namespace SHG
       this.IsShowing = false;
       this.container.style.display = DisplayStyle.None;
       this.container.SendToBack();
+      this.root.SendToBack();
+      this.root.style.display = DisplayStyle.None;
     }
 
     public void SetKey(KeyCode keyCode) {
