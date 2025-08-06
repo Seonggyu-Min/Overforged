@@ -8,7 +8,7 @@ using EditorAttributes;
 namespace SHG
 {
   using ItemBox = SCR.BoxComponent;
-  using ConveyComponent = NewProductConveyComponent;
+  using ConveyComponent = LocalProductConvey;
 
   [RequireComponent(typeof(NavMeshAgent))]
   public class EnemyBotController : MonoBehaviour, IBot

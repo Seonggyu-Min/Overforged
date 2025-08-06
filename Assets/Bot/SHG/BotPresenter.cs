@@ -8,9 +8,7 @@ namespace SHG
 {
   public class BotPresenter : MonoBehaviour
   {
-    [Inject]
     IAudioLibrary audioLibrary;
-    public bool IsOwner;
     IBot bot;
     [SerializeField] [Required]
     Animator animator;
@@ -29,20 +27,16 @@ namespace SHG
 
     void Start()
     {
-      if (this.IsOwner) {
-        this.bot = this.GetComponent<IBot>();
-        this.bot.OnWork += this.OnWork;
-        this.bot.OnRoot += this.OnRoot;
-        this.bot.OnFinishWork += this.OnFinishWork;
-      }
+      this.audioLibrary = SingletonAudio.Instance;
+      this.bot = this.GetComponent<IBot>();
+      this.bot.OnWork += this.OnWork;
+      this.bot.OnRoot += this.OnRoot;
+      this.bot.OnFinishWork += this.OnFinishWork;
     }
 
     void Update()
     {
-      if (this.IsOwner)
-      {
-        this.animator.SetBool("IsMoving", this.bot.NavMeshAgent.velocity.magnitude > 0.1f);
-      }
+      this.animator.SetBool("IsMoving", this.bot.NavMeshAgent.velocity.magnitude > 0.1f);
     } 
 
     void OnWork(IInteractableTool tool)
@@ -81,10 +75,6 @@ namespace SHG
     void PlaySfx()
     {
       if (this.sfxToPlay != null) {
-        Debug.Log($"audioLibrary null: {this.audioLibrary == null}");
-        if (this.audioLibrary == null) {
-          return; 
-        }
         this.audioLibrary.PlayRandomSfx(this.sfxToPlay)
           .SetDistance(max: 5f)
           .Set3dBlend(0.5f);

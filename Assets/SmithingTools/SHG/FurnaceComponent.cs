@@ -14,6 +14,7 @@ namespace SHG
     public bool IsFinished => this.furnace.IsFinished;
     [Inject]
     IAudioLibrary audioLibrary;
+    IAudioLibrary audio => (SingletonAudio.Instance ?? this.audioLibrary);
     [SerializeField] [Required()]
     SmithingToolData furnaceData;
     [SerializeField]
@@ -92,7 +93,7 @@ namespace SHG
         if (this.isIgnited != this.effecter.IsStateOn(ISmithingToolEffecter.State.Working))
         {
           this.effecter.ToggleState(ISmithingToolEffecter.State.Working);
-          this.audioLibrary.PlayRandomSfx(
+          this.audio.PlayRandomSfx(
             soundName: "ignite",
             position: this.transform.position);
           this.Invoke(nameof(PlayBurningSound), 2f);
@@ -114,7 +115,7 @@ namespace SHG
 
     void PlayBurningSound()
     {
-      this.burningSfx = this.audioLibrary.PlayRandomSfx(
+      this.burningSfx = this.audio.PlayRandomSfx(
         soundName: "burning",
         position: this.transform.position + 
         (Camera.main.transform.position - CameraController.Instance.CameraLookPos))

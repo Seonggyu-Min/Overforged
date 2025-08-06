@@ -22,7 +22,8 @@ namespace SHG
       this.networkEventHandler.Register<SmithingToolSynchronizer>(this);
       this.smithingTools = new();
       var photonObject = new GameObject($"{nameof(SmithingToolSynchronizer)} photonObject");
-      this.IsLocal = PhotonNetwork.CurrentRoom.PlayerCount == 1;
+      //this.IsLocal = PhotonNetwork.CurrentRoom.PlayerCount == 1;
+      this.IsLocal = true;
     }
 
     public void RegisterSynchronizable(SmithingToolComponent smithingTool)

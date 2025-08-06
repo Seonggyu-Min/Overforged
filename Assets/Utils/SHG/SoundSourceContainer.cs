@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Zenject;
+using SHG;
 
 public class SoundSourceContainer: MonoBehaviour
 {
@@ -28,8 +29,20 @@ public class SoundSourceContainer: MonoBehaviour
 #if UNITY_EDITOR
       Debug.LogError($"{nameof(SoundSourceContainer)} has {nameof(SoundSources)} no SoundFiles");
 #endif
+    }
+  }
+
+  void Start()
+  {
+    if (this.SoundSources == null) {
       return ;
     }
-    this.audioLibrary.Register(this);
+    if (SingletonAudio.Instance != null) {
+      SingletonAudio.Instance.Register(this);
+    }
+    else {
+      this.audioLibrary.Register(this);
+    }
+
   }
 }

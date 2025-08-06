@@ -6,9 +6,10 @@ using UnityEngine.Audio;
 
 namespace SHG
 {
-
-  public class AudioLibrary : IAudioLibrary
+  public class SingletonAudio : MonoBehaviour, IAudioLibrary
   {
+    public static SingletonAudio Instance => instance;
+    static SingletonAudio instance;
     const float DEFAULT_MASTER_VOLUME = 0.5f;
     const float DEFAULT_SFX_VOLUME = 1f;
     const float DEFAULT_BGM_VOLUME = 1f;
@@ -25,8 +26,13 @@ namespace SHG
     float[] volumes;
     int currentBgmIndex = -1;
 
-    public AudioLibrary()
+    void Awake()
     {
+      if (instance != null) {
+        Destroy(this.gameObject);
+        return;
+      }
+      instance = this;
       this.mainMixer = Resources.Load<AudioMixer>("SHG/MainMixer");
       var sfxOutput = this.mainMixer.FindMatchingGroups("Sfx")[0];
       this.rand = new();
@@ -49,6 +55,13 @@ namespace SHG
       this.SetVolume(IAudioLibrary.VolumeType.Master, DEFAULT_MASTER_VOLUME);
       this.SetVolume(IAudioLibrary.VolumeType.Bgm, DEFAULT_BGM_VOLUME);
       this.SetVolume(IAudioLibrary.VolumeType.Sfx, DEFAULT_SFX_VOLUME);
+    }
+
+    void OnDestroy()
+    {
+      if (instance == this) {
+        instance = null;
+      }
     }
 
     public void Register(BgmSourceContainer bgmSource)

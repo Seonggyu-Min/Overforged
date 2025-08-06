@@ -1,4 +1,3 @@
-//#define LOCAL_TEST
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -92,11 +91,12 @@ namespace SHG
 
     public virtual bool CanTransferItem(ToolTransferArgs args)
     {
-      #if LOCAL_TEST
-      return (this.tool.CanTransferItem(args));
-      #else
-      return (this.IsOwner && this.tool.CanTransferItem(args));
-      #endif
+      if (this.NetworkSynchronizer.IsLocal) {
+        return (this.tool.CanTransferItem(args));
+      }
+      else {
+        return (this.IsOwner && this.tool.CanTransferItem(args));
+      }
     }
 
     public virtual ToolTransferResult Transfer(ToolTransferArgs args)
@@ -133,11 +133,12 @@ namespace SHG
 
     public virtual bool CanWork()
     {
-      #if LOCAL_TEST
-      return (this.tool.CanWork());
-      #else
-      return (this.IsOwner && this.tool.CanWork());
-      #endif
+      if (this.NetworkSynchronizer.IsLocal) {
+        return (this.tool.CanWork());
+      }
+      else {
+        return (this.IsOwner && this.tool.CanWork());
+      }
     }
 
     public virtual ToolWorkResult Work()

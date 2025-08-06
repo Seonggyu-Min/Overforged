@@ -6,7 +6,7 @@ using Photon.Pun;
 
 namespace SHG
 {
-  using ConveyComponent = NewProductConveyComponent;
+  using ConveyComponent = LocalProductConvey;
   public class BotContext : MonoBehaviour
   {
     public static BotContext Instance => instance;

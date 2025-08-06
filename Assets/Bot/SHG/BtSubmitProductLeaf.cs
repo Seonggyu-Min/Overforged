@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SHG
 {
-  using ConveyCompontent = NewProductConveyComponent;
+  using ConveyCompontent = LocalProductConvey;
 
   public class BtSubmitProductLeaf : BtLeaf
   {

@@ -5,7 +5,7 @@ using UnityEngine.AI;
 namespace SHG
 {
   using ItemBox = SCR.BoxComponent;
-  using ConveyComponent = NewProductConveyComponent;
+  using ConveyComponent = LocalProductConvey;
 
   public interface IBot
   {
