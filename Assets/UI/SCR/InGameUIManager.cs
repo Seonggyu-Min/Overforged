@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
@@ -13,7 +13,10 @@ namespace SCR
     public class InGameUIManager : MonoBehaviourPunCallbacks
     {
         private List<Photon.Realtime.Player> players;
+<<<<<<< HEAD
         private string Score = "Score";
+=======
+>>>>>>> Develop
 
         [SerializeField] CurrentTimeUI currentTimeUI;
         [SerializeField] ScoreStatusUI scoreStatusUI;
@@ -31,7 +34,12 @@ namespace SCR
         private void Awake()
         {
             players = new();
-            players = PhotonNetwork.PlayerList.ToList();
+
+            foreach (var p in PhotonNetwork.PlayerList)
+            {
+                players.Add(p);
+            }
+
             EndGameAction += CheckFinish;
 
             waitingUI.setPlayer(players.Count);
@@ -43,6 +51,7 @@ namespace SCR
 
         private void Start()
         {
+<<<<<<< HEAD
             foreach (var p in players)
             {
                 Hashtable playerProps = p.CustomProperties;
@@ -67,16 +76,35 @@ namespace SCR
                 { CustomPropertyKeys.localSceneLoaded, true }
             };
             PhotonNetwork.LocalPlayer.SetCustomProperties(updatedProps);
+=======
+            //foreach (var p in players)
+            //{
+            //    if ((bool)p.CustomProperties[localSceneLoaded] == true)
+            //    {
+            //        Debug.Log($"{p.NickName}의 준비 상태가 true");
+            //        waitingUI.ConnectedPlayer(CheckPlayerIndex(p));
+            //    }
+            //}
+>>>>>>> Develop
         }
 
         public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, Hashtable changedProps)
         {
+<<<<<<< HEAD
             base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
             if (IsWaiting)
             {
+=======
+            Debug.Log("OnPlayerPropertiesUpdate Entered");
+            if (IsWaiting)
+            {
+                Debug.Log("IsWaiting");
+>>>>>>> Develop
                 if (changedProps.ContainsKey(CustomPropertyKeys.localSceneLoaded))
                 {
+                    Debug.Log("changedProps.ContainsKey(localSceneLoaded)");
                     // 플레이어가 게임에 진입한 경우
+<<<<<<< HEAD
                     bool join = (bool)changedProps[CustomPropertyKeys.localSceneLoaded];
                     if (join)
                     {
@@ -84,6 +112,17 @@ namespace SCR
                         if (waitingUI.AllConnectedPlayer())
                             if (PhotonNetwork.IsMasterClient)
                                 photonView.RPC("AllConnected", RpcTarget.All);
+=======
+                    waitingUI.ConnectedPlayer(CheckPlayerIndex(targetPlayer));
+                    Debug.Log($"{targetPlayer.NickName}");
+
+                    if (waitingUI.AllConnectedPlayer())
+                    {
+                        if (PhotonNetwork.IsMasterClient)
+                        {
+                            photonView.RPC("AllConnected", RpcTarget.AllBuffered);
+                        }
+>>>>>>> Develop
                     }
                 }
             }
@@ -91,7 +130,9 @@ namespace SCR
             {
                 if (changedProps.ContainsKey(CustomPropertyKeys.Score))
                 {
-                    scoreStatusUI.ChangeScore(CheckPlayerIndex(targetPlayer), 1);
+                    int score = (int)changedProps[CustomPropertyKeys.Score];
+                    scoreStatusUI.ChangeScore(CheckPlayerIndex(targetPlayer), score);
+
                     if (IsLastChance) CheckFinish();
                 }
             }
@@ -144,17 +185,16 @@ namespace SCR
         // 끝났음을 확인하는 함수
         private void CheckFinish()
         {
-            //if(GameManager.)
-            // {
-            // LastChance();
-            //  IsLastChance = true;
-            // }
-            // 1, 2등의 점수가 같다면 LastChance 실행
-            // else{
-            // EndGame();
-            //IsLastChance = false;
-            //}
-            // 1등이 2등보다 점수가 높다면 EndGame 실행
+            if (GameManager.IsTieForWinTeam())
+            {
+                LastChance();
+                IsLastChance = true;
+            }
+            else
+            {
+                EndGame();
+                IsLastChance = false;
+            }
         }
 
         // 점수가 같다면 실행할 함수
@@ -167,8 +207,8 @@ namespace SCR
         // 게임이 끝났을 경우 실행할 함수
         private void EndGame()
         {
-            resultUI.OnResultUI(players);
             resultUI.gameObject.SetActive(true);
+            resultUI.OnResultUI(players);
         }
 
 

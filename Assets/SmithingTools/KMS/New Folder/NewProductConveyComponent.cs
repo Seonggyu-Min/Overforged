@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using JJY;
 using SHG;
@@ -40,6 +40,19 @@ public class NewProductConveyComponent : SmithingToolComponent
 
     protected override void Awake()
     {
+        //manager = GameObject.Find("InGameManager").GetComponent<InGameManager>().InGameUIManager.OrderUI;
+        //this.meshRenderer = model;
+        //if (this.meshRenderer != null)
+        //{
+        //    this.highlighter = new GameObjectHighlighter(
+        //      new Material[] { this.meshRenderer.material });
+        //    this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
+        //}
+        //this.convey = new NewProductConvey(this.data);
+    }
+
+    protected override void Start()
+    {
         manager = GameObject.Find("InGameManager").GetComponent<InGameManager>().InGameUIManager.OrderUI;
         this.meshRenderer = model;
         if (this.meshRenderer != null)
@@ -49,11 +62,12 @@ public class NewProductConveyComponent : SmithingToolComponent
             this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
         }
         this.convey = new NewProductConvey(this.data);
-    }
 
-    protected override void Start()
-    {
         this.IsOwner = true;
+        if (TutorialManager.Instance == null)
+        {
+            manager = GameObject.Find("InGameManager").GetComponent<InGameManager>().InGameUIManager.OrderUI;
+        }
     }
 
     public override ToolTransferResult Transfer(ToolTransferArgs args)
@@ -61,13 +75,18 @@ public class NewProductConveyComponent : SmithingToolComponent
         var result = this.tool.Transfer(args);
         if (args.ItemToGive is ProductItem item)
         {
-            if (manager.Check(item.Data as ProductItemData, item.Ore, item.Wood))
+            if (TutorialManager.Instance != null)
+            {
+                Instantiate(good, goodPos.position, Quaternion.identity);
+            }
+            else if (manager.Check(item.Data as ProductItemData, item.Ore, item.Wood))
             {
                 manager.FulfillRecipe();
                 BotContext.Instance.RemoveRecipe(item.Data as ProductItemData, item.Wood, item.Ore); // AI에 등록된 레시피 정보 삭제.
                 Instantiate(good, goodPos.position, Quaternion.identity);
             }
         }
+        this.OnTransfered?.Invoke(this, args, result);
         StartCoroutine(ItemRemoveRoutine(args));
         return (result);
     }

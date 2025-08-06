@@ -1,12 +1,15 @@
+﻿using MIN;
 using Photon.Pun;
+using SHG;
+using System.Collections;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
-using SHG;
 
 namespace SCR
 {
     public class InGameManager : MonoBehaviour
     {
+        //[SerializeField] private CameraController controller;
         [SerializeField] private MapManager mapManager;
         public InGameUIManager InGameUIManager { get => inGameUIManager; }
         [SerializeField] private InGameUIManager inGameUIManager;
@@ -18,6 +21,10 @@ namespace SCR
             SpwanPlayer();
         }
 
+        private void Start()
+        {
+            StartCoroutine(SendJoinMessageRoutine());
+        }
 
         // 맵 생성
         private void SetMap()
@@ -50,14 +57,39 @@ namespace SCR
             PlayerPhysical player = playerobj.GetComponent<PlayerPhysical>();
             player.RespawnPoint = spawnPos;
 
-            var cameraController = CameraController.Instance; ;
-            Debug.Log($"cameraController : {cameraController}");
-            cameraController.Player = player.gameObject.transform;
-            cameraController.gameObject.SetActive(true);
+
+            //Debug.Log($"cameraController? : {controller != null}");
+            //controller.Player = player.gameObject.transform;
+            //controller.gameObject.SetActive(true);
         }
 
 
 
+        private IEnumerator SendJoinMessageRoutine()
+        {
+            while (!PhotonNetwork.InRoom)
+            {
+                yield return new WaitForSeconds(0.5f);
+                Debug.Log("방에 없음");
+            }
+
+            yield return new WaitForSeconds(0.5f);
+
+            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { CustomPropertyKeys.localSceneLoaded, true } });
+        }
+
+        [ContextMenu("localSceneLoaded?")]
+        private void Test()
+        {
+            if ((bool)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.localSceneLoaded] == true)
+            {
+                Debug.Log("localSceneLoaded가 true");
+            }
+            else
+            {
+                Debug.Log("localSceneLoaded가 false");
+            }
+        }
     }
 }
 
