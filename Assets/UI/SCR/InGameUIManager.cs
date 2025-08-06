@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine;
-using Photon.Pun.UtilityScripts;
 using System.Linq;
 using Zenject;
 using MIN;
@@ -48,26 +47,52 @@ namespace SCR
 
         private void Start()
         {
-            //foreach (var p in players)
-            //{
-            //    if ((bool)p.CustomProperties[localSceneLoaded] == true)
-            //    {
-            //        Debug.Log($"{p.NickName}의 준비 상태가 true");
-            //        waitingUI.ConnectedPlayer(CheckPlayerIndex(p));
-            //    }
-            //}
+            foreach (var p in players)
+            {
+                Hashtable playerProps = p.CustomProperties;
+
+                if (playerProps.ContainsKey(CustomPropertyKeys.localSceneLoaded))
+                {
+                    bool join = (bool)playerProps[CustomPropertyKeys.localSceneLoaded];
+                    if (join)
+                    {
+                        waitingUI.ConnectedPlayer(CheckPlayerIndex(p));
+                    }
+                }
+            }
+            SendJoinMessage();
+        }
+
+        private void SendJoinMessage()
+        {
+            // 접속했다는 신호를 보냄
+            Hashtable updatedProps = new()
+            {
+                { MIN.CustomPropertyKeys.localSceneLoaded, true }
+            };
+            PhotonNetwork.LocalPlayer.SetCustomProperties(updatedProps);
         }
 
         public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, Hashtable changedProps)
         {
+            base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
             Debug.Log("OnPlayerPropertiesUpdate Entered");
             if (IsWaiting)
             {
-                Debug.Log("IsWaiting");
+                if (changedProps.ContainsKey(CustomPropertyKeys.localSceneLoaded))
+                    Debug.Log("IsWaiting");
                 if (changedProps.ContainsKey(CustomPropertyKeys.localSceneLoaded))
                 {
                     Debug.Log("changedProps.ContainsKey(localSceneLoaded)");
                     // 플레이어가 게임에 진입한 경우
+                    bool join = (bool)changedProps[CustomPropertyKeys.localSceneLoaded];
+                    if (join)
+                    {
+                        waitingUI.ConnectedPlayer(CheckPlayerIndex(targetPlayer));
+                        if (waitingUI.AllConnectedPlayer())
+                            if (PhotonNetwork.IsMasterClient)
+                                photonView.RPC("AllConnected", RpcTarget.All);
+                    }
                     waitingUI.ConnectedPlayer(CheckPlayerIndex(targetPlayer));
                     Debug.Log($"{targetPlayer.NickName}");
 
@@ -86,7 +111,6 @@ namespace SCR
                 {
                     int score = (int)changedProps[CustomPropertyKeys.Score];
                     scoreStatusUI.ChangeScore(CheckPlayerIndex(targetPlayer), score);
-
                     if (IsLastChance) CheckFinish();
                 }
             }
@@ -109,7 +133,7 @@ namespace SCR
         {
             for (int i = 0; i < players.Count; i++)
             {
-                if (player.ActorNumber == players[i].ActorNumber)
+                if (player.NickName == players[i].NickName)
                     return i;
             }
             return players.Count + 1;

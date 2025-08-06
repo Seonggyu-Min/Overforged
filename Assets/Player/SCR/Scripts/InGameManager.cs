@@ -13,7 +13,6 @@ namespace SCR
         [SerializeField] private MapManager mapManager;
         public InGameUIManager InGameUIManager { get => inGameUIManager; }
         [SerializeField] private InGameUIManager inGameUIManager;
-        private string localSceneLoaded = "localSceneLoaded";
         private MapData map;
 
         private void Awake()
@@ -24,7 +23,6 @@ namespace SCR
 
         private void Start()
         {
-            SendJoinMessage();
             StartCoroutine(SendJoinMessageRoutine());
         }
 
@@ -59,17 +57,13 @@ namespace SCR
             PlayerPhysical player = playerobj.GetComponent<PlayerPhysical>();
             player.RespawnPoint = spawnPos;
 
-            
+
             //Debug.Log($"cameraController? : {controller != null}");
             //controller.Player = player.gameObject.transform;
             //controller.gameObject.SetActive(true);
         }
 
-        private void SendJoinMessage()
-        {
-            // 접속했다는 신호를 보냄
-            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { localSceneLoaded, true } });
-        }
+
 
         private IEnumerator SendJoinMessageRoutine()
         {
@@ -81,8 +75,7 @@ namespace SCR
 
             yield return new WaitForSeconds(0.5f);
 
-            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { localSceneLoaded, true } });
-            Debug.Log("localSceneLoaded, true 시도");
+            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { CustomPropertyKeys.localSceneLoaded, true } });
         }
 
         [ContextMenu("localSceneLoaded?")]
