@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Photon.Pun;
@@ -22,8 +22,14 @@ namespace SCR
 
         private int targetIndex = -1;
 
+        private void Start()
+        {
+            productSprites.Init();
+        }
+
         public void StartOrder()
         {
+            if (!PhotonNetwork.IsMasterClient) return;
             StartCoroutine(OrderCoroutine());
         }
 
@@ -75,6 +81,7 @@ namespace SCR
 
             BotContext.Instance.AddRecipe(prod.ProductItemData, wood, ore); // AI에게 현재 레시피 정보 추가.
 
+            ui.gameObject.SetActive(true);
             ui.Setup(prod, wood, ore);
         }
 
