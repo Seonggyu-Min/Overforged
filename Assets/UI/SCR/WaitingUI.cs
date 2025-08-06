@@ -51,7 +51,6 @@ namespace SCR
             popUp.SetActive(false);
             waitingAnimator.SetTrigger("Start");
             yield return new WaitForSeconds(0.5f);
-
             gameObject.SetActive(false);
             inGameUIManager.StartGame();
         }

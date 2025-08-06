@@ -57,7 +57,7 @@ namespace SCR
 
             var cameraController = CameraController.Instance; ;
             Debug.Log($"cameraController : {cameraController}");
-            cameraController.Player = player.transform;
+            cameraController.Player = player.gameObject.transform;
             cameraController.gameObject.SetActive(true);
         }
 

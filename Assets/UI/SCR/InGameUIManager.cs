@@ -101,6 +101,12 @@ namespace SCR
             IsWaiting = false;
             currentTimeUI.StartTime();
             orderUI.StartOrder();
+            GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag("Player");
+
+            foreach (GameObject obj in taggedObjects)
+            {
+                obj.GetComponent<Player>().OnPlayerInput();
+            }
         }
 
         // 끝났음을 확인하는 함수
