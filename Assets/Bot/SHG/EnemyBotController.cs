@@ -8,7 +8,7 @@ using EditorAttributes;
 namespace SHG
 {
   using ItemBox = SCR.BoxComponent;
-  using ConveyComponent = NewProductConveyComponent;
+  using ConveyComponent = LocalProductConvey;
 
   [RequireComponent(typeof(NavMeshAgent))]
   public class EnemyBotController : MonoBehaviour, IBot
@@ -23,11 +23,22 @@ namespace SHG
       get => this.holdingItem;
       private set => this.holdingItem = value;
     }
-    public int NetworkId => this.networkId;
+    public int NetworkId {
+      get => this.networkId;
+      set => this.networkId = value;
+    }
     public NavMeshAgent NavMeshAgent { get; private set; }
     public Transform Transform => this.transform;
+    public bool IsHoldingTong => this.tong != null;
+    public Transform[] GetTongs() => this.allTongs;
+    public Action<IInteractableTool> OnWork { get; set; }
+    public Action OnFinishWork { get; set; }
+    public Action<Item> OnRoot { get; set; }
+    public bool IsOwner;
     [SerializeField] [Required]
-    Transform hands;
+    Transform rightHand;
+    [SerializeField] [Required]
+    Transform leftHand;
     [SerializeField] [ReadOnly]
     FurnaceComponent furnace;
     [SerializeField] [ReadOnly]
@@ -45,12 +56,10 @@ namespace SHG
     int networkId;
     float remainingDelay;
     Action workTrigger;
-    public bool IsHoldingTong => this.tong != null;
     Transform tong;
     Transform[] allTongs = new Transform[0];
     BtNode[] allLeaves;
     SmithingToolComponent targetTool;
-    public Transform[] GetTongs() => this.allTongs;
 
     public void GrabItem(Item item)
     {
@@ -67,6 +76,7 @@ namespace SHG
       #endif
         return;
       }
+      this.OnRoot?.Invoke(item);
       Debug.Log($"GrabItem: {item}");
       this.HoldingItem = item;
       var rigidbody = item.GetComponent<Rigidbody>();
@@ -77,8 +87,18 @@ namespace SHG
       if (collider != null) {
         collider.isTrigger = true;
       }
-      item.transform.SetParent(this.hands);
-      item.transform.position = this.hands.position;
+      if (item is MaterialItem materialItem && materialItem.IsHot) {
+        materialItem.transform.SetParent(this.leftHand);
+        materialItem.transform.position = this.leftHand.position + this.leftHand.forward * 0.5f;
+      }
+      else {
+        item.transform.SetParent(this.rightHand);
+        item.transform.position = this.rightHand.position;
+        if (item is ProductItem productItem) {
+          item.transform.rotation = this.rightHand.rotation;
+        }
+      }
+      this.remainingDelay = Math.Max(this.remainingDelay + 0.5f, 0.5f);
     }
 
     public void WaitForSeconds(float second)
@@ -117,6 +137,9 @@ namespace SHG
           ItemToGive = this.HoldingItem,
           PlayerNetworkId = this.NetworkId
         };
+      if (tool is Component component) {
+        this.transform.LookAt(component.transform);
+      }
       if (tool.CanTransferItem(new ToolTransferArgs {
           ItemToGive = this.HoldingItem,
           PlayerNetworkId = this.NetworkId
@@ -128,6 +151,7 @@ namespace SHG
         if (result.ReceivedItem != null) {
           this.GrabItem(result.ReceivedItem);
         }
+        Debug.LogWarning($"Transfer: {tool}");
         return (true);
       }
       else {
@@ -140,10 +164,12 @@ namespace SHG
     
     public ToolWorkResult Work(IInteractableTool tool)
     {
+      Debug.LogWarning($"work: {tool}");
       var result = tool.Work();
       Debug.Log($"work {tool} result: {result}");
       this.workTrigger = result.Trigger;
-      this.Invoke(nameof(TriggerWork), 1f);
+      this.OnWork?.Invoke(tool);
+      this.Invoke(nameof(TriggerWork), result.DurationToStay);
       return (result);
     }
 
@@ -155,6 +181,10 @@ namespace SHG
         if (collider != null) {
           collider.isTrigger = false;
         }
+        var rb = this.tong.GetComponent<Rigidbody>();
+        if (rb != null) {
+          rb.isKinematic = false;
+        }
       }
     }
 
@@ -162,11 +192,16 @@ namespace SHG
     {
       if (!this.IsHoldingTong) {
         this.tong = tong;
-        this.tong.SetParent(this.hands);
-        this.tong.position = this.hands.position;
+        this.tong.SetParent(this.leftHand);
+        this.tong.position = this.leftHand.position;
+        this.tong.transform.localRotation = Quaternion.identity;
         var collider = this.tong.GetComponent<Collider>();
         if (collider != null) {
           collider.isTrigger = true;
+        }
+        var rb = this.tong.GetComponent<Rigidbody>();
+        if (rb != null) {
+          rb.isKinematic = true;
         }
       }
     }
@@ -253,7 +288,7 @@ namespace SHG
     // Update is called once per frame
     void Update()
     {
-      if (this.remainingDelay < 0) {
+      if (this.IsOwner && this.remainingDelay < 0) {
         this.currentState = this.behaviourTree.Evaluate();
       }
       else {
@@ -265,6 +300,7 @@ namespace SHG
     void TriggerWork()
     {
       this.workTrigger?.Invoke();
+      this.OnFinishWork?.Invoke();
     }
 
     public void PutDownItem()
@@ -305,7 +341,7 @@ namespace SHG
     }
 
     [Button]
-    void CreateProductTest()
+    public void StartCreateProduct()
     {
       this.behaviourTree = EnemyBotBt.KeepCraftingProductBt(this);
     }
@@ -337,10 +373,8 @@ namespace SHG
         tool: null,
         transform: null,
         bot: this);
-      this.allLeaves[(int)BtLeaf.Type.PickUpTong] = new BtPickUpTongLeaf(bot: this
-
-      );
+      this.allLeaves[(int)BtLeaf.Type.PickUpTong] = new BtPickUpTongLeaf(bot: this);
+      this.allLeaves[(int)BtLeaf.Type.OpenDoor] = new BtOpenDoorLeaf(this);
     }
-
   }
 }

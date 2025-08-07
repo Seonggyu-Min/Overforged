@@ -4,7 +4,6 @@ using Photon.Pun;
 
 namespace SHG
 {
-  using Player = TestPlayer;
 
   public interface IInteractableTool
   {

@@ -38,7 +38,13 @@ namespace SHG
           transform: this.tool.transform,
           bot: this.bot));
       this.AddChild(new BtConditionLeaf(
-          condition: () => this.tool.IsFinished,
+          condition: () => {
+            bool isFinished = this.tool.IsFinished;
+            if (isFinished) {
+              this.bot.PutDownTong();
+            }
+            return (isFinished);
+          },
           falseState: NodeState.Running));
       this.AddChild(new BtTransferItemLeaf(
           toGive: false,

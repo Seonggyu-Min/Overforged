@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using EditorAttributes;
+using Photon.Pun;
 
 namespace SHG
 {
-  using ConveyComponent = NewProductConveyComponent;
+  using ConveyComponent = LocalProductConvey;
   public class BotContext : MonoBehaviour
   {
     public static BotContext Instance => instance;
@@ -16,9 +17,12 @@ namespace SHG
     Dictionary<int, List<SmithingToolComponent>> tools;
     [SerializeField]
     List<ProductRecipe> recipes;
+    [SerializeField]
+    DoorController door;
     public Action<ProductRecipe> OnRecipeAdded;
     public Action<ProductRecipe> OnRecipeRemoved;
     public List<ConveyComponent> submitPlaces;
+    public DoorController Door => this.door;
 
     public void AddRecipe(
       ProductItemData data,
@@ -77,6 +81,22 @@ namespace SHG
         this.tools.Add(tool.PlayerNetworkId, new List<SmithingToolComponent>()); 
       }
       this.tools[tool.PlayerNetworkId].Add(tool);
+    }
+
+    [Button]
+    public void SpawnBot(Vector3 position, int playerNetworkId)
+    {
+      var botObject = PhotonNetwork.Instantiate(
+        "SHG/Bot",
+        position: position,
+        rotation: Quaternion.identity);
+      var botController = botObject.GetComponent<EnemyBotController>();
+      bool isOwner = PhotonNetwork.LocalPlayer.IsMasterClient;
+      if (botController != null && isOwner) {
+        botController.IsOwner = isOwner;
+        botController.StartCreateProduct();
+        botController.NetworkId = PhotonNetwork.LocalPlayer.ActorNumber;
+      }
     }
 
     public bool TryGetClosestSubmitPlace(Vector3 position, out ConveyComponent submitPlace)

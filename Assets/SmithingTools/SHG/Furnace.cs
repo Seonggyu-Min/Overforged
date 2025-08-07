@@ -88,6 +88,7 @@ namespace SHG
         (this.IsIgnited || this.NormalizedTemparature > 0.5f)) {
         this.HoldingMaterial.Heat();
       }
+      this.ResetInteraction();
       return (result);
     }
 
