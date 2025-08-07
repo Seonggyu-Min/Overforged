@@ -46,7 +46,7 @@ namespace SCR
         void Update()
         {
             centralPos = transform.position;
-            centralPos.y = 0.7f;
+            centralPos.y = transform.position.y + 0.2f;
             CheckInteractable();
         }
 
