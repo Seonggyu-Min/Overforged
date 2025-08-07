@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace SHG
@@ -108,8 +108,8 @@ namespace SHG
         #if UNITY_EDITOR
         if (this.processingBox == null) {
           throw (new ApplicationException($"{nameof(ConveyorBelt)} {nameof(Transfer)}: {nameof(processingBox)} is null"));
-        #endif
         }
+        #endif
         if (this.TryGetBoxItem(this.processingBox, out Item item)) {
           result.ReceivedItem = item;
           this.AllItemBox.Remove(this.processingBox);
@@ -118,8 +118,8 @@ namespace SHG
         #if UNITY_EDITOR
         else {
           throw (new ApplicationException($"{nameof(ConveyorBelt)} {nameof(Transfer)}: fail to find item for {nameof(processingBox)}"));
-        #endif
         }
+        #endif
         return (this.ReturnWithEvent(result));    
       }
     }
