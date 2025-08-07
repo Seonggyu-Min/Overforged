@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SHG
 {
-  using ConveyCompontent = NewProductConveyComponent;
+  using ConveyCompontent = LocalProductConvey;
 
   public class BtSubmitProductLeaf : BtLeaf
   {
@@ -49,7 +49,7 @@ namespace SHG
       return (this.ReturnState(NodeState.Running));
     }
 
-    public void Reset() 
+    public override void Reset() 
     {
       this.submitPlace = null;
     }

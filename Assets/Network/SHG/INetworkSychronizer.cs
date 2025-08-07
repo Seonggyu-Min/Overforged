@@ -4,6 +4,7 @@ namespace SHG
 {
   public interface INetworkSynchronizer<T> where T: INetworkSynchronizable
   {
+    public bool IsLocal { get; }
     public bool TryFindComponentFromNetworkId<U>(int networId, out U found) where U: Component;
     public GameObject GetPlayerObject();
     public bool TryGetGameObjectNetworkId(GameObject gameObject, out int id);

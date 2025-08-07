@@ -2,7 +2,7 @@ using Zenject;
 
 namespace SHG
 {
-  using IAudioManager = MIN.IAudioManager;
+
   public class TestMonoInstaller : MonoInstaller<TestMonoInstaller>
   {
     public override void InstallBindings()

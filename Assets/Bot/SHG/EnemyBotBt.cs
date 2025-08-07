@@ -23,16 +23,13 @@ namespace SHG
       BtNode getRecipe = new BtGetRecipeNode();
       BtNode checkRecipe = new BtCheckRecipeNode(bot);
       BtNode createProductNode = new BtCreateProductNode(bot);
-      BtNode submitNode = new BtSubmitProductLeaf(bot);
+      BtNode openDoor = new BtOpenDoorLeaf(bot);
       BtNode craftNode = new BtSequenceNode(
         children: new BtNode[] {
-        getRecipe, createProductNode, checkRecipe, submitNode });
-      BtNode repeatNode = new BtRepeaterNode(
-        target: craftNode,
-        condition: () => false);
+        getRecipe, createProductNode, checkRecipe, openDoor });
       EnemyBotBt bt = new EnemyBotBt(
         bot, 
-        children: new BtNode[] { repeatNode });
+        children: new BtNode[] { craftNode });
       return (bt);
     }
 
@@ -40,7 +37,10 @@ namespace SHG
     {
       NodeState result = base.Evaluate();
       if (result == NodeState.Success && this.children.Count > 0) {
-        Debug.Log($"done");
+        if (this.TryFindData(CURRENT_RECIPE_KEY, out object found)) {
+          Debug.Log($"CurrentRecipe {found}");
+          };
+        this.Reset();
       }
       return (result);
     }

@@ -20,7 +20,7 @@ namespace SHG
 
     public BtConditionLeaf Init(
       Func<bool> condition,
-      NodeState falseSTate = NodeState.Failure)
+      NodeState falseState = NodeState.Failure)
     {
       this.condition = condition;      
       this.falseState = falseState;

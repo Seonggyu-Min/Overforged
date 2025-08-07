@@ -40,11 +40,16 @@ namespace SHG
 
     public override ToolTransferResult Transfer(ToolTransferArgs args)
     {
-      //TODO: check item is hot
-      if (args.ItemToGive != null) {
+      if (args.ItemToGive != null)
+      {
+        args.ItemToGive.gameObject.SetActive(false);
         this.Temparature = MAX_TEMPARATURE;
       }
-      return (base.Transfer(args));
+      var result = base.Transfer(args);
+      if (result.ReceivedItem != null) {
+        result.ReceivedItem.gameObject.SetActive(true);
+      }
+      return (result);
     }
 
     public override bool CanWork()

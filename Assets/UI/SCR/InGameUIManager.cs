@@ -21,6 +21,7 @@ namespace SCR
         [SerializeField] OrderUI orderUI;
         [SerializeField] ResultUI resultUI;
         [Inject] public IGameManager GameManager;
+        [Inject] private InGameManager InGameManager;
 
         public Action EndGameAction;
         public bool IsWaiting;
@@ -43,6 +44,7 @@ namespace SCR
             IsWaiting = true;
             IsEnd = false;
             IsLastChance = false;
+            InGameManager.SetTeam(players);
         }
 
         private void Start()
