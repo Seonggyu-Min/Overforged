@@ -13,11 +13,13 @@ namespace SHG
   [RequireComponent(typeof(NavMeshAgent))]
   public class EnemyBotController : MonoBehaviour, IBot
   {
-
+    const int BOT_HP = 15;
     [SerializeField]
     Part partToCreate;
     [SerializeField]
     ProductRecipe productToCreate;
+    [SerializeField]
+    GauageImageUI hpBar;
 
     public Item HoldingItem { 
       get => this.holdingItem;
@@ -32,9 +34,13 @@ namespace SHG
     public bool IsHoldingTong => this.tong != null;
     public Transform[] GetTongs() => this.allTongs;
     public Action<IInteractableTool> OnWork { get; set; }
+    public Action OnAttack { get; set; }
     public Action OnFinishWork { get; set; }
     public Action<Item> OnRoot { get; set; }
+    public Action OnHit { get; set; }
+    public Action OnDied { get; set; }
     public bool IsOwner;
+    public ObservableValue<(int current, int max)> Hp { get; private set; }
     [SerializeField] [Required]
     Transform rightHand;
     [SerializeField] [Required]
@@ -60,6 +66,23 @@ namespace SHG
     Transform[] allTongs = new Transform[0];
     BtNode[] allLeaves;
     SmithingToolComponent targetTool;
+    bool isDead;
+
+    public void GetDamaged(int damage)
+    {
+      var (current, max) = this.Hp.Value;
+      this.Hp.Value = (Math.Max(current - damage, 0), max);
+      if (this.Hp.Value.current > 0) {
+        this.OnHit?.Invoke();
+        this.remainingDelay = Math.Max(this.remainingDelay + 1f, 1f);
+      }
+      else {
+        this.isDead = true;
+        this.OnDied.Invoke();
+        BotSceneManager.Instance.OnBotDead();
+      }
+      this.NavMeshAgent.isStopped = true;
+    }
 
     public void GrabItem(Item item)
     {
@@ -77,11 +100,11 @@ namespace SHG
         return;
       }
       this.OnRoot?.Invoke(item);
-      Debug.Log($"GrabItem: {item}");
       this.HoldingItem = item;
       var rigidbody = item.GetComponent<Rigidbody>();
       if (rigidbody != null) {
         rigidbody.useGravity = false;
+        rigidbody.isKinematic = true;
       }
       var collider = item.GetComponent<Collider>();
       if (collider != null) {
@@ -283,12 +306,14 @@ namespace SHG
       var pickTong = this.GetLeaf<BtPickUpTongLeaf>(BtLeaf.Type.PickUpTong);
       pickTong.Init();
       this.GetContext();
+      this.Hp = new((BOT_HP, BOT_HP));
+      this.hpBar.WatchingIntValue = this.Hp;
     }
 
     // Update is called once per frame
     void Update()
     {
-      if (this.IsOwner && this.remainingDelay < 0) {
+      if (this.IsOwner && this.remainingDelay < 0 && !this.isDead) {
         this.currentState = this.behaviourTree.Evaluate();
       }
       else {
@@ -305,8 +330,16 @@ namespace SHG
 
     public void PutDownItem()
     {
-      Debug.Log($"loose item : {this.HoldingItem}");
       if (this.HoldingItem != null) {
+        var rigidbody = this.HoldingItem.GetComponent<Rigidbody>();
+        if (rigidbody != null) {
+          rigidbody.useGravity = true;
+          rigidbody.isKinematic = false;
+        }
+        var collider = this.HoldingItem.GetComponent<Collider>();
+        if (collider != null) {
+          collider.isTrigger = false;
+        }
         this.HoldingItem.transform.SetParent(null);
         this.HoldingItem = null;
       }
@@ -344,6 +377,33 @@ namespace SHG
     public void StartCreateProduct()
     {
       this.behaviourTree = EnemyBotBt.KeepCraftingProductBt(this);
+    }
+
+    [Button]
+    public void StartBattle(LocalPlayerController player)
+    {
+      if (this.HoldingItem != null &&
+      this.HoldingItem is MaterialItem materialItem) {
+        this.PutDownItem();
+      }
+      this.behaviourTree = new EnemyBotBattleBt(
+        bot: this,
+        player: player
+      );
+    }
+
+    public void Attack(LocalPlayerController player)
+    {
+      this.NavMeshAgent.isStopped = true;
+      this.remainingDelay = Math.Min(this.remainingDelay + 1f, 1f);
+      this.transform.LookAt(player.transform.position);
+      int damage = 1;
+      if (this.HoldingItem != null &&
+      this.HoldingItem is ProductItem productItem) {
+        damage = 3;
+      }
+      player.GetDamaged(damage);
+      this.OnAttack?.Invoke();
     }
 
     void CreateLeaves()

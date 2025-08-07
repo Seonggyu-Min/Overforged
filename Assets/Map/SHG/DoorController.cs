@@ -25,6 +25,7 @@ namespace SHG
       set => this.highlighter.HighlightColor = value;
     }
     GameObjectHighlighter highlighter;
+    public Action<DoorController> OnOpened;
 
     [SerializeField] [Required]
     Transform doorHinge;
@@ -97,7 +98,7 @@ namespace SHG
     }
 
     [Button ("Open")]
-    void Open()
+    public void Open()
     {
       if (this.isLocked) {
         return ;
@@ -110,6 +111,7 @@ namespace SHG
       this.destRotation = this.opendedRotation;
       this.rotateRoutine = this.StartCoroutine(this.CreateRotateRoutine());
       this.IsClosed = false;
+      this.OnOpened?.Invoke(this);
     }
 
     [Button ("Close")]
