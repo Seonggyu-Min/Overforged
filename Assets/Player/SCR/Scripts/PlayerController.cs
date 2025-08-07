@@ -229,24 +229,16 @@ namespace SCR
                 if (useTong)
                 {
                     photonView.RPC("UseTongs", RpcTarget.All, !useTong, tongs.GetComponent<PhotonView>().ViewID);
-                    player.Tongs = tongs;
-                    player.Tongs.transform.SetParent(player.HoldingPos);
-                    player.Tongs.transform.localPosition = new Vector3(0, 0, 0);
-                    player.Tongs.transform.rotation = Quaternion.identity;
                 }
                 else
                 {
                     if (!CanUseTongs()) return;
                     photonView.RPC("UseTongs", RpcTarget.All, !useTong, player.Tongs.GetComponent<PhotonView>().ViewID);
-                    player.Tongs.SetActive(!useTong);
-                    player.Tongs.transform.SetParent(null);
-                    player.Tongs = null;
                 }
 
                 player.PlayerPhysical.UseTongs = useTong;
                 player.Animator.SetBool("UseTongs", useTong);
             }
-
         }
 
         /// <summary>
