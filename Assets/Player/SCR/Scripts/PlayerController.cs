@@ -248,7 +248,10 @@ namespace SCR
         private void PickUpObject(GameObject pickUpObject, bool isPlayer = true)
         {
             if (pickUpObject.transform.parent != null && isPlayer)
-                return;
+            {
+                if (pickUpObject.transform.parent.gameObject.CompareTag("Player")) return;
+            }
+            
             if (player.HoldObject == null)
             {
                 photonView.RPC("PickUpObject", RpcTarget.All, pickUpObject.GetComponent<PhotonView>().ViewID);
