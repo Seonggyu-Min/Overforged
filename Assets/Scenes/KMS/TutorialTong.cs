@@ -1,18 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TutorialTong : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    public Action OnGet;
+    public Action OnAbandon;
+
+    private Transform parent;
+
+    void OnEnable()
     {
-        
+        OnAbandon?.Invoke();
+
+    }
+    void OnDisable()
+    {
+        OnGet?.Invoke();
     }
 }
