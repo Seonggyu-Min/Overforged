@@ -285,6 +285,7 @@ namespace SCR
         {
             PhotonView photonView = PhotonView.Find(itemId);
             HoldObject = photonView.gameObject;
+            HoldObject.transform.SetParent(null);
             HoldObject.transform.SetParent(HoldingPos);
             HoldObject.transform.localPosition = new Vector3(0, 0, 0);
             HoldObject.transform.rotation = transform.rotation;
