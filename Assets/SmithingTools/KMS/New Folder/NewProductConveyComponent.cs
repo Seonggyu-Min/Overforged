@@ -53,7 +53,7 @@ public class NewProductConveyComponent : SmithingToolComponent
 
     protected override void Start()
     {
-        manager = GameObject.Find("InGameManager").GetComponent<InGameManager>().InGameUIManager.OrderUI;
+        //manager = GameObject.Find("InGameManager").GetComponent<InGameManager>().InGameUIManager.OrderUI;
         this.meshRenderer = model;
         if (this.meshRenderer != null)
         {

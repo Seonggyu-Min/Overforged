@@ -19,7 +19,7 @@ MonoBehaviour:
   Offset: {x: 0, y: 0, z: 0}
   Rotation: {x: 0, y: 0, z: 90}
   Scale: {x: 8, y: 1.8, z: 8}
-  materialVariation: 0
+  materialVariation: 9
   materialType: 3
   nextMaterial: {fileID: 11400000, guid: 6cb14106c0dd60b41aa2edec90ec8fb6, type: 2}
   guideImage: {fileID: 901578416, guid: f216483f8d9995dff8c06536c9cb12c7, type: 3}
