@@ -69,7 +69,7 @@ namespace SHG
       }
       this.highlighter = new GameObjectHighlighter(
         Array.ConvertAll(this.renderers,
-        renderer => renderer.sharedMaterial));
+        renderer => renderer.material));
       for (int i = 0; i < this.highlighter.HighlightedMaterials.Length; ++i) {
         this.renderers[i].material = this.highlighter.HighlightedMaterials[i];
       }
@@ -82,10 +82,16 @@ namespace SHG
       }
     }
 
+    void Update()
+    {
+      this.highlighter.OnUpdate(Time.deltaTime);
+    }
+
     public void OnUnlock()
     {
-      this.isLocked = false; 
-      if (this.IsClosed) {
+      this.isLocked = false;
+      if (this.IsClosed)
+      {
         this.Open();
       }
     }
@@ -163,12 +169,12 @@ namespace SHG
 
     public void HighlightInstantly(Color color)
     {
-      throw new NotImplementedException();
+      this.highlighter.HighlightInstantly(color);
     }
 
     public void HighlightForSeconds(float seconds, Color color)
     {
-      throw new NotImplementedException();
+      this.highlighter.HighlightForSeconds(seconds, color);
     }
   }
 }

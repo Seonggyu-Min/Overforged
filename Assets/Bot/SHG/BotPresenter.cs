@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using EditorAttributes;
 using Zenject;
+using Unity.AppUI.UI;
 
 namespace SHG
 {
@@ -75,9 +76,11 @@ namespace SHG
     void PlaySfx()
     {
       if (this.sfxToPlay != null) {
-        this.audioLibrary.PlayRandomSfx(this.sfxToPlay)
+        this.audioLibrary.PlayRandomSfx(this.sfxToPlay, 
+        position: this.transform.position + 
+        (Camera.main.transform.position - CameraController.Instance.CameraLookPos))
           .SetDistance(max: 5f)
-          .Set3dBlend(0.5f);
+          .Set3dBlend(0.8f);
         this.sfxToPlay = null;
       }
     }

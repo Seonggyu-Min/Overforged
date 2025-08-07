@@ -15,6 +15,25 @@ namespace SHG
     OreType oreType;
     WoodType woodType;
     float timeStamp;
+    public WoodType WoodType {
+      get {
+        if (this.Parts[0].WoodType != WoodType.None) {
+          return (this.Parts[0].WoodType);
+        }
+          return (this.Parts[1].WoodType);
+      }
+    }
+    public OreType OreType
+    {
+      get
+      {
+        if (this.Parts[0].OreType != OreType.None)
+        {
+          return (this.Parts[0].OreType);
+        }
+        return (this.Parts[1].OreType);
+      }
+    }
 
     public ProductRecipe(
       ProductType productType,

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using EditorAttributes;
 using Photon.Pun;
+using System.Linq;
 
 namespace SHG
 {
@@ -11,18 +12,30 @@ namespace SHG
   {
     public static BotContext Instance => instance;
     static BotContext instance;
-    [SerializeField]
-    RawMaterialBox[] materialBoxes;
     public RawMaterialBox[] MaterialBoxes => this.materialBoxes;
-    Dictionary<int, List<SmithingToolComponent>> tools;
-    [SerializeField]
-    List<ProductRecipe> recipes;
-    [SerializeField]
-    DoorController door;
+    public List<ProductRecipe> Recipes => this.recipes;
     public Action<ProductRecipe> OnRecipeAdded;
     public Action<ProductRecipe> OnRecipeRemoved;
     public List<ConveyComponent> submitPlaces;
     public DoorController Door => this.door;
+
+    [SerializeField]
+    RawMaterialBox[] materialBoxes;
+    Dictionary<int, List<SmithingToolComponent>> tools;
+    [SerializeField]
+    List<ProductRecipe> recipes;
+    [SerializeField]
+    List<CraftData> recipeCraftData;
+    [SerializeField]
+    DoorController door;
+
+    public CraftData GetCraftDataAt(int index)
+    {
+      if (index < this.recipeCraftData.Count) {
+        return (this.recipeCraftData[index]);
+      }
+      return (null);
+    }
 
     public void AddRecipe(
       ProductItemData data,
@@ -147,8 +160,12 @@ namespace SHG
     void Init()
     {
       this.tools = new ();
-      this.recipes = new (); 
       this.submitPlaces = new ();
+      int count = this.recipes.Count;
+      this.recipes = this.recipes.OrderBy(i => System.Guid.NewGuid()).ToList();
+      if (count > 3) {
+        this.recipes.RemoveRange(3, count - 3);
+      }
     }
 
     public T GetComponent<T>(int networkId, SmithingTool.ToolType toolType) where T: SmithingToolComponent
@@ -185,8 +202,9 @@ namespace SHG
     #if UNITY_EDITOR
     [SerializeField] [VerticalGroup(10f, true, nameof(craftData), nameof(woodType), nameof(oreType))]
     EditorAttributes.Void testGroup;
-    [SerializeField] [HideInInspector]
-    ProductItemData craftData;
+    [SerializeField]
+    [HideInInspector]
+    CraftData craftData;
     [SerializeField] [HideInInspector]
     WoodType woodType;
     [SerializeField] [HideInInspector]
@@ -195,14 +213,9 @@ namespace SHG
     [Button] 
     void AddRecipeTest()
     {
-      this.AddRecipe(this.craftData, this.woodType, this.oreType);
+      this.AddRecipe(this.craftData.ProductItemData, this.woodType, this.oreType);
     }
 
-    [Button]
-    void RemoveRecipeTest()
-    {
-      this.RemoveRecipe(this.craftData, this.woodType, this.oreType);
-    }
     #endif
     #endregion
   }

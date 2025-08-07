@@ -369,7 +369,7 @@ namespace SHG
         };
       }
       bool canTransfer = interactable.CanTransferItem(transferArgs);
-
+      bool hasProduct = false;
       if (interactable is SmithingToolComponent smithingTool) {
         if (smithingTool.HoldingItem != null &&
           smithingTool.HoldingItem.IsHot) {
@@ -390,6 +390,7 @@ namespace SHG
       }
       else if (interactable is DoorController door) {
         if (this.HoldingItem != null && this.HoldingItem is ProductItem product) {
+          hasProduct = true;
           door.HighlightInstantly(Color.green);
         }
         else {
@@ -399,13 +400,17 @@ namespace SHG
       if (!this.isTryInteracting) {
         return;
       }
-      if (this.mode == Mode.Work && interactable.CanWork())
+      if (hasProduct &&
+      interactable is DoorController doorToOpen &&
+      doorToOpen.CanWork()) {
+        doorToOpen.Work();
+      }
+      else if (this.mode == Mode.Work && interactable.CanWork())
       {
         this.Work(interactable);
       }
       else if (this.mode == Mode.Normal && canTransfer)
       {
-        Debug.Log("Transfer");
         this.TransferItem(interactable, transferArgs);
       }
     }

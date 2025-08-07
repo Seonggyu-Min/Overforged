@@ -9,11 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/MSG/OutGameScene.unity
     guid: 69071a1b65375ea40aeabfbc82d344a7
   - enabled: 1
-    path: Assets/Scenes/SHG/BotScene.unity
-    guid: b73012cc2a5eaeb91a8a1de3290f3790
-  - enabled: 1
     path: Assets/Scenes/MSG/InGameTestScene.unity
     guid: a437b7c1bcc8f9d4e89b63bdfbb5a0ca
+  - enabled: 1
+    path: Assets/Scenes/SHG/BotScene.unity
+    guid: b73012cc2a5eaeb91a8a1de3290f3790
   - enabled: 1
     path: Assets/Scenes/KMS/Tutorial.unity
     guid: 433ed6b6d85a7754888b1bd0da8c59cd
