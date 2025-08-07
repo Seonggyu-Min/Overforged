@@ -2,6 +2,7 @@
 using Photon.Pun;
 using SHG;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -13,6 +14,7 @@ namespace SCR
         [SerializeField] private MapManager mapManager;
         public InGameUIManager InGameUIManager { get => inGameUIManager; }
         [SerializeField] private InGameUIManager inGameUIManager;
+        private List<int> teams;
         private MapData map;
 
         private void Awake()
@@ -26,6 +28,26 @@ namespace SCR
             StartCoroutine(SendJoinMessageRoutine());
         }
 
+        public void SetTeam(List<Photon.Realtime.Player> players)
+        {
+            teams = new();
+            foreach (var p in players)
+            {
+                Hashtable playerProps = p.CustomProperties;
+                if (!p.CustomProperties.TryGetValue(CustomPropertyKeys.TeamColor, out object teamcolor))
+                {
+                    Debug.LogWarning($"플레이어 {p.NickName}의 팀 색상이 설정되지 않았습니다.");
+                    continue;
+                }
+                int teamNum = int.Parse(teamcolor.ToString());
+                if (teams.Find(n => n == teamNum) == 0)
+                {
+                    teams.Add(teamNum);
+                }
+            }
+            SetTeamMap();
+        }
+
         // 맵 생성
         private void SetMap()
         {
@@ -35,6 +57,11 @@ namespace SCR
                 map = mapManager.getMap((int)roomProps["MapId"]);
                 map.gameObject.SetActive(true);
             }
+        }
+
+        private void SetTeamMap()
+        {
+            map.SetTeam(teams);
         }
 
         // 플레이어 생성
