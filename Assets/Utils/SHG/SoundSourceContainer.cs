@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Zenject;
+using SHG;
 
 public class SoundSourceContainer: MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class SoundSourceContainer: MonoBehaviour
   IAudioLibrary audioLibrary;
 
   public SoundSource[] SoundSources;
+  [SerializeField]
+  bool isSingletonSource;
 
   void Awake()
   {
@@ -28,8 +31,12 @@ public class SoundSourceContainer: MonoBehaviour
 #if UNITY_EDITOR
       Debug.LogError($"{nameof(SoundSourceContainer)} has {nameof(SoundSources)} no SoundFiles");
 #endif
-      return ;
     }
-    this.audioLibrary.Register(this);
+    if (this.isSingletonSource) {
+      SingletonAudio.Instance.Register(this);
+    }
+    else {
+      this.audioLibrary.Register(this);
+    }
   }
 }

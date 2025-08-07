@@ -3,18 +3,20 @@ VisualElement
   -unity-font-definition: url("project://database/Assets/Imports/Fonts/Maplestory Bold.ttf");
 }
 
+.window
+{
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+}
+
 #option-window
 {
+  position: absolute;
   top: 15%;
   left: 25%;
   width: 50%;
   height: 70%;
-}
-
-#option-panel
-{
-  width: 100%;
-  height: 100%;
   background-image: url("project://database/Assets/Imports/GUI/ResourceData/Sprites/Component/Popup/Popup_Frame.png");
   border-radius: 50px;
   padding-left: 100px;

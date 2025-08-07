@@ -20,6 +20,12 @@ namespace SHG
       this.StartFadeOut();
     }
 
+    public void StopFadeOut() 
+    {
+      this.nextClip = null;
+      this.StartFadeOut();
+    }
+
     // Update is called once per frame
     protected override void Update()
     {

@@ -22,6 +22,7 @@ public interface IAudioLibrary
   public void PlayNextBgm();
   public void Register(SoundSourceContainer audioSource);
   public void Register(BgmSourceContainer bgmSource);
+  public void UnRegister(BgmSourceContainer bgmSource);
   public string[] GetBgmList();
   public string GetCurrentBgm();
 }

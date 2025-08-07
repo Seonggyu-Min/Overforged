@@ -22,6 +22,7 @@ namespace SHG
     public BtCreateProductNode Init(ProductRecipe recipe)
     {
       this.children.Clear();
+      this.currentChildIndex = 0;
       if (this.table == null) {
         if (this.bot.TryFindTool(SmithingTool.ToolType.WoodTable,
             out SmithingToolComponent found)) {
@@ -39,9 +40,7 @@ namespace SHG
           new BtCreatePartNode(
             bot: this.bot,
             part: recipe.Parts[woodTablePartIndex],
-            takePart: false
-            )
-          );
+            takePart: false));
       }
       for (int i = 0; i < recipe.Parts.Length; i++) {
         if (i == woodTablePartIndex) {
