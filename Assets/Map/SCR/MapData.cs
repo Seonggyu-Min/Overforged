@@ -7,6 +7,7 @@ public class MapData : MonoBehaviour
     public MapTheme mapTheme;
     public Sprite Image;
     public List<Transform> SpawnPoints;
+    public List<TeamSmithingTools> teamSmithingTools;
     public GameObject MapPrefabs;
 
     public enum MapTheme
@@ -16,5 +17,13 @@ public class MapData : MonoBehaviour
         Desert,
         Forest,
         Volcano
+    }
+
+    public void SetTeam(List<int> teamNum)
+    {
+        for (int i = 0; i < teamSmithingTools.Count; i++)
+        {
+            teamSmithingTools[i].SetTeam(teamNum[i]);
+        }
     }
 }
