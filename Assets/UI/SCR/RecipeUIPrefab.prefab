@@ -1534,6 +1534,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5345309728507261242}
   - component: {fileID: 7124699519384125531}
+  - component: {fileID: 3650335094708197100}
   m_Layer: 0
   m_Name: RecipeUIPrefab
   m_TagString: Untagged
@@ -1586,6 +1587,28 @@ MonoBehaviour:
   curWood: 0
   curOre: 0
   matData: {fileID: 11400000, guid: 693c33b29feef914cb892532fd31073c, type: 2}
+--- !u!114 &3650335094708197100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6270672565766776205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6324996568208562581
 GameObject:
   m_ObjectHideFlags: 0

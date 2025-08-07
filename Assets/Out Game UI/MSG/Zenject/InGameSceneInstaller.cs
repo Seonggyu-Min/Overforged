@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using SCR;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -25,6 +26,11 @@ namespace MIN
             Container.Bind<IScoreManager>()
                 .To<ScoreManager>()
                 .FromComponentInNewPrefab(_scoreManagerPrefab)
+                .AsSingle()
+                .NonLazy();
+
+            Container.Bind<InGameManager>()
+                .FromComponentInHierarchy()
                 .AsSingle()
                 .NonLazy();
         }
