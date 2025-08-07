@@ -261,8 +261,19 @@ namespace SCR
         private void UseTongs(bool use, int itemId)
         {
             PhotonView photonView = PhotonView.Find(itemId);
-            HoldObject = photonView.gameObject;
-            HoldObject.SetActive(use);
+            photonView.gameObject.SetActive(use);
+            if (!use)
+            {
+                Tongs = photonView.gameObject;
+                Tongs.transform.SetParent(HoldingPos);
+                Tongs.transform.localPosition = new Vector3(0, 0, 0);
+                Tongs.transform.rotation = Quaternion.identity;
+            }
+            else
+            {
+                Tongs.transform.SetParent(null);
+                Tongs = null;
+            }
         }
 
         /// <summary>
@@ -276,7 +287,7 @@ namespace SCR
             HoldObject = photonView.gameObject;
             HoldObject.transform.SetParent(HoldingPos);
             HoldObject.transform.localPosition = new Vector3(0, 0, 0);
-            HoldObject.transform.rotation = Quaternion.identity;
+            HoldObject.transform.rotation = transform.rotation;
             HoldObject.GetComponent<Collider>().isTrigger = true;
             HoldObject.GetComponent<Rigidbody>().useGravity = false;
             PlayerPhysical.IsHold = true;
