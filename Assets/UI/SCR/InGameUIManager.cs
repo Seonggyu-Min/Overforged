@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
@@ -21,7 +21,7 @@ namespace SCR
         [SerializeField] OrderUI orderUI;
         [SerializeField] ResultUI resultUI;
         [Inject] public IGameManager GameManager;
-        [Inject] private InGameManager InGameManager;
+        [SerializeField] private InGameManager InGameManager;
 
         public Action EndGameAction;
         public bool IsWaiting;
