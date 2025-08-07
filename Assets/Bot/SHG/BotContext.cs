@@ -17,9 +17,12 @@ namespace SHG
     Dictionary<int, List<SmithingToolComponent>> tools;
     [SerializeField]
     List<ProductRecipe> recipes;
+    [SerializeField]
+    DoorController door;
     public Action<ProductRecipe> OnRecipeAdded;
     public Action<ProductRecipe> OnRecipeRemoved;
     public List<ConveyComponent> submitPlaces;
+    public DoorController Door => this.door;
 
     public void AddRecipe(
       ProductItemData data,

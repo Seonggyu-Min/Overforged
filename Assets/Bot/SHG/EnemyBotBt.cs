@@ -23,10 +23,10 @@ namespace SHG
       BtNode getRecipe = new BtGetRecipeNode();
       BtNode checkRecipe = new BtCheckRecipeNode(bot);
       BtNode createProductNode = new BtCreateProductNode(bot);
-      BtNode submitNode = new BtSubmitProductLeaf(bot);
+      BtNode openDoor = new BtOpenDoorLeaf(bot);
       BtNode craftNode = new BtSequenceNode(
         children: new BtNode[] {
-        getRecipe, createProductNode, checkRecipe, submitNode });
+        getRecipe, createProductNode, checkRecipe, openDoor });
       EnemyBotBt bt = new EnemyBotBt(
         bot, 
         children: new BtNode[] { craftNode });

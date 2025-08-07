@@ -84,7 +84,7 @@ namespace SHG
 
     protected virtual void Update()
     {
-      this.highlighter.OnUpdate(Time.deltaTime);
+      this.highlighter?.OnUpdate(Time.deltaTime);
       this.tool.OnUpdate(Time.deltaTime);
       this.effecter?.OnUpdate(Time.deltaTime);
     }

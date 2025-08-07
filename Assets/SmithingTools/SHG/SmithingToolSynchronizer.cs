@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Photon.Pun;
 
 namespace SHG
@@ -22,8 +23,7 @@ namespace SHG
       this.networkEventHandler.Register<SmithingToolSynchronizer>(this);
       this.smithingTools = new();
       var photonObject = new GameObject($"{nameof(SmithingToolSynchronizer)} photonObject");
-      //this.IsLocal = PhotonNetwork.CurrentRoom.PlayerCount == 1;
-      this.IsLocal = true;
+      this.IsLocal = (SceneManager.GetActiveScene().name == "BotScene");
     }
 
     public void RegisterSynchronizable(SmithingToolComponent smithingTool)

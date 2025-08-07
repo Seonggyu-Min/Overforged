@@ -89,11 +89,14 @@ namespace SHG
       }
       if (item is MaterialItem materialItem && materialItem.IsHot) {
         materialItem.transform.SetParent(this.leftHand);
-        materialItem.transform.position = this.leftHand.position + this.leftHand.forward;
+        materialItem.transform.position = this.leftHand.position + this.leftHand.forward * 0.5f;
       }
       else {
         item.transform.SetParent(this.rightHand);
         item.transform.position = this.rightHand.position;
+        if (item is ProductItem productItem) {
+          item.transform.rotation = this.rightHand.rotation;
+        }
       }
       this.remainingDelay = Math.Max(this.remainingDelay + 0.5f, 0.5f);
     }
@@ -134,6 +137,9 @@ namespace SHG
           ItemToGive = this.HoldingItem,
           PlayerNetworkId = this.NetworkId
         };
+      if (tool is Component component) {
+        this.transform.LookAt(component.transform);
+      }
       if (tool.CanTransferItem(new ToolTransferArgs {
           ItemToGive = this.HoldingItem,
           PlayerNetworkId = this.NetworkId
@@ -367,10 +373,8 @@ namespace SHG
         tool: null,
         transform: null,
         bot: this);
-      this.allLeaves[(int)BtLeaf.Type.PickUpTong] = new BtPickUpTongLeaf(bot: this
-
-      );
+      this.allLeaves[(int)BtLeaf.Type.PickUpTong] = new BtPickUpTongLeaf(bot: this);
+      this.allLeaves[(int)BtLeaf.Type.OpenDoor] = new BtOpenDoorLeaf(this);
     }
-
   }
 }
