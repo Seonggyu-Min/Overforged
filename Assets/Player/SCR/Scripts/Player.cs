@@ -253,7 +253,17 @@ namespace SCR
             ShowOff,
             Hit
         }
-
+        /// <summary>
+        /// 물건을 들었을 때의 함수
+        /// </summary>
+        /// <param name="itemId"></param>
+        [PunRPC]
+        private void UseTongs(bool use, int itemId)
+        {
+            PhotonView photonView = PhotonView.Find(itemId);
+            HoldObject = photonView.gameObject;
+            HoldObject.SetActive(use);
+        }
 
         /// <summary>
         /// 물건을 들었을 때의 함수
