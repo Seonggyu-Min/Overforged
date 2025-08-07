@@ -14,7 +14,7 @@ namespace SHG
   {
     [Inject]
     IAudioLibrary audioLibrary;
-    IAudioLibrary audio => (SingletonAudio.Instance ?? this.audioLibrary);
+    IAudioLibrary audioPlayer => (SingletonAudio.Instance ?? this.audioLibrary);
     [SerializeField] [ReadOnly]
     WoodTable woodTable;
     [SerializeField]
@@ -260,7 +260,7 @@ namespace SHG
     void OnCraftProductCrafted(ProductItemData craftedProduct)
     {
       this.tableEffecter.TriggerWorkEffect();
-      this.audio.PlayRandomSfx(
+      this.audioPlayer.PlayRandomSfx(
         soundName: "success",
         position: this.transform.position);
     }

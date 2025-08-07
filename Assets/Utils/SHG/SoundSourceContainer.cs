@@ -9,6 +9,8 @@ public class SoundSourceContainer: MonoBehaviour
   IAudioLibrary audioLibrary;
 
   public SoundSource[] SoundSources;
+  [SerializeField]
+  bool isSingletonSource;
 
   void Awake()
   {
@@ -30,19 +32,11 @@ public class SoundSourceContainer: MonoBehaviour
       Debug.LogError($"{nameof(SoundSourceContainer)} has {nameof(SoundSources)} no SoundFiles");
 #endif
     }
-  }
-
-  void Start()
-  {
-    if (this.SoundSources == null) {
-      return ;
-    }
-    if (SingletonAudio.Instance != null) {
+    if (this.isSingletonSource) {
       SingletonAudio.Instance.Register(this);
     }
     else {
       this.audioLibrary.Register(this);
     }
-
   }
 }

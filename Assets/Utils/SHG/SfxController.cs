@@ -74,7 +74,7 @@ public class SfxController : MonoBehaviour, IPooledObject
   {
     this.AudioSource.Stop();
     this.AudioSource.clip = clip;
-    this.remainingPlayTime = clip.length;
+    this.remainingPlayTime = Math.Max(clip.length, 0.5f);
     return (this);
   }
 

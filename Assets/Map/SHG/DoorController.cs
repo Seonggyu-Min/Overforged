@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using EditorAttributes;
+using System.Linq;
 
 namespace SHG
 {
@@ -11,10 +12,20 @@ namespace SHG
     public bool IsLocked { get; protected set; }
   }
 
-  public class DoorController : MonoBehaviour, IInteractableTool
+  public class DoorController : MonoBehaviour, IInteractableTool, IHighlightable
   {
     public bool IsClosed { get; private set; }
     public bool IsLocked => this.isLocked;
+    [SerializeField] [Required]
+    MeshRenderer[] renderers;
+    public bool IsHighlighted => this.highlighter.IsHighlighted;
+    public Color HighlightColor
+    {
+      get => this.highlighter.HighlightColor;
+      set => this.highlighter.HighlightColor = value;
+    }
+    GameObjectHighlighter highlighter;
+
     [SerializeField] [Required]
     Transform doorHinge;
     [SerializeField]
@@ -41,12 +52,12 @@ namespace SHG
         this.openedAngle.z);
       this.closedRotation = Quaternion.Euler(
         this.closedAngle.x,
-        this.closedAngle.y, 
+        this.closedAngle.y,
         this.closedAngle.z);
       this.IsClosed = this.isClosed;
       if (this.locker != null) {
         this.isLocked = this.locker.IsLocked;
-      } 
+      }
       else {
         this.isLocked = false;
       }
@@ -55,6 +66,12 @@ namespace SHG
       }
       else {
         this.doorHinge.localRotation = this.opendedRotation;
+      }
+      this.highlighter = new GameObjectHighlighter(
+        Array.ConvertAll(this.renderers,
+        renderer => renderer.sharedMaterial));
+      for (int i = 0; i < this.highlighter.HighlightedMaterials.Length; ++i) {
+        this.renderers[i].material = this.highlighter.HighlightedMaterials[i];
       }
     }
 
@@ -142,6 +159,16 @@ namespace SHG
         this.Close();
       }
        return (new ToolWorkResult());
+    }
+
+    public void HighlightInstantly(Color color)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void HighlightForSeconds(float seconds, Color color)
+    {
+      throw new NotImplementedException();
     }
   }
 }

@@ -10,7 +10,7 @@ namespace SHG
     public bool IsFinished => this.quenchingTool.IsFinished;
     [Inject]
     IAudioLibrary audioLibrary;
-    IAudioLibrary audio => (SingletonAudio.Instance ?? this.audioLibrary);
+    IAudioLibrary audioPlayer => (SingletonAudio.Instance ?? this.audioLibrary);
     [SerializeField] [Required()]
     SmithingToolData quenchingToolData;
     [SerializeField] 
@@ -59,7 +59,7 @@ namespace SHG
       if (tool.InteractionToTrigger == SmithingTool.InteractionType.ReceivedItem) {
         this.highlighter.HighlightColor = this.heatedColor;
         this.quenchingEffecter.TriggerWorkEffect();
-        this.audio.PlayRandomSfx("quench");
+        this.audioPlayer.PlayRandomSfx("quench");
       } 
       else if (tool.InteractionToTrigger == SmithingTool.InteractionType.ReturnItem) {
         this.highlighter.HighlightColor = this.normalColor;

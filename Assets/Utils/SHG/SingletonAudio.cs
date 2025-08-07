@@ -26,8 +26,16 @@ namespace SHG
     float[] volumes;
     int currentBgmIndex = -1;
 
+    [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void Init()
+    {
+      var gameObject = GameObject.Instantiate(Resources.Load<GameObject>("SHG/SingletonAudio"));
+      DontDestroyOnLoad(gameObject);
+    }
+
     void Awake()
     {
+      Debug.LogWarning("Awake");
       if (instance != null) {
         Destroy(this.gameObject);
         return;

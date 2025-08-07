@@ -112,8 +112,10 @@ namespace SHG
         if (rigidbody != null) {
           rigidbody.isKinematic = true;
         }
+        args.ItemToGive.transform.SetParent(this.transform);
       }
       else {
+        Debug.Log($"Suball Image");
         this.itemUI.SubAllImage();
       }
       if (this.HoldingItem != null) {

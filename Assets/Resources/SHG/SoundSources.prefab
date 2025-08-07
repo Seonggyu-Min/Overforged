@@ -100,3 +100,29 @@ MonoBehaviour:
     - Clip: {fileID: 8300000, guid: c34cf6a60917045618941034c2b2fe1f, type: 3}
       volume: 0
       isVolumeModified: 0
+  - Name: playerHammering
+    SoundFiles:
+    - Clip: {fileID: 8300000, guid: b613c78f062dd4866ac078c8bb9c87ec, type: 3}
+      volume: 0
+      isVolumeModified: 0
+  - Name: playerWalk
+    SoundFiles:
+    - Clip: {fileID: 8300000, guid: 889bfe50caec9f7d09b8ca4822ce1ba5, type: 3}
+      volume: 0
+      isVolumeModified: 0
+  - Name: playerDash
+    SoundFiles:
+    - Clip: {fileID: 8300000, guid: 3d4d84ac9d65a4d65a0bfb6c8124ec06, type: 3}
+      volume: 0
+      isVolumeModified: 0
+  - Name: playerChangeState
+    SoundFiles:
+    - Clip: {fileID: 8300000, guid: 983da25a331714c2fae77d05db10d321, type: 3}
+      volume: 0
+      isVolumeModified: 0
+  - Name: playerThrow
+    SoundFiles:
+    - Clip: {fileID: 8300000, guid: 7215d80e7d69146bf9d71617855e7b4b, type: 3}
+      volume: 0
+      isVolumeModified: 0
+  isSingletonSource: 1

@@ -236,6 +236,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8c2cb87d47613b65afde1e3b297a4bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 4626696236509685330}
+  - {fileID: 1710962195348177011}
   doorHinge: {fileID: 3016053229814392433}
   locker: {fileID: 0}
   openedAngle: {x: 0, y: 0, z: 0}

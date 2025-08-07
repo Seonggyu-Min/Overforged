@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
+using SCR;
+using MIN;
 
 namespace SHG
 {
@@ -38,6 +40,11 @@ namespace SHG
       smithingTool.OnWorked += this.OnWork;
       BotContext.Instance.AddTool(smithingTool);
       int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
+      if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(
+        CustomPropertyKeys.TeamColor, out object teamProperty) &&
+        int.TryParse(teamProperty.ToString(), out int teamNumber)) {
+        playerId = teamNumber;
+      }
       if (this.IsLocal) {
         smithingTool.IsOwner = true;
         if (smithingTool is TableComponent table) {
