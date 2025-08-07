@@ -48,6 +48,17 @@ namespace MIN
                 _panelStack.Push(_panels["Lobby Panel"]); // 로비패널 스택에 넣어 뒤로갈 수 있도록 함
                 ShowAsFirst("Room Panel");
             }
+            //else if (!PhotonNetwork.InRoom && PhotonNetwork.InLobby)  // 튜토리얼 갔다가 왔을 때
+            //{
+            //    _panelStack.Clear();
+
+            //    foreach (var panel in _panels)
+            //    {
+            //        panel.Value.gameObject.SetActive(false);
+            //    }
+
+            //    ShowAsFirst("Lobby Panel");
+            //}
             // 예외 상황
             // 로그인 상황이 로컬 캐시에 남아있고, GameQuitManager의 TrySignOut이 아직 반영되지 않은 경우 해당 예외 상황으로 들어갈 것 같음
             // 근데 최소 로그인 이전까지는 SignOut처리가 될 것 같아서 큰 문제는 없어보이는데, 아래의 디버그 로그가 나왔을 때 추가적인 버그가 있는지 확인해야될 듯
@@ -151,7 +162,7 @@ namespace MIN
                     return;
                 }
 
-                if (topPanel.HasToLeaveRoomWhenClosed && PhotonNetwork.InRoom)
+                if (topPanel.HasToLeaveRoomWhenClosed)
                 {
                     PhotonNetwork.LeaveRoom();
                 }
