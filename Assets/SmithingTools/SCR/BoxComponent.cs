@@ -21,11 +21,17 @@ namespace SCR
 
         public Action<GameObject> OnGetItem;
 
+#if UNITY_EDITOR
         void OnValidate()
         {
             SetItem();
         }
-
+#else
+        private void OnEnable()
+        {
+            SetItem();
+        }
+#endif
         private void SetItem()
         {
             if ((int)type < 3)
