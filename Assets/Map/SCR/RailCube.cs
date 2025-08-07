@@ -18,11 +18,12 @@ public class RailCube : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!snappingTargets.Contains(collision.transform))
-        {
-            snappingTargets.Add(collision.transform); // 리스트에 추가
-            StartCoroutine(SnapToCenter(collision.transform));
-        }
+        if (collision.gameObject.tag != "Player")
+            if (!snappingTargets.Contains(collision.transform))
+            {
+                snappingTargets.Add(collision.transform); // 리스트에 추가
+                StartCoroutine(SnapToCenter(collision.transform));
+            }
     }
 
     private void OnCollisionStay(Collision collision)
