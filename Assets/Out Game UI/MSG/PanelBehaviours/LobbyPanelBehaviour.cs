@@ -153,11 +153,6 @@ namespace MIN
             StartCoroutine(LogOutRoutine());
         }
 
-        public void OnClickLeaderBoardButton()
-        {
-            _outGameUIManager.Show("Leader Board Panel");
-        }
-
         public void OnClickExitButton()
         {
             Exit();
