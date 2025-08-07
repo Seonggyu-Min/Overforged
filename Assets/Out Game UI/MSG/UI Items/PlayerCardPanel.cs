@@ -43,6 +43,7 @@ namespace MIN
             ResetCustomProperties();
             UpdatePlayerCards();
             UpdateButtonText();
+            _infoText.text = string.Empty;
         }
 
         public override void OnDisable() => PhotonNetwork.RemoveCallbackTarget(this);
@@ -166,7 +167,6 @@ namespace MIN
                 _isReady = !_isReady;
                 PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { CustomPropertyKeys.IsReady, _isReady } });
             }
-
         }
 
         public void OnClickExitButton()
