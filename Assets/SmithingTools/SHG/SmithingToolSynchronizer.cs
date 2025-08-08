@@ -12,10 +12,10 @@ namespace SHG
   {
     INetworkEventHandler networkEventHandler;
     public bool IsLocal { get; private set; }
-
     const float MS_TO_SEC = 1f / 1000f;
     Dictionary<int, SmithingToolComponent> smithingTools;
     GameObject playerObject;
+    HashSet<int> userTools = new();
 
     public SmithingToolSynchronizer(INetworkEventHandler networkEventHandler)
     {
@@ -43,11 +43,11 @@ namespace SHG
                 BotContext.Instance.AddTool(smithingTool);
             }
       int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
-      //if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(
-      //  CustomPropertyKeys.TeamColor, out object teamProperty) &&
-      //  int.TryParse(teamProperty.ToString(), out int teamNumber)) {
-      //  playerId = teamNumber;
-      //}
+      if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(
+        CustomPropertyKeys.TeamColor, out object teamProperty) &&
+        int.TryParse(teamProperty.ToString(), out int teamNumber)) {
+        playerId = teamNumber;
+      }
       if (this.IsLocal) {
         smithingTool.IsOwner = true;
         if (smithingTool is TableComponent table) {
@@ -65,27 +65,48 @@ namespace SHG
 
     void OnWork(SmithingToolComponent component, ToolWorkResult result)
     {
-      if (component.IsOwner) {
-        this.SendRpc(
-          sceneId: component.SceneId,
-          method: nameof(SmithingToolComponent.Work),
-          args: new object[] {
-            result.ConvertToNetworkArguments() }
-          );
-      }
+    //  bool isOwner = false;
+    //  var photonView = component.GetComponent<PhotonView>();
+    //  if (photonView != null && photonView.IsMine)
+    //  {
+    //    isOwner = true;
+    //  }
+    //  else if  ((component is DropOffTableComponent dropOffTable ||
+    //    component is ConveyorBeltHopper conveyorBelt  ) && component.IsOwner) {
+    //    isOwner = true;
+    //  }
+    //  if (isOwner) {
+    //    this.SendRpc(
+    //      sceneId: component.SceneId,
+    //      method: nameof(SmithingToolComponent.Work),
+    //      args: new object[] {
+    //        result.ConvertToNetworkArguments() }
+    //      );
+    //  }
     }
 
     void OnTranfered(SmithingToolComponent component, ToolTransferArgs args, ToolTransferResult result)
     {
-      if (component.IsOwner) {
-        this.SendRpc(
-          sceneId: component.SceneId,
-          method: nameof(SmithingToolComponent.Transfer),
-          args: new object[] {
-            args.ConvertToNetworkArguments(),
-            result.ConvertToNetworkArguments()
-          });
-      }
+      //bool isOwner = false;
+      //var photonView = component.GetComponent<PhotonView>();
+      //if (photonView != null && photonView.IsMine)
+      //{
+      //  isOwner = true;
+      //}
+      //else if  ((component is DropOffTableComponent dropOffTable ||
+      //  component is ConveyorBeltHopper conveyorBelt  ) && component.IsOwner) {
+      //  isOwner = true;
+      //}
+      //if (isOwner) {
+      ////if (component.IsOwner) {
+      //  this.SendRpc(
+      //    sceneId: component.SceneId,
+      //    method: nameof(SmithingToolComponent.Transfer),
+      //    args: new object[] {
+      //      args.ConvertToNetworkArguments(),
+      //      result.ConvertToNetworkArguments()
+      //    });
+      //}
     }
 
     public void SendRpc(int sceneId, in string method, object[] args)

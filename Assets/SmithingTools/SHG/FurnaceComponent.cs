@@ -3,6 +3,7 @@ using EditorAttributes;
 using UnityEngine.UI;
 using Void = EditorAttributes.Void;
 using Zenject;
+using Photon.Pun;
 
 namespace SHG
 {
@@ -100,7 +101,7 @@ namespace SHG
       }
     }
 
-    public override ToolTransferResult Transfer(ToolTransferArgs args)
+    public override ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false)
     {
       if (args.ItemToGive != null) {
         args.ItemToGive.transform.localScale = SCALE_IN_FURNACE;
@@ -108,6 +109,15 @@ namespace SHG
       var result = base.Transfer(args);
       if (result.ReceivedItem != null) {
         result.ReceivedItem.transform.localScale = Vector3.one;
+      }
+      if (!fromNetwork) {
+        this.NetworkSynchronizer.SendRpc(
+          sceneId:this.SceneId,
+          method: nameof(SmithingToolComponent.Transfer),
+          args: new object[] {
+            args.ConvertToNetworkArguments(),
+            result.ConvertToNetworkArguments()
+          });
       }
       return (result);
     }

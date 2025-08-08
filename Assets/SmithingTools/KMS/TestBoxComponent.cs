@@ -32,7 +32,7 @@ public class TestBoxComponent : MonoBehaviourPun, IInteractableTool
         return false;
     }
 
-    public ToolTransferResult Transfer(ToolTransferArgs args)
+    public ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false)
     {
         UI.enabled = false;
         //var item = HoldingItem;
@@ -52,7 +52,7 @@ public class TestBoxComponent : MonoBehaviourPun, IInteractableTool
 
     //상호작용 시 UI가 켜져있으면 끄고, 꺼져있으면 키고 못움직이도록 해보았습니다.
 
-    public ToolWorkResult Work()
+    public ToolWorkResult Work(bool fromNetwork = false)
     {
         if (UI.enabled)
         {

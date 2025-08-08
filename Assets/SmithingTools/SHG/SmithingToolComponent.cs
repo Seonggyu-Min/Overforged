@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using EditorAttributes;
+using Photon.Pun;
 
 namespace SHG
 {
@@ -55,9 +56,11 @@ namespace SHG
     public Action<SmithingToolComponent, ToolTransferArgs, ToolTransferResult> OnTransfered;
     public Action<SmithingToolComponent, ToolWorkResult> OnWorked;
     protected abstract ISmithingToolEffecter effecter { get; }
+    //public PhotonView PhotonView { get; private set; }
 
     protected virtual void Awake()
     {
+      //this.PhotonView = this.GetComponent<PhotonView>();
       if (this.meshRenderer != null) {
         this.highlighter = new GameObjectHighlighter(
           new Material[] { this.meshRenderer.material });
@@ -99,7 +102,7 @@ namespace SHG
       }
     }
 
-    public virtual ToolTransferResult Transfer(ToolTransferArgs args)
+    public virtual ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false)
     {
       var result = this.tool.Transfer(args);
       Debug.Log($"{nameof(Transfer)} result: {result}");
@@ -130,6 +133,16 @@ namespace SHG
       #endif
       }
       this.OnTransfered?.Invoke(this, args, result);
+      if (!fromNetwork) {
+        Debug.LogWarning("Send Rpc");
+        this.NetworkSynchronizer.SendRpc(
+          sceneId:this.SceneId,
+          method: nameof(SmithingToolComponent.Transfer),
+          args: new object[] {
+            args.ConvertToNetworkArguments(),
+            result.ConvertToNetworkArguments()
+          });
+      }
       return (result);
     }
 
@@ -143,11 +156,18 @@ namespace SHG
       }
     }
 
-    public virtual ToolWorkResult Work()
+    public virtual ToolWorkResult Work(bool fromNetwork = false)
     {
       var result = this.tool.Work();
       Debug.Log($"{nameof(Work)} result: {result}");
       this.OnWorked?.Invoke(this, result);
+      if (!fromNetwork) {
+        this.NetworkSynchronizer.SendRpc(
+          sceneId: this.SceneId,
+          method: nameof(SmithingToolComponent.Work),
+          args: new object[] {
+            result.ConvertToNetworkArguments() });
+      }
       return (result);
     }
 
@@ -167,7 +187,7 @@ namespace SHG
     {
       // TODO: handle work result
       var dict = args[0] as Dictionary<string, object>;
-      this.Work();
+      this.Work(fromNetwork: true);
       // TODO: handle work trigger
       this.tool.OnInteractionTriggered?.Invoke(this.tool.InteractionToTrigger);
     }
@@ -186,7 +206,7 @@ namespace SHG
           this.Transfer(new ToolTransferArgs {
             ItemToGive = foundItem,
             PlayerNetworkId = playerNetworkId
-          });
+          }, fromNetwork: true);
         }
         #if UNITY_EDITOR
         else {
@@ -200,7 +220,7 @@ namespace SHG
         this.Transfer(new ToolTransferArgs {
           ItemToGive = null,
           PlayerNetworkId = playerNetworkId
-        });
+        }, fromNetwork: true);
       }
     }
 

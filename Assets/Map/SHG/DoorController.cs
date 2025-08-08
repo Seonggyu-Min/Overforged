@@ -148,7 +148,7 @@ namespace SHG
         return (false);
     }
 
-    public ToolTransferResult Transfer(ToolTransferArgs args)
+    public ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false)
     {
             return (new ToolTransferResult());
     }
@@ -158,7 +158,7 @@ namespace SHG
         return (this.IsClosed);
     }
 
-    public ToolWorkResult Work()
+    public ToolWorkResult Work(bool fromNetwork = false)
     {
        if (this.IsClosed) {
         this.Open();

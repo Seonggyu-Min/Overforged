@@ -96,7 +96,7 @@ namespace SHG
       foreach (var soundSource in audioSource.SoundSources) {
         if (!this.soundSources.TryAdd(soundSource.Name, soundSource)) {
         #if UNITY_EDITOR
-          Debug.LogError($"{nameof(AudioLibrary)}: fail to {nameof(Register)} with duplicated Name {soundSource.Name}");
+          Debug.Log($"{nameof(AudioLibrary)}: fail to {nameof(Register)} with duplicated Name {soundSource.Name}");
         #endif
         }
       }

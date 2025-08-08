@@ -36,11 +36,11 @@ namespace SCR
             IsHold = false;
             UseTongs = false;
             IsRespawning = false;
-            // if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(CustomPropertyKeys.TeamColor, out object teamcolor))
-            // {
-            //     teamId = int.Parse(teamcolor.ToString());
-            // }
-            teamId = PhotonNetwork.LocalPlayer.ActorNumber;
+             if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(CustomPropertyKeys.TeamColor, out object teamcolor))
+             {
+                 teamId = int.Parse(teamcolor.ToString());
+             }
+            //teamId = PhotonNetwork.LocalPlayer.ActorNumber;
 
         }
 

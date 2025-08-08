@@ -41,7 +41,7 @@ public class NewProductConvey : SmithingTool
         return result;
     }
 
-    public override ToolTransferResult Transfer(ToolTransferArgs args)
+    public override ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false)
     {
         this.BeforeInteract?.Invoke(this);
         if (args.ItemToGive != null)
@@ -73,7 +73,7 @@ public class NewProductConvey : SmithingTool
         return false;
     }
 
-    public override ToolWorkResult Work()
+    public override ToolWorkResult Work(bool fromNetwork  = false)
     {
         return new ToolWorkResult();
     }

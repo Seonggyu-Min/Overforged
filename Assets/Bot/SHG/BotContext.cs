@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace SHG
 {
-  using ConveyComponent = LocalProductConvey;
+  //using ConveyComponent = LocalProductConvey;
   public class BotContext : MonoBehaviour
   {
     public static BotContext Instance => instance;
@@ -16,7 +16,7 @@ namespace SHG
     public List<ProductRecipe> Recipes => this.recipes;
     public Action<ProductRecipe> OnRecipeAdded;
     public Action<ProductRecipe> OnRecipeRemoved;
-    public List<ConveyComponent> submitPlaces;
+   // public List<ConveyComponent> submitPlaces;
     public DoorController Door => this.door;
 
     [SerializeField]
@@ -112,28 +112,28 @@ namespace SHG
       }
     }
 
-    public bool TryGetClosestSubmitPlace(Vector3 position, out ConveyComponent submitPlace)
-    {
-      if (this.submitPlaces.Count == 1) {
-        submitPlace = this.submitPlaces[0];
-        return (true);
-      }
-      submitPlace = null;
-      if (this.submitPlaces.Count > 1) {
-        float dist = float.MaxValue;
-        foreach (var place in this.submitPlaces) {
-          float curDist = Vector3.Distance(
-            place.transform.position,
-            position); 
-          if (curDist < dist) {
-            submitPlace = place;
-          }
-        }
-        return (true);
-      }
-      return (false);
+    //public bool TryGetClosestSubmitPlace(Vector3 position, out ConveyComponent submitPlace)
+    //{
+    //  if (this.submitPlaces.Count == 1) {
+    //    submitPlace = this.submitPlaces[0];
+    //    return (true);
+    //  }
+    //  submitPlace = null;
+    //  if (this.submitPlaces.Count > 1) {
+    //    float dist = float.MaxValue;
+    //    foreach (var place in this.submitPlaces) {
+    //      float curDist = Vector3.Distance(
+    //        place.transform.position,
+    //        position); 
+    //      if (curDist < dist) {
+    //        submitPlace = place;
+    //      }
+    //    }
+    //    return (true);
+    //  }
+    //  return (false);
 
-    }
+    //}
     
     void Awake()
     {
@@ -148,19 +148,19 @@ namespace SHG
 
     void Start()
     {
-      foreach (var interactObject in GameObject.FindGameObjectsWithTag(
-          "InteractionObj")) {
-        var convey = interactObject.GetComponent<ConveyComponent>();
-        if (convey != null) {
-          this.submitPlaces.Add(convey);
-        }
-      }
+      //foreach (var interactObject in GameObject.FindGameObjectsWithTag(
+      //    "InteractionObj")) {
+      //  var convey = interactObject.GetComponent<ConveyComponent>();
+      //  if (convey != null) {
+      //    this.submitPlaces.Add(convey);
+      //  }
+      //}
     }
 
     void Init()
     {
       this.tools = new ();
-      this.submitPlaces = new ();
+      //this.submitPlaces = new ();
       int count = this.recipes.Count;
       this.recipes = this.recipes.OrderBy(i => System.Guid.NewGuid()).ToList();
       if (count > 3) {

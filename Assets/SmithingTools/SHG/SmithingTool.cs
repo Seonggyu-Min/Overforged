@@ -64,7 +64,7 @@ namespace SHG
     }
 
     public abstract bool CanTransferItem(ToolTransferArgs args);
-    public virtual ToolTransferResult Transfer(ToolTransferArgs args) 
+    public virtual ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false) 
     {
       this.BeforeInteract?.Invoke(this);
       if (args.ItemToGive != null) {
@@ -82,7 +82,7 @@ namespace SHG
     }
 
     public abstract bool CanWork();
-    public abstract ToolWorkResult Work();
+    public abstract ToolWorkResult Work(bool fromNetwork = false);
 
     protected float CalcProgress()
     {

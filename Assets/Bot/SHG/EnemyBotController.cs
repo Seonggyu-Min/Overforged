@@ -8,7 +8,7 @@ using EditorAttributes;
 namespace SHG
 {
   using ItemBox = SCR.BoxComponent;
-  using ConveyComponent = LocalProductConvey;
+  //using ConveyComponent = LocalProductConvey;
 
   [RequireComponent(typeof(NavMeshAgent))]
   public class EnemyBotController : MonoBehaviour, IBot
@@ -285,12 +285,12 @@ namespace SHG
       return (false);
     }
 
-    public bool TryGetSubmitPlace(out ConveyComponent submitPlace)
-    {
-      return (BotContext.Instance.TryGetClosestSubmitPlace(
-          this.transform.position, out submitPlace));
-    }
-
+//    public bool TryGetSubmitPlace(out ConveyComponent submitPlace)
+//    {
+//      return (BotContext.Instance.TryGetClosestSubmitPlace(
+//          this.transform.position, out submitPlace));
+//    }
+//
     void Awake()
     {
       this.NavMeshAgent = this.GetComponent<NavMeshAgent>();

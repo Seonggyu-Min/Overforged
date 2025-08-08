@@ -41,7 +41,7 @@ namespace SHG
       return (true);
     }
 
-    public override ToolWorkResult Work()
+    public override ToolWorkResult Work(bool fromNetwork = false)
     {
       this.InteractionToTrigger = InteractionType.Work;
       this.BeforeInteract?.Invoke(this);  

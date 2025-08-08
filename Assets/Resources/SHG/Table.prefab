@@ -24787,6 +24787,7 @@ GameObject:
   - component: {fileID: 8500046819381393959}
   - component: {fileID: 5867714234381489634}
   - component: {fileID: 7811634564514241940}
+  - component: {fileID: -3736416896935268836}
   m_Layer: 7
   m_Name: Table
   m_TagString: InteractionObj
@@ -24888,6 +24889,7 @@ MonoBehaviour:
   woodTableData: {fileID: 11400000, guid: a719b1e45263d10b7b3f075007c4e848, type: 2}
   craftTableData: {fileID: 11400000, guid: 8c1d5fe141b4381ec8024c9d999b8ee4, type: 2}
   materialPosition: {fileID: 7627591344773568123}
+  IsLocal: 0
   model: {fileID: 2432883992184752648}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   interactColor: {r: 0.5686589, g: 1, b: 0.43337494, a: 0.85490197}
@@ -24935,6 +24937,28 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-3736416896935268836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6760304072123716176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &7073344670656629822
 GameObject:
   m_ObjectHideFlags: 0
