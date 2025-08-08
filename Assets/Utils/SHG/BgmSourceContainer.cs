@@ -1,11 +1,12 @@
 using System;
+using SHG;
+using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
 
 public class BgmSourceContainer : MonoBehaviour
 {
-  [Inject]
-  IAudioLibrary audioLibrary;
+  IAudioLibrary audioLibrary => SingletonAudio.Instance;
 
   public BgmSource[] BgmSources;
 

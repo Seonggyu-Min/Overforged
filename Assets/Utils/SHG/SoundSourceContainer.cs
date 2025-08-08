@@ -5,8 +5,7 @@ using SHG;
 
 public class SoundSourceContainer: MonoBehaviour
 {
-  [Inject]
-  IAudioLibrary audioLibrary;
+  IAudioLibrary audioLibrary => SingletonAudio.Instance;
 
   public SoundSource[] SoundSources;
   [SerializeField]
@@ -32,11 +31,6 @@ public class SoundSourceContainer: MonoBehaviour
       Debug.LogError($"{nameof(SoundSourceContainer)} has {nameof(SoundSources)} no SoundFiles");
 #endif
     }
-    if (this.isSingletonSource) {
-      SingletonAudio.Instance.Register(this);
-    }
-    else {
-      this.audioLibrary.Register(this);
-    }
+    this.audioLibrary.Register(this);
   }
 }

@@ -13,8 +13,7 @@ namespace SHG
     public bool IsIgnited => this.furnace.IsIgnited;
     public bool IsFinished => this.furnace.IsFinished;
     [Inject]
-    IAudioLibrary audioLibrary;
-    IAudioLibrary audioPlayer => (SingletonAudio.Instance ?? this.audioLibrary);
+    IAudioLibrary audioPlayer => (SingletonAudio.Instance );
     [SerializeField] [Required()]
     SmithingToolData furnaceData;
     [SerializeField]

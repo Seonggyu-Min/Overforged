@@ -9,8 +9,7 @@ namespace SHG
   {
     public bool IsFinished => this.quenchingTool.IsFinished;
     [Inject]
-    IAudioLibrary audioLibrary;
-    IAudioLibrary audioPlayer => (SingletonAudio.Instance ?? this.audioLibrary);
+    IAudioLibrary audioPlayer => (SingletonAudio.Instance);
     [SerializeField] [Required()]
     SmithingToolData quenchingToolData;
     [SerializeField] 

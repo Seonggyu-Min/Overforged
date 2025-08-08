@@ -12,8 +12,7 @@ namespace SHG
   {
     public static OptionUI Instance => instance;
     static OptionUI instance;
-    [Inject]
-    IAudioLibrary audioManger;
+    IAudioLibrary audioManger => SingletonAudio.Instance;
 
     UIDocument document;
     VisualElement root;
