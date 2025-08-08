@@ -21,6 +21,6 @@ MonoBehaviour:
   Scale: {x: 2, y: 2, z: 2}
   materialVariation: 5
   materialType: 3
-  nextMaterial: {fileID: 0}
+  nextMaterial: {fileID: 11400000}
   guideImage: {fileID: 901578416, guid: f216483f8d9995dff8c06536c9cb12c7, type: 3}
   guideMessage: 2
