@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using EditorAttributes;
 using Zenject;
@@ -8,7 +8,7 @@ namespace SHG
   public class QuenchingComponent : SmithingToolComponent
   {
     public bool IsFinished => this.quenchingTool.IsFinished;
-    [Inject]
+    
     IAudioLibrary audioPlayer => (SingletonAudio.Instance);
     [SerializeField] [Required()]
     SmithingToolData quenchingToolData;

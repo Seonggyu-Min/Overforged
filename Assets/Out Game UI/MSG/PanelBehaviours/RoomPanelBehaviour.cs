@@ -17,12 +17,12 @@ namespace MIN
         [SerializeField] private GameObject _menuPanel;
         [SerializeField] private GameObject _exitButton;
 
-        //private Coroutine _tutorialCheckCO;
+        private Coroutine _tutorialCheckCO;
 
 
         public override void OnEnable()
         {
-            //_tutorialCheckCO = StartCoroutine(CheckTutorialRoom());
+            _tutorialCheckCO = StartCoroutine(CheckTutorialRoom());
 
             StartCoroutine(RoomNameUpdateRoutine());
             _exitButton.SetActive(true);
@@ -37,11 +37,11 @@ namespace MIN
             _exitButton.SetActive(false);
             _menuPanel.SetActive(false);
 
-            //if (_tutorialCheckCO != null)
-            //{
-            //    StopCoroutine(_tutorialCheckCO);
-            //    _tutorialCheckCO = null;
-            //}
+            if (_tutorialCheckCO != null)
+            {
+                StopCoroutine(_tutorialCheckCO);
+                _tutorialCheckCO = null;
+            }
         }
 
         public override void OnJoinedRoom()
@@ -106,24 +106,38 @@ namespace MIN
             }
         }
 
-        //private IEnumerator CheckTutorialRoom()
-        //{
-        //    WaitForSeconds wait = new WaitForSeconds(0.5f);
+        private IEnumerator CheckTutorialRoom()
+        {
+            WaitForSeconds wait = new WaitForSeconds(0.5f);
 
-        //    for (int i = 0; i < 5; i++)
-        //    {
-        //        yield return wait;
+            for (int i = 0; i < 5; i++)
+            {
+                yield return wait;
 
-        //        if ((string)PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.MapId] == "Tutorial")
-        //        {
-        //            _outGameUIManager.CloseTopPanel(); // 튜토리얼이라면 로비로 바로 보내기
-        //        }
+                if (PhotonNetwork.CurrentRoom != null)
+                {
+                    if (PhotonNetwork.CurrentRoom.CustomProperties != null)
+                    {
+                        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(CustomPropertyKeys.MapId, out object value))
+                        {
+                            if (value is string sValue)
+                            {
+                                if (sValue == "Tutorial")
+                                {
+                                    if (PhotonNetwork.InRoom)
+                                    {
+                                        PhotonNetwork.LeaveRoom();
+                                    }
 
-        //        if (PhotonNetwork.InRoom)
-        //        {
-        //            PhotonNetwork.LeaveRoom();
-        //        }
-        //    }
-        //}
+                                    _outGameUIManager.CloseTopPanel(); // 튜토리얼이라면 로비로 바로 보내기
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+            }
+        }
     }
 }

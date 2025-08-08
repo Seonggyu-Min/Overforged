@@ -82,7 +82,10 @@ public class NewProductConveyComponent : SmithingToolComponent
             else if (manager.Check(item.Data as ProductItemData, item.Ore, item.Wood))
             {
                 manager.FulfillRecipe();
-                BotContext.Instance.RemoveRecipe(item.Data as ProductItemData, item.Wood, item.Ore); // AI에 등록된 레시피 정보 삭제.
+                if (BotContext.Instance != null)
+                {
+                    BotContext.Instance.RemoveRecipe(item.Data as ProductItemData, item.Wood, item.Ore); // AI에 등록된 레시피 정보 삭제.
+                }
                 Instantiate(good, goodPos.position, Quaternion.identity);
             }
         }

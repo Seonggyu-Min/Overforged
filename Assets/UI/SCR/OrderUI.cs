@@ -91,7 +91,10 @@ namespace SCR
             //RecipeData recipe = allRecipes[index];
             RecipeUI ui = GetFirstUI();
 
-            BotContext.Instance.AddRecipe(prod.ProductItemData, wood, ore); // AI에게 현재 레시피 정보 추가.
+            if (BotContext.Instance != null)
+            {
+                BotContext.Instance.AddRecipe(prod.ProductItemData, wood, ore); // AI에게 현재 레시피 정보 추가.
+            }
 
             ui.gameObject.SetActive(true);
             ui.Setup(prod, wood, ore);
