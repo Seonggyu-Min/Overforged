@@ -14,18 +14,30 @@ namespace MIN
         [Inject] IOutGameUIManager _outGameUIManager;
 
         [SerializeField] private TMP_Text _loadingText;
-
+        private Coroutine _loadingCoroutine;
 
         public override void OnEnable()
         {
             PhotonNetwork.AddCallbackTarget(this);
             PhotonNetwork.AutomaticallySyncScene = true;
             Init();
+            if (_loadingCoroutine != null)
+            {
+                StopCoroutine(_loadingCoroutine);
+                _loadingCoroutine = null;
+            }
+            _loadingCoroutine = StartCoroutine(DisconnectRoomRoutine());
         }
 
         public override void OnDisable()
         {
             PhotonNetwork.RemoveCallbackTarget(this);
+
+            if (_loadingCoroutine != null)
+            {
+                StopCoroutine(_loadingCoroutine);
+                _loadingCoroutine = null;
+            }
         }
 
         // 디버그용
@@ -80,6 +92,24 @@ namespace MIN
             yield return new WaitUntil(() => PhotonNetwork.NetworkClientState == ClientState.ConnectedToMasterServer);
             Debug.Log("마스터 서버에 연결됨. 로비에 입장합니다.");
             PhotonNetwork.JoinLobby();
+        }
+
+        private IEnumerator DisconnectRoomRoutine()
+        {
+            yield return new WaitForSeconds(0.5f);
+
+            for (int i = 0; i < 10; i++)
+            {
+                if (PhotonNetwork.InRoom)
+                {
+                    PhotonNetwork.LeaveRoom();
+                    yield return new WaitForSeconds(0.5f);
+                }
+                else
+                {
+                    yield break;
+                }
+            }
         }
     }
 }
