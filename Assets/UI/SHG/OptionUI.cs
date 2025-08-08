@@ -119,7 +119,7 @@ namespace SHG
       this.CreateUI();
       this.UpdateUI();
       this.Hide();
-      this.SetKey(KeyCode.Backspace);
+      this.SetKey(KeyCode.Delete);
     }
     
     void OnEnable()
