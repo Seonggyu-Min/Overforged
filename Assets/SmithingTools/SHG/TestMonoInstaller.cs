@@ -1,4 +1,4 @@
-using Zenject;
+﻿using Zenject;
 
 namespace SHG
 {
@@ -14,10 +14,6 @@ namespace SHG
       this.Container
         .Bind<INetworkSynchronizer<SmithingToolComponent>>()
         .To<SmithingToolSynchronizer>()
-        .AsSingle();
-      this.Container
-        .Bind<IAudioLibrary>()
-        .To<AudioLibrary>()
         .AsSingle();
     }
   }
