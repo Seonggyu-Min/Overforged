@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using SCR;
 using TMPro;
 using UnityEngine;
@@ -38,6 +39,11 @@ namespace SCR
             {
                 rankingText.color = textColor.Color[value - 1];
                 medalImage.sprite = medalList.sprites[value - 1];
+            }
+            else
+            {
+                rankingText.color = textColor.Color[4];
+                medalImage.sprite = medalList.sprites[4];
             }
             rankingText.text = $"{value}";
         }
