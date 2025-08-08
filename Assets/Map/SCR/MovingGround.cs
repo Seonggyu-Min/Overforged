@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
-public class MovingGround : MonoBehaviour
+public class MovingGround : MonoBehaviourPun
 {
     [SerializeField] private List<Transform> movePoints; // 발판이 이동할 지점들
     [SerializeField] private float moveSpeed = 3f; // 발판의 이동 속도
@@ -25,7 +26,8 @@ public class MovingGround : MonoBehaviour
         index++;
         nextTarget = movePoints[index].position;
 
-        StartCoroutine(MovePlatform());
+        if (PhotonNetwork.IsMasterClient)
+            StartCoroutine(MovePlatform());
     }
 
     private IEnumerator MovePlatform()

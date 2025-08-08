@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
-public class DisappearGround : MonoBehaviour
+public class DisappearGround : MonoBehaviourPun
 {
     [SerializeField] private float cycleTime;
     [SerializeField] private GameObject ground;
 
     private void Start()
     {
-        StartCoroutine(DisappearCycle());
+        if (PhotonNetwork.IsMasterClient)
+            StartCoroutine(DisappearCycle());
     }
 
     private IEnumerator DisappearCycle()

@@ -1028,6 +1028,10 @@ PrefabInstance:
       propertyPath: cameraFollowSpeed
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 1816188136549525886, guid: e7643851bec4d2871896597b45c2cdc5, type: 3}
+      propertyPath: m_ClearFlags
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3687574459782799011, guid: e7643851bec4d2871896597b45c2cdc5, type: 3}
       propertyPath: m_IsActive
       value: 0

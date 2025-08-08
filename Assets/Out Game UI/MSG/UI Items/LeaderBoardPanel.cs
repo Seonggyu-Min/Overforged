@@ -44,6 +44,7 @@ namespace MIN
 
         private void OnEnable()
         {
+            MyLeaderBoard();
             LoadLeaderBoard();
             _currentPage = 0;
         }
