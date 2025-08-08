@@ -189,6 +189,7 @@ namespace SCR
         {
             resultUI.gameObject.SetActive(true);
             resultUI.OnResultUI(players);
+            orderUI.StopOder();
         }
 
 
