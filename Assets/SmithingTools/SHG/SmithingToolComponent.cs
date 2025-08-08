@@ -107,7 +107,19 @@ namespace SHG
       var result = this.tool.Transfer(args);
       Debug.Log($"{nameof(Transfer)} result: {result}");
       if (args.ItemToGive != null) {
-        this.itemUI.AddImage(args.ItemToGive.Data.Image);
+        OreType ore = OreType.None;
+        WoodType wood = WoodType.None;
+        if (args.ItemToGive is MaterialItem materialItem)
+        {
+          ore = materialItem.Ore;
+          wood = materialItem.Wood;
+        }
+        else if (args.ItemToGive is ProductItem productItem)
+        {
+          ore = productItem.Ore;
+          wood = productItem.Wood;
+        }
+        this.itemUI.AddImage(ore, wood);
         args.ItemToGive.transform.SetParent(this.transform);
         args.ItemToGive.transform.position = this.materialPoint.position;
         args.ItemToGive.transform.up = this.materialPoint.up;
@@ -227,7 +239,10 @@ namespace SHG
     void OnMaterialChanged(ItemData itemData)
     {
       this.itemUI.SubImage();
-      this.itemUI.AddImage(itemData.Image);
+      var material = this.tool.HoldingMaterial;
+      if (material != null) {
+      this.itemUI.AddImage(material.Ore, material.Wood);
+      }
     }
 
     public void HighlightInstantly(Color color)

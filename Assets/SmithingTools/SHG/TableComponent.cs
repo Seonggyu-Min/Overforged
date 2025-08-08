@@ -99,7 +99,19 @@ namespace SHG
         args.ItemToGive.transform.SetParent(this.transform);
         //TODO: Item position
         args.ItemToGive.transform.localPosition = Vector3.up;
-        this.itemUI.AddImage(args.ItemToGive.Data.Image);
+        OreType ore = OreType.None;
+        WoodType wood = WoodType.None;
+        if (args.ItemToGive is MaterialItem materialItem)
+        {
+          ore = materialItem.Ore;
+          wood = materialItem.Wood;
+        }
+        else if (args.ItemToGive is ProductItem productItem)
+        {
+          ore = productItem.Ore;
+          wood = productItem.Wood;
+        }
+        this.itemUI.AddImage(ore, wood);
         if (this.CurrentWorkingTool == this.woodTable &&
           !this.woodTable.CanTransferItem(args) &&
           this.woodTable.HoldingMaterial != null &&
