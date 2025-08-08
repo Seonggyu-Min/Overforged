@@ -45,6 +45,9 @@ namespace MIN
 
         public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
         {
+            _rightButton.enabled = PhotonNetwork.IsMasterClient;
+            _leftButton.enabled = PhotonNetwork.IsMasterClient;
+
             if (propertiesThatChanged.ContainsKey(CustomPropertyKeys.MapId))
             {
                 ChangeMap();

@@ -12,9 +12,7 @@ namespace SHG
   [RequireComponent(typeof(MeshRenderer), typeof(Animator))]
   public class TableComponent : SmithingToolComponent
   {
-    [Inject]
-    IAudioLibrary audioLibrary;
-    IAudioLibrary audioPlayer => (SingletonAudio.Instance ?? this.audioLibrary);
+    IAudioLibrary audioPlayer => (SingletonAudio.Instance);
     [SerializeField] [ReadOnly]
     WoodTable woodTable;
     [SerializeField]

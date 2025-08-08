@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,9 +29,9 @@ namespace SHG
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void Init()
     {
-      var gameObject = GameObject.Instantiate(Resources.Load<GameObject>("SHG/SingletonAudio"));
-      DontDestroyOnLoad(gameObject);
-    }
+            var gameObject = GameObject.Instantiate(Resources.Load<GameObject>("SHG/SingletonAudio"));
+            DontDestroyOnLoad(gameObject);
+        }
 
     void Awake()
     {
@@ -50,6 +50,7 @@ namespace SHG
         poolSize: DEFAULT_SFX_POOL_SIZE,
         prefab: this.sfxControllerPrefab,
         initPooledObject: (sfxController) =>  {
+        sfxController.transform.SetParent(this.transform); 
         sfxController.OnDisabled += this.OnSfxDisabled;
         sfxController.AudioSource.outputAudioMixerGroup = sfxOutput;
         });
@@ -58,6 +59,7 @@ namespace SHG
       this.bgmController = GameObject.Instantiate(
         Resources.Load<GameObject>("SHG/BgmController"))
         .GetComponent<BgmController>();
+      this.bgmController.transform.SetParent(this.transform);
       this.BgmController.AudioSource.outputAudioMixerGroup = this.mainMixer.FindMatchingGroups("Bgm")[0];
       this.SetVolume(IAudioLibrary.VolumeType.Master, DEFAULT_MASTER_VOLUME);
       this.SetVolume(IAudioLibrary.VolumeType.Bgm, DEFAULT_BGM_VOLUME);

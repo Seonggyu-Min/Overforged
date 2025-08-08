@@ -12,8 +12,7 @@ namespace SHG
   {
     public static OptionUI Instance => instance;
     static OptionUI instance;
-    [Inject]
-    IAudioLibrary audioManger;
+    IAudioLibrary audioManger => SingletonAudio.Instance;
 
     UIDocument document;
     VisualElement root;
@@ -119,7 +118,7 @@ namespace SHG
       this.CreateUI();
       this.UpdateUI();
       this.Hide();
-      this.SetKey(KeyCode.Backspace);
+      this.SetKey(KeyCode.Delete);
     }
     
     void OnEnable()

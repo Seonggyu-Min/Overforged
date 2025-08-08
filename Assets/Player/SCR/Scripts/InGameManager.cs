@@ -19,7 +19,7 @@ namespace SCR
 
         private void Awake()
         {
-            SpwanPlayer();
+            
         }
 
         private void Start()
@@ -30,6 +30,7 @@ namespace SCR
         public void SetTeam(List<Photon.Realtime.Player> players)
         {
             SetMap();
+            SpwanPlayer();
 
             teams = new();
             foreach (var p in players)

@@ -29,9 +29,9 @@ namespace MIN
                 .AsSingle()
                 .NonLazy();
 
-            Container.Bind<IAudioLibrary>()
-              .To<AudioLibrary>()
-              .AsSingle();
+//            Container.Bind<IAudioLibrary>()
+//              .To<AudioLibrary>()
+//              .AsSingle();
         }
     }
 }
