@@ -21,7 +21,8 @@ namespace SCR
         public bool IsHold;
         public bool UseTongs;
         private Vector3 centralPos;
-        private RaycastHit hitInteractable;
+        private RaycastHit hitInteractable2;
+        private Collider hitInteractable;
         public ToolTransferArgs TransferArgs { get => transferArgs; }
         private ToolTransferArgs transferArgs;
         public bool CanTransfer { get => canTransfer; }
@@ -30,7 +31,7 @@ namespace SCR
         void Awake()
         {
             player = GetComponent<Player>();
-            rayLength = 0.8f;
+            rayLength = 1.5f;
             HoldingObjLayer = LayerMask.GetMask("Item", "InteractionObject");
             IsDash = false;
             IsHold = false;
@@ -62,8 +63,47 @@ namespace SCR
             this.dashForce = dashForce;
             this.workSpeed = workSpeed;
         }
+        bool TryFind(out Collider col, float radius)
+        {
+            col = null;
+            float distance = float.MaxValue;
 
+            Collider[] hitColliders = Physics.OverlapSphere(
+              position: this.transform.position,
+              radius: radius,
+              layerMask: HoldingObjLayer.value
+              );
+            foreach (var hit in hitColliders)
+            {
+                var dir = hit.transform.position - this.transform.position;
+                var dot = Vector3.Dot(dir.normalized, this.transform.forward);
+                //dot = Mathf.Clamp(dot, -1f, 1f);
+                var angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
+                if (angle < 80f)
+                {
+                    float dist = dir.sqrMagnitude;
+                    if (dist < distance)
+                    {
+                        distance = dist;
+                        col = hit;
+                    }
+                }
+            }
+            return col != null;
+        }
         public GameObject GetActionObj()
+        {
+            Collider hit;
+
+            if (TryFind(out hit, rayLength))
+            {
+                Debug.Log(hit.gameObject.name);
+                return hit.gameObject;
+            }
+            return null;
+        }
+
+        public GameObject GetActionObj2()
         {
             RaycastHit hit;
 
@@ -77,7 +117,7 @@ namespace SCR
 
         private void CheckInteractable()
         {
-            if (Physics.Raycast(centralPos, transform.forward, out hitInteractable, rayLength, HoldingObjLayer))
+            if (TryFind(out hitInteractable, rayLength))
             {
                 if (IsHold)
                 {
@@ -95,10 +135,10 @@ namespace SCR
                         PlayerNetworkId = teamId
                     };
                 }
-                IInteractableTool interactable = hitInteractable.collider.gameObject.GetComponent<IInteractableTool>();
+                IInteractableTool interactable = hitInteractable.gameObject.GetComponent<IInteractableTool>();
                 if (interactable == null)
                 {
-                    Item item = hitInteractable.collider.gameObject.GetComponent<Item>();
+                    Item item = hitInteractable.gameObject.GetComponent<Item>();
                     if (item != null) item.Hightlight(Color.green);
                     return;
                 }
