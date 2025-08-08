@@ -14,10 +14,14 @@ namespace SHG
     const float ITEM_TRANSFER_DELAY = 1.0f;
     const float WORK_DIST = 2.5f;
     const float WORK_DELAY = 1f;
+    const float ATTACK_RANGE = 2.5f;
 
     public Action<IInteractableTool> OnWork { get; set; }
     public Action OnFinishWork { get; set; }
+    public Action OnAttack { get; set; }
     public Action<Item> OnRoot { get; set; }
+    public Action OnHit { get; set; }
+    public Action OnDied { get; set; }
     public int NetworkId { get; }
     public Item HoldingItem { get; }
     public NavMeshAgent NavMeshAgent { get; }
@@ -38,5 +42,6 @@ namespace SHG
     public bool IsHoldingHotMaterial();
     public bool IsStopped => (!this.NavMeshAgent.pathPending &&
       (this.NavMeshAgent.remainingDistance <= this.NavMeshAgent.stoppingDistance || !this.NavMeshAgent.hasPath));
+    public void Attack(LocalPlayerController player);
   }
 }

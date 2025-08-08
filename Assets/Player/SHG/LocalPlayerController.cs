@@ -7,6 +7,7 @@ using Void = EditorAttributes.Void;
 using Unity.VisualScripting;
 using SCR;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 //using Photon.Pun;
 
 namespace SHG
@@ -17,10 +18,13 @@ namespace SHG
     const float CHANGE_MODE_DELAY = 0.5f;
     const float DASH_DELAY = 1f;
     const float DASH_DURATION = 0.3f;
+    const float ATTACK_DELAY = 0.5f;
+    const int  PLAYER_HP= 15;
     enum Mode
     {
       Normal,
-      Work
+      Work,
+      Fight
     }
     SingletonAudio audioPlayer;
     public Action OnTriggerInteraction;
@@ -36,6 +40,8 @@ namespace SHG
     Item HoldingItem;
     [SerializeField] [Required]
     Transform hand;
+    [SerializeField] [Required]
+    Transform rightHand;
     [SerializeField] [Required]
     Transform itemPos;
     [SerializeField] [Required]
@@ -65,6 +71,11 @@ namespace SHG
     Transform tong;
     int itemLayer;
     int toolLayer;
+    int botLayer;
+    public ObservableValue<(int current, int max)>Hp { get; private set;}
+    [SerializeField]
+    GauageImageUI hpBar;
+
     //    [SerializeField]
     //    Color normalColor;
     //    [SerializeField]
@@ -80,6 +91,15 @@ namespace SHG
     //    string itemPrefabPath;
     //    PhotonView photonView;
 
+    public void StartBattle()
+    {
+      this.mode = Mode.Fight;
+      if (this.HoldingItem != null &&
+      this.HoldingItem is MaterialItem materialItem) {
+        this.LooseItem();
+      }
+    }
+
     public void GrabItem(Item item)
     {
       this.HoldingItem = item;
@@ -91,8 +111,21 @@ namespace SHG
       if (collider != null) {
         collider.isTrigger = true;
       }
-      item.transform.SetParent(this.transform);
-      item.transform.position = this.itemPos.position;
+      if (item is MaterialItem materialItem && materialItem.IsHot) {
+        this.animator.SetBool("UseTongs", true);
+      }
+      else {
+        this.animator.SetBool("UseTongs", false);
+      }
+      if (item is ProductItem productItem) {
+        productItem.transform.SetParent(this.rightHand);
+        productItem.transform.position = this.rightHand.position + this.rightHand.forward * 0.5f;
+        productItem.transform.rotation = this.rightHand.rotation;
+      }
+      else {
+        item.transform.SetParent(this.transform);
+        item.transform.position = this.itemPos.position;
+      }
       this.animator.SetBool("Hold", true);
       this.audioPlayer.PlayRandomSfx("grab");
       this.isTryInteracting = false;
@@ -121,6 +154,7 @@ namespace SHG
           collider.isTrigger = false;
         }
         this.animator.SetBool("Hold", false);
+        this.animator.SetBool("UseTongs", false);
         this.audioPlayer.PlayRandomSfx("playerThrow");
         this.HoldingItem = null;
       }
@@ -165,12 +199,12 @@ namespace SHG
       this.isTryToThrow = false;
     }
 
-    bool TryFind<T>(out T found, in string tag = null) where T: Component
+    bool TryFind<T>(out T found, int layer, in string tag = null) where T: Component
     {
       Collider[] hitColliders = Physics.OverlapSphere(
         position: this.transform.position,
         radius: this.interactRange,
-        layerMask: this.itemLayer
+        layerMask: layer
         );
       foreach (var collider in hitColliders) {
         if (tag != null && collider.tag != tag) {
@@ -237,6 +271,7 @@ namespace SHG
     {
       if (this.delay <= 0) {
         this.mode = this.mode == Mode.Work ? Mode.Normal : Mode.Work;
+        this.animator.SetBool("UseTongs", false);
         this.animator.SetBool("Work", this.mode == Mode.Work);
         this.animator.SetTrigger("ChangeState");
         this.audioPlayer.PlayRandomSfx("playerChangeState");
@@ -311,6 +346,14 @@ namespace SHG
       //      if (!this.photonView.IsMine) {
       //        return ; 
       //      }
+      if (this.delay > 0) {
+        return;
+      }
+      if (this.isTryInteracting &&
+        this.mode == Mode.Fight) {
+        this.Attack();
+        return;
+      }
       if (this.HoldingItem != null && this.isTryToThrow) {
         this.LooseItem();
         return;
@@ -321,17 +364,18 @@ namespace SHG
       }
       if (this.tong == null &&
         this.isTryInteracting &&
-        this.TryFind<Transform>(out Transform foundTransform, tag:
-          "Tongs")) {
+        this.TryFind<Transform>(
+          out Transform foundTransform,
+          layer: this.itemLayer,
+           tag: "Tongs")) {
         this.GrabTong(foundTransform);
         return;
       }
       if (this.HoldingItem == null &&
         this.mode == Mode.Normal &&
         this.isTryInteracting &&
-        this.TryFind<Item>(out Item item) &&
+        this.TryFind<Item>(out Item item, this.itemLayer) &&
         item.transform.parent == null) {
-        Debug.LogWarning("GrabItem");
         if (item is MaterialItem materialToGrab) {
           if ((item.IsHot && this.tong != null) ||
             (!item.IsHot && this.tong == null)) {
@@ -369,7 +413,7 @@ namespace SHG
         };
       }
       bool canTransfer = interactable.CanTransferItem(transferArgs);
-
+      bool hasProduct = false;
       if (interactable is SmithingToolComponent smithingTool) {
         if (smithingTool.HoldingItem != null &&
           smithingTool.HoldingItem.IsHot) {
@@ -390,6 +434,7 @@ namespace SHG
       }
       else if (interactable is DoorController door) {
         if (this.HoldingItem != null && this.HoldingItem is ProductItem product) {
+          hasProduct = true;
           door.HighlightInstantly(Color.green);
         }
         else {
@@ -399,13 +444,17 @@ namespace SHG
       if (!this.isTryInteracting) {
         return;
       }
-      if (this.mode == Mode.Work && interactable.CanWork())
+      if (hasProduct &&
+      interactable is DoorController doorToOpen &&
+      doorToOpen.CanWork()) {
+        doorToOpen.Work();
+      }
+      else if (this.mode == Mode.Work && interactable.CanWork())
       {
         this.Work(interactable);
       }
       else if (this.mode == Mode.Normal && canTransfer)
       {
-        Debug.Log("Transfer");
         this.TransferItem(interactable, transferArgs);
       }
     }
@@ -430,7 +479,32 @@ namespace SHG
       if (result.ReceivedItem != null) {
         this.GrabItem(result.ReceivedItem);
       }
+      this.delay = Math.Max(this.delay + 1f, 1f);
       this.isTryInteracting = false;
+    }
+
+    public void GetDamaged(int damage)
+    {
+      var (current, max) = this.Hp.Value;
+      this.Hp.Value = (Math.Max(current - damage, 0), max);
+      this.audioPlayer.PlayRandomSfx("getHit");
+      this.delay = Math.Max(this.delay + 1f, 1f);
+      this.animator.SetTrigger("ChangeState");
+      this.rb.velocity = Vector3.zero;
+      if (this.Hp.Value.current <= 0) {
+        this.StartCoroutine(this.DieRoutine());
+      }
+    }
+
+    IEnumerator DieRoutine()
+    {
+      this.audioPlayer.PlayRandomSfx("playerDead");
+      BotSceneManager.Instance.OnPlayerDead();
+      while (true) {
+        this.delay = float.MaxValue;
+        this.IsAbleToMove = false;
+        yield return (null);
+      }
     }
 
     void Work(in IInteractableTool tool)
@@ -444,6 +518,7 @@ namespace SHG
       else {
         result.Trigger?.Invoke();
       }
+      this.delay = Math.Max(this.delay + 1f, 1f);
       this.isTryInteracting = false;
     }
 
@@ -482,6 +557,32 @@ namespace SHG
         z: input.y);
     }
 
+    void Attack()
+    {
+      if (this.delay < 0) {
+        int damage = 1;
+        if (this.HoldingItem != null &&
+        this.HoldingItem is ProductItem productItem) {
+          damage = 5;
+        }
+        this.animator.SetTrigger("Hammering");
+        this.delay = Math.Max(this.delay + ATTACK_DELAY, ATTACK_DELAY);
+        if (this.TryFind<EnemyBotController>(
+          found: out EnemyBotController bot,
+          layer: this.botLayer,
+          tag: "Player"))
+        {
+          bot.GetDamaged(damage);
+        }
+      }
+      this.isTryInteracting = false;
+    }
+
+    void StartTrigger()
+    {
+  
+    }
+
     void OnMove(InputValue value)
     {
       this.movingInput = value.Get<Vector2>().normalized;
@@ -494,8 +595,11 @@ namespace SHG
 
     void Awake()
     {
+      this.Hp = new((PLAYER_HP, PLAYER_HP));
+      this.hpBar.WatchingIntValue = this.Hp;
       this.itemLayer = (1 << LayerMask.NameToLayer("Item"));
       this.toolLayer = (1 << LayerMask.NameToLayer("InteractionObject"));
+      this.botLayer = (1 << LayerMask.NameToLayer("Player"));
       this.rb = this.GetComponent<Rigidbody>();
       //      this.meshRenderer = this.GetComponent<MeshRenderer>();
       //      this.photonView = this.GetComponent<PhotonView>();
