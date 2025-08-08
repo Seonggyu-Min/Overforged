@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -38,7 +38,10 @@ namespace SHG
       }
       smithingTool.OnTransfered += this.OnTranfered;
       smithingTool.OnWorked += this.OnWork;
-      BotContext.Instance.AddTool(smithingTool);
+            if (BotContext.Instance != null)
+            {
+                BotContext.Instance.AddTool(smithingTool);
+            }
       int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
       if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(
         CustomPropertyKeys.TeamColor, out object teamProperty) &&
