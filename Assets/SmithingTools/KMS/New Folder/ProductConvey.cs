@@ -44,7 +44,7 @@ public class ProductConvey : MonoBehaviour, IInteractableTool
         return result;
     }
 
-    public ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false)
+    public ToolTransferResult Transfer(ToolTransferArgs args)
     {
         if (args.ItemToGive != null)
         {
@@ -62,7 +62,7 @@ public class ProductConvey : MonoBehaviour, IInteractableTool
         return false;
     }
 
-    public ToolWorkResult Work(bool fromNetwork = false)
+    public ToolWorkResult Work()
     {
         return (new ToolWorkResult
         {

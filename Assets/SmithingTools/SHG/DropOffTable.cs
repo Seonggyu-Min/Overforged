@@ -23,7 +23,7 @@ namespace SHG
       }
     }
 
-    public override ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false)
+    public override ToolTransferResult Transfer(ToolTransferArgs args)
     {
       if (this.HoldingItem != null) {
         Item item = this.HoldingItem;
@@ -47,7 +47,7 @@ namespace SHG
       return (false);
     }
 
-    public override ToolWorkResult Work(bool fromNetwork = false)
+    public override ToolWorkResult Work()
     {
       #if UNITY_EDITOR 
       throw (new ApplicationException($"{nameof(DropOffTable)} is unable to {nameof(Work)}"));

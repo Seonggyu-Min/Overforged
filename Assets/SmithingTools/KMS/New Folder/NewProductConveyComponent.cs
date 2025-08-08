@@ -70,7 +70,7 @@ public class NewProductConveyComponent : SmithingToolComponent
         }
     }
 
-    public override ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false)
+    public override ToolTransferResult Transfer(ToolTransferArgs args)
     {
         var result = this.tool.Transfer(args);
         if (args.ItemToGive is ProductItem item)
@@ -98,8 +98,7 @@ public class NewProductConveyComponent : SmithingToolComponent
     {
         return false;
     }
-
-    public override ToolWorkResult Work(bool fromNetwork = false)
+    public override ToolWorkResult Work()
     {
         return new ToolWorkResult();
     }

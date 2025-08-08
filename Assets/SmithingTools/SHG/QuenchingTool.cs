@@ -38,7 +38,7 @@ namespace SHG
       return (this.HoldingMaterial != null && this.IsFinished);
     }
 
-    public override ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false)
+    public override ToolTransferResult Transfer(ToolTransferArgs args)
     {
       if (args.ItemToGive != null)
       {
@@ -57,7 +57,7 @@ namespace SHG
       return (false);
     }
 
-    public override ToolWorkResult Work(bool fromNetwork = false)
+    public override ToolWorkResult Work()
     {
       #if UNITY_EDITOR
       throw (new ApplicationException($"{typeof(QuenchingTool)} is not requrired work"));

@@ -93,7 +93,7 @@ namespace SHG
       }
     }
 
-    public override ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false)
+    public override ToolTransferResult Transfer(ToolTransferArgs args)
     {
       if (args.ItemToGive != null) {
         args.ItemToGive.transform.SetParent(this.transform);
@@ -118,15 +118,6 @@ namespace SHG
           this.craftTable.CanTransferItem(args)) {
           var result = this.MoveMaterialToCraftTable(args);
           this.OnTransfered?.Invoke(this, args, result);
-        if (!fromNetwork) {
-          this.NetworkSynchronizer.SendRpc(
-            sceneId: this.SceneId,
-            method: nameof(SmithingToolComponent.Work),
-            args: new object[] {
-            result.ConvertToNetworkArguments()
-            });
-            }
-      
           return (result);
         }
       }
@@ -146,15 +137,6 @@ namespace SHG
           this.itemUI.SubImage();
         }
         this.OnTransfered?.Invoke(this, args, result);
-        if (!fromNetwork) {
-          this.NetworkSynchronizer.SendRpc(
-            sceneId: this.SceneId,
-            method: nameof(SmithingToolComponent.Work),
-            args: new object[] {
-            result.ConvertToNetworkArguments()
-            });
-            }
-      
         return (result);
       }
       else {
@@ -167,14 +149,6 @@ namespace SHG
         var result = this.CurrentWorkingTool.Transfer(args);
         Debug.Log($"{this.CurrentWorkingTool} {nameof(Transfer)} result: {result}");
         this.OnTransfered?.Invoke(this, args, result);
-        if (!fromNetwork) {
-          this.NetworkSynchronizer.SendRpc(
-            sceneId: this.SceneId,
-            method: nameof(SmithingToolComponent.Work),
-            args: new object[] {
-            result.ConvertToNetworkArguments()
-            });
-            }
         return (result);
 #if UNITY_EDITOR
         throw (new ApplicationException($"{nameof(TableComponent)} is not able Transfer"));
@@ -207,7 +181,7 @@ namespace SHG
       return (false);
     }
 
-    public override ToolWorkResult Work(bool fromNetwork = false)
+    public override ToolWorkResult Work()
     {
       if (this.CurrentWorkingTool != null) {
         var result = this.CurrentWorkingTool.Work();
@@ -219,16 +193,6 @@ namespace SHG
         }
         Debug.Log($"{this.CurrentWorkingTool} {nameof(Work)} result: {result}");
         this.OnWorked?.Invoke(this, result);
-
-        if (!fromNetwork) {
-          this.NetworkSynchronizer.SendRpc(
-            sceneId: this.SceneId,
-            method: nameof(SmithingToolComponent.Work),
-            args: new object[] {
-            result.ConvertToNetworkArguments()
-            });
-            }
-      
         return (result);
       }
       else {
@@ -347,7 +311,7 @@ namespace SHG
           this.Transfer(new ToolTransferArgs {
             ItemToGive = foundItem,
             PlayerNetworkId = playerNetworkId
-          }, fromNetwork: true);
+          });
         }
         #if UNITY_EDITOR
         else {
@@ -368,7 +332,7 @@ namespace SHG
         this.Transfer(new ToolTransferArgs {
           ItemToGive = null,
           PlayerNetworkId = playerNetworkId
-        }, fromNetwork: true);
+        });
       }
     }
 
@@ -406,7 +370,7 @@ namespace SHG
     {
       // TODO: handle work result
       var dict = args[0] as Dictionary<string, object>;
-      this.Work(fromNetwork: true);
+      this.Work();
       if (this.CurrentWorkingTool == this.woodTable) {
         this.woodTable.OnInteractionTriggered?.Invoke(this.woodTable.InteractionToTrigger);
       }

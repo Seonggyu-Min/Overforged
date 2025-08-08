@@ -31,7 +31,7 @@ namespace SHG
       return (this.table.CanWork());
     }
 
-    public override ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false)
+    public override ToolTransferResult Transfer(ToolTransferArgs args)
     {
       if (this.IsOwner) {
         ToolTransferResult result = (this.tool.Transfer(args));
@@ -156,7 +156,7 @@ namespace SHG
       }
     }
 
-    public override ToolWorkResult Work(bool fromNetwork = false)
+    public override ToolWorkResult Work()
     {
       return (this.tool.Work());
     }

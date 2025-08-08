@@ -45,7 +45,7 @@ namespace SHG
       }
     }
 
-    public override ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false)
+    public override ToolTransferResult Transfer(ToolTransferArgs args)
     {
       if (args.ItemToGive != null) {
         args.ItemToGive.gameObject.SetActive(false); 
@@ -110,7 +110,7 @@ namespace SHG
       }
     }
 
-    public override ToolWorkResult Work(bool fromNetwork)
+    public override ToolWorkResult Work()
     {
       if (this.IsOwner) {
         if (this.conveyorBelt.IsPowerOn) {
@@ -156,7 +156,7 @@ namespace SHG
       bool powerOn = (bool)args[0];
       if (this.IsOwner) {
         if (powerOn != this.conveyorBelt.IsPowerOn) {
-          this.Work(fromNetwork: true);
+          this.Work();
         }        
       }
       else {
@@ -187,7 +187,7 @@ namespace SHG
           var result = this.tool.Transfer(new ToolTransferArgs{
             ItemToGive = foundItem,
             PlayerNetworkId = playerNetworkId
-            }, fromNetwork: true);
+            });
           if (this.conveyorBelt.TryGetProcessingBox(
               out ConveyorBeltBox box)) {
             box.transform.position = this.boxPoint.position;

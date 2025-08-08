@@ -1,7 +1,6 @@
 using UnityEngine;
 using EditorAttributes;
 using Void = EditorAttributes.Void;
-using Photon.Pun;
 
 namespace SHG
 {

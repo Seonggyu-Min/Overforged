@@ -6,79 +6,79 @@ using Zenject;
 
 namespace SHG
 {
-//  public class LocalProductConvey : SmithingToolComponent
-//  {
-//    [SerializeField]
-//    LocalConvey convey;
-//    [SerializeField]
-//    SmithingToolData data;
-//    [SerializeField]
-//    MeshRenderer model;
-//    [SerializeField]
-//    Transform productPosition;
-//
-//    [SerializeField] OrderUI manager;
-//    [SerializeField] GameObject good;
-//    [SerializeField] Transform goodPos;
-//    [Inject] MIN.IScoreManager _scoreManager;
-//
-//    protected override SmithingTool tool => this.convey;
-//    protected override ISmithingToolEffecter effecter => null;
-//
-//    protected override Transform materialPoint => this.productPosition;
-//
-//    protected override void Update()
-//    {
-//      this.highlighter.OnUpdate(Time.deltaTime);
-//    }
-//
-//    protected override void Awake()
-//    {
-//      this.meshRenderer = model;
-//      if (this.meshRenderer != null) {
-//        this.highlighter = new GameObjectHighlighter(
-//          new Material[] { this.meshRenderer.material });
-//        this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
-//      }
-//      this.convey = new LocalConvey(this.data);
-//    }
-//
-//    protected override void Start()
-//    {
-//      this.IsOwner = true;
-//    }
-//
-//    public override ToolTransferResult Transfer(ToolTransferArgs args)
-//    {
-//      var result = this.tool.Transfer(args);
-//      if (args.ItemToGive is ProductItem item) {
-//        if (manager.Check(item.Data as ProductItemData, item.Ore, item.Wood)) {
-//          manager.FulfillRecipe();
-//          BotContext.Instance.RemoveRecipe(item.Data as ProductItemData, item.Wood, item.Ore); // AI에 등록된 레시피 정보 삭제.
-//          Instantiate(good, goodPos.position, Quaternion.identity);
-//        }
-//      }
-//      this.OnTransfered?.Invoke(this, args, result);
-//      StartCoroutine(ItemRemoveRoutine(args));
-//      return (result);
-//    }
-//
-//    public override bool CanWork()
-//    {
-//      return false;
-//    }
-//    public override ToolWorkResult Work()
-//    {
-//      return new ToolWorkResult();
-//    }
-//
-//    private void SetItem(int itemId)
-//    {
-//    }
-//
-//    private IEnumerator ItemRemoveRoutine(ToolTransferArgs args)
-//    {
-//      yield return new WaitForSeconds(3);
-//    }
-//  }
+  public class LocalProductConvey : SmithingToolComponent
+  {
+    [SerializeField]
+    LocalConvey convey;
+    [SerializeField]
+    SmithingToolData data;
+    [SerializeField]
+    MeshRenderer model;
+    [SerializeField]
+    Transform productPosition;
+
+    [SerializeField] OrderUI manager;
+    [SerializeField] GameObject good;
+    [SerializeField] Transform goodPos;
+    [Inject] MIN.IScoreManager _scoreManager;
+
+    protected override SmithingTool tool => this.convey;
+    protected override ISmithingToolEffecter effecter => null;
+
+    protected override Transform materialPoint => this.productPosition;
+
+    protected override void Update()
+    {
+      this.highlighter.OnUpdate(Time.deltaTime);
+    }
+
+    protected override void Awake()
+    {
+      this.meshRenderer = model;
+      if (this.meshRenderer != null) {
+        this.highlighter = new GameObjectHighlighter(
+          new Material[] { this.meshRenderer.material });
+        this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
+      }
+      this.convey = new LocalConvey(this.data);
+    }
+
+    protected override void Start()
+    {
+      this.IsOwner = true;
+    }
+
+    public override ToolTransferResult Transfer(ToolTransferArgs args)
+    {
+      var result = this.tool.Transfer(args);
+      if (args.ItemToGive is ProductItem item) {
+        if (manager.Check(item.Data as ProductItemData, item.Ore, item.Wood)) {
+          manager.FulfillRecipe();
+          BotContext.Instance.RemoveRecipe(item.Data as ProductItemData, item.Wood, item.Ore); // AI에 등록된 레시피 정보 삭제.
+          Instantiate(good, goodPos.position, Quaternion.identity);
+        }
+      }
+      this.OnTransfered?.Invoke(this, args, result);
+      StartCoroutine(ItemRemoveRoutine(args));
+      return (result);
+    }
+
+    public override bool CanWork()
+    {
+      return false;
+    }
+    public override ToolWorkResult Work()
+    {
+      return new ToolWorkResult();
+    }
+
+    private void SetItem(int itemId)
+    {
+    }
+
+    private IEnumerator ItemRemoveRoutine(ToolTransferArgs args)
+    {
+      yield return new WaitForSeconds(3);
+    }
+  }
 }

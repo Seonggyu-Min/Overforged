@@ -81,7 +81,7 @@ namespace SHG
       }
     }
 
-    public override ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false)
+    public override ToolTransferResult Transfer(ToolTransferArgs args)
     {
       ToolTransferResult result = base.Transfer(args);
       if (this.HoldingMaterial != null && 
@@ -97,7 +97,7 @@ namespace SHG
       return (!this.IsIgnited);
     }
 
-    public override ToolWorkResult Work(bool fromNetwork = false)
+    public override ToolWorkResult Work()
     {
       this.InteractionToTrigger = InteractionType.Work;
       this.BeforeInteract?.Invoke(this);

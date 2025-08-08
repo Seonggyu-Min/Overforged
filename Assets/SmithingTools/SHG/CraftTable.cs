@@ -54,7 +54,7 @@ namespace SHG
       return (this.HoldingMaterials.Count > 0);
     }
 
-    public override ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false)
+    public override ToolTransferResult Transfer(ToolTransferArgs args)
     {
       this.CraftableProduct = null;
       this.BeforeInteract?.Invoke(this);
@@ -113,7 +113,7 @@ namespace SHG
       return (false);
     }
 
-    public override ToolWorkResult Work(bool fromNetwork = false)
+    public override ToolWorkResult Work()
     {
       if (!this.FindCraftable(out Craft craft)) {
         #if UNITY_EDITOR

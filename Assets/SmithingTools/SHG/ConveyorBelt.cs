@@ -85,7 +85,7 @@ namespace SHG
       return (true);
     }
 
-    public override ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false)
+    public override ToolTransferResult Transfer(ToolTransferArgs args)
     {
       this.BeforeInteract?.Invoke(this);
       if (args.ItemToGive != null) {
@@ -124,7 +124,7 @@ namespace SHG
       }
     }
 
-    public override ToolWorkResult Work(bool fromNetwork = false)
+    public override ToolWorkResult Work()
     {
       this.InteractionToTrigger = InteractionType.Work;
       this.IsPowerOn = !this.IsPowerOn;

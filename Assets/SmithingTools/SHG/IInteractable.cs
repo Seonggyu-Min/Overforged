@@ -8,9 +8,9 @@ namespace SHG
   public interface IInteractableTool
   {
     public bool CanTransferItem(ToolTransferArgs args);
-    public ToolTransferResult Transfer(ToolTransferArgs args, bool fromNetwork = false);
+    public ToolTransferResult Transfer(ToolTransferArgs args);
     public bool CanWork();
-    public ToolWorkResult Work(bool fromNetwork = false);
+    public ToolWorkResult Work();
   }
 
   public interface IInteractable
