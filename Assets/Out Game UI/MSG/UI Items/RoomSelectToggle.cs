@@ -25,6 +25,8 @@ namespace MIN
 
         public void ChangeType()
         {
+            if (!PhotonNetwork.IsMasterClient) return;
+
             for (int i = 0; i < toggle.Length; i++)
             {
                 ColorBlock colorBlock = toggle[i].colors;

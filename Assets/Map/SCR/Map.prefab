@@ -365,6 +365,7 @@ MonoBehaviour:
   - {fileID: 2957700719468049215}
   - {fileID: 4095557835612787336}
   - {fileID: 3340999336498895520}
+  teamSmithingTools: []
   MapPrefabs: {fileID: 4761429625394750882}
 --- !u!1 &8117365199364744951
 GameObject:

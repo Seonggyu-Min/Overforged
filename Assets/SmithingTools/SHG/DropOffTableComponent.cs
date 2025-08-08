@@ -19,6 +19,8 @@ namespace SHG
     protected override bool isProgressUsed => false;
     DropOffTable table;
 
+    public System.Action<ToolTransferResult> OnDropOffTransfered;
+
     public override bool CanTransferItem(ToolTransferArgs args)
     {
       return (this.table.CanTransferItem(args));
@@ -45,6 +47,7 @@ namespace SHG
             args.ConvertToNetworkArguments(),
             result.ConvertToNetworkArguments()
           });
+        this.OnDropOffTransfered?.Invoke(result);
         return (result);
       }
       else {
@@ -58,6 +61,7 @@ namespace SHG
             args.ConvertToNetworkArguments(),
             result.ConvertToNetworkArguments()
           });
+          this.OnDropOffTransfered?.Invoke(result);
         return (result);
       }
     }

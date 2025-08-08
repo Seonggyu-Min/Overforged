@@ -4,18 +4,26 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 
 namespace MIN
 {
     public class RoomPanelBehaviour : MonoBehaviourPunCallbacks
     {
+        [Inject] private IOutGameUIManager _outGameUIManager;
+
         [SerializeField] private TMP_Text _roomNameText;
         [SerializeField] private GameObject _menuPanel;
         [SerializeField] private GameObject _exitButton;
 
+        //private Coroutine _tutorialCheckCO;
+
+
         public override void OnEnable()
         {
+            //_tutorialCheckCO = StartCoroutine(CheckTutorialRoom());
+
             StartCoroutine(RoomNameUpdateRoutine());
             _exitButton.SetActive(true);
             _menuPanel.SetActive(true);
@@ -28,6 +36,12 @@ namespace MIN
         {
             _exitButton.SetActive(false);
             _menuPanel.SetActive(false);
+
+            //if (_tutorialCheckCO != null)
+            //{
+            //    StopCoroutine(_tutorialCheckCO);
+            //    _tutorialCheckCO = null;
+            //}
         }
 
         public override void OnJoinedRoom()
@@ -91,5 +105,25 @@ namespace MIN
                 Debug.Log("localSceneLoaded가 false");
             }
         }
+
+        //private IEnumerator CheckTutorialRoom()
+        //{
+        //    WaitForSeconds wait = new WaitForSeconds(0.5f);
+
+        //    for (int i = 0; i < 5; i++)
+        //    {
+        //        yield return wait;
+
+        //        if ((string)PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.MapId] == "Tutorial")
+        //        {
+        //            _outGameUIManager.CloseTopPanel(); // 튜토리얼이라면 로비로 바로 보내기
+        //        }
+
+        //        if (PhotonNetwork.InRoom)
+        //        {
+        //            PhotonNetwork.LeaveRoom();
+        //        }
+        //    }
+        //}
     }
 }

@@ -1155,7 +1155,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.000002861023}
+  m_AnchoredPosition: {x: 0, y: -997}
   m_SizeDelta: {x: 806.9, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &84219148
@@ -2474,7 +2474,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -1000}
   m_SizeDelta: {x: 806.9, y: 481.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &151184357
@@ -5012,11 +5012,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiGroups:
   - Targets:
-    - {fileID: 161730174}
+    - {fileID: 233986459}
     SlideDirection: 1
-    OriginOffset: -335
-    MoveInOffset: -1335
-    MoveOutOffset: -1335
+    OriginOffset: 55
+    MoveInOffset: -945
+    MoveOutOffset: -945
     MoveInDuration: 0.5
     FadeInDuration: 0.5
     MoveOutDuration: 0.5
@@ -5227,7 +5227,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00036621094, y: 53.6989}
+  m_AnchoredPosition: {x: 0.00036621094, y: -945}
   m_SizeDelta: {x: 666.7296, y: 648.3305}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &233986460
@@ -5641,7 +5641,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 30, y: -272.09583}
+  m_AnchoredPosition: {x: -970, y: -272.09583}
   m_SizeDelta: {x: 600, y: 464.1917}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &241530147
@@ -6089,7 +6089,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8799331917431130045, guid: 99e48a8d6960934419f2d1df0e029653, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8799331917431130045, guid: 99e48a8d6960934419f2d1df0e029653, type: 3}
       propertyPath: m_AnchorMin.x
@@ -6097,7 +6097,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8799331917431130045, guid: 99e48a8d6960934419f2d1df0e029653, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8799331917431130045, guid: 99e48a8d6960934419f2d1df0e029653, type: 3}
       propertyPath: m_SizeDelta.x
@@ -6141,7 +6141,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8799331917431130045, guid: 99e48a8d6960934419f2d1df0e029653, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 386.5
+      value: 936.5
       objectReference: {fileID: 0}
     - target: {fileID: 8799331917431130045, guid: 99e48a8d6960934419f2d1df0e029653, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6405,15 +6405,28 @@ MonoBehaviour:
     FadeInDuration: 0.5
     MoveOutDuration: 0.5
     FadeOutDuration: 0.5
-    Interval: 0.04
+    Interval: 0.05
     MoveInEase: 21
     MoveOutEase: 21
   - Targets:
     - {fileID: 947677178}
     SlideDirection: 1
-    OriginOffset: -161.73
-    MoveInOffset: -1161.73
-    MoveOutOffset: -1161.73
+    OriginOffset: -161
+    MoveInOffset: -1161
+    MoveOutOffset: -1161
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
+  - Targets:
+    - {fileID: 761300161}
+    SlideDirection: 1
+    OriginOffset: 20
+    MoveInOffset: -980
+    MoveOutOffset: -980
     MoveInDuration: 0.5
     FadeInDuration: 0.5
     MoveOutDuration: 0.5
@@ -7672,7 +7685,86 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475a6c8e2915ff249b55beb4fe141206, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiGroups: []
+  _uiGroups:
+  - Targets:
+    - {fileID: 1686433652}
+    SlideDirection: 1
+    OriginOffset: -20
+    MoveInOffset: 980
+    MoveOutOffset: 980
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
+  - Targets:
+    - {fileID: 1564820226}
+    SlideDirection: 0
+    OriginOffset: 30
+    MoveInOffset: -970
+    MoveOutOffset: -970
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
+  - Targets:
+    - {fileID: 763313993}
+    SlideDirection: 0
+    OriginOffset: 30
+    MoveInOffset: -970
+    MoveOutOffset: -970
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
+  - Targets:
+    - {fileID: 1717833980}
+    - {fileID: 1682791165}
+    SlideDirection: 0
+    OriginOffset: 0
+    MoveInOffset: 1000
+    MoveOutOffset: 1000
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
+  - Targets:
+    - {fileID: 1368901443}
+    SlideDirection: 0
+    OriginOffset: -20
+    MoveInOffset: 980
+    MoveOutOffset: 980
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
+  - Targets:
+    - {fileID: 883639768}
+    SlideDirection: 0
+    OriginOffset: 0
+    MoveInOffset: 1000
+    MoveOutOffset: 1000
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
 --- !u!114 &285038179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11408,7 +11500,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475a6c8e2915ff249b55beb4fe141206, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiGroups: []
+  _uiGroups:
+  - Targets:
+    - {fileID: 660205328}
+    SlideDirection: 1
+    OriginOffset: 0
+    MoveInOffset: -1000
+    MoveOutOffset: -1000
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
 --- !u!114 &450828399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15125,7 +15230,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000104904175, y: 0.0000076293945}
+  m_AnchoredPosition: {x: 0.0000104904175, y: -1000}
   m_SizeDelta: {x: 640, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &600819982
@@ -16112,8 +16217,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Room Name\u200B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fa08fff1716a04db18700207b6c202e5, type: 2}
-  m_sharedMaterial: {fileID: 7908499825950019370, guid: fa08fff1716a04db18700207b6c202e5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
+  m_sharedMaterial: {fileID: -5365197815800372689, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -16137,7 +16242,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28.55
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -16497,7 +16602,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.000015258789}
+  m_AnchoredPosition: {x: 0, y: -1000}
   m_SizeDelta: {x: 750, y: 700}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &660205329
@@ -17107,7 +17212,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 30, y: 140}
+  m_AnchoredPosition: {x: -970, y: 140}
   m_SizeDelta: {x: 600, y: 400}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &685182734
@@ -17327,7 +17432,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 400, y: -63.5}
+  m_AnchoredPosition: {x: 400, y: 936.5}
   m_SizeDelta: {x: 320, y: 127}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &694058802
@@ -19024,7 +19129,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1540658904713320795, guid: fffcb3bd743054c85860e9394da42531, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 20
+      value: -980
       objectReference: {fileID: 0}
     - target: {fileID: 1540658904713320795, guid: fffcb3bd743054c85860e9394da42531, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -19268,7 +19373,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 30, y: 140}
+  m_AnchoredPosition: {x: -1000, y: 140}
   m_SizeDelta: {x: 1000, y: 285.1815}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &763313994
@@ -20291,7 +20396,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -45, y: 30}
+  m_AnchoredPosition: {x: -45, y: -970}
   m_SizeDelta: {x: 55, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &782735912
@@ -21604,7 +21709,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475a6c8e2915ff249b55beb4fe141206, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiGroups: []
+  _uiGroups:
+  - Targets:
+    - {fileID: 241530146}
+    - {fileID: 685182733}
+    SlideDirection: 0
+    OriginOffset: 30
+    MoveInOffset: -970
+    MoveOutOffset: -970
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
+  - Targets:
+    - {fileID: 254620339}
+    - {fileID: 1802487550}
+    - {fileID: 694058801}
+    SlideDirection: 1
+    OriginOffset: -63.5
+    MoveInOffset: 936.5
+    MoveOutOffset: 936.5
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
+  - Targets:
+    - {fileID: 1464021859}
+    SlideDirection: 0
+    OriginOffset: 0
+    MoveInOffset: 1230
+    MoveOutOffset: 1230
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
+  - Targets:
+    - {fileID: 782735911}
+    - {fileID: 1616251504}
+    SlideDirection: 1
+    OriginOffset: 30
+    MoveInOffset: -970
+    MoveOutOffset: -970
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
 --- !u!114 &813839572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22273,6 +22434,7 @@ MonoBehaviour:
     - Clip: {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
       volume: 0
       isVolumeModified: 0
+  isSingletonSource: 0
 --- !u!4 &820808454
 Transform:
   m_ObjectHideFlags: 0
@@ -24507,7 +24669,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -50}
+  m_AnchoredPosition: {x: 1000, y: -50}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &883639769
@@ -26204,7 +26366,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -161.72998}
+  m_AnchoredPosition: {x: 0, y: -1161}
   m_SizeDelta: {x: 806.9, y: 751.73}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &947677179
@@ -30809,6 +30971,7 @@ GameObject:
   - component: {fileID: 1131798442}
   - component: {fileID: 1131798441}
   - component: {fileID: 1131798443}
+  - component: {fileID: 1131798445}
   - component: {fileID: 1131798444}
   m_Layer: 5
   m_Name: Loading Panel
@@ -30834,7 +30997,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -1080}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1131798441
@@ -30887,7 +31050,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf3bb2a038848a040a4479d3d961796f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
+  _animator: {fileID: 1131798445}
   _isRootPanel: 1
   _hasToLogOutWhenClosed: 0
   _hasToLeaveRoomWhenClosed: 0
@@ -30905,6 +31068,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _loadingText: {fileID: 1889673657}
+--- !u!114 &1131798445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131798439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 475a6c8e2915ff249b55beb4fe141206, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _uiGroups:
+  - Targets:
+    - {fileID: 1131798440}
+    SlideDirection: 1
+    OriginOffset: 0
+    MoveInOffset: -1080
+    MoveOutOffset: -1080
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
 --- !u!1 &1142296213
 GameObject:
   m_ObjectHideFlags: 0
@@ -31492,8 +31681,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Password
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fa08fff1716a04db18700207b6c202e5, type: 2}
-  m_sharedMaterial: {fileID: 7908499825950019370, guid: fa08fff1716a04db18700207b6c202e5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
+  m_sharedMaterial: {fileID: -5365197815800372689, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -31517,7 +31706,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28.55
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -34192,7 +34381,7 @@ MonoBehaviour:
   m_CaretWidth: 4
   m_ReadOnly: 0
   m_RichText: 1
-  m_GlobalFontAsset: {fileID: 11400000, guid: aa2f3c655b3634b2b852b64fd197fd58, type: 2}
+  m_GlobalFontAsset: {fileID: 11400000, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
   m_OnFocusSelectAll: 0
   m_ResetOnDeActivation: 1
   m_RestoreOriginalTextOnEscape: 1
@@ -36058,7 +36247,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -20, y: -40}
+  m_AnchoredPosition: {x: 980, y: -40}
   m_SizeDelta: {x: 850, y: 400}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1368901444
@@ -38150,7 +38339,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -50}
+  m_AnchoredPosition: {x: 0, y: 950}
   m_SizeDelta: {x: 1000, y: 300}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1447541584
@@ -38548,7 +38737,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -32.628418}
+  m_AnchoredPosition: {x: 1230, y: -32.628418}
   m_SizeDelta: {x: 1200, y: 660}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1464021860
@@ -41887,7 +42076,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 30, y: -100}
+  m_AnchoredPosition: {x: -1000, y: -100}
   m_SizeDelta: {x: 1000, y: 500}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1564820227
@@ -42046,27 +42235,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiGroups:
   - Targets:
-    - {fileID: 993775173}
-    - {fileID: 1716524749}
-    - {fileID: 494915070}
+    - {fileID: 84219147}
     SlideDirection: 1
-    OriginOffset: 40
-    MoveInOffset: 1040
-    MoveOutOffset: 1040
-    MoveInDuration: 0.5
-    FadeInDuration: 0.5
-    MoveOutDuration: 0.5
-    FadeOutDuration: 0.5
-    Interval: 0.05
-    MoveInEase: 21
-    MoveOutEase: 21
-  - Targets:
-    - {fileID: 1612556086}
-    - {fileID: 1973726508}
-    SlideDirection: 1
-    OriginOffset: -400
-    MoveInOffset: -1400
-    MoveOutOffset: -1400
+    OriginOffset: 3
+    MoveInOffset: -997
+    MoveOutOffset: -997
     MoveInDuration: 0.5
     FadeInDuration: 0.5
     MoveOutDuration: 0.5
@@ -43280,8 +43453,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u200B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fa08fff1716a04db18700207b6c202e5, type: 2}
-  m_sharedMaterial: {fileID: 7908499825950019370, guid: fa08fff1716a04db18700207b6c202e5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
+  m_sharedMaterial: {fileID: -5365197815800372689, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -43936,7 +44109,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 45, y: 30}
+  m_AnchoredPosition: {x: 45, y: -970}
   m_SizeDelta: {x: 55, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1616251505
@@ -45766,7 +45939,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 25}
+  m_AnchoredPosition: {x: 1000, y: 25}
   m_SizeDelta: {x: 600, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1682791166
@@ -45867,7 +46040,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 30, y: -20}
+  m_AnchoredPosition: {x: 30, y: 980}
   m_SizeDelta: {x: 1000, y: 100}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1686433653
@@ -46694,7 +46867,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -100}
+  m_AnchoredPosition: {x: 1000, y: -100}
   m_SizeDelta: {x: 850, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1717833981
@@ -47782,54 +47955,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiGroups:
   - Targets:
-    - {fileID: 259413738}
-    - {fileID: 1878624755}
+    - {fileID: 1843829105}
     SlideDirection: 1
-    OriginOffset: 185
-    MoveInOffset: 1185
-    MoveOutOffset: 1185
-    MoveInDuration: 0.5
-    FadeInDuration: 0.5
-    MoveOutDuration: 0.5
-    FadeOutDuration: 0.5
-    Interval: 0.05
-    MoveInEase: 21
-    MoveOutEase: 21
-  - Targets:
-    - {fileID: 972471659}
-    - {fileID: 865237636}
-    SlideDirection: 1
-    OriginOffset: 0
-    MoveInOffset: 1000
-    MoveOutOffset: 1000
-    MoveInDuration: 0.5
-    FadeInDuration: 0.5
-    MoveOutDuration: 0.5
-    FadeOutDuration: 0.5
-    Interval: 0.05
-    MoveInEase: 21
-    MoveOutEase: 21
-  - Targets:
-    - {fileID: 814803756}
-    - {fileID: 172939861}
-    SlideDirection: 1
-    OriginOffset: -185
-    MoveInOffset: 815
-    MoveOutOffset: 815
-    MoveInDuration: 0.5
-    FadeInDuration: 0.5
-    MoveOutDuration: 0.5
-    FadeOutDuration: 0.5
-    Interval: 0.05
-    MoveInEase: 21
-    MoveOutEase: 21
-  - Targets:
-    - {fileID: 1885015763}
-    - {fileID: 1998590425}
-    SlideDirection: 1
-    OriginOffset: -442
-    MoveInOffset: -1142
-    MoveOutOffset: -1142
+    OriginOffset: -10
+    MoveInOffset: -1010
+    MoveOutOffset: -1010
     MoveInDuration: 0.5
     FadeInDuration: 0.5
     MoveOutDuration: 0.5
@@ -48150,7 +48280,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -63.5}
+  m_AnchoredPosition: {x: 0, y: 936.5}
   m_SizeDelta: {x: 320, y: 127}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1802487551
@@ -49000,7 +49130,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -10.359985}
+  m_AnchoredPosition: {x: 0, y: -1010}
   m_SizeDelta: {x: 806.9, y: 884.5219}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1843829106
@@ -51157,6 +51287,134 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: -8, y: -5, z: -8, w: -5}
   m_Softness: {x: 0, y: 0}
+--- !u!1 &1893305101
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1893305103}
+  - component: {fileID: 1893305102}
+  m_Layer: 0
+  m_Name: BGM Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &1893305102
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1893305101}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -5542456094673681751, guid: 9dbecd95bc913498380f7fac0048e1af, type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &1893305103
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1893305101}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1010.621, y: 610.21844, z: 1.8576635}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1894924419
 GameObject:
   m_ObjectHideFlags: 0
@@ -51216,8 +51474,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Enter Room Name
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fa08fff1716a04db18700207b6c202e5, type: 2}
-  m_sharedMaterial: {fileID: 7908499825950019370, guid: fa08fff1716a04db18700207b6c202e5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
+  m_sharedMaterial: {fileID: -5365197815800372689, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -52295,26 +52553,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiGroups:
   - Targets:
-    - {fileID: 1079616580}
-    - {fileID: 1880627980}
-    - {fileID: 1504232008}
+    - {fileID: 151184356}
     SlideDirection: 1
-    OriginOffset: 100
-    MoveInOffset: -900
-    MoveOutOffset: -900
-    MoveInDuration: 0.5
-    FadeInDuration: 0.5
-    MoveOutDuration: 0.5
-    FadeOutDuration: 0.5
-    Interval: 0.05
-    MoveInEase: 21
-    MoveOutEase: 21
-  - Targets:
-    - {fileID: 1913963214}
-    SlideDirection: 1
-    OriginOffset: -429
-    MoveInOffset: -1429
-    MoveOutOffset: -1429
+    OriginOffset: 0
+    MoveInOffset: -1000
+    MoveOutOffset: -1000
     MoveInDuration: 0.5
     FadeInDuration: 0.5
     MoveOutDuration: 0.5
@@ -56500,7 +56743,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 475a6c8e2915ff249b55beb4fe141206, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiGroups: []
+  _uiGroups:
+  - Targets:
+    - {fileID: 600819981}
+    SlideDirection: 1
+    OriginOffset: 0
+    MoveInOffset: -1000
+    MoveOutOffset: -1000
+    MoveInDuration: 0.5
+    FadeInDuration: 0.5
+    MoveOutDuration: 0.5
+    FadeOutDuration: 0.5
+    Interval: 0.05
+    MoveInEase: 21
+    MoveOutEase: 21
 --- !u!114 &2060598015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56756,7 +57012,7 @@ MonoBehaviour:
   m_CaretWidth: 4
   m_ReadOnly: 0
   m_RichText: 1
-  m_GlobalFontAsset: {fileID: 11400000, guid: aa2f3c655b3634b2b852b64fd197fd58, type: 2}
+  m_GlobalFontAsset: {fileID: 11400000, guid: e6c2dac5128c2df428bde99dddbab4f2, type: 2}
   m_OnFocusSelectAll: 0
   m_ResetOnDeActivation: 1
   m_RestoreOriginalTextOnEscape: 1
@@ -58503,3 +58759,4 @@ SceneRoots:
   - {fileID: 1582718335}
   - {fileID: 820808454}
   - {fileID: 1977725749}
+  - {fileID: 1893305103}

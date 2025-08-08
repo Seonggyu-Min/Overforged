@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -51,15 +51,14 @@ public class MovingGround : MonoBehaviour
     // 발판이 트리거 영역에 다른 콜라이더가 들어왔을 때
     private void OnTriggerEnter(Collider other)
     {
-        // 플레이어 태그를 확인 (필수! 플레이어에 "Player" 태그를 부여하세요)
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Item") || other.CompareTag("Tongs"))
             other.transform.SetParent(transform);
     }
 
     // 발판이 트리거 영역에서 다른 콜라이더가 나갔을 때
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") /*|| other.CompareTag("Item") || other.CompareTag("Tongs")*/)
             other.transform.SetParent(null);
     }
 

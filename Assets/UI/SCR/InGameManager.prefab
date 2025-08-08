@@ -1708,6 +1708,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8168359537556187420, guid: e585f8244c2e7634fabd67d2ec3345ee, type: 3}
+      propertyPath: InGameManager
+      value: 
+      objectReference: {fileID: 8846749881435574888}
+    - target: {fileID: 8168359537556187420, guid: e585f8244c2e7634fabd67d2ec3345ee, type: 3}
       propertyPath: mapList.Array.size
       value: 10
       objectReference: {fileID: 0}

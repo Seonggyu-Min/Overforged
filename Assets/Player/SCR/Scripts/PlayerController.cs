@@ -1,11 +1,10 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Photon.Pun;
 using Photon.Realtime;
 using SHG;
 using System;
-using Unity.VisualScripting.ReorderableList.Element_Adder_Menu;
 
 namespace SCR
 {
@@ -230,24 +229,16 @@ namespace SCR
                 if (useTong)
                 {
                     photonView.RPC("UseTongs", RpcTarget.All, !useTong, tongs.GetComponent<PhotonView>().ViewID);
-                    player.Tongs = tongs;
-                    player.Tongs.transform.SetParent(player.HoldingPos);
-                    player.Tongs.transform.localPosition = new Vector3(0, 0, 0);
-                    player.Tongs.transform.rotation = Quaternion.identity;
                 }
                 else
                 {
                     if (!CanUseTongs()) return;
                     photonView.RPC("UseTongs", RpcTarget.All, !useTong, player.Tongs.GetComponent<PhotonView>().ViewID);
-                    player.Tongs.SetActive(!useTong);
-                    player.Tongs.transform.SetParent(null);
-                    player.Tongs = null;
                 }
 
                 player.PlayerPhysical.UseTongs = useTong;
                 player.Animator.SetBool("UseTongs", useTong);
             }
-
         }
 
         /// <summary>
@@ -257,7 +248,10 @@ namespace SCR
         private void PickUpObject(GameObject pickUpObject, bool isPlayer = true)
         {
             if (pickUpObject.transform.parent != null && isPlayer)
-                return;
+            {
+                if (pickUpObject.transform.parent.gameObject.CompareTag("Player")) return;
+            }
+            
             if (player.HoldObject == null)
             {
                 photonView.RPC("PickUpObject", RpcTarget.All, pickUpObject.GetComponent<PhotonView>().ViewID);

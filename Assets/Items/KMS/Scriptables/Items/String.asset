@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 101
   Name: string
-  Image: {fileID: 21300000, guid: e43b8796a68bac146a72942f676972f3, type: 3}
+  Image: {fileID: 21300000, guid: 2268ba981b857f349946bd9addef735a, type: 3}
   ItemPrefab: {fileID: 919132149155446097, guid: c85489a4eb846124b84e5613b7cc9425, type: 3}
+  Offset: {x: 0, y: 0, z: 0}
+  Rotation: {x: 0, y: 0, z: 0}
   Scale: {x: 2, y: 2, z: 2}
-  xOffset: 0
-  rotation: {x: 0, y: 0, z: 0}
   materialVariation: 4
   materialType: 0
   nextMaterial: {fileID: 0}

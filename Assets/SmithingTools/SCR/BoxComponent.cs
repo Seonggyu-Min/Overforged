@@ -19,13 +19,19 @@ namespace SCR
         private GameObject itemObj;
         [SerializeField] PhotonView view;
 
-        public Action OnGetItem;
+        public Action<GameObject> OnGetItem;
 
+#if UNITY_EDITOR
         void OnValidate()
         {
             SetItem();
         }
-
+#else
+        private void OnEnable()
+        {
+            SetItem();
+        }
+#endif
         private void SetItem()
         {
             if ((int)type < 3)
@@ -59,7 +65,7 @@ namespace SCR
 
             int viewID = itemObj.GetComponent<PhotonView>().ViewID;
             view.RPC(nameof(RPC_SetItem), RpcTarget.AllBuffered, viewID);
-            OnGetItem?.Invoke();
+            OnGetItem?.Invoke(itemObj);
 
             return itemObj;
         }

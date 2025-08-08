@@ -1,6 +1,7 @@
 ﻿using SHG;
 using UnityEngine;
 using Photon.Pun;
+using MIN;
 namespace SCR
 {
     public class PlayerPhysical : MonoBehaviour
@@ -25,7 +26,7 @@ namespace SCR
         private ToolTransferArgs transferArgs;
         public bool CanTransfer { get => canTransfer; }
         private bool canTransfer;
-        int networkId;
+        int teamId;
         void Awake()
         {
             player = GetComponent<Player>();
@@ -35,12 +36,17 @@ namespace SCR
             IsHold = false;
             UseTongs = false;
             IsRespawning = false;
+            if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(CustomPropertyKeys.TeamColor, out object teamcolor))
+            {
+                teamId = int.Parse(teamcolor.ToString());
+            }
+
         }
 
         void Update()
         {
             centralPos = transform.position;
-            centralPos.y = 0.7f;
+            centralPos.y = transform.position.y + 0.2f;
             CheckInteractable();
         }
 
@@ -77,7 +83,7 @@ namespace SCR
                     transferArgs = new ToolTransferArgs
                     {
                         ItemToGive = player.HoldObject.GetComponent<Item>(),
-                        PlayerNetworkId = PhotonNetwork.LocalPlayer.ActorNumber
+                        PlayerNetworkId = teamId
                     };
                 }
                 else
@@ -85,7 +91,7 @@ namespace SCR
                     transferArgs = new ToolTransferArgs
                     {
                         ItemToGive = null,
-                        PlayerNetworkId = PhotonNetwork.LocalPlayer.ActorNumber
+                        PlayerNetworkId = teamId
                     };
                 }
                 IInteractableTool interactable = hitInteractable.collider.gameObject.GetComponent<IInteractableTool>();

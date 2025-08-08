@@ -100,6 +100,7 @@ public class MaterialItem : Item
     }
 
     public Action onCool;
+    public Action<MaterialItemData> onChangeNext;
     [PunRPC]
     public void Cool()
     {
@@ -112,6 +113,7 @@ public class MaterialItem : Item
     {
         if (data == null) return;
         Data = matData.nextMaterial;
+        onChangeNext?.Invoke(matData);
     }
 
     private void SetMaterial()

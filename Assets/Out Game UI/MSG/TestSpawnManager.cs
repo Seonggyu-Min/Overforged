@@ -34,6 +34,7 @@ namespace MIN
 
             GameObject playerobj = PhotonNetwork.Instantiate("Player", spawnPos, Quaternion.identity);
             Player player = playerobj.GetComponent<Player>();
+            player.OnPlayerInput();
 
             //var cameraController = CameraController.Instance; ;
             //Debug.Log($"cameraController : {cameraController}");

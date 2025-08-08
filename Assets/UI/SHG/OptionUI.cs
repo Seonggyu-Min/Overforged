@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
@@ -119,7 +119,7 @@ namespace SHG
       this.CreateUI();
       this.UpdateUI();
       this.Hide();
-      this.SetKey(KeyCode.Escape);
+      this.SetKey(KeyCode.Backspace);
     }
     
     void OnEnable()
