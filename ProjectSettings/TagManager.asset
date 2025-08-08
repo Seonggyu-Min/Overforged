@@ -7,6 +7,7 @@ TagManager:
   - Item
   - Tongs
   - InteractionObj
+  - Door
   layers:
   - Default
   - TransparentFX

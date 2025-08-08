@@ -35,7 +35,6 @@ namespace SHG
 
     void Awake()
     {
-      Debug.LogWarning("Awake");
       if (instance != null) {
         Destroy(this.gameObject);
         return;

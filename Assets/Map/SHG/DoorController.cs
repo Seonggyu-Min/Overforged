@@ -25,6 +25,7 @@ namespace SHG
       set => this.highlighter.HighlightColor = value;
     }
     GameObjectHighlighter highlighter;
+    public Action<DoorController> OnOpened;
 
     [SerializeField] [Required]
     Transform doorHinge;
@@ -69,7 +70,7 @@ namespace SHG
       }
       this.highlighter = new GameObjectHighlighter(
         Array.ConvertAll(this.renderers,
-        renderer => renderer.sharedMaterial));
+        renderer => renderer.material));
       for (int i = 0; i < this.highlighter.HighlightedMaterials.Length; ++i) {
         this.renderers[i].material = this.highlighter.HighlightedMaterials[i];
       }
@@ -82,16 +83,22 @@ namespace SHG
       }
     }
 
+    void Update()
+    {
+      this.highlighter.OnUpdate(Time.deltaTime);
+    }
+
     public void OnUnlock()
     {
-      this.isLocked = false; 
-      if (this.IsClosed) {
+      this.isLocked = false;
+      if (this.IsClosed)
+      {
         this.Open();
       }
     }
 
     [Button ("Open")]
-    void Open()
+    public void Open()
     {
       if (this.isLocked) {
         return ;
@@ -104,6 +111,7 @@ namespace SHG
       this.destRotation = this.opendedRotation;
       this.rotateRoutine = this.StartCoroutine(this.CreateRotateRoutine());
       this.IsClosed = false;
+      this.OnOpened?.Invoke(this);
     }
 
     [Button ("Close")]
@@ -163,12 +171,12 @@ namespace SHG
 
     public void HighlightInstantly(Color color)
     {
-      throw new NotImplementedException();
+      this.highlighter.HighlightInstantly(color);
     }
 
     public void HighlightForSeconds(float seconds, Color color)
     {
-      throw new NotImplementedException();
+      this.highlighter.HighlightForSeconds(seconds, color);
     }
   }
 }
