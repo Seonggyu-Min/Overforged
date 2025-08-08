@@ -49,6 +49,7 @@ namespace SHG
       //  playerId = teamNumber;
       //}
       if (this.IsLocal) {
+        Debug.LogError($"Local");
         smithingTool.IsOwner = true;
         if (smithingTool is TableComponent table) {
           table.IsLocal = true;
@@ -77,6 +78,7 @@ namespace SHG
 
     void OnTranfered(SmithingToolComponent component, ToolTransferArgs args, ToolTransferResult result)
     {
+      Debug.LogError($"component: {component.name}, owner : {component.IsOwner}");
       if (component.IsOwner) {
         this.SendRpc(
           sceneId: component.SceneId,

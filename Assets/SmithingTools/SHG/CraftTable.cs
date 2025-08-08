@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 namespace SHG
 {
@@ -37,17 +38,31 @@ namespace SHG
       this.createProduct = createProduct;
     }
 
+    public void ClearMaterials()
+    {
+      var materials = this.HoldingMaterials;
+      this.Product = null;
+      this.HoldingMaterial = new();
+      foreach (var material in materials) {
+      OnMaterialRemoved?.Invoke(material);
+      }
+    }
+
     public override bool CanTransferItem(ToolTransferArgs args)
     {
-      if (this.Product != null) {
+      if (this.Product != null)
+      {
         return (args.ItemToGive == null);
       }
-      if (args.ItemToGive != null) {
-        if (args.ItemToGive is MaterialItem materialItem) {
-          return (!materialItem.IsHot && 
+      if (args.ItemToGive != null)
+      {
+        if (args.ItemToGive is MaterialItem materialItem)
+        {
+          return (!materialItem.IsHot &&
             this.IsCraftMaterial(materialItem.Data as MaterialItemData));
         }
-        else {
+        else
+        {
           return (false);
         }
       }
@@ -123,14 +138,15 @@ namespace SHG
         #endif
       }
       this.Product = this.createProduct(this.CraftableProduct);
+      if (this.Product != null) {
       this.Product.Ore = MaterialItem.GetOreType(this.HoldingMaterials);
       this.Product.Wood = MaterialItem.GetWoodType(this.HoldingMaterials);
- 
-      foreach (var material in this.HoldingMaterials) {
-        GameObject.Destroy(material.gameObject);
       }
-      this.HoldingMaterials.Clear();
+      foreach (var material in this.HoldingMaterials) {
+        PhotonNetwork.Destroy(material.gameObject);
+      }
       this.OnProductCrafted?.Invoke(this.CraftableProduct);
+      this.HoldingMaterials.Clear();
       return (new ToolWorkResult { 
           Trigger = this.OnTrigger,
           DurationToStay = 0.5f

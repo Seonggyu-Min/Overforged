@@ -101,13 +101,11 @@ namespace SHG
         args.ItemToGive.transform.localPosition = Vector3.up;
         OreType ore = OreType.None;
         WoodType wood = WoodType.None;
-        if (args.ItemToGive is MaterialItem materialItem)
-        {
+        if (args.ItemToGive is MaterialItem materialItem) {
           ore = materialItem.Ore;
           wood = materialItem.Wood;
         }
-        else if (args.ItemToGive is ProductItem productItem)
-        {
+        else if (args.ItemToGive is ProductItem productItem) {
           ore = productItem.Ore;
           wood = productItem.Wood;
         }
@@ -273,6 +271,14 @@ namespace SHG
       this.audioPlayer.PlayRandomSfx(
         soundName: "success",
         position: this.transform.position);
+      if (this.IsOwner && this.craftTable.Product != null) {
+        int itemId = this.craftTable.Product.GetComponent<PhotonView>().ViewID;
+        this.NetworkSynchronizer.SendRpc(
+          sceneId: this.SceneId,
+          method: nameof(this.SetProductData),
+          args: new object[] { itemId, this.craftTable.Product.Ore, this.craftTable.Product.Wood }
+          );
+        }
     }
 
     void OnCraftProductRemoved(ProductItemData removedProduct)
@@ -411,12 +417,6 @@ namespace SHG
           );
         var productItem = gameObject.GetComponent<ProductItem>();
         productItem.Data = itemData;
-        int itemId = gameObject.GetComponent<PhotonView>().ViewID;
-        this.NetworkSynchronizer.SendRpc(
-          sceneId: this.SceneId,
-          method: nameof(this.SetProductData),
-          args: new object[] { itemId }
-          );
         return (productItem);
       }
       else {
@@ -431,7 +431,12 @@ namespace SHG
     {
       if (this.NetworkSynchronizer.TryFindComponentFromNetworkId<ProductItem>(networId: (int)args[0], out ProductItem productItem)) {
         productItem.Data = this.craftTable.CraftableProduct;
+        Debug.LogWarning($"ore: {args[1]}, wood: {args[2]}");
+        productItem.Ore = (OreType)args[1];
+        productItem.Wood = (WoodType)args[2];
       }
+      this.craftTable.ClearMaterials();
+      this.itemUI.SubAllImage();
     }
   }
 }
