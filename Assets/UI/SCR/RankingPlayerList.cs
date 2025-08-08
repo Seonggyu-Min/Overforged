@@ -39,11 +39,13 @@ namespace SCR
             {
                 rankingText.color = textColor.Color[value - 1];
                 medalImage.sprite = medalList.sprites[value - 1];
+                medalImage.color = textColor.Color[6];
             }
             else
             {
                 rankingText.color = textColor.Color[4];
                 medalImage.sprite = medalList.sprites[4];
+                medalImage.color = textColor.Color[5];
             }
             rankingText.text = $"{value}";
         }

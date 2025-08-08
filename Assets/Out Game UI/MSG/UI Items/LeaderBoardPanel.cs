@@ -78,7 +78,6 @@ namespace MIN
         {
             string uid = _firebaseManager.Auth.CurrentUser.UserId;
             DatabaseReference userRef = _firebaseManager.Database.GetReference("users").Child(uid);
-
             userRef.GetValueAsync().ContinueWithOnMainThread(task =>
             {
                 if (task.IsCompletedSuccessfully)
@@ -98,7 +97,7 @@ namespace MIN
 
                     string nickname = snapshot.Child("nickname").Value?.ToString() ?? "Unknown";
 
-                    _myRecord.SetPlayer(0, 0, nickname, 0, 0, 0);
+                    _myRecord.SetPlayer(0, 1, nickname, 1, 1, 1);
                 }
                 else
                 {
