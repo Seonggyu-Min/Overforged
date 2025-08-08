@@ -40,9 +40,10 @@ namespace SHG
     int id;
     [SerializeField]
     int playerId;
-    [SerializeField] [ReadOnly]
+    [SerializeField]
+    [ReadOnly]
     bool isOwner;
-    [SerializeField] 
+    [SerializeField]
     GameObject uiPrefab;
     [SerializeField]
     protected Transform uiPoint;
@@ -50,7 +51,7 @@ namespace SHG
     protected GauageImageUI progressUI;
     protected LookCameraUI itemUI;
     protected virtual bool isProgressUsed => true;
-    [SerializeField] 
+    [SerializeField]
     protected Sprite gauageUIImage;
     public Action<SmithingToolComponent, ToolTransferArgs, ToolTransferResult> OnTransfered;
     public Action<SmithingToolComponent, ToolWorkResult> OnWorked;
@@ -58,19 +59,22 @@ namespace SHG
 
     protected virtual void Awake()
     {
-      if (this.meshRenderer != null) {
+      if (this.meshRenderer != null)
+      {
         this.highlighter = new GameObjectHighlighter(
           new Material[] { this.meshRenderer.material });
         this.meshRenderer.material = this.highlighter.HighlightedMaterials[0];
       }
-      if (this.uiPrefab != null && this.uiPoint != null) {
+      if (this.uiPrefab != null && this.uiPoint != null)
+      {
         this.uiObject = GameObject.Instantiate(
-          this.uiPrefab, 
+          this.uiPrefab,
           position: this.uiPoint.position,
           rotation: this.uiPoint.rotation);
         this.itemUI = Utils.RecursiveFindChild<LookCameraUI>(this.uiObject.transform);
       }
-      if (this.isProgressUsed) {
+      if (this.isProgressUsed)
+      {
         this.progressUI = Utils.RecursiveFindChild<GauageImageUI>(this.uiObject.transform);
         this.progressUI.WorkSprite = this.gauageUIImage;
       }
@@ -91,10 +95,12 @@ namespace SHG
 
     public virtual bool CanTransferItem(ToolTransferArgs args)
     {
-      if (this.NetworkSynchronizer.IsLocal) {
+      if (this.NetworkSynchronizer.IsLocal)
+      {
         return (this.tool.CanTransferItem(args));
       }
-      else {
+      else
+      {
         return (this.IsOwner && this.tool.CanTransferItem(args));
       }
     }
@@ -103,7 +109,8 @@ namespace SHG
     {
       var result = this.tool.Transfer(args);
       Debug.Log($"{nameof(Transfer)} result: {result}");
-      if (args.ItemToGive != null) {
+      if (args.ItemToGive != null)
+      {
         OreType ore = OreType.None;
         WoodType wood = WoodType.None;
         if (args.ItemToGive is MaterialItem materialItem)
@@ -121,25 +128,30 @@ namespace SHG
         args.ItemToGive.transform.position = this.materialPoint.position;
         args.ItemToGive.transform.up = this.materialPoint.up;
         var rigidbody = args.ItemToGive.gameObject.GetComponent<Rigidbody>();
-        if (rigidbody != null) {
+        if (rigidbody != null)
+        {
           rigidbody.isKinematic = true;
         }
         args.ItemToGive.transform.SetParent(this.transform);
       }
-      else {
+      else
+      {
         Debug.Log($"Suball Image");
         this.itemUI.SubAllImage();
       }
-      if (this.HoldingItem != null) {
+      if (this.HoldingItem != null)
+      {
         var rigidbody = args.ItemToGive.gameObject.GetComponent<Rigidbody>();
-        if (rigidbody != null) {
+        if (rigidbody != null)
+        {
           rigidbody.isKinematic = false;
         }
       }
-      if (this.PlayerNetworkId != args.PlayerNetworkId) {
-      #if UNITY_EDITOR && !LOCAL_TEST
+      if (this.PlayerNetworkId != args.PlayerNetworkId)
+      {
+#if UNITY_EDITOR && !LOCAL_TEST
         throw (new ApplicationException($"{this} component is not owned by player"));
-      #endif
+#endif
       }
       this.OnTransfered?.Invoke(this, args, result);
       return (result);
@@ -147,10 +159,12 @@ namespace SHG
 
     public virtual bool CanWork()
     {
-      if (this.NetworkSynchronizer.IsLocal) {
+      if (this.NetworkSynchronizer.IsLocal)
+      {
         return (this.tool.CanWork());
       }
-      else {
+      else
+      {
         return (this.IsOwner && this.tool.CanWork());
       }
     }
@@ -165,7 +179,8 @@ namespace SHG
 
     public virtual void OnRpc(string method, float latencyInSeconds, object[] args = null)
     {
-      switch (method) {
+      switch (method)
+      {
         case nameof(Transfer):
           this.HandleNetworkTransfer(args);
           break;
@@ -190,26 +205,32 @@ namespace SHG
       int playerNetworkId = (int)dict[ToolTransferArgs.PLAYER_NETWORK_ID_KEY];
       if (dict.TryGetValue(
           ToolTransferArgs.ITEM_ID_KEY, out object itemId) &&
-        itemId != null) {
+        itemId != null)
+      {
         if (this.NetworkSynchronizer != null &&
           this.NetworkSynchronizer.TryFindComponentFromNetworkId(
             networId: (int)itemId,
-            out MaterialItem foundItem)) {
-          this.Transfer(new ToolTransferArgs {
+            out MaterialItem foundItem))
+        {
+          this.Transfer(new ToolTransferArgs
+          {
             ItemToGive = foundItem,
             PlayerNetworkId = playerNetworkId
           });
         }
-        #if UNITY_EDITOR
-        else {
+#if UNITY_EDITOR
+        else
+        {
           Debug.LogError($"item not found for {args[0]}");
         }
-        #endif
+#endif
       }
-      else {
+      else
+      {
         //FIXME: Return item to player
         this.tool.HoldingMaterial.transform.SetParent(null);
-        this.Transfer(new ToolTransferArgs {
+        this.Transfer(new ToolTransferArgs
+        {
           ItemToGive = null,
           PlayerNetworkId = playerNetworkId
         });
@@ -220,8 +241,9 @@ namespace SHG
     {
       this.itemUI.SubImage();
       var material = this.tool.HoldingMaterial;
-      if (material != null) {
-      this.itemUI.AddImage(material.Ore, material.Wood);
+      if (material != null)
+      {
+        this.itemUI.AddImage(material.Ore, material.Wood);
       }
     }
 
@@ -234,17 +256,19 @@ namespace SHG
     {
       this.highlighter.HighlightForSeconds(seconds, color);
     }
-    
+
     protected void ShowProgressUI()
     {
-      if (!this.progressUI.gameObject.activeSelf) {
+      if (!this.progressUI.gameObject.activeSelf)
+      {
         this.progressUI.gameObject.SetActive(true);
       }
     }
 
     protected void HideProgressUI()
     {
-      if (this.progressUI.gameObject.activeSelf) {
+      if (this.progressUI.gameObject.activeSelf)
+      {
         this.progressUI.gameObject.SetActive(false);
       }
     }

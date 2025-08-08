@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using MIN;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,7 +21,7 @@ namespace SCR
                 {
                     playerUIs[i].gameObject.SetActive(true);
                     playerUIs[i].SetPlayer(null, players[i].NickName,
-                    int.Parse(players[i].CustomProperties["TeamColor"].ToString()));
+                    int.Parse(players[i].CustomProperties[CustomPropertyKeys.TeamColor].ToString()));
                 }
             }
         }
