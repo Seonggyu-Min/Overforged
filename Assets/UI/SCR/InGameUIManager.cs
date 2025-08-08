@@ -187,6 +187,7 @@ namespace SCR
         // 게임이 끝났을 경우 실행할 함수
         private void EndGame()
         {
+            IsEnd = true;
             resultUI.gameObject.SetActive(true);
             resultUI.OnResultUI(players);
             orderUI.StopOder();

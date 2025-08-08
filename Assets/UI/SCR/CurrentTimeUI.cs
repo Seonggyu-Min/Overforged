@@ -72,13 +72,15 @@ namespace SCR
 
         public void LastChance()
         {
+            photonView.RPC("SyncTime", RpcTarget.All, 0);
+            leftTimeText.color = lastColor;
             lastTimeCO = StartCoroutine(LastChanceCor());
         }
 
         private IEnumerator LastChanceCor()
         {
             bool isOn = true;
-            while (inGameUIManager.IsEnd)
+            while (!inGameUIManager.IsEnd)
             {
                 leftTimeText.gameObject.SetActive(isOn);
                 yield return new WaitForSeconds(1f);
