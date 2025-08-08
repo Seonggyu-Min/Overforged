@@ -116,8 +116,7 @@ namespace SHG
     {
       this.burningSfx = this.audioPlayer.PlayRandomSfx(
         soundName: "burning",
-        position: this.transform.position + 
-        (Camera.main.transform.position - CameraController.Instance.CameraLookPos))
+        position: this.transform.position)
         .SetLoop(true)
         .SetDistance(max: 5f)
         .Set3dBlend(1f);
