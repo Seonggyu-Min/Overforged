@@ -72,7 +72,7 @@ namespace SCR
 
         public void LastChance()
         {
-            photonView.RPC("SyncTime", RpcTarget.All, 0);
+            photonView.RPC("SyncTime", RpcTarget.All, 0f);
             leftTimeText.color = lastColor;
             lastTimeCO = StartCoroutine(LastChanceCor());
         }
