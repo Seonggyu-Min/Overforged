@@ -25,6 +25,7 @@ namespace MIN
         [SerializeField] private Button _readyButton;
         [SerializeField] private TMP_Text _readyButtonText;
         private bool _isReady = false;
+        private bool _isStartButtonPressed = false;
 
         [SerializeField] private TMP_Text _infoText;
         [SerializeField] private TMP_Text _debugText;
@@ -44,6 +45,7 @@ namespace MIN
             UpdatePlayerCards();
             UpdateButtonText();
             _infoText.text = string.Empty;
+            _isStartButtonPressed = false;
         }
 
         public override void OnDisable() => PhotonNetwork.RemoveCallbackTarget(this);
@@ -113,6 +115,8 @@ namespace MIN
             // 마스터 클라이언트일 경우 시작 기능
             if (PhotonNetwork.IsMasterClient)
             {
+                if (_isStartButtonPressed) return; // 이미 로드 씬을 호출한 경우 다시 클릭 금지
+
                 //마스터 클라이언트가 시작 버튼을 클릭한 경우
                 if (PhotonNetwork.CurrentRoom.PlayerCount < 2)
                 {
@@ -160,6 +164,7 @@ namespace MIN
                 int mapId = PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(CustomPropertyKeys.MapId, out object mapIdObj) && mapIdObj is int id ? id : 0;
 
                 PhotonNetwork.LoadLevel(1);
+                _isStartButtonPressed = true;
             }
             // 일반 플레이어일 경우 준비 상태 토글
             else
