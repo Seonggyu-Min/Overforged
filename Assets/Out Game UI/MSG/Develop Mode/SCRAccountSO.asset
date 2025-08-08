@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4bf447996257094f9824a81332d153d, type: 3}
   m_Name: SCRAccountSO
   m_EditorClassIdentifier: 
-  Email1: tcf1268@gmail.com
-  Password1: qwer1234
+  Email1: 
+  Password1: 
   Email2: 
   Password2: 
   Email3: 
