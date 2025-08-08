@@ -19,7 +19,7 @@ namespace SCR
 
         private void Awake()
         {
-            
+
         }
 
         private void Start()
@@ -42,10 +42,11 @@ namespace SCR
                     continue;
                 }
                 int teamNum = int.Parse(teamcolor.ToString());
-                if (teams.Find(n => n == teamNum) == 0)
-                {
-                    teams.Add(teamNum);
-                }
+                // if (teams.Find(n => n == teamNum) == 0)
+                // {
+                //     teams.Add(teamNum);
+                // }
+                teams.Add(p.ActorNumber);
             }
             SetTeamMap();
         }
