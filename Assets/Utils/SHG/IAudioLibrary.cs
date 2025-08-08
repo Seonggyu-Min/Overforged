@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public interface IAudioLibrary
 {
@@ -11,7 +11,7 @@ public interface IAudioLibrary
   public void Mute();
   public float GetVolume(VolumeType volumeType);
   public void SetVolume(VolumeType volumeType, float volume);
-  public void PlaySfx(AudioClip clip);
+  public SfxController PlaySfx(AudioClip clip);
   public void PauseBgm();
   public void PauseAllSfx();
   public void PlaybackBgm();

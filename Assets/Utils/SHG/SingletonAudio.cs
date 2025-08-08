@@ -172,11 +172,11 @@ namespace SHG
       }
     }
 
-    public void PlaySfx(AudioClip clip)
+    public SfxController PlaySfx(AudioClip clip)
     {
-      this
-        .GetSfxController()
-        .PlaySound(clip);
+            return this
+                .GetSfxController()
+                .PlaySound(clip);
     }
 
     public void PauseBgm()

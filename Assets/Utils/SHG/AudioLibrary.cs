@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -150,9 +150,9 @@ namespace SHG
       }
     }
 
-    public void PlaySfx(AudioClip clip)
+    public SfxController PlaySfx(AudioClip clip)
     {
-      this
+      return this 
         .GetSfxController()
         .PlaySound(clip);
     }
