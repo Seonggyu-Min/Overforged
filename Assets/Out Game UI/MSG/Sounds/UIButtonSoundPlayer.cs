@@ -16,12 +16,14 @@ namespace MIN
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            SingletonAudio.Instance.PlaySfx(_clickSound);
+            SfxController sfx = SingletonAudio.Instance.PlaySfx(_clickSound);
+            sfx.SetVolume(0.5f);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            SingletonAudio.Instance.PlaySfx(_hoverSound);
+            SfxController sfx = SingletonAudio.Instance.PlaySfx(_hoverSound);
+            sfx.SetVolume(0.5f);
         }
     }
 }

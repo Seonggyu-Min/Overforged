@@ -11,6 +11,7 @@ namespace MIN
         [Inject] private IOutGameUIManager _outGameUIManager;
         [SerializeField] private GameObject _menuPopUp;
         [SerializeField] private GameObject _userInfoPopUp;
+        [SerializeField] private GameObject _tutorialObj;
         private bool _isMenuPopUpShown = false;
         private bool _isUserInfoPopUpShown = false;
 
@@ -43,6 +44,16 @@ namespace MIN
             Exit();
         }
 
+
+        public void TurnOnTutorial()
+        {
+            _tutorialObj.SetActive(true);
+        }
+
+        public void TurnOffTutorial()
+        {
+            _tutorialObj.SetActive(false);
+        }
 
         private void Exit()
         {
