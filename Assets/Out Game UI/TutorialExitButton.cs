@@ -13,6 +13,7 @@ namespace MIN
         public void OnClickExitButton()
         {
             PhotonNetwork.LeaveRoom();  // 방이 아니라 로비로 가기 위해 LeaveRoom
+            PhotonNetwork.JoinLobby();
             PhotonNetwork.LoadLevel(0); // 아웃게임씬으로
         }
     }
