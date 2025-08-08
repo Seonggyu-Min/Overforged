@@ -14,7 +14,7 @@ namespace MIN
         [Inject] private IOutGameUIManager _outGameUIManager;
 
         [SerializeField] private TMP_Text _roomNameText;
-        [SerializeField] private GameObject _menuPanel;
+        [SerializeField] private MenuPanel _menuPanel;
         [SerializeField] private GameObject _exitButton;
 
         private Coroutine _tutorialCheckCO;
@@ -26,7 +26,8 @@ namespace MIN
 
             StartCoroutine(RoomNameUpdateRoutine());
             _exitButton.SetActive(true);
-            _menuPanel.SetActive(true);
+            _menuPanel.gameObject.SetActive(true);
+            _menuPanel.TurnOffTutorial();
             Debug.Log("OnEnable에서 호출");
             ResetLocalSceneLoadedProperty();
             StartCoroutine(ResetRoutine());
@@ -35,7 +36,7 @@ namespace MIN
         public override void OnDisable()
         {
             _exitButton.SetActive(false);
-            _menuPanel.SetActive(false);
+            _menuPanel.gameObject.SetActive(false);
 
             if (_tutorialCheckCO != null)
             {

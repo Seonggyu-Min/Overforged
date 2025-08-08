@@ -20,8 +20,9 @@ namespace MIN
         [SerializeField] private RoomCardPanel _roomCardPanel;
         [SerializeField] private Button _createRoomButton;
         [SerializeField] private GameObject _exitButton;
-        [SerializeField] private GameObject _menuPanel;
+        [SerializeField] private MenuPanel _menuPanel;
         [SerializeField] private TMP_Text _debugText;
+
 
         private List<RoomInfo> _roomList = new();
 
@@ -33,7 +34,8 @@ namespace MIN
         public override void OnEnable()
         {
             _exitButton.SetActive(true);
-            _menuPanel.SetActive(true);
+            _menuPanel.gameObject.SetActive(true);
+            _menuPanel.TurnOnTutorial();
             PhotonNetwork.AddCallbackTarget(this);
 
             if (!PhotonNetwork.IsConnected)
@@ -46,13 +48,17 @@ namespace MIN
                 Debug.Log("로비에 들어가지 않았습니다. 로비에 들어갑니다.");
                 StartCoroutine(ReEnterLobbyRoutine(true));
             }
+
+            // OnEnable이 JoinLobby 이후 실행되어서 콜백을 못 받음. 따라서 강제 새로고침 해봄
+            PhotonNetwork.LeaveLobby();
+            PhotonNetwork.JoinLobby();
         }
 
         public override void OnDisable()
         {
             PhotonNetwork.RemoveCallbackTarget(this);
             _exitButton.SetActive(false);
-            _menuPanel.SetActive(false);
+            _menuPanel.gameObject.SetActive(false);
         }
 
         // 디버그용
@@ -101,8 +107,8 @@ namespace MIN
 
         public override void OnJoinedLobby()
         {
-            _roomList.Clear(); // 기존 방 목록 초기화
-            _roomCardPanel.SetRoomList(_roomList); // 초기화된 방 목록 설정
+            //_roomList.Clear(); // 기존 방 목록 초기화
+            //_roomCardPanel.SetRoomList(_roomList); // 초기화된 방 목록 설정
         }
 
         #endregion
