@@ -21,11 +21,11 @@ public class MapData : MonoBehaviour
 
     public void SetTeam(List<int> teamNum)
     {
-        // for (int i = 0; i < teamSmithingTools.Count; i++)
-        // {
-        //     teamSmithingTools[i].SetTeam(teamNum[i]);
-        // }
-        teamSmithingTools[0].SetTeam(1);
-        teamSmithingTools[1].SetTeam(2);
+        for (int i = 0; i < teamSmithingTools.Count; i++)
+        {
+            teamSmithingTools[i].SetTeam(teamNum[i]);
+        }
+        // teamSmithingTools[0].SetTeam(1);
+        // teamSmithingTools[1].SetTeam(2);
     }
 }
