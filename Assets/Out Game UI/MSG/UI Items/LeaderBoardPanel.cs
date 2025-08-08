@@ -105,6 +105,7 @@ namespace MIN
                     Debug.LogWarning("사용자 정보 불러오기 실패");
                 }
             });
+
         }
 
 
