@@ -20,6 +20,8 @@ namespace SCR
         [SerializeField] private ProductSprites productSprites; // 딕셔너리, 완성품 이미지들
         [Inject] IScoreManager _scoreManager;
 
+        private Coroutine orderRoutine; // 코루틴 중복 방지를 위해 추가.
+
         private int targetIndex = -1;
 
         private void Start()
@@ -30,7 +32,8 @@ namespace SCR
         public void StartOrder()
         {
             if (!PhotonNetwork.IsMasterClient) return;
-            StartCoroutine(OrderCoroutine());
+            if (orderRoutine != null) return;
+            orderRoutine = StartCoroutine(OrderCoroutine()); // 게임 종료시, 멈춰주어야 함.
         }
 
         private IEnumerator OrderCoroutine()
@@ -51,13 +54,10 @@ namespace SCR
                 if (!CheckFullOrder())
                     AddRecipe();
             }
-
         }
 
         public void AddRecipe() // 특정 시간마다 호출 또는 다 껴져있을 때 호출
         {
-            // if (!PhotonNetwork.IsMasterClient) return;
-
             //int index = Random.Range(0, allRecipes.Count);
             int prod = UnityEngine.Random.Range(0, itemDataList.craftList.Count);
             int ore = UnityEngine.Random.Range(1, materialData.ores.Count);
