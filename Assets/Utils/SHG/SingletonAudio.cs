@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,8 +29,8 @@ namespace SHG
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void Init()
     {
-      var gameObject = GameObject.Instantiate(Resources.Load<GameObject>("SHG/SingletonAudio"));
-      DontDestroyOnLoad(gameObject);
+      //var gameObject = GameObject.Instantiate(Resources.Load<GameObject>("SHG/SingletonAudio"));
+      //DontDestroyOnLoad(gameObject);
     }
 
     void Awake()
