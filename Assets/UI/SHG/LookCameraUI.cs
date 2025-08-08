@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SCR;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +9,6 @@ namespace SHG
     Transform cameraToLook;
     Canvas canvas;
     [SerializeField] List<Image> images;
-    [SerializeField] ImageList imageList;
     private int index;
 
     void Awake()
@@ -22,8 +20,7 @@ namespace SHG
     // Start is called before the first frame update
     void Start()
     {
-      if (this.cameraToLook == null)
-      {
+      if (this.cameraToLook == null) {
         this.cameraToLook = Camera.main.transform;
       }
       if (canvas == null) canvas = GetComponent<Canvas>();
@@ -37,37 +34,16 @@ namespace SHG
                                cameraToLook.transform.rotation * Vector3.up);
     }
 
-    public void AddImage(OreType ore, WoodType wood)
+    public void AddImage(Sprite image)
     {
       if (index > 2) return;
-      images[index].sprite = SetImage(ore, wood);
+      images[index].sprite = image;
       var parent = images[index].gameObject.transform.parent;
-      if (!parent.gameObject.activeSelf)
-      {
-        parent.gameObject.SetActive(true);
+      if (!parent.gameObject.activeSelf) {
+        parent.gameObject.SetActive(true); 
       }
       images[index].gameObject.SetActive(true);
       index++;
-    }
-
-    private Sprite SetImage(OreType ore, WoodType wood)
-    {
-      if (ore == OreType.None && wood == WoodType.None)
-      {
-        return imageList.sprites[6];
-      }
-      else if (ore != OreType.None)
-      {
-        if (ore == OreType.Copper) return imageList.sprites[0];
-        else if (ore == OreType.Steel) return imageList.sprites[1];
-        else if (ore == OreType.Gold) return imageList.sprites[2];
-      }
-      else
-      {
-        if (wood == WoodType.Oak) return imageList.sprites[3];
-        else if (wood == WoodType.Birch) return imageList.sprites[4];
-      }
-      return null;
     }
 
     public void SubImage()
@@ -75,9 +51,8 @@ namespace SHG
       Debug.Log($"sub image: {index}");
       index--;
       var parent = images[index].gameObject.transform.parent;
-      if (parent.gameObject.activeSelf)
-      {
-        parent.gameObject.SetActive(false);
+      if (parent.gameObject.activeSelf) {
+        parent.gameObject.SetActive(false); 
       }
       images[index].gameObject.SetActive(false);
     }
@@ -88,9 +63,8 @@ namespace SHG
       foreach (Image image in images)
       {
         var parent = image.gameObject.transform.parent;
-        if (parent.gameObject.activeSelf)
-        {
-          parent.gameObject.SetActive(false);
+        if (parent.gameObject.activeSelf) {
+          parent.gameObject.SetActive(false); 
         }
         image.gameObject.SetActive(false);
       }

@@ -102,7 +102,7 @@ namespace SCR
 
         private void SetScore()
         {
-            int team = int.Parse(PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.TeamColor].ToString());
+            int team = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.TeamColor];
             int score = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.Score];
 
             teamColor[0].color = color.Color[team];
@@ -131,16 +131,65 @@ namespace SCR
         /// </summary>
         private void AddOtherPlayer(List<Photon.Realtime.Player> players)
         {
-            players.RemoveAll(p => p.NickName == PhotonNetwork.LocalPlayer.NickName);
+            players.RemoveAll(p => p == PhotonNetwork.LocalPlayer);
 
-            for (int i = 0; i < players.Count; i++)
+            int displayCount = Mathf.Min(players.Count, otherPlayers.Count);
+
+            for (int i = 0; i < displayCount; i++)
             {
                 otherPlayers[i].gameObject.SetActive(true);
                 otherPlayers[i].SetResult(
                     players[i].NickName,
-                   int.Parse(players[i].CustomProperties[CustomPropertyKeys.TeamColor].ToString()),
+                    (int)players[i].CustomProperties[CustomPropertyKeys.TeamColor],
                     (int)players[i].CustomProperties[CustomPropertyKeys.Score]
                 );
+            }
+
+            // 남은 슬롯 비활성화
+            for (int i = displayCount; i < otherPlayers.Count; i++)
+            {
+                otherPlayers[i].gameObject.SetActive(false);
+            }
+
+            // 나머지 칸은 비활성화
+            for (int i = players.Count; i < otherPlayers.Count; i++)
+            {
+                otherPlayers[i].gameObject.SetActive(false);
+            }
+        }
+
+        // 테스트용 메서드
+        // 우선 테스트용으로 자기가 불러오기
+        // 원래는 중간에 나간 사람도 표기가 되어야하기 때문에 InGameUIManager에서 플레이어 리스트를 전달해야 됨
+        private void AddOtherPlayer()
+        {
+            List<Photon.Realtime.Player> players = new(PhotonNetwork.PlayerListOthers);
+            players.RemoveAll(p => p == PhotonNetwork.LocalPlayer);
+
+            // 자기 자신은 otherPlayers에 업데이트 되지 않도록 삭제
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (players[i] == PhotonNetwork.LocalPlayer)
+                {
+                    players.Remove(players[i]);
+                }
+            }
+
+            int displayCount = Mathf.Min(players.Count, otherPlayers.Count);
+
+            for (int i = 0; i < displayCount; i++)
+            {
+                otherPlayers[i].gameObject.SetActive(true);
+                otherPlayers[i].SetResult(
+                    players[i].NickName,
+                    (int)players[i].CustomProperties[CustomPropertyKeys.TeamColor],
+                    (int)players[i].CustomProperties[CustomPropertyKeys.Score]
+                );
+            }
+
+            for (int i = displayCount; i < otherPlayers.Count; i++)
+            {
+                otherPlayers[i].gameObject.SetActive(false);
             }
         }
 
