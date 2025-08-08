@@ -228,16 +228,16 @@ namespace SCR
                 }
             }
 
-            foreach (var p in calculatedTeams.DrawTeams)
-            {
-                foreach (var player in p)
-                {
-                    if (player == PhotonNetwork.LocalPlayer)
-                    {
-                        Draw();
-                    }
-                }
-            }
+            //foreach (var p in calculatedTeams.DrawTeams)
+            //{
+            //    foreach (var player in p)
+            //    {
+            //        if (player == PhotonNetwork.LocalPlayer)
+            //        {
+            //            Draw();
+            //        }
+            //    }
+            //}
         }
 
         // Firebase에 경험치 저장
