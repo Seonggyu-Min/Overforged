@@ -446,8 +446,22 @@ public class TutorialManager : MonoBehaviour
         anvil.OnTransfered -= OnAnvilTransfer;
         table.OnTransfered -= OnTableTransfer;
         convey.OnTransfered -= OnConvey;
-        metalMaterial.onCool -= OnItemCool;
 
+        furnace.OnWorked -= OnFurnaceWork;
+        tong.OnGet -= OnGetTong;
+        tong.OnAbandon -= OnLeaveTong;
+        quenching.OnTransfered -= OnQuenchingTransfer;
+        dropoff.OnDropOffTransfered -= OnDropoffTransfer;
+        if (metalMaterial != null)
+        {
+            metalMaterial.onCool -= OnItemCool;
+            metalMaterial.onChangeNext -= OnMetalItemChange;
+
+        }
+        if (woodMaterial != null)
+        {
+            woodMaterial.onChangeNext -= OnWoodItemChange;
+
+        }
     }
-
 }
