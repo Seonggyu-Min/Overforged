@@ -35,6 +35,18 @@ namespace SCR
             if (orderRoutine != null) return;
             orderRoutine = StartCoroutine(OrderCoroutine()); // 게임 종료시, 멈춰주어야 함.
         }
+        public void StopOder()
+        {
+            if (orderRoutine != null)
+            {
+                StopCoroutine(OrderCoroutine());
+                orderRoutine = null;
+            }
+            else
+            {
+                Debug.Log("OrderRoutine이 null임");
+            }
+        }
 
         private IEnumerator OrderCoroutine()
         {
