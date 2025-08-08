@@ -265,6 +265,7 @@ namespace SCR
             if (!use)
             {
                 Tongs = photonView.gameObject;
+                Tongs.layer = 0;
                 Tongs.transform.SetParent(HoldingPos);
                 Tongs.transform.localPosition = new Vector3(0, 0, 0);
                 Tongs.transform.rotation = Quaternion.identity;
@@ -272,6 +273,7 @@ namespace SCR
             else
             {
                 Tongs.transform.SetParent(null);
+                Tongs.layer = 6;
                 Tongs = null;
             }
         }
@@ -292,6 +294,7 @@ namespace SCR
             HoldObject.GetComponent<Collider>().isTrigger = true;
             HoldObject.GetComponent<Rigidbody>().useGravity = false;
             PlayerPhysical.IsHold = true;
+            HoldObject.layer = 0;
         }
 
         /// <summary>
@@ -305,6 +308,7 @@ namespace SCR
             if (isPut)
             {
                 HoldObject = null;
+                HoldObject.layer = 0;
                 return;
             }
 
@@ -317,6 +321,7 @@ namespace SCR
                 if (PlayerPhysical.IsDash) throwPower *= 2;
                 HoldObject.GetComponent<Rigidbody>().AddForce(transform.forward * throwPower, ForceMode.Impulse);
             }
+            HoldObject.layer = 6;
 
             HoldObject = null;
         }
