@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 103
   Name: Wood
-  Image: {fileID: 21300000, guid: c410e3cf9732bd4438b29c6c50d93a5c, type: 3}
+  Image: {fileID: 21300000, guid: 9590422118d4d794eba22740238ec8a2, type: 3}
   ItemPrefab: {fileID: 5699382115813567197, guid: f442190307bb3974a9bca57366eb782b, type: 3}
   Offset: {x: 0, y: 0, z: 0}
   Rotation: {x: 0, y: 0, z: 0}

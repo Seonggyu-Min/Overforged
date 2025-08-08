@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 102
   Name: Ore
-  Image: {fileID: 21300000, guid: 824c4aa1936b9694ba4d4b9bfef9dbc5, type: 3}
+  Image: {fileID: 21300000, guid: 52da87d420e08fb4cb4f085f2f1382b2, type: 3}
   ItemPrefab: {fileID: 485200612604217011, guid: b481d1e017609fb439d6cfeb8b8e2496, type: 3}
   Offset: {x: 0, y: -0.3, z: 0}
   Rotation: {x: 0, y: 0, z: 0}
